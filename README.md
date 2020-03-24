@@ -1,4 +1,4 @@
-# Dmeson - pacckage for analysis
+# Dmeson - package for analysis
 
 D0 meson - 1864,86 MeV <br />
 D+ meson - 1869,57 MeV <br />
@@ -14,7 +14,7 @@ analysis_Dmeson -n 2000 /space/runs/daq023930.nat.bz2 -o out.root - experiment, 
 /home/ovtin/development/Dmeson/analysis_Dmeson -n 10000 -o /spool/users/ovtin/psi3770_test.root /home/ovtin/development/Dmeson/runsDmeson/runDmeson1 <br />
 ```
 
-запуск KDisplay для просмотра определенного события с реконструкцией <br />
+Run KDisplay for view event with reconstruction <br />
 ```
 bzcat /space/runs/daq021913.nat.bz2 | KDisplay -r -e3197 <br />
 ```
