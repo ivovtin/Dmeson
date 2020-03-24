@@ -1,33 +1,39 @@
-# Dmeson
+# Dmeson - pacckage for analysis
 
-D0 meson - 1864,86 MeV  <br />
-D+ meson - 1869,57 MeV  <br />
-Ds meson - 1968.47 MeV  <br />
+D0 meson - 1864,86 MeV <br />
+D+ meson - 1869,57 MeV <br />
+Ds meson - 1968.47 MeV <br />
 
-analysis_Dmeson  -v 23110 -n 50 /spool/users/ovtin/sim000018.dat - моделирование 50 событий <br />
-analysis_Dmeson -x -n 2000 /space/runs/daq023930.nat.bz2  - эксперимент - с KDisplay        <br />
-analysis_Dmeson -n 2000 /space/runs/daq023930.nat.bz2 -o out.root - эксперимент - запись в файл <br />
+analysis_Dmeson.C - The code for handling raw events with help reconstruction package and write structures in the root-file. <br />
 
- /home/ovtin/development/Dmeson/analysis_Dmeson -n 10000 -o /spool/users/ovtin/psi3770_test.root /home/ovtin/development/Dmeson/runsDmeson/runDmeson1 <br />
+Examples for run: <br />
+```
+analysis_Dmeson  -v 23110 -n 50 /spool/users/ovtin/sim000018.dat - simulation 50 events <br />
+analysis_Dmeson -x -n 2000 /space/runs/daq023930.nat.bz2  - run draw with KDisplay <br />
+analysis_Dmeson -n 2000 /space/runs/daq023930.nat.bz2 -o out.root - experiment, write to file<br />
+/home/ovtin/development/Dmeson/analysis_Dmeson -n 10000 -o /spool/users/ovtin/psi3770_test.root /home/ovtin/development/Dmeson/runsDmeson/runDmeson1 <br />
+```
 
 запуск KDisplay для просмотра определенного события с реконструкцией <br />
-   bzcat /space/runs/daq021913.nat.bz2 | KDisplay -r -e3197 <br />
+```
+bzcat /space/runs/daq021913.nat.bz2 | KDisplay -r -e3197 <br />
+```
 
-
+Work on batch system: <br />
 bsub batch_dataatc_Dmeson.sh <br />
 qstat                        <br />
 qstat -u ovtin               <br />
 qdel 772354                  <br />
 
 
-# Обработка масс D-мезонов:
-Заходы набранные в пике Psi(3770) -> e+e- -> DD^- (D0D^-0 или D+D-) <br />
-Заходы в интервале номеров 23206 (2016-02-09) и 23942 (2016-05-23).    Февраль-май 2016 г.  <br />
-В отобранных заходах всего 130.775.145 событий (в них 207.190 е+е- и 21.046 MHadr кандидатов), интеграл светимости 1161.799 нб^-1 (или 1.1 пб^-1)  <br />
+# Information about D-meson statistic:
+Runs in peak Psi(3770) -> e+e- -> DD^- (D0D^-0 or D+D-): <br />
+23206 (2016-02-09) and 23942 (2016-05-23).    February-May 2016 <br />
+In selected runs - 130.775.145 events (207.190 е+е- and 21.046 MHadr candidates), integral luminosity is 1161.799 нб^-1 (or 1.1 pb^-1)  <br />
 
-Добывил заходы набранные в 2017. <br />
+Added runs from 2017. <br />
 
-Регистрация D-мезонов через каналы:<br />
+Registration D-mesons in channels:<br />
 D0->K-pi+ (D0bar->K+pi-)           <br />
 D+->K-pi+pi+ (D- ->K+pi-pi-)       <br />
 
