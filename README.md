@@ -37,93 +37,58 @@ Registration D-mesons in channels:<br />
 D0->K-pi+ (D0bar->K+pi-)           <br />
 D+->K-pi+pi+ (D- ->K+pi-pi-)       <br />
 
-Импульс D-мезона от распада Psi(3770) -> DD^- составляет pd ~ 260 MeV/c <br />
-В распаде Psi(3770) рождается 2 D-мезона                                <br />
+Momentum D-meson from decay Psi(3770) -> DD^- constitute pd ~ 260 MeV/c <br />
+In decay Psi(3770) born 2 D-mesons                                <br />
 
 
 ./Dmeson 1 1 0 1 0 160 3000 0                                           <br />
 
 
-0.9 нб^-1 статистика 2009 года - ожидается 100 сигнальных событий D0->K-pi+  <br />
+0.9 nb^-1 statistic for 2009 year - expect 100 signal events D0->K-pi+  <br />
 
 N=Lint*sigma                                                                 <br />
 
-Lint - интегральная светимость (pb-1)                                        <br />
-sigma - сечение (pb, cm^2)                                                   <br />
+Lint - integral luminosity (pb-1)                                        <br />
+sigma - cross-section (pb, cm^2)                                                   <br />
 
-sigma(DDbar)=6.57 нб   -> sigma(D0D0bar) + sigma(D+D-)                       <br />
-sigma(D0D0bar)=3.66 нб                                                       <br />
-sigma(D+D-)=2.91 нб                                                          <br />
+sigma(DDbar)=6.57 nb   -> sigma(D0D0bar) + sigma(D+D-)                       <br />
+sigma(D0D0bar)=3.66 nb                                                       <br />
+sigma(D+D-)=2.91 nb                                                          <br />
 
-N=1161.799*3.66=4252 событий  D0->K-pi+  *3.80%  => 161.5 *2 = 322*1000=322000       <br />
+N=1161.799*3.66=4252 events  D0->K-pi+  *3.80%  => 161.5 *2 = 322*1000=322000       <br />
 
-N=1161.799*2.91=3380 событий  D+->K-pi+pi+ (D- ->K+pi-pi-) *9.2% => 310 *2 = 620         <br />
+N=1161.799*2.91=3380 events  D+->K-pi+pi+ (D- ->K+pi-pi-) *9.2% => 310 *2 = 620         <br />
 
  2*900*3.66*0.0388=255.61440                                                             <br />
  98.4/255.61440=38.5%                                                                    <br />
 
+The criteria pi/K identidication in ATC:                                                       <br />
+Nph.e. less then ~0.5-1.0 in momentum range for track 400-1300 MeV/c  - Kaon, otherwise Pion, lenght track is >4 cm. <br />
 
-Критерий pi/K-идентификации в ATC:                                                       <br />
-Число ф.э. меньше ~0.5-1.0 в диапазоне импульсов трека 400-1300 МэВ/с  - Каон, иначе Пион, <br />
-длина трека при этом >4см.                                                                 <br />
-
-/home/poluektv/kedr/release/dmass2/kp/bin/dmass_kp.cc                                      <br />
+Example from previous analysis: /home/poluektv/kedr/release/dmass2/kp/bin/dmass_kp.cc  <br />
 
 
-Events                                                                                        <br />
+# List candidates for D0->K-pi+ decay
 Run 23930:                                                                                     <br />
 Event=12208	Raw event=12439	eTracksAll=4	eTracksBeam=4	eTracksIP=4    +   -e12195     <br />
 
+root [5] et->Scan("ev.run:ev.evdaq");           <br />
+    Row   |    ev.run |  ev.evdaq               <br />
+       0  |    23206 |     70250                <br />
+       1  |    23215 |     32843                <br />
+       9  |    23218 |      3306                <br />
+      14  |    23219 |      4596                <br />
+      15  |    23219 |     16396                <br />
+      16  |    23219 |     20915                <br />
+      24  |    23220 |     19317                <br />
+      25  |    23220 |     31429                <br />
 
-root [5] et->Scan("ev.run:ev.evdaq");                              <br />
-************************************                               <br />
-*    Row   *    ev.run *  ev.evdaq *                               <br />
-************************************                               <br />
-*        0 *     23206 *     70250 *                                <br />
-*        1 *     23215 *     32843 *                               <br />
-*        9 *     23218 *      3306 *              !!! --           <br />
-*       14 *     23219 *      4596 *              !!!               <br />
-*       15 *     23219 *     16396 *              !!!               <br />
-*       16 *     23219 *     20915 *              !!!               <br />
-*       24 *     23220 *     19317 *              !!!                <br />
-*       25 *     23220 *     31429 *              !!!               <br />
-
- et->Scan("ev.run:ev.evdaq:Dmeson.Mbc:Dmeson.dE");                  <br />
- et->Scan("ev.run:ev.evdaq:Dmeson.Mbc:Dmeson.dE","Dmeson.dE>0");    <br />
- et->Draw("Dmeson.Mbc","emc.ncls>2 && emc.ncls<6")                  <br />
+et->Scan("ev.run:ev.evdaq:Dmeson.Mbc:Dmeson.dE");                  <br />
+et->Scan("ev.run:ev.evdaq:Dmeson.Mbc:Dmeson.dE","Dmeson.dE>0");    <br />
+et->Draw("Dmeson.Mbc","emc.ncls>2 && emc.ncls<6")                  <br />
 
 
- bzcat /space/runs/daq023665.nat.bz2 | KDisplay -r -e520             <br />
-
-root [18] sqrt(493.68*493.68+pow(758.2,2))+sqrt(pow(139.57,2)+pow(766.1,2))      <br />
-(const double)1.68346790663866659e+03                                            <br />
-root [19]                                                                        <br />
-root [19] sqrt(493.68*493.68+pow(925,2))+sqrt(pow(139.57,2)+pow(711.5,2))        <br />
-(const double)1.77355653679083707e+03                                            <br />
-                                                                                 <br />
-root [22] (1683.46+1773.5)/2-1864                                                <br />
-(const double)(-1.35519999999999982e+02)                                         <br />
-root [23]                                                                        <br />
-                                                                                 <br />
-ot [23] sqrt(493.68*493.68+pow(758.2,2))+sqrt(pow(139.57,2)+pow(925.0,2))        <br />
-(const double)1.84022843439040207e+03                                            <br />
-root [24]                                                                        <br />
-root [24]                                                                        <br />
-root [24] sqrt(493.68*493.68+pow(766.1,2))+sqrt(pow(139.57,2)+pow(711.5,2))      <br />
-(const double)1.63644860632750351e+03                                            <br />
-root [25]                                                                        <br />
-root [25]                                                                        <br />
-root [25] (1840.22+1636.4)/2-1864                                                <br />
-(const double)(-1.25690000000000055e+02)                                         <br />
-                                                                                 <br />
-root [26] sqrt(493.68*493.68+pow(711.5,2))+sqrt(pow(139.57,2)+pow(925.0,2))      <br />
-(const double)1.80146815651558472e+03                                            <br />
-root [27] sqrt(493.68*493.68+pow(766.1,2))+sqrt(pow(139.57,2)+pow(758.2,2))      <br />
-(const double)1.68232763868963229e+03                                            <br />
-root [28]                                                                        <br />
-root [28] (1801.46+1682.32)/2-1864                                               <br />
-(const double)(-1.22110000000000127e+02)                                         <br />
-
+bzcat /space/runs/daq023665.nat.bz2 | KDisplay -r -e520             <br />
 
 
 
