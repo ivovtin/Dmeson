@@ -33,7 +33,8 @@
 #include <algorithm>      // std::min_element, std::max_element
 #include <assert.h>
 
-struct data
+    //structure for ATC
+    struct data
     {
 	int i, t, ntrk, triggered,zero,fitted,estimated,neightrig,wlshit,nearwls,aerogel_region,aerogel_region0,
 	aerogel_region5,aerogel_region20,active_region,active_region0,active_region5,active_region20,test,
@@ -57,6 +58,7 @@ struct data
     data t1atccr3;
     data t1atccr4;
 
+    //structure for track from DC
     struct data2
     {
 	int t,q,ip,nvec,nvecxy,nvecz,nhits,nhitsxy,nhitsz,nhitsvd;
@@ -66,6 +68,7 @@ struct data
     data2 t0;
     data2 t1;
 
+    //TOF system
     struct data3
     {
 	int nhits, dchits, namps, ntimes;
@@ -75,6 +78,7 @@ struct data
     data3 t0tof;
     data3 t1tof;
 
+    //EM-Calorymeter
     struct data4
     {
 	int ncls,ncls_trk,nlkr,ncsi,nstrcls,nstrtrk;
@@ -99,6 +103,7 @@ struct data
     data5 clgamma2;
     data5 clgamma3;
 
+    //MU system
     struct data7
     {
 	int nhits,dcmuhits,octant,layer;
@@ -106,6 +111,7 @@ struct data
     };
     data7 mu;
 
+    //event, run, ebeam...
     struct data8
     {
 	int event,evdaq,run,quality;
@@ -113,6 +119,7 @@ struct data
     };
     data8 ev;
 
+    //VRTX detector
     struct data9
     {
 	int ntrk, nip, nbeam;
@@ -122,6 +129,7 @@ struct data
     };
     data9 vrt;
 
+    //kinematic reconstruction
     struct data10
     {
 	int numHyp;
@@ -129,7 +137,7 @@ struct data
     };
     data10 jpsi;
 
-
+   //atc
     struct data11
     {
 	int natc_cr, natc_hits, natc_thr, rawdt;
@@ -143,6 +151,7 @@ struct data
     bool sim;
     TChain *tt=new TChain("et");
 
+    //include samples Data/MC
     void chain(){
 	if(sim!=1){
 	    for(int i=1; i<=50; i++)
@@ -317,12 +326,16 @@ struct data
     float num_npezero2[n]={0};
 
     int npipi=0;
+    //Mass Kaon and Pion
     Double_t m1=493.667, m2=139.57;
+    //trheshold for ATC counter in number of photoelectrons
     float npetrh=0.5;
     float thicknpetrh=0.5;
+    //counters for first and second layers ATC
     int ncnt1l1=0, ncnt1l2=80;
     int ncnt2l1=80, ncnt2l2=160;
 
+    //for print DEBUG information
     bool verbose=0;
     bool verbose1=0;
     bool verbose2=0;

@@ -48,6 +48,7 @@ int main(int argc, char* argv[])
     gROOT->SetStyle("Plain");
     cc1->cd();
 
+    //determine name output file
     sim=fl_sim_exp;
     if( sim!=1 ){
 	fnameout=TString::Format("res_%d_%d_%d_%d_%d_exp_Dmeson.root",first_cnt,end_cnt,region,len,momentum).Data();
@@ -58,9 +59,10 @@ int main(int argc, char* argv[])
     cout<<fnameout<<endl;
     fout = new TFile(fnameout,"RECREATE");
 
-    chain();    //include samples
+    //include samples
+    chain();
     Int_t nentr=tt->GetEntries();
-    cout<<"Nentries="<<nentr<<endl;
+    if(verbose) cout<<"Nentries="<<nentr<<endl;
 
     setbranchstatus();
     setbranchaddress();
@@ -76,10 +78,11 @@ int main(int argc, char* argv[])
     if(sim!=1)sprintf(namepr2,"Experiment - 2 layer");
     TProfile* pr2=new TProfile(namepr2,namepr2,50,0,1600,0,500);
 
+    //event loop
     for(int k=0; k<nentr; k++)
     {
 	tt->GetEntry(k);
-	cout<<"ev.run="<<ev.run<<"\t"<<"t0.t="<<t0.t<<"\t"<<"t1.t="<<t1.t<<endl;
+	if(verbose2) cout<<"ev.run="<<ev.run<<"\t"<<"t0.t="<<t0.t<<"\t"<<"t1.t="<<t1.t<<endl;
 
 	if( (k %100000)==0 )cout<<k<<endl;
 
