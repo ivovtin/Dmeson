@@ -293,6 +293,9 @@
     TH1F* hzero4=new TH1F("hzero4","Energy",1000,0.,5000.);
     TH1F* hzero5=new TH1F("hzero5","emc.ncls",12,0.,12.);
 
+    TProfile* pr1;
+    TProfile* pr2;
+
     vector<float> chi2min;
     float mom=0;
 
@@ -340,7 +343,14 @@
 
     int Natc=0;
     int Nselect=0;
-    int Npred=0;
+
+    int kk; int kk1; int kk2; int ii1; int ii2;
+
+    Double_t P11, P22;
+    float n00, n01, n02, n03, n04;
+    float n10, n11, n12, n13, n14;
+    int cnt11, cnt12;
+    int cnt21, cnt22;
 
 
 #endif

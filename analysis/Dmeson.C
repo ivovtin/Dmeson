@@ -1,4 +1,5 @@
 #include "Dmeson.h"
+extern void atc_cross();
 
 using namespace std;
 string progname;
@@ -73,10 +74,10 @@ int main(int argc, char* argv[])
     TProfile* prthink=new TProfile(namepr,namepr,50,0,1600,0,500);
     if(sim==1)sprintf(namepr1,"Simulation - 1 layer");
     if(sim!=1)sprintf(namepr1,"Experiment - 1 layer");
-    TProfile* pr1=new TProfile(namepr1,namepr1,50,0,1600,0,500);
+    pr1=new TProfile(namepr1,namepr1,50,0,1600,0,500);
     if(sim==1)sprintf(namepr2,"Simulation - 2 layer");
     if(sim!=1)sprintf(namepr2,"Experiment - 2 layer");
-    TProfile* pr2=new TProfile(namepr2,namepr2,50,0,1600,0,500);
+    pr2=new TProfile(namepr2,namepr2,50,0,1600,0,500);
 
     //event loop
     for(int k=0; k<nentr; k++)
@@ -87,19 +88,16 @@ int main(int argc, char* argv[])
 	if( (k %100000)==0 )cout<<k<<endl;
 
 	//momentum of particles
-	Double_t P11=0, P22=0;
+	P11=0, P22=0;
 	P11=t0.p;
 	P22=t1.p;
-
-	//cout<<jpsi.P1[0]<<"\t"<<jpsi.P1[1]<<"\t"<<jpsi.P1[2]<<"\t"<<jpsi.P1[3]<<"\t"<<jpsi.P1[4]<<endl;
-	//cout<<jpsi.P2[0]<<"\t"<<jpsi.P2[1]<<"\t"<<jpsi.P2[2]<<"\t"<<jpsi.P2[3]<<"\t"<<jpsi.P2[4]<<endl;
 
 	float en0[3];
 	en0[0]=t0c0.e; en0[1]=t0c1.e; en0[2]=t0c2.e;      //energy clasters 0,1,2 on first track
 	float en1[3];
 	en1[0]=t1c0.e; en1[1]=t1c1.e; en1[2]=t1c2.e;      //energy clasters 0,1,2 on second track
 	float engamma[4];
-	engamma[0]=clgamma0.e; engamma[1]=clgamma1.e; engamma[2]=clgamma2.e; engamma[3]=clgamma3.e;  //energy clasters 0,1,2,3 from Photon
+	engamma[0]=clgamma0.e; engamma[1]=clgamma1.e; engamma[2]=clgamma2.e; engamma[3]=clgamma3.e;  //energy clasters 0,1,2,3 from Photons
 	float e0=0,e1=0,egamma=0;
 
 	for(int i=0; i<t0.emc_ncls; i++){
@@ -114,25 +112,357 @@ int main(int argc, char* argv[])
 	    egamma+=engamma[i];                          //sum energy from clasters on Photon
 	}
 
-        //apply cut conditions
+        //Apply cut conditions
 	if( t0.emc_ncls>=1 && t1.emc_ncls>=1 && emc.ncls>=2 && emc.ncls<=2 && en0[0]>50 && en1[0]>50 && (t0.q+t1.q)==0 && mu.nhits<1 )
 	{
-	    Npred++;
 	    Nselect++;
 
-	    int kk=0;
-	    int kk1=0;
-	    int kk2=0;
-	    int ii1=0;
-	    int ii2=0;
+	    kk=0; int kk1=0; int kk2=0; int ii1=0; int ii2=0;
 
 	    if(verbose) cout<<ev.run<<"\t"<<ev.evdaq<<"\t"<<"\t"<<t0.p<<"\t"<<t1.p<<"\t"<<P11<<"\t"<<P22<<"\t"<<(P11/t0.p)<<"\t"<<(P22/t1.p)<<"\t"<<(P11/t0.p)/(P22/t1.p)<<"\t"<<(t0.vx*t1.vx+t0.vy*t1.vy+t0.vz*t1.vz)<<"\t"<<clgamma0.vx*clgamma1.vx+clgamma0.vy*clgamma1.vy+clgamma0.vz*clgamma1.vz<<"\t"<<t0c0.e<<"\t"<<t0c1.e<<"\t"<<t1c0.e<<"\t"<<t1c1.e<<"\t"<<clgamma0.e<<"\t"<<clgamma1.e<<"\t"<<emc.ncls<<"\t"<<t0.emc_ncls<<"\t"<<t1.emc_ncls<<"\t"<<emc.ncls-t0.emc_ncls-t1.emc_ncls<<"\t"<<t0tof.nhits<<"\t"<<t1tof.nhits<<endl;
 
 	    //cout<<t0atccr0.aerogel_region5<<"\t"<<t0atccr0.npe<<endl;
-	    float n00=0, n01=0, n02=0, n03=0, n04=0;
-	    float n10=0, n11=0, n12=0, n13=0, n14=0;
+	    n00=0, n01=0, n02=0, n03=0, n04=0;
+	    n10=0, n11=0, n12=0, n13=0, n14=0;
 
-	    //=======================
+	    cnt11=0, cnt12=0;
+	    cnt21=0, cnt22=0;
+
+            atc_cross();
+
+	    float Npe1tr=0., Npe2tr=0.;
+	    //if(kk1==1 && ( (n00+n01+n02+n03)>0 || ( (n00+n01+n02+n03)==0 && ii1==1 ) ) )
+	    //if( kk1==1 && (n00+n01+n02+n03)>0 )
+	    if( kk1==1 && ii1>1 && cnt11==1 && cnt12==1 )
+	    {
+		prthink->Fill(P11,(n00+n01+n02+n03+n04));
+
+		//if( (n00+n01+n02+n03)==0 )przero->Fill(P11,(n00+n01+n02+n03));
+		if( (n00+n01+n02+n03+n04)<=0.02 )
+		{
+		    hzero->Fill(P11);
+		    hzero1->Fill(vrt.theta2t);
+		    hzero2->Fill(cos(pi*(vrt.theta2t)/180));
+		    hzero4->Fill(emc.energy);
+		    hzero5->Fill(emc.ncls);
+		}
+
+		Natc++;
+		if(verbose1) cout<<"ev.run="<<ev.run<<"\t"<<"cnt0.npe="<<n00+n01+n02+n03+n04<<"\t"<<endl;
+		Npe1tr=n00+n01+n02+n03+n04;
+		for(int ii=0; ii<=14; ii++)
+		{
+		    p_all[ii]=100*ii+50;
+		    err_p_all[ii]=50;
+		    if(P11>100*ii&&P11<100+100*ii)
+		    {
+			if((n00+n01+n02+n03+n04)<=thicknpetrh)
+			{
+			    num_npezero[ii]=++num_npezero[ii];
+			    //cout<<"cnt.npe="<<cnt.npe<<"\t"<<"t.p="<<t.p<<"\t"<<ii<<"\t"<<"num_npezero[ii]="<<num_npezero[ii]<<endl;
+			}
+			if((n00+n01+n02+n03+n04)>thicknpetrh){num_npenotzero[ii]=++num_npenotzero[ii];}
+			num_npetotal[ii]=++num_npetotal[ii];
+			eff[ii]=num_npenotzero[ii]/num_npetotal[ii];
+			err_eff[ii]=sqrt(num_npenotzero[ii])/num_npetotal[ii];
+		    }
+		}
+	    }
+	    //if(kk2==1 && ( (n10+n11+n12+n13)>0 || ( (n10+n11+n12+n13)==0 && ii2==1 ) )  )
+	    //if( kk2==1 && (n10+n11+n12+n13)>0 )
+	    if( kk2==1 && ii2>1 && cnt21==1 && cnt22==1 )
+	    {
+		prthink->Fill(P22,(n10+n11+n12+n13+n14));
+
+		//if( (n10+n11+n12+n13)==0 )przero->Fill(P22,(n10+n11+n12+n13));
+		if( (n10+n11+n12+n13+n14)<=0.02 )
+		{
+		    hzero->Fill(P22);
+		    hzero1->Fill(vrt.theta2t);
+		    hzero2->Fill(cos(pi*(vrt.theta2t)/180));
+		    hzero4->Fill(emc.energy);
+		    hzero5->Fill(emc.ncls);
+		}
+
+		Natc++;
+		if(verbose1) cout<<"ev.run="<<ev.run<<"\t"<<"cnt1.npe="<<n10+n11+n12+n13<<"\t"<<endl;
+		Npe2tr=n10+n11+n12+n13;
+		for(int ii=0; ii<=14; ii++)
+		{
+		    p_all[ii]=100*ii+50;
+		    err_p_all[ii]=50;
+		    if(P22>100*ii&&P22<100+100*ii)
+		    {
+			if((n10+n11+n12+n13+n14)<=thicknpetrh)
+			{
+			    num_npezero[ii]=++num_npezero[ii];
+			    //cout<<"cnt.npe="<<cnt.npe<<"\t"<<"t.p="<<t.p<<"\t"<<ii<<"\t"<<"num_npezero[ii]="<<num_npezero[ii]<<endl;
+			}
+			if((n10+n11+n12+n13+n14)>thicknpetrh){num_npenotzero[ii]=++num_npenotzero[ii];}
+			num_npetotal[ii]=++num_npetotal[ii];
+			eff[ii]=num_npenotzero[ii]/num_npetotal[ii];
+			err_eff[ii]=sqrt(num_npenotzero[ii])/num_npetotal[ii];
+		    }
+		}
+	    }
+
+	    if(verbose2) cout<<"ev.run="<<ev.run<<"\t"<<"Npe1tr="<<Npe1tr<<"\t"<<"Npe2tr="<<Npe2tr<<"\t"<<endl;
+
+	    //===============================
+
+	    float E;
+	    E=ev.ebeam;
+	    if(sim==1)E=3770/2;          //psi3770
+
+	    Double_t E1, E2;
+	    if(t0.q<0)
+	    {
+		E1=abs(sqrt(P11*P11+m1*m1));   //K-     - 1 track is K-
+		E2=abs(sqrt(P22*P22+m2*m2));   //pi+    - 2 track is pi+
+	    }
+	    else
+	    {
+		E1=abs(sqrt(P22*P22+m1*m1));    //K-     - 2 track is K-
+		E2=abs(sqrt(P11*P11+m2*m2));    //pi+    - 1 track is pi+
+	    }
+
+	    Double_t pprod=abs(P11)*abs(P22)*(t0.vx*t1.vx+t0.vy*t1.vy+t0.vz*t1.vz);
+	    Double_t InvMass=sqrt(m1*m1+m2*m2+2*(E1*E2-pprod));
+	    h16->Fill(InvMass);
+
+	    Double_t mbc=pow(ev.ebeam,2)-pow(P11,2)-pow(P22,2)-P11*P22*(t0.vx*t1.vx+t0.vy*t1.vy+t0.vz*t1.vz);
+	    //*mbc = ebeam*ebeam - pow(px1+px2,2)- pow(py1+py2,2) - pow(pz1+pz2,2);
+	    if (mbc>0) mbc = sqrt(mbc); else mbc = 0;
+
+	    //if( (P11>400 && P22>1300 && Npe1tr<0.7 && Npe2tr>0.7) || (P11>1300 && P22>400 && Npe1tr>0.7 && Npe2tr<0.7) )
+	    h17->Fill(mbc);
+
+	    Double_t ekminuspiplus=0;
+	    Double_t ekpluspiminus=0;
+	    if(t0.q<0)
+	    {
+		ekminuspiplus=sqrt(m1*m1 + P11*P11) + sqrt(m2*m2 + P22*P22);
+		ekpluspiminus=sqrt(m1*m1 + P22*P22) + sqrt(m2*m2 + P11*P11);
+	    }
+	    else
+	    {
+		ekminuspiplus=sqrt(m1*m1 + P22*P22) + sqrt(m2*m2 + P11*P11);
+		ekpluspiminus=sqrt(m1*m1 + P11*P11) + sqrt(m2*m2 + P22*P22);
+	    }
+	    Double_t de = ( ekminuspiplus + ekpluspiminus )/2. - ev.ebeam;
+	    h18->Fill(de);
+
+
+	    h1->Fill(e0/P11);
+	    h1->Fill(e1/P22);
+	    h2->Fill(emc.energy);
+	    h3->Fill(emc.elkr);
+	    h4->Fill(emc.ecsi);
+	    h7->Fill(P11);
+	    h7->Fill(P22);
+	    h8->Fill(t0.theta);
+	    h8->Fill(t1.theta);
+	    h9->Fill(t0.phi);
+	    h9->Fill(t1.phi);
+	    h10->Fill(vrt.theta2t);
+	    h11->Fill(vrt.phi2t);
+
+	    h12->Fill(cos(pi*(vrt.theta2t)/180));
+	    h13->Fill(cos(pi*vrt.phi2t/180));
+	    h14->Fill(cos(pi*t0.theta/180));
+	    h15->Fill(cos(pi*t0.phi/180));
+	    h14->Fill(cos(pi*t1.theta/180));
+	    h15->Fill(cos(pi*t1.phi/180));
+
+	    h19->Fill(t0tof.nhits);
+	    h20->Fill(t0tof.dchits);
+	    h21->Fill(t0tof.namps);
+	    h22->Fill(t0tof.ntimes);
+	    h23->Fill(t0tof.time[0]);
+	    h24->Fill(t0tof.beta[0]);
+	    h25->Fill(t0tof.length[0]);
+
+	    h26->Fill(t1tof.nhits);
+	    h27->Fill(t1tof.dchits);
+	    h28->Fill(t1tof.namps);
+	    h29->Fill(t1tof.ntimes);
+	    h30->Fill(t1tof.time[1]);
+	    h31->Fill(t1tof.beta[1]);
+	    h32->Fill(t1tof.length[1]);
+
+	    h33->Fill(P11/t0.p);
+	    h34->Fill(P22/t1.p);
+
+	    S=(3/2)*(pow(t0.pt,2)+pow(t1.pt,2))/(pow(t0.p,2)+pow(t1.p,2));
+	    h35->Fill(S);
+
+	    h40->Fill(t0.chi2);
+	    h41->Fill(t1.chi2);
+	    h42->Fill(t0.vx*t1.vx+t0.vy*t1.vy+t0.vz*t1.vz);
+	    h43->Fill(emc.ncls);
+	    h45->Fill(t0.nhitsxy);
+	    h46->Fill(t1.nhitsxy);
+	    h47->Fill(t0.nvecxy);
+	    h48->Fill(t1.nvecxy);
+	    h49->Fill(t0.nvec);
+	    h50->Fill(t1.nvec);
+	    h51->Fill(clgamma0.theta);
+	    h52->Fill(clgamma1.theta);
+	    h53->Fill(cos(pi*(clgamma0.theta-clgamma1.theta)/180));
+	    h58->Fill(mu.nhits);
+
+	    if(verbose1)cout<<t0c0.theta<<"\t"<<t1c0.theta<<"\t"<<clgamma0.theta<<"\t"<<clgamma1.theta<<"\t"<<(clgamma0.theta+clgamma1.theta)/2<<"\t"<<clgamma0.theta-clgamma1.theta<<"\t"<<clgamma0.vx*clgamma1.vx+clgamma0.vy*clgamma1.vy+clgamma0.vz*clgamma1.vz<<endl;
+
+	}  //if  t emc ...
+    }
+
+    //cout<<"Natc="<<Natc<<"\t"<<"ATC from selected events, % "<<float(Natc*100/(Nselect*2))<<endl;
+    cout<<"Nselect="<<Nselect<<endl;
+
+    if(verbose1) cout<<counter<<endl;
+
+    TF1* myfit=new TF1("myfit","[0]+[1]*(x^2-[2]^2)/(x^2)*(TMath::Erf(x-[2])+1)/2",200.,1450.);
+    myfit->SetParameter(0,prthink->GetMinimum());
+    myfit->SetParameter(1,prthink->GetMaximum());
+    myfit->SetParameter(2,430);
+    myfit->SetParNames("#mu_{0}","#mu_{max}","P_{thr}");
+    if(sim!=1)
+    {
+	myfit->SetLineColor(kRed);
+	prthink->SetLineColor(kRed);
+    }
+    else
+    {
+	myfit->SetLineColor(kBlue);
+	prthink->SetLineColor(kBlue);
+    }
+    prthink->Fit("myfit","","",200,1450);
+    cout<<"pr->GetMinimum()="<<prthink->GetMinimum()<<"\t"<<"pr->GetMaximum()"<<prthink->GetMaximum()<<endl;
+    prthink->SetXTitle("P, MeV/c");
+    prthink->SetYTitle("N_{ph.e.}");
+    prthink->Draw("prof");
+
+
+    TF1* myfit1=new TF1("myfit1","[0]+[1]*(x^2-[2]^2)/(x^2)*(TMath::Erf(x-[2])+1)/2",200.,1450.);
+    myfit1->SetParameter(0,pr1->GetMinimum());
+    myfit1->SetParameter(1,pr1->GetMaximum());
+    myfit1->SetParameter(2,90);
+    myfit1->SetParNames("#mu_{0}","#mu_{max}","P_{thr}");
+    if(sim!=1)
+    {
+	myfit1->SetLineColor(kRed);
+	pr1->SetLineColor(kRed);
+    }
+    else
+    {
+	myfit1->SetLineColor(kBlue);
+	pr1->SetLineColor(kBlue);
+    }
+    pr1->Fit("myfit1","","",200,1450);
+    cout<<"pr1->GetMinimum()="<<pr1->GetMinimum()<<"\t"<<"pr1->GetMaximum()"<<pr1->GetMaximum()<<endl;
+    pr1->SetXTitle("P, MeV/c");
+    pr1->SetYTitle("N_{ph.e.}");
+    pr1->Draw("prof");
+
+
+    TF1* myfit2=new TF1("myfit2","[0]+[1]*(x^2-[2]^2)/(x^2)*(TMath::Erf(x-[2])+1)/2",200.,1450.);
+    myfit2->SetParameter(0,pr2->GetMinimum());
+    myfit2->SetParameter(1,pr2->GetMaximum());
+    myfit2->SetParameter(2,90);
+    myfit2->SetParNames("#mu_{0}","#mu_{max}","P_{thr}");
+    if(sim!=1)
+    {
+	myfit2->SetLineColor(kRed);
+	pr2->SetLineColor(kRed);
+    }
+    else
+    {
+	myfit2->SetLineColor(kBlue);
+	pr2->SetLineColor(kBlue);
+    }
+    pr2->Fit("myfit2","","",200,1450);
+    cout<<"pr2->GetMinimum()="<<pr2->GetMinimum()<<"\t"<<"pr2->GetMaximum()"<<pr2->GetMaximum()<<endl;
+    pr2->SetXTitle("P, MeV/c");
+    pr2->SetYTitle("N_{ph.e.}");
+    pr2->Draw("prof");
+
+    TGraphErrors* gr1=new TGraphErrors(14,p_all,eff,err_p_all,err_eff);
+    gr1->SetMarkerStyle(20);
+    gr1->SetLineWidth(2);
+    if(sim!=1)
+    {
+	gr1->SetMarkerColor(2);
+	gr1->SetLineColor(2);
+    }
+    else
+    {
+	gr1->SetMarkerColor(kBlue);
+	gr1->SetLineColor(kBlue);
+    }
+    gr1->SetTitle("Efficiency&Momentum");
+    gr1->GetXaxis()->SetTitle("P, MeV/c");
+    gr1->GetYaxis()->SetTitle("Efficiency");
+    gr1->Write("Think_Efficiency&Momentum");
+
+    TGraphErrors* gr2=new TGraphErrors(14,p_all,eff1,err_p_all,err_eff1);
+    gr2->SetMarkerStyle(20);
+    gr2->SetLineWidth(2);
+    if(sim!=1)
+    {
+	gr2->SetMarkerColor(2);
+	gr2->SetLineColor(2);
+    }
+    else
+    {
+	gr2->SetMarkerColor(kBlue);
+	gr2->SetLineColor(kBlue);
+    }
+    gr2->SetTitle("Efficiency&Momentum");
+    gr2->GetXaxis()->SetTitle("P, MeV/c");
+    gr2->GetYaxis()->SetTitle("Efficiency");
+    gr2->Write("1layer_Efficiency&Momentum");
+
+    TGraphErrors* gr3=new TGraphErrors(14,p_all,eff2,err_p_all,err_eff2);
+    gr3->SetMarkerStyle(20);
+    gr3->SetLineWidth(2);
+    if(sim!=1)
+    {
+	gr3->SetMarkerColor(2);
+	gr3->SetLineColor(2);
+    }
+    else
+    {
+	gr3->SetMarkerColor(kBlue);
+	gr3->SetLineColor(kBlue);
+    }
+    gr3->SetTitle("Efficiency&Momentum");
+    gr3->GetXaxis()->SetTitle("P, MeV/c");
+    gr3->GetYaxis()->SetTitle("Efficiency");
+    gr3->Write("2layer_Efficiency&Momentum");
+
+    TH1F *h38 = (TH1F*) h17->Clone();
+    h38->SetName("h38");
+    Double_t bb=h38->GetEntries();
+    h38->Scale(1/bb);
+    h38->GetXaxis()->SetTitle("m(#pi#pi), MeV/c^{2}");
+
+    if(sim!=1)
+    {
+	h38->SetLineColor(kRed);
+    }
+    else
+    {
+	h38->SetLineColor(kBlue);
+    }
+
+    fout->Write();
+    fout->Close();
+}
+
+void atc_cross()
+{
+
+    //=======================
 	    //First track hit in 0, 1, 2, 3, 4 counters ATC from first layer and get number of Nph.e....
 	    if( t0atccr0.aerogel_region0==1 && t0atccr0.wlshit==0 && ( (t0atccr0.i>=ncnt1l1 && t0atccr0.i<ncnt1l2) ) )
 	    {
@@ -495,9 +825,6 @@ int main(int argc, char* argv[])
 	    }
 	    //================================
 
-	    int cnt11=0, cnt12=0;
-	    int cnt21=0, cnt22=0;
-
 	    if( t0atccr0.aerogel_region0==1 && t0atccr0.wlshit==0 && ( (t0atccr0.i>=ncnt1l1 && t0atccr0.i<ncnt1l2) || (t0atccr0.i>=ncnt2l1 && t0atccr0.i<ncnt2l2) ) )
 	    {
 		n00=t0atccr0.npe;   kk1=1;  ii1++;
@@ -561,332 +888,6 @@ int main(int argc, char* argv[])
 		if(t1atccr4.i>=ncnt2l1 && t1atccr4.i<ncnt2l2)cnt22=1;
 	    }
 
-	    float Npe1tr=0., Npe2tr=0.;
-	    //if(kk1==1 && ( (n00+n01+n02+n03)>0 || ( (n00+n01+n02+n03)==0 && ii1==1 ) ) )
-	    //if( kk1==1 && (n00+n01+n02+n03)>0 )
-	    if( kk1==1 && ii1>1 && cnt11==1 && cnt12==1 )
-	    {
-		prthink->Fill(P11,(n00+n01+n02+n03+n04));
-
-		//if( (n00+n01+n02+n03)==0 )przero->Fill(P11,(n00+n01+n02+n03));
-		if( (n00+n01+n02+n03+n04)<=0.02 )
-		{
-		    hzero->Fill(P11);
-		    hzero1->Fill(vrt.theta2t);
-		    hzero2->Fill(cos(pi*(vrt.theta2t)/180));
-		    hzero4->Fill(emc.energy);
-		    hzero5->Fill(emc.ncls);
-		}
-
-		Natc++;
-		if(verbose1) cout<<"ev.run="<<ev.run<<"\t"<<"cnt0.npe="<<n00+n01+n02+n03+n04<<"\t"<<endl;
-		Npe1tr=n00+n01+n02+n03+n04;
-		for(int ii=0; ii<=14; ii++)
-		{
-		    p_all[ii]=100*ii+50;
-		    err_p_all[ii]=50;
-		    if(P11>100*ii&&P11<100+100*ii)
-		    {
-			if((n00+n01+n02+n03+n04)<=thicknpetrh)
-			{
-			    num_npezero[ii]=++num_npezero[ii];
-			    //cout<<"cnt.npe="<<cnt.npe<<"\t"<<"t.p="<<t.p<<"\t"<<ii<<"\t"<<"num_npezero[ii]="<<num_npezero[ii]<<endl;
-			}
-			if((n00+n01+n02+n03+n04)>thicknpetrh){num_npenotzero[ii]=++num_npenotzero[ii];}
-			num_npetotal[ii]=++num_npetotal[ii];
-			eff[ii]=num_npenotzero[ii]/num_npetotal[ii];
-			err_eff[ii]=sqrt(num_npenotzero[ii])/num_npetotal[ii];
-		    }
-		}
-	    }
-	    //if(kk2==1 && ( (n10+n11+n12+n13)>0 || ( (n10+n11+n12+n13)==0 && ii2==1 ) )  )
-	    //if( kk2==1 && (n10+n11+n12+n13)>0 )
-	    if( kk2==1 && ii2>1 && cnt21==1 && cnt22==1 )
-	    {
-		prthink->Fill(P22,(n10+n11+n12+n13+n14));
-
-		//if( (n10+n11+n12+n13)==0 )przero->Fill(P22,(n10+n11+n12+n13));
-		if( (n10+n11+n12+n13+n14)<=0.02 )
-		{
-		    hzero->Fill(P22);
-		    hzero1->Fill(vrt.theta2t);
-		    hzero2->Fill(cos(pi*(vrt.theta2t)/180));
-		    hzero4->Fill(emc.energy);
-		    hzero5->Fill(emc.ncls);
-		}
-
-		Natc++;
-		if(verbose1) cout<<"ev.run="<<ev.run<<"\t"<<"cnt1.npe="<<n10+n11+n12+n13<<"\t"<<endl;
-		Npe2tr=n10+n11+n12+n13;
-		for(int ii=0; ii<=14; ii++)
-		{
-		    p_all[ii]=100*ii+50;
-		    err_p_all[ii]=50;
-		    if(P22>100*ii&&P22<100+100*ii)
-		    {
-			if((n10+n11+n12+n13+n14)<=thicknpetrh)
-			{
-			    num_npezero[ii]=++num_npezero[ii];
-			    //cout<<"cnt.npe="<<cnt.npe<<"\t"<<"t.p="<<t.p<<"\t"<<ii<<"\t"<<"num_npezero[ii]="<<num_npezero[ii]<<endl;
-			}
-			if((n10+n11+n12+n13+n14)>thicknpetrh){num_npenotzero[ii]=++num_npenotzero[ii];}
-			num_npetotal[ii]=++num_npetotal[ii];
-			eff[ii]=num_npenotzero[ii]/num_npetotal[ii];
-			err_eff[ii]=sqrt(num_npenotzero[ii])/num_npetotal[ii];
-		    }
-		}
-	    }
-
-	    if(verbose2) cout<<"ev.run="<<ev.run<<"\t"<<"Npe1tr="<<Npe1tr<<"\t"<<"Npe2tr="<<Npe2tr<<"\t"<<endl;
-
-	    //===============================
-
-	    float E;
-	    E=ev.ebeam;
-	    if(sim==1)E=3770/2;          //psi3770
-
-	    Double_t E1, E2;
-	    if(t0.q<0)
-	    {
-		E1=abs(sqrt(P11*P11+m1*m1));   //K-     - 1 track is K-
-		E2=abs(sqrt(P22*P22+m2*m2));   //pi+    - 2 track is pi+
-	    }
-	    else
-	    {
-		E1=abs(sqrt(P22*P22+m1*m1));    //K-     - 2 track is K-
-		E2=abs(sqrt(P11*P11+m2*m2));    //pi+    - 1 track is pi+
-	    }
-
-	    Double_t pprod=abs(P11)*abs(P22)*(t0.vx*t1.vx+t0.vy*t1.vy+t0.vz*t1.vz);
-	    Double_t InvMass=sqrt(m1*m1+m2*m2+2*(E1*E2-pprod));
-	    h16->Fill(InvMass);
-
-	    Double_t mbc=pow(ev.ebeam,2)-pow(P11,2)-pow(P22,2)-P11*P22*(t0.vx*t1.vx+t0.vy*t1.vy+t0.vz*t1.vz);
-	    //*mbc = ebeam*ebeam - pow(px1+px2,2)- pow(py1+py2,2) - pow(pz1+pz2,2);
-	    if (mbc>0) mbc = sqrt(mbc); else mbc = 0;
-
-	    //if( (P11>400 && P22>1300 && Npe1tr<0.7 && Npe2tr>0.7) || (P11>1300 && P22>400 && Npe1tr>0.7 && Npe2tr<0.7) )
-	    h17->Fill(mbc);
-
-	    Double_t ekminuspiplus=0;
-	    Double_t ekpluspiminus=0;
-	    if(t0.q<0)
-	    {
-		ekminuspiplus=sqrt(m1*m1 + P11*P11) + sqrt(m2*m2 + P22*P22);
-		ekpluspiminus=sqrt(m1*m1 + P22*P22) + sqrt(m2*m2 + P11*P11);
-	    }
-	    else
-	    {
-		ekminuspiplus=sqrt(m1*m1 + P22*P22) + sqrt(m2*m2 + P11*P11);
-		ekpluspiminus=sqrt(m1*m1 + P11*P11) + sqrt(m2*m2 + P22*P22);
-	    }
-	    Double_t de = ( ekminuspiplus + ekpluspiminus )/2. - ev.ebeam;
-	    h18->Fill(de);
-
-
-	    h1->Fill(e0/P11);
-	    h1->Fill(e1/P22);
-	    h2->Fill(emc.energy);
-	    h3->Fill(emc.elkr);
-	    h4->Fill(emc.ecsi);
-	    h7->Fill(P11);
-	    h7->Fill(P22);
-	    h8->Fill(t0.theta);
-	    h8->Fill(t1.theta);
-	    h9->Fill(t0.phi);
-	    h9->Fill(t1.phi);
-	    h10->Fill(vrt.theta2t);
-	    h11->Fill(vrt.phi2t);
-
-	    h12->Fill(cos(pi*(vrt.theta2t)/180));
-	    h13->Fill(cos(pi*vrt.phi2t/180));
-	    h14->Fill(cos(pi*t0.theta/180));
-	    h15->Fill(cos(pi*t0.phi/180));
-	    h14->Fill(cos(pi*t1.theta/180));
-	    h15->Fill(cos(pi*t1.phi/180));
-
-	    h19->Fill(t0tof.nhits);
-	    h20->Fill(t0tof.dchits);
-	    h21->Fill(t0tof.namps);
-	    h22->Fill(t0tof.ntimes);
-	    h23->Fill(t0tof.time[0]);
-	    h24->Fill(t0tof.beta[0]);
-	    h25->Fill(t0tof.length[0]);
-
-	    h26->Fill(t1tof.nhits);
-	    h27->Fill(t1tof.dchits);
-	    h28->Fill(t1tof.namps);
-	    h29->Fill(t1tof.ntimes);
-	    h30->Fill(t1tof.time[1]);
-	    h31->Fill(t1tof.beta[1]);
-	    h32->Fill(t1tof.length[1]);
-
-	    h33->Fill(P11/t0.p);
-	    h34->Fill(P22/t1.p);
-
-	    S=(3/2)*(pow(t0.pt,2)+pow(t1.pt,2))/(pow(t0.p,2)+pow(t1.p,2));
-	    h35->Fill(S);
-
-	    h40->Fill(t0.chi2);
-	    h41->Fill(t1.chi2);
-	    h42->Fill(t0.vx*t1.vx+t0.vy*t1.vy+t0.vz*t1.vz);
-	    h43->Fill(emc.ncls);
-	    h45->Fill(t0.nhitsxy);
-	    h46->Fill(t1.nhitsxy);
-	    h47->Fill(t0.nvecxy);
-	    h48->Fill(t1.nvecxy);
-	    h49->Fill(t0.nvec);
-	    h50->Fill(t1.nvec);
-	    h51->Fill(clgamma0.theta);
-	    h52->Fill(clgamma1.theta);
-	    h53->Fill(cos(pi*(clgamma0.theta-clgamma1.theta)/180));
-	    h58->Fill(mu.nhits);
-
-	    if(verbose1)cout<<t0c0.theta<<"\t"<<t1c0.theta<<"\t"<<clgamma0.theta<<"\t"<<clgamma1.theta<<"\t"<<(clgamma0.theta+clgamma1.theta)/2<<"\t"<<clgamma0.theta-clgamma1.theta<<"\t"<<clgamma0.vx*clgamma1.vx+clgamma0.vy*clgamma1.vy+clgamma0.vz*clgamma1.vz<<endl;
-
-	}  //if  t emc ...
-    }
-
-    //cout<<"Natc="<<Natc<<"\t"<<"ATC from selected events, % "<<float(Natc*100/(Nselect*2))<<endl;
-    cout<<"Npred="<<Npred<<"\t"<<"Nselect="<<Nselect<<endl;
-
-    if(verbose1) cout<<counter<<endl;
-
-    TF1* myfit=new TF1("myfit","[0]+[1]*(x^2-[2]^2)/(x^2)*(TMath::Erf(x-[2])+1)/2",200.,1450.);
-    myfit->SetParameter(0,prthink->GetMinimum());
-    myfit->SetParameter(1,prthink->GetMaximum());
-    myfit->SetParameter(2,430);
-    myfit->SetParNames("#mu_{0}","#mu_{max}","P_{thr}");
-    if(sim!=1)
-    {
-	myfit->SetLineColor(kRed);
-	prthink->SetLineColor(kRed);
-    }
-    else
-    {
-	myfit->SetLineColor(kBlue);
-	prthink->SetLineColor(kBlue);
-    }
-    prthink->Fit("myfit","","",200,1450);
-    cout<<"pr->GetMinimum()="<<prthink->GetMinimum()<<"\t"<<"pr->GetMaximum()"<<prthink->GetMaximum()<<endl;
-    prthink->SetXTitle("P, MeV/c");
-    prthink->SetYTitle("N_{ph.e.}");
-    prthink->Draw("prof");
-
-
-    TF1* myfit1=new TF1("myfit1","[0]+[1]*(x^2-[2]^2)/(x^2)*(TMath::Erf(x-[2])+1)/2",200.,1450.);
-    myfit1->SetParameter(0,pr1->GetMinimum());
-    myfit1->SetParameter(1,pr1->GetMaximum());
-    myfit1->SetParameter(2,90);
-    myfit1->SetParNames("#mu_{0}","#mu_{max}","P_{thr}");
-    if(sim!=1)
-    {
-	myfit1->SetLineColor(kRed);
-	pr1->SetLineColor(kRed);
-    }
-    else
-    {
-	myfit1->SetLineColor(kBlue);
-	pr1->SetLineColor(kBlue);
-    }
-    pr1->Fit("myfit1","","",200,1450);
-    cout<<"pr1->GetMinimum()="<<pr1->GetMinimum()<<"\t"<<"pr1->GetMaximum()"<<pr1->GetMaximum()<<endl;
-    pr1->SetXTitle("P, MeV/c");
-    pr1->SetYTitle("N_{ph.e.}");
-    pr1->Draw("prof");
-
-
-    TF1* myfit2=new TF1("myfit2","[0]+[1]*(x^2-[2]^2)/(x^2)*(TMath::Erf(x-[2])+1)/2",200.,1450.);
-    myfit2->SetParameter(0,pr2->GetMinimum());
-    myfit2->SetParameter(1,pr2->GetMaximum());
-    myfit2->SetParameter(2,90);
-    myfit2->SetParNames("#mu_{0}","#mu_{max}","P_{thr}");
-    if(sim!=1)
-    {
-	myfit2->SetLineColor(kRed);
-	pr2->SetLineColor(kRed);
-    }
-    else
-    {
-	myfit2->SetLineColor(kBlue);
-	pr2->SetLineColor(kBlue);
-    }
-    pr2->Fit("myfit2","","",200,1450);
-    cout<<"pr2->GetMinimum()="<<pr2->GetMinimum()<<"\t"<<"pr2->GetMaximum()"<<pr2->GetMaximum()<<endl;
-    pr2->SetXTitle("P, MeV/c");
-    pr2->SetYTitle("N_{ph.e.}");
-    pr2->Draw("prof");
-
-    TGraphErrors* gr1=new TGraphErrors(14,p_all,eff,err_p_all,err_eff);
-    gr1->SetMarkerStyle(20);
-    gr1->SetLineWidth(2);
-    if(sim!=1)
-    {
-	gr1->SetMarkerColor(2);
-	gr1->SetLineColor(2);
-    }
-    else
-    {
-	gr1->SetMarkerColor(kBlue);
-	gr1->SetLineColor(kBlue);
-    }
-    gr1->SetTitle("Efficiency&Momentum");
-    gr1->GetXaxis()->SetTitle("P, MeV/c");
-    gr1->GetYaxis()->SetTitle("Efficiency");
-    gr1->Write("Think_Efficiency&Momentum");
-
-    TGraphErrors* gr2=new TGraphErrors(14,p_all,eff1,err_p_all,err_eff1);
-    gr2->SetMarkerStyle(20);
-    gr2->SetLineWidth(2);
-    if(sim!=1)
-    {
-	gr2->SetMarkerColor(2);
-	gr2->SetLineColor(2);
-    }
-    else
-    {
-	gr2->SetMarkerColor(kBlue);
-	gr2->SetLineColor(kBlue);
-    }
-    gr2->SetTitle("Efficiency&Momentum");
-    gr2->GetXaxis()->SetTitle("P, MeV/c");
-    gr2->GetYaxis()->SetTitle("Efficiency");
-    gr2->Write("1layer_Efficiency&Momentum");
-
-    TGraphErrors* gr3=new TGraphErrors(14,p_all,eff2,err_p_all,err_eff2);
-    gr3->SetMarkerStyle(20);
-    gr3->SetLineWidth(2);
-    if(sim!=1)
-    {
-	gr3->SetMarkerColor(2);
-	gr3->SetLineColor(2);
-    }
-    else
-    {
-	gr3->SetMarkerColor(kBlue);
-	gr3->SetLineColor(kBlue);
-    }
-    gr3->SetTitle("Efficiency&Momentum");
-    gr3->GetXaxis()->SetTitle("P, MeV/c");
-    gr3->GetYaxis()->SetTitle("Efficiency");
-    gr3->Write("2layer_Efficiency&Momentum");
-
-    TH1F *h38 = (TH1F*) h17->Clone();
-    h38->SetName("h38");
-    Double_t bb=h38->GetEntries();
-    h38->Scale(1/bb);
-    h38->GetXaxis()->SetTitle("m(#pi#pi), MeV/c^{2}");
-
-    if(sim!=1)
-    {
-	h38->SetLineColor(kRed);
-    }
-    else
-    {
-	h38->SetLineColor(kBlue);
-    }
-
-    fout->Write();
-    fout->Close();
 }
+
 
