@@ -25,7 +25,7 @@ bzcat /space/runs/daq021913.nat.bz2 | KDisplay -r -e3197 <br />
 ```
 
 Work on batch system: <br />
-bsub batch_dataatc_Dmeson.sh <br />
+qsub batch_dataatc_Dmeson.sh <br />
 qstat                        <br />
 qstat -u ovtin               <br />
 qdel 772354                  <br />
