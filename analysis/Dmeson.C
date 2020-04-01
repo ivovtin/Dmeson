@@ -95,97 +95,29 @@ int main(int argc, char* argv[])
 	//cout<<jpsi.P2[0]<<"\t"<<jpsi.P2[1]<<"\t"<<jpsi.P2[2]<<"\t"<<jpsi.P2[3]<<"\t"<<jpsi.P2[4]<<endl;
 
 	float en0[3];
-	en0[0]=t0c0.e;
-	en0[1]=t0c1.e;
-	en0[2]=t0c2.e;
+	en0[0]=t0c0.e; en0[1]=t0c1.e; en0[2]=t0c2.e;      //energy clasters 0,1,2 on first track
 	float en1[3];
-	en1[0]=t1c0.e;
-	en1[1]=t1c1.e;
-	en1[2]=t1c2.e;
+	en1[0]=t1c0.e; en1[1]=t1c1.e; en1[2]=t1c2.e;      //energy clasters 0,1,2 on second track
 	float engamma[4];
-	engamma[0]=clgamma0.e;
-	engamma[1]=clgamma1.e;
-	engamma[2]=clgamma2.e;
-	engamma[3]=clgamma3.e;
+	engamma[0]=clgamma0.e; engamma[1]=clgamma1.e; engamma[2]=clgamma2.e; engamma[3]=clgamma3.e;  //energy clasters 0,1,2,3 from Photon
 	float e0=0,e1=0,egamma=0;
 
 	for(int i=0; i<t0.emc_ncls; i++){
-	    e0+=en0[i];
+	    e0+=en0[i];                                   //sum energy from clasters on first track
 	}
 	for(int i=0; i<t1.emc_ncls; i++){
-	    e1+=en1[i];
+	    e1+=en1[i];                                   //sum energy from clasters on second track
 	}
 
 	for(int i=0; i<(emc.ncls-t0.emc_ncls-t1.emc_ncls); i++)
 	{
-	    egamma+=engamma[i];
+	    egamma+=engamma[i];                          //sum energy from clasters on Photon
 	}
 
-	float S;
-
-	/*
-	 for(int i=0; i<5; i++)
-	 {
-	 if(jpsi.chi2[i]>0)
-	 {
-	 //cout<<"jpsi.chi2[i]="<<jpsi.chi2[i]<<endl;
-	 chi2min.push_back(jpsi.chi2[i]);
-	 }
-	 }
-	 */
-	int pipi=0;
-	float kaonchi2=0;
-	float protonchi2=0;
-	float electronchi2=0;
-	float muonchi2=0;
-	float pionchi2=0;
-	/*
-	 if(jpsi.numHyp>=1)
-	 {
-	 for(int i=0; i<5; i++)
-	 {
-	 //if( *min_element(chi2min.begin(),chi2min.end())==jpsi.chi2[i] && jpsi.M[i]>139. && jpsi.M[i]<140. && jpsi.chi2[i]>0. && jpsi.chi2[i]<4000. )
-	 if( jpsi.M[i]>0.5 && jpsi.M[i]<0.6 && jpsi.chi2[i]>0. ){ electronchi2=jpsi.chi2[i]; }
-	 if( jpsi.M[i]>105. && jpsi.M[i]<106. && jpsi.chi2[i]>0. ){ muonchi2=jpsi.chi2[i]; }
-	 if( jpsi.M[i]>492. && jpsi.M[i]<494. && jpsi.chi2[i]>0. ){ kaonchi2=jpsi.chi2[i]; }
-	 if( jpsi.M[i]>938. && jpsi.M[i]<940. && jpsi.chi2[i]>0. ){ protonchi2=jpsi.chi2[i]; }
-
-	 if( jpsi.M[i]>139. && jpsi.M[i]<140. && jpsi.chi2[i]>0. && jpsi.chi2[i]<4000. )
-	 {
-	 npipi++;
-	 //cout<<int(k)<<"\t"<<ev.evdaq<<"\t"<<"i="<<i<<"\t"<<"chi2="<<jpsi.chi2[i]<<"\t"<<"M="<<jpsi.M[i]<<"\t"<<"npipi="<<npipi<<endl;
-
-	 //cout<<jpsi.P1[0]<<"\t"<<jpsi.P1[1]<<"\t"<<jpsi.P1[2]<<"\t"<<jpsi.P1[3]<<"\t"<<jpsi.P1[4]<<endl;
-	 //cout<<jpsi.P2[0]<<"\t"<<jpsi.P2[1]<<"\t"<<jpsi.P2[2]<<"\t"<<jpsi.P2[3]<<"\t"<<jpsi.P2[4]<<endl;
-	 //cout<<jpsi.M[0]<<"\t"<<jpsi.M[1]<<"\t"<<jpsi.M[2]<<"\t"<<jpsi.M[3]<<"\t"<<jpsi.M[4]<<endl;
-	 //cout<<jpsi.chi2[0]<<"\t"<<jpsi.chi2[1]<<"\t"<<jpsi.chi2[2]<<"\t"<<jpsi.chi2[3]<<"\t"<<jpsi.chi2[4]<<endl;
-	 //cout<<i<<"\t"<<jpsi.M[i]<<"\t"<<jpsi.P1[i]<<"\t"<<jpsi.P2[i]<<"\t"<<jpsi.chi2[i]<<endl;
-
-	 P11=jpsi.P1[i];
-	 P22=jpsi.P2[i];
-
-	 pionchi2=jpsi.chi2[i];
-	 pipi=1;
-	 }
-	 }
-	 }
-	 */
-	//S=(3/2)*(pow(t0.pt,2)+pow(t1.pt,2))/(pow(t0.p,2)+pow(t1.p,2));
-
-	//if( cos(pi*(vrt.theta2t)/180)>-0.998 && emc.ncls>2 && emc.ncls<=6 && t0.emc_ncls>=1 && t1.emc_ncls>=1 && e0/P11<0.85 && e1/P22<0.85 && (t0.q+t1.q)==0 && t0tof.nhits<=11 && t1tof.nhits<=11 && (emc.ncls-t0.emc_ncls-t1.emc_ncls)>=1 && mu.nhits<3  )
-	//if( cos(pi*(vrt.theta2t)/180)>-0.998 && emc.ncls>2 && emc.ncls<=5 && t0.emc_ncls>=1 && t1.emc_ncls>=1 && e0/t0.p<0.70 && e1/t1.p<0.70 && (t0.q+t1.q)==0 && (emc.ncls-t0.emc_ncls-t1.emc_ncls)>=1 && mu.nhits<3  && en0[0]>20 && en1[0]>20 && engamma[0]>20 )
-
+        //apply cut conditions
 	if( t0.emc_ncls>=1 && t1.emc_ncls>=1 && emc.ncls>=2 && emc.ncls<=2 && en0[0]>50 && en1[0]>50 && (t0.q+t1.q)==0 && mu.nhits<1 )
 	{
 	    Npred++;
-
-	    h54->Fill(electronchi2/pionchi2);
-	    h55->Fill(muonchi2/pionchi2);
-	    h56->Fill(kaonchi2/pionchi2);
-	    h57->Fill(protonchi2/pionchi2);
-
-	    //if( pipi==1 && P11>0 && P22>0 && P11/P22>0.1 ){
-
 	    Nselect++;
 
 	    int kk=0;
@@ -642,10 +574,8 @@ int main(int argc, char* argv[])
 		    hzero->Fill(P11);
 		    hzero1->Fill(vrt.theta2t);
 		    hzero2->Fill(cos(pi*(vrt.theta2t)/180));
-		    hzero3->Fill(kaonchi2/pionchi2);
 		    hzero4->Fill(emc.energy);
 		    hzero5->Fill(emc.ncls);
-		    hzero6->Fill(pionchi2);
 		}
 
 		Natc++;
@@ -681,10 +611,8 @@ int main(int argc, char* argv[])
 		    hzero->Fill(P22);
 		    hzero1->Fill(vrt.theta2t);
 		    hzero2->Fill(cos(pi*(vrt.theta2t)/180));
-		    hzero3->Fill(kaonchi2/pionchi2);
 		    hzero4->Fill(emc.energy);
 		    hzero5->Fill(emc.ncls);
-		    hzero6->Fill(pionchi2);
 		}
 
 		Natc++;
@@ -816,13 +744,10 @@ int main(int argc, char* argv[])
 
 	    if(verbose1)cout<<t0c0.theta<<"\t"<<t1c0.theta<<"\t"<<clgamma0.theta<<"\t"<<clgamma1.theta<<"\t"<<(clgamma0.theta+clgamma1.theta)/2<<"\t"<<clgamma0.theta-clgamma1.theta<<"\t"<<clgamma0.vx*clgamma1.vx+clgamma0.vy*clgamma1.vy+clgamma0.vz*clgamma1.vz<<endl;
 
-	    //}  //pipi
-	    //chi2min.clear();
 	}  //if  t emc ...
     }
 
     //cout<<"Natc="<<Natc<<"\t"<<"ATC from selected events, % "<<float(Natc*100/(Nselect*2))<<endl;
-    cout<<"Npipi="<<npipi<<endl;
     cout<<"Npred="<<Npred<<"\t"<<"Nselect="<<Nselect<<endl;
 
     if(verbose1) cout<<counter<<endl;
@@ -959,20 +884,6 @@ int main(int argc, char* argv[])
     else
     {
 	h38->SetLineColor(kBlue);
-    }
-
-    TH1F *h60 = (TH1F*) h56->Clone();
-    h60->SetName("h60");
-    Double_t bbb=h60->GetEntries();
-    h60->Scale(1/bbb);
-    h60->GetXaxis()->SetTitle("K#chi^{2}/#pi#chi^{2}");
-    if(sim!=1)
-    {
-	h60->SetLineColor(kRed);
-    }
-    else
-    {
-	h60->SetLineColor(kBlue);
     }
 
     fout->Write();

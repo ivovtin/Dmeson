@@ -286,18 +286,12 @@
     TH1F* h51=new TH1F("clgamma0theta","clgamma0.theta",1000,0.,185.);
     TH1F* h52=new TH1F("clgamma1theta","clgamma1.theta",1000,0.,185.);
     TH1F* h53=new TH1F("cos(cl.theta)","cos(cl.theta)",100,-1.,1.);
-    TH1F* h54=new TH1F("elchi2toPIchi2","elchi2/Pionchi2",1000,0.,5.);
-    TH1F* h55=new TH1F("muchi2toPIchi2","muchi2/Pionchi2",1000,0.,5.);
-    TH1F* h56=new TH1F("Kchi2toPIchi2","Kaonchi2/Pionchi2",1000,0.,5.);
-    TH1F* h57=new TH1F("Pchi2toPIchi2","Protonchi2/Pionchi2",1000,0.,5.);
     TH1F* h58=new TH1F("munhits","mu.nhits",30,0.,30.);
     TH1F* hzero=new TH1F("hzero","Jpsi->pi^{+}pi^{-}pi^{0}",1600,0,1600);
     TH1F* hzero1=new TH1F("hzero1","vrt.theta2t",1000,0.,185.);
     TH1F* hzero2=new TH1F("hzero2","cos(theta2t)",100,-1.,1.);
-    TH1F* hzero3=new TH1F("hzero3","Kaonchi2/Pionchi2",1000,0.,5.);
     TH1F* hzero4=new TH1F("hzero4","Energy",1000,0.,5000.);
     TH1F* hzero5=new TH1F("hzero5","emc.ncls",12,0.,12.);
-    TH1F* hzero6=new TH1F("hzero6","pionchi2",4000,0.,4000.);
 
     vector<float> chi2min;
     float mom=0;
@@ -324,6 +318,8 @@
     double num_npenotzero2[n]={0};
     double num_npetotal2[n]={0};
     float num_npezero2[n]={0};
+
+    float S;
 
     int npipi=0;
     //Mass Kaon and Pion
