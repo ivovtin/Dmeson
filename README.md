@@ -11,25 +11,31 @@ Ds meson - 1968.47 MeV <br />
 
 analysis_Dmeson.C - The code for handling raw events with help reconstruction package and write structures in the root-file. <br />
 
-Examples for run: <br />
+Examples for run <br />
+Run processing 2000 experimental events and write to file:
 ```
-analysis_Dmeson  -v 23110 -n 50 /spool/users/ovtin/sim000018.dat - simulation 50 events <br />
-analysis_Dmeson -x -n 2000 /space/runs/daq023930.nat.bz2  - run draw with KDisplay <br />
-analysis_Dmeson -n 2000 /space/runs/daq023930.nat.bz2 -o out.root - experiment, write to file<br />
-/home/ovtin/development/Dmeson/analysis_Dmeson -n 10000 -o /spool/users/ovtin/psi3770_test.root /home/ovtin/development/Dmeson/runsDmeson/runDmeson1 <br />
+analysis_Dmeson -n 2000 /space/runs/daq023930.nat.bz2 -o out.root
+/home/ovtin/development/Dmeson/analysis_Dmeson -n 10000 -o /spool/users/ovtin/psi3770_test.root /home/ovtin/development/Dmeson/runsDmeson/runDmeson1
 ```
-
-Run KDisplay for view event with reconstruction <br />
+Simulation 50 events:
 ```
-bzcat /space/runs/daq021913.nat.bz2 | KDisplay -r -e3197 <br />
+analysis_Dmeson  -v 23110 -n 50 /spool/users/ovtin/sim000018.dat
 ```
-
-Run tasks with D-meson on batch system: <br />
-qsub batch_data_Dmeson.sh <br />
-qstat                        <br />
-qstat -u ovtin               <br />
-qdel 772354                  <br />
-
+Run drawing with KDisplay:
+```
+analysis_Dmeson -x -n 2000 /space/runs/daq023930.nat.bz2
+```
+Run KDisplay for view event with reconstruction:
+```
+bzcat /space/runs/daq021913.nat.bz2 | KDisplay -r -e3197
+```
+Run tasks with D-meson on batch system:
+```
+qsub batch_data_Dmeson.sh
+qstat
+qstat -u ovtin
+qdel 772354
+```
 
 # Information about D-meson statistic:
 Runs in peak Psi(3770) -> e+e- -> DD^- (D0D^-0 or D+D-): <br />
