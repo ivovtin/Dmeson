@@ -90,6 +90,8 @@ struct ProgramParameters {
 	int max_cluster_number;               //maximal number of clusters with energy large minimal
 	int min_lkrcl_number;                 //minimal number of clusters in LKr
 	int min_csicl_number;                 //minimal number of clusters in CsI
+        float max_tchi2;                      //fit quality
+        float min_Nhits;                      //number hits on track
 	const char* rootfile;
 	int MCCalibRunNumber;                 //19862 - number of run - download from DB calibration for processe MC-file in runs interval
 	int NEvents;                          //number of processed events
@@ -117,7 +119,7 @@ struct ProgramParameters {
 //=======================================================================================================================================
 
 //set selection conditions
-static const struct ProgramParameters def_progpar={false,4,4,2,2,4,100,2000,15,45,2,8,0,0,"/store/users/ovtin/out.root",19862,0,false};
+static const struct ProgramParameters def_progpar={false,4,4,2,2,4,100,2000,15,45,2,8,0,0,50,25,"/store/users/ovtin/out.root",19862,0,false};
 
 static struct ProgramParameters progpar(def_progpar);
 
@@ -227,8 +229,8 @@ int vddc_event_rejection()
     for (int t = 0; t< eTracksAll; t++) {
 	if( tPt(t)<=progpar.min_momentum )  return MinMomentumCut;
 	if( tPt(t)>=progpar.max_momentum )  return MaxMomentumCut;
-	if( tCh2(t)>50 )  return Chi2Cut;
-	if( tHits(t)<25 )  return tHitsCut;         //15
+	if( tCh2(t)>progpar.max_tchi2 )  return Chi2Cut;
+	if( tHits(t)<progpar.min_Nhits )  return tHitsCut;
 	charge += tCharge(t);
     }
 
@@ -580,16 +582,14 @@ int analyse_event()         //анализ события
 	}
 }
 
-
-//static const char* optstring="ra:b:p:t:e:c:k:i:o:v:x";
-static const char* optstring="ra:d:b:p:h:s:j:t:e:c:l:k:i:o:v:n:x";
+static const char* optstring="ra:d:b:p:h:s:j:t:e:c:l:k:i:u:q:o:v:n:x";
 
 void Usage(int status)
-{                   //static const struct ProgramParameters def_progpar={false,1,0,0,50,300,1,0,0,"/store/users/ovtin/out.root",false};
+{
 	cout.precision(3);
 	cout<<"Usage:\n"
 		<<progname<<" [OPTIONS] run|nat_file|run_list_file...\n\n"
-		<<"Reconstruction of BhaBha events with DC and search of hits in ATC system.\n"
+		<<"Reconstruction of events with VRTX, DC, ATC, TOF, EMC, MU systems.\n"
 		<<"Options:\n"
 		<<"  -r             Read VDDC&EMC reconstructed info from file (reconstruct by default)\n"
 		<<"  -a tracks      Minimum total tracks number required (default to "<<def_progpar.min_track_number<<")\n"
@@ -605,19 +605,20 @@ void Usage(int status)
 		<<"  -l clusters    Maximum number of clusters in both calorimeters (default to "<<def_progpar.max_cluster_number<<")\n"
 		<<"  -k clusters    Minumum number of clusters in LKr calorimeter (default to "<<def_progpar.min_lkrcl_number<<")\n"
 		<<"  -i clusters    Minumum number of clusters in CsI calorimeter (default to "<<def_progpar.min_csicl_number<<")\n"
+	        <<"  -u max_tchi2   Maximum fit quality on track  (default to "<<def_progpar.max_tchi2<<")\n"
+	        <<"  -q min_Nhits   Nininum number hits on track (default to "<<def_progpar.min_Nhits<<")\n"
 	        <<"  -o RootFile    Output ROOT file name (default to "<<def_progpar.rootfile<<")\n"
             	<<"  -v MCCalibRunNumber    MCCalibRunNumber (default to "<<def_progpar.MCCalibRunNumber<<")\n"
             	<<"  -n NEvents     Number events in process "<<def_progpar.NEvents<<")\n"
 		<<"  -x             Process the events specified after file exclusively and print debug information"
-		<<endl;
+	    <<endl;
 	exit(status);
 }
 
 int main(int argc, char* argv[])
 {
 	progname=argv[0];
-
-	//If no arguments print usage help
+	//if no arguments print usage help
 	if( argc==1 ) Usage(0);
 
 	int opt;
@@ -638,6 +639,8 @@ int main(int argc, char* argv[])
 			case 'l': progpar.max_cluster_number=atoi(optarg); break;
 			case 'k': progpar.min_lkrcl_number=atoi(optarg); break;
 			case 'i': progpar.min_csicl_number=atoi(optarg); break;
+			case 'u': progpar.max_tchi2=atoi(optarg); break;
+			case 'q': progpar.min_Nhits=atoi(optarg); break;
 		        case 'o': progpar.rootfile=optarg; break;
                         case 'v': progpar.MCCalibRunNumber=atoi(optarg); break;
                         case 'n': progpar.NEvents=atoi(optarg); break;
@@ -647,9 +650,9 @@ int main(int argc, char* argv[])
 	}
 
 	if( progpar.min_track_number<progpar.min_beam_track_number ||
-		progpar.min_beam_track_number<progpar.min_ip_track_number ) {
-		cerr<<"Error in parameters specification, should be MinTotalTracks>=MinBeamTracks>=MinIPTracks"<<endl;
-		return 1;
+	   progpar.min_beam_track_number<progpar.min_ip_track_number ) {
+	    cerr<<"Error in parameters specification, should be MinTotalTracks>=MinBeamTracks>=MinIPTracks"<<endl;
+	    return 1;
 	}
 
 
