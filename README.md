@@ -24,8 +24,8 @@ Run KDisplay for view event with reconstruction <br />
 bzcat /space/runs/daq021913.nat.bz2 | KDisplay -r -e3197 <br />
 ```
 
-Work on batch system: <br />
-qsub batch_dataatc_Dmeson.sh <br />
+Run tasks with D-meson on batch system: <br />
+qsub batch_data_Dmeson.sh <br />
 qstat                        <br />
 qstat -u ovtin               <br />
 qdel 772354                  <br />
