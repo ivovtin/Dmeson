@@ -633,6 +633,7 @@ int main(int argc, char* argv[])
 			case 'p': progpar.min_ip_track_number=atoi(optarg); break;
 			case 'h': progpar.max_ip_track_number=atoi(optarg); break;
 			case 's': progpar.min_momentum=atof(optarg); break;
+			case 'j': progpar.max_momentum=atof(optarg); break;
 			case 't': progpar.min_cluster_energy=atof(optarg); break;
 			case 'e': progpar.min_total_energy=atof(optarg); break;
 			case 'c': progpar.min_cluster_number=atoi(optarg); break;

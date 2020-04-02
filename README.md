@@ -11,7 +11,10 @@ Ds meson - 1968.47 MeV <br />
 
 analysis_Dmeson.C - The code for handling raw events with help reconstruction package and write structures in the root-file. <br />
 
-Examples for run <br />
+Examples for run: <br />
+```
+./runAnalysis.sh
+```
 Run processing 2000 experimental events and write to file:
 ```
 analysis_Dmeson -n 2000 /space/runs/daq023930.nat.bz2 -o out.root
