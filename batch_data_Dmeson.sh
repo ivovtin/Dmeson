@@ -36,9 +36,6 @@
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]
 
-#inruns=23942
-#outfile="psi3770_to_D0meson_test.root"
-
 #inruns=23219
 #Nevents=10000
 #outfile="psi3770_to_D0meson_test.root"
