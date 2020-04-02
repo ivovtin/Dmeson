@@ -1,15 +1,15 @@
 #!/bin/bash
 
-inruns=23942
-Nevents=2000
+inruns=23219
+Nevents=10000
 outfile="psi3770_to_D0meson_test.root"
 #inruns="/home/ovtin/development/Dmeson/runsDmeson/runDmeson"$i
 #outfile="/spool/users/ovtin/psi3770_to_D0meson_"$i".root"
-mintracks=2
-maxtracks=8
-minbeamtracks=1
-minIPtracks=1
-maxIPtracks=8
+mintracks=4
+maxtracks=6
+minbeamtracks=2
+minIPtracks=2
+maxIPtracks=6
 minPt=10
 maxPt=5000
 minClusterEnergy=15
