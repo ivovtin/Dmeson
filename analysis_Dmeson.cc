@@ -77,65 +77,63 @@ static const char* progname;
 
 struct ProgramParameters {
 	bool read_reco;
-	int min_track_number;                 //миниммальное число треков
-	int max_track_number;                 //максимальное число треков
-	int min_beam_track_number;            //миниммальное число пучковых треков
-	int min_ip_track_number;              //миниммальное число треков из точки взаимодействия
-	int max_ip_track_number;              //максимальное число треков из точки взаимодействия
-        float min_momentum;                   //минимальный импульс
-        float max_momentum;                   //максимальный импульс
-	float min_cluster_energy; //MeV       //минимальная энергия кластера
-	float min_total_energy; //MeV         //минимальная общая энергия
-	int min_cluster_number;               //минимальное кол-во кластеров с энергией больше минимальной
-	int max_cluster_number;               //минимальное кол-во кластеров с энергией больше минимальной
-	int min_lkrcl_number;                 //минимальное кол-во кластеров в LKr
-	int min_csicl_number;                 //минимальное кол-во кластеров в CsI
+	int min_track_number;                 //minimal number of tracks
+	int max_track_number;                 //maximal number of tracks
+	int min_beam_track_number;            //minimal number of beam tracks
+	int min_ip_track_number;              //minimal number of tracks form IP
+	int max_ip_track_number;              //maximal number of tracks form IP
+        float min_momentum;                   //minimal transverse momentum
+        float max_momentum;                   //maximal transverse momentum
+	float min_cluster_energy; //MeV       //minimal energy of cluster
+	float min_total_energy; //MeV         //minimal total energy
+	int min_cluster_number;               //minimal number of clusters with energy large minimal
+	int max_cluster_number;               //maximal number of clusters with energy large minimal
+	int min_lkrcl_number;                 //minimal number of clusters in LKr
+	int min_csicl_number;                 //minimal number of clusters in CsI
 	const char* rootfile;
-	int MCCalibRunNumber;                 //19862 - номер захода - загрузка из БД калибровок при обработке файла моделирования в заданном интервале заходов
-	int NEvents;                          //число обрабатываемых событий
+	int MCCalibRunNumber;                 //19862 - number of run - download from DB calibration for processe MC-file in runs interval
+	int NEvents;                          //number of processed events
 	bool process_only;                    //process one event only
 };
 //=======================================================================================================================================
-//Условия отбора для pi+pi-pi0:
-//1)минимальное число треков 2
-//2)максимальное число треков 2
-//3)миниммальное число пучковых треков 2
-//4)минимальное число треков из точки взаимодействия 2
-//5)максимальное число треков из точки взаимодействия 2
-//6)минимальный поперечный импульс 100 МэВ/c
-//6)максимальный поперечный импульс 2000 МэВ/c
-//7)минимальная энергия кластера 15 МэВ
-//8)Суммарная энергия по всем кластерам больше 45 MeV
-//9)минимальное число кластеров 2
-//10)максимальное число кластеров 8
-//11) tChi2<50 - качество подгонки
-//12) Число хитов на треке Nhits>25
+//Selection conditions:
+//1)minimal number of tracks 4 (2K and 2pi)
+//2)maximal number of tracks 4
+//3)minimal number of beam tracks 2
+//4)minimal number of tracks form IP 2
+//5)maximal number of tracks form IP 4
+//6)minimal transverse momentum 100 МэВ/c
+//6)maximal transverse momentum 2000 МэВ/c
+//7)minimal energy of cluster 15 МэВ
+//8)sum ennergy on all clusters large 45 MeV
+//9)minimal number of clusters with energy large minimal 2
+//10)maximal number of clusters with energy large minimal 8
+//11) tChi2<50 - fit quality
+//12) number hits on track Nhits>25
 
 //....
-//10)треки из вершины tVertex(t)==1
-////11)центральные треки 	fabs(tX0(t)-eVertexX)<1 && fabs(tY0(t)-eVertexY)<1 && fabs(tZ0(t)-eVertexZ)<15 )
+//10)tracks from VRTX tVertex(t)==1
+////11)central tracks 	fabs(tX0(t)-eVertexX)<1 && fabs(tY0(t)-eVertexY)<1 && fabs(tZ0(t)-eVertexZ)<15 )
 //=======================================================================================================================================
 
-//отбор по трекам
+//set selection conditions
 static const struct ProgramParameters def_progpar={false,4,4,2,2,4,100,2000,15,45,2,8,0,0,"/store/users/ovtin/out.root",19862,0,false};
 
 static struct ProgramParameters progpar(def_progpar);
 
-enum {                                                                          //перечисление
+enum {
 	CutLongDcRecord=1,
 	CutLongVdRecord,
         AtcEventDamageCut,
         AtcIllegalTrackCut,
-//      NoAtcOnTrackCut,
         CutTotalEnergyFast,
 	CutTrackNumber,
 	CutBeamTrackNumber,
 	CutIPTrackNumber_min,
 	CutIPTrackNumber_max,
-        Cut_CPhi2t,            //для отброса событий по расколлинеарности по углам
+        Cut_CPhi2t,
 	Cut_CThe2t,
         EMCthetaCut,
-//        Cut_10per_Energy,      //отбрасываю события если выделившаяся энергия в калориметре не приписанная двум рассматриваемым кластерам превышает 10% от полной
 	CutTotalEnergy,
         CutClusterEnergy,
 	CutMINClusterNumber,
@@ -200,50 +198,49 @@ extern "C" void kemc_energy_(float Ecsi[2],float *Elkr);
 int pre_event_rejection()
 {
     //maximum track number supposed to be 7
-	//maximum record size for DC: Ntracks*maxNhits*HitLength + 10% (spare)
-	static const int maxDClen=1940; //=1940
-	//maximum record size for VD: Ntracks*maxNhits*Length + 2 (for dT) + 10% (spare)
-	static const int maxVDlen=156; //=156
+    //maximum record size for DC: Ntracks*maxNhits*HitLength + 10% (spare)
+    static const int maxDClen=1940; //=1940
+    //maximum record size for VD: Ntracks*maxNhits*Length + 2 (for dT) + 10% (spare)
+    static const int maxVDlen=156; //=156
 
-	//if( RawLength(SS_DC)>maxDClen ) return CutLongDcRecord; //too long DC event
+    //if( RawLength(SS_DC)>maxDClen ) return CutLongDcRecord; //too long DC event
+    //if( RawLength(SS_VD)>maxVDlen ) return CutLongVdRecord; //too long VD event
 
-	//if( RawLength(SS_VD)>maxVDlen ) return CutLongVdRecord; //too long VD event
-
-	float Ecsi[2], Elkr;
-	kemc_energy_(Ecsi,&Elkr);
+    float Ecsi[2], Elkr;
+    kemc_energy_(Ecsi,&Elkr);
 
     //Total energy deposition should be more than progpar.min_total_energy
-//	if( Ecsi[0]+Ecsi[1]+Elkr<progpar.min_total_energy ) return CutTotalEnergyFast;
+    //if( Ecsi[0]+Ecsi[1]+Elkr<progpar.min_total_energy ) return CutTotalEnergyFast;
 
-	return 0;
+    return 0;
 }
 
 int vddc_event_rejection()
 {
-	if( eTracksAll<progpar.min_track_number )       return CutTrackNumber;
-	if( eTracksAll>progpar.max_track_number )       return CutTrackNumber;
-	if( eTracksBeam<progpar.min_beam_track_number ) return CutBeamTrackNumber;
-	if( eTracksIP<progpar.min_ip_track_number )     return CutIPTrackNumber_min;
-	if( eTracksIP>progpar.max_ip_track_number )     return CutIPTrackNumber_max;
+    if( eTracksAll<progpar.min_track_number )       return CutTrackNumber;
+    if( eTracksAll>progpar.max_track_number )       return CutTrackNumber;
+    if( eTracksBeam<progpar.min_beam_track_number ) return CutBeamTrackNumber;
+    if( eTracksIP<progpar.min_ip_track_number )     return CutIPTrackNumber_min;
+    if( eTracksIP>progpar.max_ip_track_number )     return CutIPTrackNumber_max;
 
-        int charge=0;
-	for (int t = 0; t< eTracksAll; t++) {
-	    if( tPt(t)<=progpar.min_momentum )  return MinMomentumCut;
-	    if( tPt(t)>=progpar.max_momentum )  return MaxMomentumCut;
-	    if( tCh2(t)>50 )  return Chi2Cut;
-	    if( tHits(t)<25 )  return tHitsCut;         //15
-            charge += tCharge(t);
-	}
+    int charge=0;
+    for (int t = 0; t< eTracksAll; t++) {
+	if( tPt(t)<=progpar.min_momentum )  return MinMomentumCut;
+	if( tPt(t)>=progpar.max_momentum )  return MaxMomentumCut;
+	if( tCh2(t)>50 )  return Chi2Cut;
+	if( tHits(t)<25 )  return tHitsCut;         //15
+	charge += tCharge(t);
+    }
 
-	if( (charge)!=0 )  return ChargeCut;   //если сумма зарядов треков не равна 0 то отбрасываем
+    if( (charge)!=0 )  return ChargeCut;   //if sim charge of tracks do not equal 0 then delete event
 
-	return 0;
+    return 0;
 }
 
 int tof_event_rejection()
 {
-//    if( kschit_.time_ns[0]<-4 || kschit_.time_ns[0]>4)         return TofCut;
-//    if( kschit_.time_ns[1]<-4 || kschit_.time_ns[1]>4)         return TofCut;
+    //if( kschit_.time_ns[0]<-4 || kschit_.time_ns[0]>4)         return TofCut;
+    //if( kschit_.time_ns[1]<-4 || kschit_.time_ns[1]>4)         return TofCut;
 
     return 0;
 }
