@@ -335,7 +335,8 @@ int analyse_event()         //анализ события
     if( kedrrun_cb_.Header.RunType == 64 ) { WTotal=2*1886.75; }
     //cout<<"RunNumber="<<kedrraw_.Header.RunNumber<<"\t"<<"WTotal="<<WTotal<<"\t"<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"eTracksAll="<<eTracksAll<<endl;
 
-    if(eTracksBeam>=3&&eTracksIP>=3&&eTracksAll<=4) {
+    //if(eTracksBeam>=3&&eTracksIP>=3&&eTracksAll<=4) {
+    if(eTracksBeam>=progpar.min_beam_track_number&&eTracksIP>=progpar.min_ip_track_number&&eTracksAll<=progpar.max_track_number) {
 
 	if (info) cout<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"eTracksAll="<<eTracksAll<<"\t"<<"eTracksBeam="<<eTracksBeam<<"\t"<<"eTracksIP="<<eTracksIP<<endl;
 
