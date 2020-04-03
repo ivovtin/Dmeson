@@ -128,7 +128,6 @@ enum {
 	CutLongVdRecord,
         AtcEventDamageCut,
         AtcIllegalTrackCut,
-        CutTotalEnergyFast,
 	CutTrackNumber,
 	CutBeamTrackNumber,
 	CutIPTrackNumber_min,
@@ -208,12 +207,6 @@ int pre_event_rejection()
     //if( RawLength(SS_DC)>maxDClen ) return CutLongDcRecord; //too long DC event
     //if( RawLength(SS_VD)>maxVDlen ) return CutLongVdRecord; //too long VD event
 
-    float Ecsi[2], Elkr;
-    kemc_energy_(Ecsi,&Elkr);
-
-    //Total energy deposition should be more than progpar.min_total_energy
-    //if( Ecsi[0]+Ecsi[1]+Elkr<progpar.min_total_energy ) return CutTotalEnergyFast;
-
     return 0;
 }
 
@@ -233,8 +226,7 @@ int vddc_event_rejection()
 	if( tHits(t)<progpar.min_Nhits )  return tHitsCut;
 	charge += tCharge(t);
     }
-
-    if( (charge)!=0 )  return ChargeCut;   //if sim charge of tracks do not equal 0 then delete event
+    if( (charge)!=0 )  return ChargeCut;   //if sum charge of tracks do not equal 0 then delete event
 
     return 0;
 }
@@ -249,58 +241,52 @@ int tof_event_rejection()
 
 int emc_event_rejection()
 {
-	int nemc=0, nlkr=0, ncsi=0;
-	float tot_energy=0;
-	float two_cluster_energy=0;
-        int nclntrack=0;
-//        int add_nemc;                                                //дополнительное кол-во сработавших кластеров
-//	float add_nemc_energy=0;                                       //энергия доп-х сработавших кластеров
+    int nemc=0, nlkr=0, ncsi=0;
+    float tot_energy=0;
+    int nclntrack=0;
 
-	for(int c=0; c<semc.emc_ncls; c++) {                           //цикл по числу кластеров в калориметре
-		tot_energy+=semc.emc_energy[c];                        //подсчет энергии выделившейся в калориметре
-		if( semc.emc_energy[c]>progpar.min_cluster_energy ) {  //если энергия кластера больше установленной минимальной энергии
-			nemc++;                                        //число кластеров с энергией больше минимальной
-                        two_cluster_energy+=semc.emc_energy[c];        //сумма энергий в кластерах с энергией больше минимальной энергии кластера
-			if( semc.emc_type[c]==1 )
-				nlkr++;
-			else
-				ncsi++;
-		}
-		else {
-	                return CutClusterEnergy;
-                //      add_nemc++;
-		//      add_nemc_energy+=semc.emc_energy[c];
-		}
-
-		if ( semc.emc_dc_ntrk[c]==1 )            //если кластер привязан к треку то считаем их число      //semc.dc_emc_ncls[t]
-		{
-		    nclntrack++;
-		}
-
-        //if(semc.emc_theta[c]<20 || semc.emc_theta[c]>31 || semc.emc_theta[c]<39 || semc.emc_theta[c]>141 || semc.emc_theta[c]<149 || semc.emc_theta[c]>160) return EMCthetaCut;
+    for (int t = 0; t< eTracksAll; t++) {
+	float energy_on_track=0;
+	int cl_tr=0;
+	for(int c=0; c<semc.dc_emc_ncls[t]; c++)                     //dc_emc_ncls[NDCH_TRK] - число кластеров emc, соответствующих данному треку
+	{
+	    cl_tr=semc.dc_emc_cls[t][c]-1;                           //dc_emc_cls[NDCH_TRK][NEMC_CLS]-1 - number of clusters on track
+	    energy_on_track+=semc.emc_energy[cl_tr];
+            //cout<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"t="<<t<<"\t"<<"cl_tr="<<cl_tr<<"\t"<<"energy_on_track="<<energy_on_track<<endl;
 	}
-
-        //semc.emc_theta[c];            //угол theta в градусах
-
-//	cout<<"tot_energy="<<tot_energy<<"\t"<<"two_cluster_energy="<<two_cluster_energy<<endl;
-
-	//отбрасываем если какое-либо условие не выполняется
-            //        if(tot_energy-two_cluster_energy>0.1*tot_energy)    return  Cut_10per_Energy;
-	if( tot_energy<progpar.min_total_energy )           return CutTotalEnergy;
-	if( nemc<progpar.min_cluster_number )               return CutMINClusterNumber;
-	if( nemc>progpar.max_cluster_number )               return CutMAXClusterNumber;
-	//if( nlkr<progpar.min_lkrcl_number )                 return CutLkrClusterNumber;
-	//if( ncsi<progpar.min_csicl_number )                 return CutCsiClusterNumber;
-       /*
-	if ( nclntrack<2 || semc.dc_emc_ncls[0]<1 || semc.dc_emc_ncls[1]<1 )  {   //общее число привязанных кластеров должно быть не меньше 2-х и к каждому треку должен быть привязан хотя бы 1 кластер
-	    //cout<<"Ev:"<<eNumber<<"\t"<<"nclntrack="<<nclntrack<<"\t"<<"semc.dc_emc_ncls[0]="<<semc.dc_emc_ncls[0]<<"\t"<<"semc.dc_emc_ncls[1]="<<semc.dc_emc_ncls[1]<<endl;
+	if( energy_on_track<progpar.min_cluster_energy )             //if energy cluster large setup minimal energy
+	{
+	    return CutClusterEnergy;
+	}
+	if( semc.dc_emc_ncls[t]<1 )                                 //if track do not have cluster - cut event
+	{
 	    return Cut_nclntrack;
 	}
-        */
-	//if(add_nemc<3&&add_nemc_energy>120)               return Cut_add_nemc;
-           //if(add_nemc<2&&add_nemc_energy>160)               return Cut_add_nemc;
+    }
 
-	return 0;
+    for(int c=0; c<semc.emc_ncls; c++) {                             //cycle for number of clusters in calorimetr
+	tot_energy+=semc.emc_energy[c];                              //energy deposit in calorimetr
+
+	if ( semc.emc_dc_ntrk[c]==1 )                                //number clusters which connected with track     //semc.dc_emc_ncls[t]
+	{
+	    nclntrack++;                                             //sum on all tracks
+	}
+	nemc++;                                                      //number clusters with energy large minimal
+	if( semc.emc_type[c]==1 )
+	    nlkr++;
+	else
+	    ncsi++;
+	//semc.emc_theta[c];                                             //angle theta (degree)
+	//if(semc.emc_theta[c]<20 || semc.emc_theta[c]>31 || semc.emc_theta[c]<39 || semc.emc_theta[c]>141 || semc.emc_theta[c]<149 || semc.emc_theta[c]>160) return EMCthetaCut;
+    }
+
+    if( tot_energy<progpar.min_total_energy )           return CutTotalEnergy;
+    if( nemc<progpar.min_cluster_number )               return CutMINClusterNumber;
+    if( nemc>progpar.max_cluster_number )               return CutMAXClusterNumber;
+    if( nlkr<progpar.min_lkrcl_number )                 return CutLkrClusterNumber;
+    if( ncsi<progpar.min_csicl_number )                 return CutCsiClusterNumber;
+
+    return 0;
 }
 
 int atc_rejection()          //отброс событий в АЧС
