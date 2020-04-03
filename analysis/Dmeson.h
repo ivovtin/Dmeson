@@ -154,9 +154,9 @@
     //include samples Data/MC
     void chain(){
 	if(sim!=1){
-	    for(int i=1; i<=50; i++)
+	    for(int i=1; i<=245; i++)
 	    {
-		tt->Add(TString::Format("/spool/users/ovtin/psi3770_to_D0meson_%d.root",i).Data());
+		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/psi3770_to_D0meson_%d.root",i).Data());
 	    }
 	}
 	else{
@@ -231,67 +231,6 @@
 	tt->SetBranchAddress("mu",&mu);
 	tt->SetBranchAddress("jpsi",&jpsi);
     }
-
-    TFile *fout=0;
-    TString fnameout;
-    char branchname[1];
-    char branchname1[161];
-
-    TH1F* h1=new TH1F("E/p","E/p",100,0.,10.);
-    TH1F* h2=new TH1F("Energy","Energy",1000,0.,5000.);
-    TH1F* h3=new TH1F("E_LKr","Energy LKr",1000,0.,5000.);
-    TH1F* h4=new TH1F("E_CsI","Energy CsI",1000,0.,5000.);
-    TH1F* h7=new TH1F("Momentum","Momentum",1000,0.,5000.);
-    TH1F* h8=new TH1F("theta","t.theta",1000,0.,185.);
-    TH1F* h9=new TH1F("phi","t.phi",1000,0.,380.);
-    TH1F* h10=new TH1F("theta2t","vrt.theta2t",1000,0.,185.);
-    TH1F* h11=new TH1F("phi2t","vrt.phi2t",1000,0.,185.);
-    TH1F* h12=new TH1F("cos(theta2t)","cos(theta2t)",100,-1.,1.);
-    TH1F* h13=new TH1F("cos(phi2t)","cos(phi2t)",100,-1.,1.);
-    TH1F* h14=new TH1F("cos(t.theta)","cos(t.theta)",100,-1.,1.);
-    TH1F* h15=new TH1F("cos(t.phi)","cos(t.phi)",100,-1.,1.);
-    TH1F* h16=new TH1F("InvMass","InvMass",1000,0.,4000.);
-    TH1F* h17=new TH1F("Mbc","Mbc",1000,0.,4000.);
-    TH1F* h18=new TH1F("de","de",1000,-10000.,10000.);
-
-    TH1F* h19=new TH1F("t0tof.nhits","t0tof.nhits",20,0.,20.);
-    TH1F* h20=new TH1F("t0tof.dchits","t0tof.dchits",20,0.,20.);
-    TH1F* h21=new TH1F("t0tof.namps","t0tof.namps",20,0.,20.);
-    TH1F* h22=new TH1F("t0tof.ntimes","t0tof.ntimes",20,0.,20.);
-    TH1F* h23=new TH1F("t0tof.time","t0tof.time",1000,-150.,150.);
-    TH1F* h24=new TH1F("t0tof.beta","t0tof.beta",1000,-1.,5.);
-    TH1F* h25=new TH1F("t0tof.length","t0tof.length",1000,0.,250.);
-
-    TH1F* h26=new TH1F("t1tof.nhits","t1tof.nhits",20,0.,20.);
-    TH1F* h27=new TH1F("t1tof.dchits","t1tof.dchits",20,0.,20.);
-    TH1F* h28=new TH1F("t1tof.namps","t1tof.namps",20,0.,20.);
-    TH1F* h29=new TH1F("t1tof.ntimes","t1tof.ntimes",20,0.,20.);
-    TH1F* h30=new TH1F("t1tof.time","t1tof.time",1000,-150.,150.);
-    TH1F* h31=new TH1F("t1tof.beta","t1tof.beta",1000,-1.,5.);
-    TH1F* h32=new TH1F("t1tof.length","t1tof.length",1000,0.,250.);
-
-    TH1F* h33=new TH1F("ratiop1t0p","p1/t0.p",100,0.,10.);
-    TH1F* h34=new TH1F("ratiop2t1p","p2/t1.p",100,0.,10.);
-    TH1F* h35=new TH1F("S","S",150,0.,1.5);
-    TH1F* h40=new TH1F("t0chi2","t0.chi2",1000,0.,1000.);
-    TH1F* h41=new TH1F("t1chi2","t1.chi2",1000,0.,1000.);
-    TH1F* h42=new TH1F("h42","cos_2t",100,-1.,1.);
-    TH1F* h43=new TH1F("ncls","emc.ncls",12,0.,12.);
-    TH1F* h45=new TH1F("t0.nhitsxy","t0.nhitsxy",100,0.,100.);
-    TH1F* h46=new TH1F("t1.nhitsxy","t1.nhitsxy",100,0.,100.);
-    TH1F* h47=new TH1F("t0.nvecxy","t0.nvecxy",100,0.,100.);
-    TH1F* h48=new TH1F("t1.nvecxy","t1.nvecxy",100,0.,100.);
-    TH1F* h49=new TH1F("t0.nvec","t0.nvec",100,0.,100.);
-    TH1F* h50=new TH1F("t1.nvec","t1.nvec",100,0.,100.);
-    TH1F* h51=new TH1F("clgamma0theta","clgamma0.theta",1000,0.,185.);
-    TH1F* h52=new TH1F("clgamma1theta","clgamma1.theta",1000,0.,185.);
-    TH1F* h53=new TH1F("cos(cl.theta)","cos(cl.theta)",100,-1.,1.);
-    TH1F* h58=new TH1F("munhits","mu.nhits",30,0.,30.);
-    TH1F* hzero=new TH1F("hzero","Jpsi->pi^{+}pi^{-}pi^{0}",1600,0,1600);
-    TH1F* hzero1=new TH1F("hzero1","vrt.theta2t",1000,0.,185.);
-    TH1F* hzero2=new TH1F("hzero2","cos(theta2t)",100,-1.,1.);
-    TH1F* hzero4=new TH1F("hzero4","Energy",1000,0.,5000.);
-    TH1F* hzero5=new TH1F("hzero5","emc.ncls",12,0.,12.);
 
     TProfile* pr1;
     TProfile* pr2;
