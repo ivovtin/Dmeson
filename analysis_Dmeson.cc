@@ -198,7 +198,6 @@ int listtr[6],lclpi0[8],lclg[5];
 //Rejection prior to reconstruction helps to save CPU time
 extern "C" void kemc_energy_(float Ecsi[2],float *Elkr);
 
-//предварительный отброс события
 int pre_event_rejection()
 {
     //maximum track number supposed to be 7
@@ -251,7 +250,7 @@ int emc_event_rejection()
     for (int t = 0; t< eTracksAll; t++) {
 	float energy_on_track=0;
 	int cl_tr=0;
-	for(int c=0; c<semc.dc_emc_ncls[t]; c++)                     //dc_emc_ncls[NDCH_TRK] - число кластеров emc, соответствующих данному треку
+	for(int c=0; c<semc.dc_emc_ncls[t]; c++)                     //dc_emc_ncls[NDCH_TRK] - number clusters for track
 	{
 	    cl_tr=semc.dc_emc_cls[t][c]-1;                           //dc_emc_cls[NDCH_TRK][NEMC_CLS]-1 - number of clusters on track
 	    energy_on_track+=semc.emc_energy[cl_tr];
