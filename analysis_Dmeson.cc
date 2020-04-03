@@ -289,23 +289,23 @@ int emc_event_rejection()
     return 0;
 }
 
-int atc_rejection()          //отброс событий в АЧС
+int atc_rejection()
 {
-    //ATC raw record damaged in any way (including when DeltaT is absent or out of range)     //сырые данные повреждены
+    //ATC raw record damaged in any way (including when DeltaT is absent or out of range)
     if( atc_rec.eventdamage ) return AtcEventDamageCut;
 
-    //track determined as illegal by atcrec                                                   //трек не определяется в atcrec
+    //track determined as illegal by atcrec
     if( atc_track.illtrack[0] ) return AtcIllegalTrackCut;
 
-    //no counters on tracks, very strange if occurs                                           //нет счетчика на трек
-//    if( atc_track.ncnt_on_track[0]==0 ) return NoAtcOnTrackCut;
+    //no counters on tracks, very strange if occurs
+    //if( atc_track.ncnt_on_track[0]==0 ) return NoAtcOnTrackCut;
 
     return 0;
 }
 
 int mu_event_rejection()
 {
-    //if( mu_next_event()>0 ) return MUCut;           //отброс космики
+    if( mu_next_event()>0 ) return MUCut;           //for delete cosmic events
 
     return 0;
 }
