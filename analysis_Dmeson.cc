@@ -96,6 +96,7 @@ struct ProgramParameters {
 	int MCCalibRunNumber;                 //19862 - number of run - download from DB calibration for processe MC-file in runs interval
 	int NEvents;                          //number of processed events
 	bool process_only;                    //process one event only
+        bool verbose;                         //print debug information
 };
 //=======================================================================================================================================
 //Selection conditions:
@@ -119,7 +120,7 @@ struct ProgramParameters {
 //=======================================================================================================================================
 
 //set selection conditions
-static const struct ProgramParameters def_progpar={false,4,4,2,2,4,100,2000,15,45,2,8,0,0,50,25,"/store/users/ovtin/out.root",19862,0,false};
+static const struct ProgramParameters def_progpar={false,4,4,2,2,4,100,2000,15,45,2,8,0,0,50,25,"/store/users/ovtin/out.root",19862,0,false,0};
 
 static struct ProgramParameters progpar(def_progpar);
 
@@ -189,6 +190,8 @@ typedef struct {Float_t Mbc[4],InvM[4],dE[4],dP[4],E_KminusP[4],E_KplusP[4],E_Pm
 static DMESON Dmeson;
 //static TH1F *hbeam;
 
+double mk = 493.68;
+double mpi = 139.57;
 float Ekminuspiplus, Ekpluspiminus, Pminus, Pplus;
 
 int listtr[6],lclpi0[8],lclg[5];
@@ -252,7 +255,7 @@ int emc_event_rejection()
 	{
 	    cl_tr=semc.dc_emc_cls[t][c]-1;                           //dc_emc_cls[NDCH_TRK][NEMC_CLS]-1 - number of clusters on track
 	    energy_on_track+=semc.emc_energy[cl_tr];
-            //cout<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"t="<<t<<"\t"<<"cl_tr="<<cl_tr<<"\t"<<"energy_on_track="<<energy_on_track<<endl;
+            if(progpar.verbose) cout<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"t="<<t<<"\t"<<"cl_tr="<<cl_tr<<"\t"<<"energy_on_track="<<energy_on_track<<endl;
 	}
 	if( energy_on_track<progpar.min_cluster_energy )             //if energy cluster large setup minimal energy
 	{
@@ -311,45 +314,83 @@ int mu_event_rejection()
 }
 
 
-int analyse_event()         //анализ события
+int analyse_event()
 {
-    bool info=false;
-    //bool info=true;
-    //float EMinPhot=50.;
-    float EMinPhot=15.;
-    double  WTotal=2*beam_energy;
-    if( kedrrun_cb_.Header.RunType == 64 ) { WTotal=2*1886.75; }
-    //cout<<"RunNumber="<<kedrraw_.Header.RunNumber<<"\t"<<"WTotal="<<WTotal<<"\t"<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"eTracksAll="<<eTracksAll<<endl;
+    float EMinPhot=progpar.min_cluster_energy;
+    double  WTotal=2*beam_energy;                                                                 //beam_energy - How determined this energy ?
+    if( kedrrun_cb_.Header.RunType == 64 ) { WTotal=2*1886.75; }                                  //for MC
 
-    //if(eTracksBeam>=3&&eTracksIP>=3&&eTracksAll<=4) {
-    if(eTracksBeam>=progpar.min_beam_track_number&&eTracksIP>=progpar.min_ip_track_number&&eTracksAll<=progpar.max_track_number) {
+    if (progpar.verbose) cout<<"RunNumber="<<kedrraw_.Header.RunNumber<<"\t"<<"WTotal="<<WTotal<<"\t"<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"eTracksAll="<<eTracksAll<<endl;
 
-	if (info) cout<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"eTracksAll="<<eTracksAll<<"\t"<<"eTracksBeam="<<eTracksBeam<<"\t"<<"eTracksIP="<<eTracksIP<<endl;
+    //apply tracks cut conditions
+    if(eTracksBeam>=progpar.min_beam_track_number&&eTracksIP>=progpar.min_ip_track_number&&eTracksAll<=progpar.max_track_number)
+    {
+	if (progpar.verbose) cout<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"eTracksAll="<<eTracksAll<<"\t"<<"eTracksBeam="<<eTracksBeam<<"\t"<<"eTracksIP="<<eTracksIP<<endl;
 
-	//=====================================================================================
+	copy(&bevent);
+	bevent.event=kdcenum_.EvNum;
 
-	int t1, t2, t3, t4;
+	unsigned short nhits=mu_next_event();
+
+	copy(&bvertex);
+	copy(&bemc);
+
 	int i=0;
+	int ntrfromip=0;
 
-	for (t1 = 0; t1 < eTracksAll; t1++) {
-	    for (t2 = 0; t2 < eTracksAll; t2++) {
+	for (int t1 = 0; t1 < eTracksAll; t1++)                                  //cycle for first track
+	{
+	    double xx=tX0IP(t1)*tX0IP(t1);
+	    double yy=tY0IP(t1)*tY0IP(t1);
+	    double rr=sqrt(xx+yy);
+	    if (progpar.verbose) cout<<"rr="<<rr<<endl;                          //radius begin track
+
+	    if(rr<5) {
+		ntrfromip++;
+		if(ntrfromip<=6){
+		    listtr[ntrfromip-1]=t1+1;                                    //list identificator of traks ListTr[1:6]
+		}
+	    }
+
+	    copy(&btrack[t1],t1);
+	    copy(&btof[t1],t1);
+	    copy(&bmu,t1,nhits);
+	    copy(&batc);
+
+	    for(int k=0; k<6; k++)                                              //cycle for number of crossing ATC counters on track
+	    {
+		if (progpar.verbose) cout<<"Event="<<kdcenum_.EvNum<<"\t"<<"Track="<<t1<<"\t"<<"i="<<i<<"\t"<<"atc_track.cnt_cross[t][k]="<<atc_track.cnt_cross[t1][k]<<"\t"<<"atc_rec.npe="<<atc_rec.npe[atc_track.cnt_cross[t1][k]-1]<<endl;
+		copy(&bcnt[k][t1],(atc_track.cnt_cross[t1][k]-1),t1);
+	    }
+
+	    for(int c=0; c<semc.dc_emc_ncls[t1]; c++)                            //dc_emc_ncls[NDCH_TRK] - number clusters of emc on track
+	    {
+		if (progpar.verbose) cout<<"Event="<<kdcenum_.EvNum<<"\t"<<"Track="<<t1<<"\t"<<"semc.dc_emc_ncls[t]="<<semc.dc_emc_ncls[t1]<<endl;
+		copy(&bcluster[c][t1],(semc.dc_emc_cls[t1][c]-1));               //dc_emc_cls[NDCH_TRK][NEMC_CLS] - number clusters
+	    }
+
+	    for(int t=0; t<semc.str_ntracks; t++) {
+		copy(&bstriptrack,t);
+	    }
+
+	    for (int t2 = 0; t2 < eTracksAll; t2++)                              //cycle for second track
+	    {
 		double p1pi=0, p2pi=0, p1ki=0, p2ki=0;
-		//condition for part1: K-, part2: pi+    (D0->K-pi+)
-		if( tCharge(t1)<0 && tCharge(t2)>0 ) {
-		    if (info) cout<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"Ebeam="<<beam_energy<<"\t"<<"t1="<<t1<<"\t"<<"t2="<<t2<<"\t"<<"tCharge(t1)="<<tCharge(t1)<<"\t"<<"tCharge(t2)="<<tCharge(t2)<<endl;
-		    if (info) cout<<"P(t1)="<<tP(t1)<<"\t"<<"P(t2)="<<tP(t2)<<"\t"<<"tHits(t1)="<<tHits(t1)<<"\t"<<"tHits(t2)="<<tHits(t2)<<"\t"<<"tCh2(t1)="<<tCh2(t1)<<"\t"<<"tCh2(t2)="<<tCh2(t2)<<endl;
-		    Dmeson.Mbc[i]=0;
-		    Dmeson.InvM[i]=0;
-	   	    Dmeson.dE[i]=0;
+		if( tCharge(t1)<0 && tCharge(t2)>0 )       		         //condition for part1: K-, part2: pi+    (D0->K-pi+)
+		{
+		    if (progpar.verbose) cout<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"Ebeam="<<beam_energy<<"\t"<<"t1="<<t1<<"\t"<<"t2="<<t2<<"\t"<<"tCharge(t1)="<<tCharge(t1)<<"\t"<<"tCharge(t2)="<<tCharge(t2)<<endl;
+		    if (progpar.verbose) cout<<"P(t1)="<<tP(t1)<<"\t"<<"P(t2)="<<tP(t2)<<"\t"<<"tHits(t1)="<<tHits(t1)<<"\t"<<"tHits(t2)="<<tHits(t2)<<"\t"<<"tCh2(t1)="<<tCh2(t1)<<"\t"<<"tCh2(t2)="<<tCh2(t2)<<endl;
+
+		    Dmeson.Mbc[i]=0;                                            //Invariant mass or beam consraint mass
+		    Dmeson.InvM[i]=0;                                           //also Invariant mass
+		    Dmeson.dE[i]=0;
 		    Dmeson.dP[i]=0;
 		    Dmeson.E_KminusP[i]=0;
 		    Dmeson.E_KplusP[i]=0;
 		    Dmeson.E_PminusK[i]=0;
 		    Dmeson.E_PplusK[i]=0;
-		    double mk = 493.68;
-		    double mpi = 139.57;
 
-		    double px1, px2, py1, py2, pz1, pz2;
+		    double px1, px2, py1, py2, pz1, pz2;                        //determine momentums
 		    px1 = tP(t1)*tVx(t1);
 		    px2 = tP(t2)*tVx(t2);
 		    py1 = tP(t1)*tVy(t1);
@@ -366,21 +407,22 @@ int analyse_event()         //анализ события
 		    Dmeson.InvM[i] = pow(beam_energy,2)-pow(tP(t1),2)-pow(tP(t2),2)-2*tP(t1)*tP(t2)*(tVx(t1)*tVx(t2)+tVy(t1)*tVy(t2)+tVz(t1)*tVz(t2));
 		    if ( Dmeson.InvM[i]>0) Dmeson.InvM[i] = sqrt(Dmeson.InvM[i]); else Dmeson.InvM[i] = 0;
 
-		    if (info) cout<<"mbc="<<Dmeson.Mbc[i]<<"\t"<<"InvM="<<Dmeson.InvM[i]<<endl;
+		    if (progpar.verbose) cout<<"mbc="<<Dmeson.Mbc[i]<<"\t"<<"InvM="<<Dmeson.InvM[i]<<endl;
 
 		    p1ki = tP(t1);
 		    p1pi = tP(t2);
 		    Dmeson.E_KminusP[i] = sqrt(mk*mk + p1ki*p1ki) + sqrt(mpi*mpi + p1pi*p1pi);
 		    Dmeson.E_PminusK[i] = sqrt(mk*mk + p1pi*p1pi) + sqrt(mpi*mpi + p1ki*p1ki);
 
-		    for(t3=0; t3<eTracksAll; t3++  ){
-			for(t4=0; t4<eTracksAll; t4++  ){
+                    //condition for part1: K+, part2: pi-    (D0bar->K+pi-)
+		    for(int t3=0; t3<eTracksAll; t3++  ){
+			for(int t4=0; t4<eTracksAll; t4++  ){
 			    if ( t3!=t1 && t3!=t2 && t4!=t1 && t4!=t2 && tCharge(t1)!=tCharge(t3) ){
 				if ( tCharge(t3)>0 && tCharge(t4)<0 )
 				{
 				    p2ki = tP(t3);
 				    p2pi = tP(t4);
-				    if (info) cout<<"P(t3)="<<tP(t3)<<"\t"<<"P(t4)="<<tP(t4)<<endl;
+				    if (progpar.verbose) cout<<"P(t3)="<<tP(t3)<<"\t"<<"P(t4)="<<tP(t4)<<endl;
 				}
 			    }
 			}
@@ -389,89 +431,33 @@ int analyse_event()         //анализ события
 		    Dmeson.E_PplusK[i] = sqrt(mk*mk + p2pi*p2pi) + sqrt(mpi*mpi + p2ki*p2ki);
 		    //dE = (EkminusP + EkplusP)*0.5 - beamenergy;
 		    Dmeson.dE[i] = (Dmeson.E_KminusP[i] + Dmeson.E_KplusP[i])/2. - beam_energy;
-		    if (info) cout<<"E_KminusP="<< Dmeson.E_KminusP[i]<<"\t"<<"E_KplusP="<<Dmeson.E_KplusP[i]<<"\t"<<"de="<<Dmeson.dE[i]<<endl;
-		    if (info) cout<<"E_PminusK="<< Dmeson.E_PminusK[i]<<"\t"<<"E_PplusK="<<Dmeson.E_PplusK[i]<<endl;
+		    if (progpar.verbose) cout<<"E_KminusP="<< Dmeson.E_KminusP[i]<<"\t"<<"E_KplusP="<<Dmeson.E_KplusP[i]<<"\t"<<"de="<<Dmeson.dE[i]<<endl;
+		    if (progpar.verbose) cout<<"E_PminusK="<< Dmeson.E_PminusK[i]<<"\t"<<"E_PplusK="<<Dmeson.E_PplusK[i]<<endl;
 
 		    Dmeson.dP[i] = tP(t1)-tP(t2);
-		    if (info) cout<<"dP="<< Dmeson.dP[i]<<endl;
+		    if (progpar.verbose) cout<<"dP="<< Dmeson.dP[i]<<endl;
 		    i++;
 		}
 	    }
 	}
 	Dmeson.rEv = kedrraw_.Header.Number;
-	//=====================================================================================
-
-	int ntrfromip=0;
-
 	Dmeson.Ebeam=beam_energy;
 
-	copy(&bevent);
-	bevent.event=kdcenum_.EvNum;                 //take succesive event number from VDDCRec
-
-	unsigned short nhits=mu_next_event();
-
-	copy(&bvertex);
-	copy(&bemc);
-
-	for(int t=0; t<eTracksAll; t++)                            //цикл по числу треков
-	{
-	    //		if(sqrt(pow(tX0(t),2)+pow(tY0(t),2)+pow(tZ0(t),2))<30)    {          //cut area in DC       30 - радиус сферы в см
-	    //		if( fabs(tX0(t)-eVertexX)<1 && fabs(tY0(t)-eVertexY)<1 && fabs(tZ0(t)-eVertexZ)<15 )    {          //cut area in DC       30 - радиус сферы в см
-	    //cout<<"tX0(t)="<<tX0(t)<<"   tY0(t)="<<tY0(t)<<"    tZ0(t)="<<tZ0(t)<<endl;   //coordinates begin track
-	    //cout<<"eVertexX="<<eVertexX<<"   eVertexY="<<eVertexY<<"    eVertexZ="<<eVertexZ<<endl;   //координаты восстановленной вершины
-	    //============================================================
-	    double xx=tX0IP(t)*tX0IP(t);
-	    double yy=tY0IP(t)*tY0IP(t);
-	    double rr=sqrt(xx+yy);
-	    //cout<<"rr="<<rr<<endl;   //radius begin track
-
-	    //if(rr<3) {
-	    if(rr<5) {
-		ntrfromip++;
-		if(ntrfromip<=6){
-		    listtr[ntrfromip-1]=t+1;                //Список идентификаторов треков ListTr[1:6]
-		}
-	    }
-                //============================================================
-	    copy(&btrack[t],t);
-	    copy(&btof[t],t);
-	    copy(&bmu,t,nhits);
-	    copy(&batc);
-
-	    for(int k=0; k<6; k++)                    //цикл по числу пересеченных счетчиков на трек
-	    {
-		//                  cout<<"Event="<<kdcenum_.EvNum<<"\t"<<"Track="<<t<<"\t"<<"i="<<i<<"\t"<<"atc_track.cnt_cross[t][i]="<<atc_track.cnt_cross[t][i]<<"\t"<<"atc_rec.npe="<<atc_rec.npe[atc_track.cnt_cross[t][i]-1]<<endl;
-		copy(&bcnt[k][t],(atc_track.cnt_cross[t][k]-1),t);
-	    }
-
-	    for(int c=0; c<semc.dc_emc_ncls[t]; c++)                      //dc_emc_ncls[NDCH_TRK] - число кластеров emc, соответствующих данному треку
-	    {
-		//cout<<"Event="<<kdcenum_.EvNum<<"\t"<<"Track="<<t<<"\t"<<"semc.dc_emc_ncls[t]="<<semc.dc_emc_ncls[t]<<endl;
-		copy(&bcluster[c][t],(semc.dc_emc_cls[t][c]-1)); //?????     //dc_emc_cls[NDCH_TRK][NEMC_CLS] - номера таких кластеров
-	    }
-
-
-	    for(int t=0; t<semc.str_ntracks; t++) {
-		copy(&bstriptrack,t);
-	    }
-	}
-
 	int nclg=0;
-	for(int cl=0; cl<semc.emc_ncls; cl++)       //цикл по числу кластеров
+	for(int cl=0; cl<semc.emc_ncls; cl++)
 	{
-	    if(semc.emc_dc_ntrk[cl]==0)            //если кластер не привязан к треку
+	    if(semc.emc_dc_ntrk[cl]==0)                                               //cluster do not connected with track
 	    {
-		copy(&bclgamma[nclg],cl);               //	ncls=semc.emc_emc_ncls[c];       ntracks=semc.emc_dc_ntrk[c];
+		copy(&bclgamma[nclg],cl);                                             //ncls=semc.emc_emc_ncls[c];       ntracks=semc.emc_dc_ntrk[c];
 		nclg++;
 	    }
 	}
-	//cout<<"Event="<<eDaqNumber<<"\t"<<endl;
 
 	for(int c=0; c<semc.str_ncls; c++) {
 	    copy(&bstrip,c);
 	}
-            /*
-            //====================================================================
+	/*
+	     //====================================================================
 	    int nclnft=0;
 	    for(int cl=0; cl<semc.emc_ncls; cl++)       //цикл по числу кластеров
 	    {
@@ -569,7 +555,7 @@ int analyse_event()         //анализ события
 	}
 }
 
-static const char* optstring="ra:d:b:p:h:s:j:t:e:c:l:k:i:u:q:o:v:n:x";
+static const char* optstring="ra:d:b:p:h:s:j:t:e:c:l:k:i:u:q:o:v:n:z:x";
 
 void Usage(int status)
 {
@@ -597,6 +583,7 @@ void Usage(int status)
 	        <<"  -o RootFile    Output ROOT file name (default to "<<def_progpar.rootfile<<")\n"
             	<<"  -v MCCalibRunNumber    MCCalibRunNumber (default to "<<def_progpar.MCCalibRunNumber<<")\n"
             	<<"  -n NEvents     Number events in process "<<def_progpar.NEvents<<")\n"
+            	<<"  -z Debug       Print debug information "<<def_progpar.verbose<<")\n"
 		<<"  -x             Process the events specified after file exclusively and print debug information"
 	    <<endl;
 	exit(status);
@@ -632,6 +619,7 @@ int main(int argc, char* argv[])
 		        case 'o': progpar.rootfile=optarg; break;
                         case 'v': progpar.MCCalibRunNumber=atoi(optarg); break;
                         case 'n': progpar.NEvents=atoi(optarg); break;
+                        case 'z': progpar.verbose=atoi(optarg); break;
 			case 'x': progpar.process_only=true; break;
 			default : Usage(1);
 		}
