@@ -40,6 +40,13 @@ qstat -u ovtin
 qdel 772354
 ```
 
+Processing prepared root-files with reconstruction for D-meson:
+```
+./Dmeson 1 1 0 1 0 160 3000 0
+
+. runDmeson.sh
+```
+
 # Information about D-meson statistic:
 Runs in peak Psi(3770) -> e+e- -> DD^- (D^0D^-0 or D+D-): <br />
 1) 23206 - 23942 (date: 2016-02-09 - 2016-05-23) <br />
@@ -55,21 +62,15 @@ In selected runs - 6791860 events (1 e+e- and 510 MHadr candidates), integral lu
 2) 24834 - 26245 (2017 year) <br />
 In selected runs - 14182834 events (7 e+e- and 3124 MHadr candidates), integral luminosity is 0.000 nb^-1   <br />
 
-Registration D-mesons in channels:<br />
+0.9 nb^-1 statistic for 2009 year - expect 100 signal events D0->K-pi+  <br />
+
+
+# Registration D-mesons in channels:<br />
 D0->K-pi+ (D0bar->K+pi-)           <br />
 D+->K-pi+pi+ (D- ->K+pi-pi-)       <br />
 
 Momentum D-meson from decay Psi(3770) -> DD^- constitute pd ~ 260 MeV/c <br />
 In decay Psi(3770) born 2 D-mesons                                <br />
-
-Processing prepared root-files with reconstruction for D-meson:
-```
-./Dmeson 1 1 0 1 0 160 3000 0
-
-. runDmeson.sh
-```
-
-0.9 nb^-1 statistic for 2009 year - expect 100 signal events D0->K-pi+  <br />
 
 N=Lint*sigma                                                                 <br />
 
