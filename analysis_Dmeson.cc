@@ -69,9 +69,10 @@
 
 using namespace std;
 
-const int Ntraks=6;
-const int Natccr=6;
-const int Nclcr=2;
+const int Natccr=4;           //number crossing ATC counters on track
+const int Ntraks=6;           //number tracks
+const int Nclcr=4;            //number crossing clusters on track
+const int Nclcrg=4;
 
 static const char* progname;
 
@@ -163,25 +164,17 @@ enum {
 static TTree *eventTree, *trackTree, *emcTowerTree, *lkrStripTree, *lkrStripTrackTree, *ATCTree, *jpsiTree;
 static struct EventBranch bevent;
 static struct VertexBranch bvertex;
-static struct TrackBranch btrack[6];
-static struct ToFBranch btof[6];
+static struct TrackBranch btrack[Ntraks];
+static struct ToFBranch btof[Ntraks];
 static struct MUBranch bmu;
 static struct EMCBranch bemc;
-static struct TowerClusterBranch bcluster[4][3];
-static struct TowerClusterBranch bclgamma[4];
+static struct TowerClusterBranch bcluster[Nclcr][Ntraks];
+static struct TowerClusterBranch bclgamma[Nclcrg];
 static struct StripClusterBranch bstrip;
 static struct StripTrackBranch bstriptrack;
 
-static struct ATCCounterBranch bcnt[6][6];
+static struct ATCCounterBranch bcnt[Natccr][Ntraks];
 static struct ATCBranch batc;
-
-//TH1F *hpx;
-//struct piBranch {
-//        Int_t numHyp;
-//	Float_t  chi2,M1,P1,M2,P2;
-//};
-//static struct piBranch bpi;
-//static const char* piBranchList="numHyp/I:chi2/F:M1:P1:M2:P2";
 
 typedef struct {Int_t numHyp; Float_t chi2[5],M[5],P1[5],P2[5];} JPSI;
 static JPSI jpsi;
@@ -356,7 +349,7 @@ int analyse_event()
 	    copy(&bmu,t1,nhits);
 	    copy(&batc);
 
-	    for(int k=0; k<6; k++)                                              //cycle for number of crossing ATC counters on track
+	    for(int k=0; k<Natccr;  k++)                                              //cycle for number of crossing ATC counters on track
 	    {
 		if (progpar.verbose) cout<<"Event="<<kdcenum_.EvNum<<"\t"<<"Track="<<t1<<"\t"<<"i="<<i<<"\t"<<"atc_track.cnt_cross[t][k]="<<atc_track.cnt_cross[t1][k]<<"\t"<<"atc_rec.npe="<<atc_rec.npe[atc_track.cnt_cross[t1][k]-1]<<endl;
 		copy(&bcnt[k][t1],(atc_track.cnt_cross[t1][k]-1),t1);
@@ -630,6 +623,7 @@ int main(int argc, char* argv[])
 	    return 1;
 	}
 
+        //Ntraks=progpar.max_track_number;
 
 	char timestr[161];
 	time_t curtime=time(NULL);
@@ -643,7 +637,7 @@ int main(int argc, char* argv[])
 	TFile *fout=0;
 	//Create root file if exclusive event processing is not set
 	if( !progpar.process_only )
-		fout = new TFile(progpar.rootfile,"RECREATE");        //fout = new TFile(progpar.rootfile,"RECREATE","",7);
+		fout = new TFile(progpar.rootfile,"RECREATE");
 
 	eventTree = new TTree("et","Event tree");
 	eventTree->SetAutoSave(500000000);  // autosave when 0.5 Gbyte written
@@ -652,38 +646,29 @@ int main(int argc, char* argv[])
 	eventTree->Branch("emc",&bemc,emcBranchList);
 	eventTree->Branch("atcev",&batc,atcBranchList);
 
-	//for(int i=0; i<Ntraks; i++) {
-	for(int i=0; i<6; i++) {
-	//char branchname[Ntraks];
-	char branchname[6];
-	sprintf(branchname,"t%d",i);
-	TBranch* b1=eventTree->Branch(branchname,&btrack[i],trackBranchList);
-	  //for(int ii=0; ii<Natccr; ii++) {
-	  for(int ii=0; ii<6; ii++) {
-	      //char branchname2[Natccr];
-	      char branchname2[6];
-	      sprintf(branchname2,"t%datccr%d",i,ii);
-	      eventTree->Branch(branchname2,&bcnt[ii][i],atcCounterBranchList);
-	  }
-	  //for (int ii=0; ii<Nclcr; ii++)
-	  for (int ii=0; ii<3; ii++)
-	  {
-	      //char clastername[Nclcr];
-	      char clastername[3];
-	      sprintf(clastername,"t%dc%d",i,ii);
-	      eventTree->Branch(clastername,&bcluster[ii][i],towerClusterBranchList);
-	  }
-	  //char tofname[Ntraks];
-	  char tofname[6];
-	  sprintf(tofname,"t%dtof",i);
-          eventTree->Branch(tofname,&btof[i],ToFBranchList);
+	for(int i=0; i<Ntraks; i++) {
+	    char branchname[10];
+	    sprintf(branchname,"t%d",i);
+	    TBranch* b1=eventTree->Branch(branchname,&btrack[i],trackBranchList);
+	    for(int ii=0; ii<Natccr; ii++) {
+		char branchname2[10];
+		sprintf(branchname2,"t%datccr%d",i,ii);
+		eventTree->Branch(branchname2,&bcnt[ii][i],atcCounterBranchList);
+	    }
+	    for (int ii=0; ii<Nclcr; ii++)
+	    {
+		char clastername[10];
+		sprintf(clastername,"t%dc%d",i,ii);
+		eventTree->Branch(clastername,&bcluster[ii][i],towerClusterBranchList);
+	    }
+	    char tofname[10];
+	    sprintf(tofname,"t%dtof",i);
+	    eventTree->Branch(tofname,&btof[i],ToFBranchList);
 	}
 
-	//for (int ii=0; ii<Nclcr; ii++)
-	for (int ii=0; ii<4; ii++)
+	for (int ii=0; ii<Nclcrg; ii++)
 	{
-	    //char clgammaname[Nclcr];
-	    char clgammaname[4];
+	    char clgammaname[10];
 	    sprintf(clgammaname,"clgamma%d",ii);
 	    eventTree->Branch(clgammaname,&bclgamma[ii],towerClusterBranchList);
 	}
@@ -708,7 +693,7 @@ int main(int argc, char* argv[])
 	kf_install_signal_handler(1);
 
 	//Set subsystems to be used
-        kf_use(KF_VDDC_SYSTEM|KF_TOF_SYSTEM|KF_ATC_SYSTEM|KF_EMC_SYSTEM|KF_MU_SYSTEM);                             //устанавливаем, какие будем использовать системы
+        kf_use(KF_VDDC_SYSTEM|KF_TOF_SYSTEM|KF_ATC_SYSTEM|KF_EMC_SYSTEM|KF_MU_SYSTEM);
 
 	//Register to kframework used cuts
 	char buf[100];
