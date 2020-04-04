@@ -213,7 +213,7 @@ int vddc_event_rejection()
     if( eTracksIP<progpar.min_ip_track_number )     return CutIPTrackNumber_min;
     if( eTracksIP>progpar.max_ip_track_number )     return CutIPTrackNumber_max;
 
-    int charge=0;
+    double charge=0;
     for (int t = 0; t< eTracksAll; t++) {
 	if( tPt(t)<=progpar.min_momentum )  return MinMomentumCut;
 	if( tPt(t)>=progpar.max_momentum )  return MaxMomentumCut;
@@ -543,8 +543,8 @@ int analyse_event()
 	    if( progpar.process_only ) return 1;
 
 	    return 0;
-
 	}
+	    return 0;
 }
 
 static const char* optstring="ra:d:b:p:h:s:j:t:e:c:l:k:i:u:q:o:v:n:z:x";
@@ -622,8 +622,6 @@ int main(int argc, char* argv[])
 	    cerr<<"Error in parameters specification, should be MinTotalTracks>=MinBeamTracks>=MinIPTracks"<<endl;
 	    return 1;
 	}
-
-        //Ntraks=progpar.max_track_number;
 
 	char timestr[161];
 	time_t curtime=time(NULL);
@@ -746,7 +744,7 @@ int main(int argc, char* argv[])
 
 	//Register an analysis routine
 	kf_register_analysis(analyse_event);
-        cout<<"analyse_event="<<analyse_event<<endl;
+        //if(verbose)cout<<"analyse_event="<<analyse_event<<endl;
 
 	//Do not reconstruct, read reconstruction records from file
 	kf_reco_from_file(progpar.read_reco);
