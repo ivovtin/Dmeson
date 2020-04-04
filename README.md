@@ -42,18 +42,18 @@ qdel 772354
 
 # Information about D-meson statistic:
 Runs in peak Psi(3770) -> e+e- -> DD^- (D^0D^-0 or D+D-): <br />
-1) 23206 - 23942 (date: 2016-02-09 - 2016-05-23)<br />
-In selected runs - 130775145 events (207190 Å+Å- and 21046 MHadr candidates), integral luminosity is 1161.799 nb^-1 (or 1.16 pb^-1)  <br />
-2) 24835 - 26248 (date: 2017-03-05 - 2017-12-24)
-In selected runs - 452752351 events (393776 Å+Å- and 61279 MHadr candidates), integral luminosity is 2638.276 nb^-1 (or 2.64 pb^-1)  <br />
+1) 23206 - 23942 (date: 2016-02-09 - 2016-05-23) <br />
+In selected runs - 130775145 events (207190 e+e- and 21046 MHadr candidates), integral luminosity is 1161.799 nb^-1 (or 1.16 pb^-1).  <br />
+2) 24835 - 26248 (date: 2017-03-05 - 2017-12-24) <br />
+In selected runs - 452752351 events (393776 e+e- and 61279 MHadr candidates), integral luminosity is 2638.276 nb^-1 (or 2.64 pb^-1).  <br />
 
-Summary: 583,527,496 events; 600966 Å+Å- and 82325 MHadr candidates; integral luminosity - 3.8 pb^-1
+Summary: 583,527,496 events; 600966 e+e- and 82325 MHadr candidates; integral luminosity - 3.8 pb^-1. <br />
 
 Bkg Runs: <br />
-1) 23939 - 23499
-In selected runs - 6791860 events (1 Å+Å- and 510 MHadr candidates), integral luminosity is 0.000 nb^-1   <br />
-2) 24834 - 26245 (2017 year)
-In selected runs - 14182834 events (7 Å+Å- and 3124 MHadr candidates), integral luminosity is 0.000 nb^-1   <br />
+1) 23939 - 23499 <br />
+In selected runs - 6791860 events (1 e+e- and 510 MHadr candidates), integral luminosity is 0.000 nb^-1   <br />
+2) 24834 - 26245 (2017 year) <br />
+In selected runs - 14182834 events (7 e+e- and 3124 MHadr candidates), integral luminosity is 0.000 nb^-1   <br />
 
 Registration D-mesons in channels:<br />
 D0->K-pi+ (D0bar->K+pi-)           <br />
