@@ -41,11 +41,19 @@ qdel 772354
 ```
 
 # Information about D-meson statistic:
-Runs in peak Psi(3770) -> e+e- -> DD^- (D0D^-0 or D+D-): <br />
-23206 (2016-02-09) and 23942 (2016-05-23).    February-May 2016 <br />
-In selected runs - 130.775.145 events (207.190 Å+Å- and 21.046 MHadr candidates), integral luminosity is 1161.799 ÎÂ^-1 (or 1.1 pb^-1)  <br />
+Runs in peak Psi(3770) -> e+e- -> DD^- (D^0D^-0 or D+D-): <br />
+1) 23206 - 23942 (date: 2016-02-09 - 2016-05-23)<br />
+In selected runs - 130775145 events (207190 Å+Å- and 21046 MHadr candidates), integral luminosity is 1161.799 nb^-1 (or 1.16 pb^-1)  <br />
+2) 24835 - 26248 (date: 2017-03-05 - 2017-12-24)
+In selected runs - 452752351 events (393776 Å+Å- and 61279 MHadr candidates), integral luminosity is 2638.276 nb^-1 (or 2.64 pb^-1)  <br />
 
-Added runs from 2017. <br />
+Summary: 583,527,496 events; 600966 Å+Å- and 82325 MHadr candidates; integral luminosity - 3.8 pb^-1
+
+Bkg Runs: <br />
+1) 23939 - 23499
+In selected runs - 6791860 events (1 Å+Å- and 510 MHadr candidates), integral luminosity is 0.000 nb^-1   <br />
+2) 24834 - 26245 (2017 year)
+In selected runs - 14182834 events (7 Å+Å- and 3124 MHadr candidates), integral luminosity is 0.000 nb^-1   <br />
 
 Registration D-mesons in channels:<br />
 D0->K-pi+ (D0bar->K+pi-)           <br />
@@ -54,9 +62,12 @@ D+->K-pi+pi+ (D- ->K+pi-pi-)       <br />
 Momentum D-meson from decay Psi(3770) -> DD^- constitute pd ~ 260 MeV/c <br />
 In decay Psi(3770) born 2 D-mesons                                <br />
 
+Processing prepared root-files with reconstruction for D-meson:
+```
+./Dmeson 1 1 0 1 0 160 3000 0
 
-./Dmeson 1 1 0 1 0 160 3000 0                                           <br />
-
+. runDmeson.sh
+```
 
 0.9 nb^-1 statistic for 2009 year - expect 100 signal events D0->K-pi+  <br />
 
@@ -85,7 +96,6 @@ Example from previous analysis: /home/poluektv/kedr/release/dmass2/kp/bin/dmass_
 # List candidates for D0->K-pi+ decay
 Run 23930:                                                                                     <br />
 Event=12208	Raw event=12439	eTracksAll=4	eTracksBeam=4	eTracksIP=4    +   -e12195     <br />
-
 root [5] et->Scan("ev.run:ev.evdaq");           <br />
     Row   |    ev.run |  ev.evdaq               <br />
        0  |    23206 |     70250                <br />
@@ -96,13 +106,8 @@ root [5] et->Scan("ev.run:ev.evdaq");           <br />
       16  |    23219 |     20915                <br />
       24  |    23220 |     19317                <br />
       25  |    23220 |     31429                <br />
-
-et->Scan("ev.run:ev.evdaq:Dmeson.Mbc:Dmeson.dE");                  <br />
 et->Scan("ev.run:ev.evdaq:Dmeson.Mbc:Dmeson.dE","Dmeson.dE>0");    <br />
 et->Draw("Dmeson.Mbc","emc.ncls>2 && emc.ncls<6")                  <br />
-
-
-bzcat /space/runs/daq023665.nat.bz2 | KDisplay -r -e520             <br />
 
 
 
