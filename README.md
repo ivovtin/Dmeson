@@ -62,12 +62,16 @@ In selected runs - 6791860 events (1 e+e- and 510 MHadr candidates), integral lu
 2) 24834 - 26245 (2017 year) <br />
 In selected runs - 14182834 events (7 e+e- and 3124 MHadr candidates), integral luminosity is 0.000 nb^-1   <br />
 
-0.9 nb^-1 statistic for 2009 year - expect 100 signal events D0->K-pi+  <br />
+0.9 pb^-1 statistic for 2004-2009 year - expect 100 signal events D0->K-pi+  <br />
+2x900(nb^-1)x3.66 (nb)x0.0388 = 255.61440  -  expected signal events         <br />
+98.4/255.61440=38.5%  - efficiency                                           <br />
 
 
 # Registration D-mesons in channels:<br />
 D0->K-pi+ (D0bar->K+pi-)           <br />
 D+->K-pi+pi+ (D- ->K+pi-pi-)       <br />
+
+Resonant depolarization technique for Beam energy measurement - accuracy is 10-70 keV  <br />
 
 Momentum D-meson from decay Psi(3770) -> DD^- constitute pd ~ 260 MeV/c <br />
 In decay Psi(3770) born 2 D-mesons                                <br />
@@ -81,12 +85,10 @@ sigma(DDbar)=6.57 nb   -> sigma(D0D0bar) + sigma(D+D-)                       <br
 sigma(D0D0bar)=3.66 nb                                                       <br />
 sigma(D+D-)=2.91 nb                                                          <br />
 
-N=1161.799*3.66=4252 events  D0->K-pi+  *3.80%  => 161.5 *2 = 322*1000=322000       <br />
+N=3800 nb^-1 x 3.66 nb = 13908 events Psi(3770)->D0D0bar, (D0->K-pi+)  x3.80%  =>  = 528.5 x2 = 1057      <br />
 
-N=1161.799*2.91=3380 events  D+->K-pi+pi+ (D- ->K+pi-pi-) *9.2% => 310 *2 = 620         <br />
+N=3800x2.91 = 11058 events Psi(3770)->D+D-, ( D+->K-pi+pi+) (D- ->K+pi-pi-) x9.2% =>  = 1017.3 x2 = 2034         <br />
 
- 2*900*3.66*0.0388=255.61440                                                             <br />
- 98.4/255.61440=38.5%                                                                    <br />
 
 The criteria pi/K identidication in ATC:                                                       <br />
 Nph.e. less then ~0.5-1.0 in momentum range for track 400-1300 MeV/c  - Kaon, otherwise Pion, lenght track is >4 cm. <br />
