@@ -58,13 +58,13 @@ BINDIR := ./
 LIB_LOCAL= `root-config --libs` -lMinuit -lcrypt -lpq -lbz2 -lg2c
 
 # Определим, какие программы мы будем собирать
-BINARIES = analysis_Dmeson
+BINARIES = analysis_D0meson
 
 # укажем, из каких модулей этого пакета они состоят
 # (эти модули не будут включены в библиотеку)
 # и какие библиотеки надо подключить при сборке
-analysis_Dmeson_MODULES := analysis_Dmeson
-analysis_Dmeson_LIBS := KaFramework KrAtc KDisplay VDDCRec KrVDDCMu KrMu \
+analysis_D0meson_MODULES := analysis_D0meson
+analysis_D0meson_LIBS := KaFramework KrAtc KDisplay VDDCRec KrVDDCMu KrMu \
 KrdEdxPId KrDCCalibdEdx DchdEdxDataRoot VDDCRec KrToF KsToF KEmcRec LKrTools \
 VDDCRec KsTrg KdConvert KrObjects KdDCSim FitTools DchGeom ReadNat KDB AppFramework KrKRec KrDONLP2
 

@@ -9,24 +9,24 @@ D0 meson - 1864,86 MeV <br />
 D+ meson - 1869,57 MeV <br />
 Ds meson - 1968.47 MeV <br />
 
-analysis_Dmeson.C - The code for handling raw events with help reconstruction package and write structures in the root-file. <br />
+analysis_D0meson.C - The code for D0 preprocessing raw events with help reconstruction package and write structures in the root-file. <br />
 
 Examples for run: <br />
 ```
-./runAnalysis.sh
+./runAnalysisD0.sh
 ```
 Run processing 2000 experimental events and write to file:
 ```
-analysis_Dmeson -n 2000 /space/runs/daq023930.nat.bz2 -o out.root
+analysis_D0meson -n 2000 /space/runs/daq023930.nat.bz2 -o out.root
 /home/ovtin/development/Dmeson/analysis_Dmeson -n 10000 -o /spool/users/ovtin/psi3770_test.root /home/ovtin/development/Dmeson/runsDmeson/runDmeson1
 ```
 Simulation 50 events:
 ```
-analysis_Dmeson  -v 23110 -n 50 /spool/users/ovtin/sim000018.dat
+analysis_D0meson  -v 23110 -n 50 /spool/users/ovtin/sim000018.dat
 ```
 Run drawing with KDisplay:
 ```
-analysis_Dmeson -x -n 2000 /space/runs/daq023930.nat.bz2
+analysis_D0meson -x -n 2000 /space/runs/daq023930.nat.bz2
 ```
 Run KDisplay for view event with reconstruction:
 ```
@@ -34,7 +34,7 @@ bzcat /space/runs/daq021913.nat.bz2 | KDisplay -r -e3197
 ```
 Run tasks with D-meson on batch system:
 ```
-qsub batch_data_Dmeson.sh
+qsub batch_data_D0meson.sh
 qstat
 qstat -u ovtin
 qdel 772354
@@ -42,7 +42,7 @@ qdel 772354
 
 Processing prepared root-files with reconstruction for D-meson:
 ```
-./Dmeson 1 1 0 1 0 160 3000 0
+./D0meson 1 1 0 1 0 160 3000 0
 
 . runDmeson.sh
 ```
