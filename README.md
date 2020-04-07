@@ -47,6 +47,8 @@ Processing prepared root-files with reconstruction for D-meson:
 . runDmeson.sh
 ```
 
+Important plots are here http://kedr.inp.nsk.su/~ovtin/outDmeson/
+
 # Information about D-meson statistic:
 Runs in peak Psi(3770) -> e+e- -> DD^- (D^0D^-0 or D+D-): <br />
 1) 23206 - 23942 (date: 2016-02-09 - 2016-05-23) <br />
