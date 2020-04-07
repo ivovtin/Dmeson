@@ -4,6 +4,7 @@ Get the code:  <br />
 ```
 git clone https://github.com/ivovtin/Dmeson
 ```
+Package depends on [KaFramework](https://github.com/ivovtin/KaFramework) <br />
 
 D0 meson - 1864,86 MeV <br />
 D+ meson - 1869,57 MeV <br />
