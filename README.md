@@ -6,10 +6,6 @@ git clone https://github.com/ivovtin/Dmeson
 ```
 Package depends on [KaFramework](https://github.com/ivovtin/KaFramework) <br />
 
-D0 meson - 1864,86 MeV <br />
-D+ meson - 1869,57 MeV <br />
-Ds meson - 1968.47 MeV <br />
-
 analysis_D0meson.C - The code for D0 preprocessing raw events with help reconstruction package and write structures in the root-file. <br />
 
 Examples for run: <br />
@@ -52,6 +48,11 @@ Important plots are here http://kedr.inp.nsk.su/~ovtin/outDmeson/
 
 # Information about D-meson statistic:
 Runs in peak Psi(3770) -> e+e- -> DD^- (D^0D^-0 or D+D-): <br />
+
+D0 meson - 1864,86 MeV <br />
+D+ meson - 1869,57 MeV <br />
+Ds meson - 1968.47 MeV <br />
+
 1) 23206 - 23942 (date: 2016-02-09 - 2016-05-23) <br />
 In selected runs - 130775145 events (207190 e+e- and 21046 MHadr candidates), integral luminosity is 1161.799 nb^-1 (or 1.16 pb^-1).  <br />
 2) 24835 - 26248 (date: 2017-03-05 - 2017-12-24) <br />
