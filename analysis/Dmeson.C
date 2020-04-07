@@ -12,34 +12,32 @@ string progname;
 
 int Usage(string status)
 {
-	cout<<"Usage: "<<progname<<"\t"<<"Range ATC->1,2...  Hit in aer(0,1)  Hit in wls  Lenght  First cnt->0-160  End cnt->0-160 Momentum(350 or 3000)  Data->Exp or Sim(0,1)"<<endl;
+	cout<<"Usage: "<<progname<<"\t"<<"1)Range ATC->1,2..  2)Hit in aer(0,1)  3)Hit in wls  4)First cnt   5)End cnt  6)Maximum momentum  7)Data/MC (0,1)"<<endl;
         exit(0);
 }
 
 int main(int argc, char* argv[])
 {
     progname=argv[0];
-    int region;
-    int hit_aer;
-    int hit_wls;
-    int len;
-    int first_cnt;
-    int end_cnt;
-    int momentum;
-    int fl_sim_exp;
+    int region=1;
+    int hit_aer=1;
+    int hit_wls=0;
+    int first_cnt=0;
+    int end_cnt=160;
+    int momentum=5000;
+    int fl_sim_exp=0;
     if( argc>1 )
     {
 	region=atoi(argv[1]);
 	hit_aer=atoi(argv[2]);
 	hit_wls=atoi(argv[3]);
-	len=atoi(argv[4]);
-	first_cnt=atoi(argv[5]);
-	end_cnt=atoi(argv[6]);
-	momentum=atoi(argv[7]);
-	fl_sim_exp=atoi(argv[8]);
+	first_cnt=atoi(argv[4]);
+	end_cnt=atoi(argv[5]);
+	momentum=atoi(argv[6]);
+	fl_sim_exp=atoi(argv[7]);
 	if(region>10){ Usage(progname); return 0;}
-	if(hit_aer>1 || hit_wls>1 || len>4 || fl_sim_exp>1){ Usage(progname); return 0;}
-	if(hit_aer<0 || hit_wls<0 || len<0 || fl_sim_exp<0){ Usage(progname); return 0;}
+	if(hit_aer>1 || hit_wls>1 || fl_sim_exp>1){ Usage(progname); return 0;}
+	if(hit_aer<0 || hit_wls<0 || fl_sim_exp<0){ Usage(progname); return 0;}
 	if(first_cnt<0 || first_cnt>160){ Usage(progname); return 0;}
 	if(end_cnt<0 || first_cnt>160){ Usage(progname); return 0;}
     }
@@ -53,10 +51,10 @@ int main(int argc, char* argv[])
     TString fnameout;
     sim=fl_sim_exp;
     if( sim!=1 ){
-	fnameout=TString::Format("res_%d_%d_%d_%d_%d_exp_Dmeson.root",first_cnt,end_cnt,region,len,momentum).Data();
+	fnameout=TString::Format("res_%d_%d_%d_%d_exp_Dmeson.root",first_cnt,end_cnt,region,momentum).Data();
     }else
     {
-	fnameout=TString::Format("res_%d_%d_%d_%d_%d_sim_Dmeson.root",first_cnt,end_cnt,region,len,momentum).Data();
+	fnameout=TString::Format("res_%d_%d_%d_%d_sim_Dmeson.root",first_cnt,end_cnt,region,momentum).Data();
     }
     cout<<fnameout<<endl;
     fout = new TFile(fnameout,"RECREATE");
@@ -83,7 +81,7 @@ int main(int argc, char* argv[])
     TH1F* h14=new TH1F("cos(t.theta)","cos(t.theta)",100,-1.,1.);
     TH1F* h15=new TH1F("cos(t.phi)","cos(t.phi)",100,-1.,1.);
     TH1F* h16=new TH1F("InvMass","InvMass",1000,0.,4000.);
-    TH1F* h17=new TH1F("Mbc","Mbc",1000,0.,4000.);
+    TH1F* h17=new TH1F("Mbc","Mbc",1000,0.,2000.);
     TH1F* h18=new TH1F("de","de",1000,-10000.,10000.);
 
     TH1F* h19=new TH1F("t0tof.nhits","t0tof.nhits",20,0.,20.);
@@ -515,14 +513,17 @@ int main(int argc, char* argv[])
 	h38->SetLineColor(kBlue);
     }
 
-    //Set style
+    TString KEDR = "/home/ovtin/public_html/outDmeson/";
     TCanvas *cc1 = new TCanvas();
     gStyle->SetOptStat(1111);
     gStyle->SetOptFit(1011);
     gROOT->SetStyle("Plain");
     cc1->cd();
     h17->Draw();
-    c->SaveAs("/home/ovtin/public_html/outDmeson/Mbc.png");
+    cc1->SaveAs(KEDR+"Mbc.png");
+    h17->GetXaxis()->SetRangeUser(1600,1900);
+    h17->Draw();
+    cc1->SaveAs(KEDR+"Mbc_zoom.png");
 
     fout->Write();
     fout->Close();
