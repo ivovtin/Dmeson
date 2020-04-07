@@ -67,11 +67,14 @@ int main(int argc, char* argv[])
     setbranchstatus();
     setbranchaddress();
 
-    TH1F* h1=new TH1F("E/p","E/p",100,0.,10.);
-    TH1F* h2=new TH1F("Energy","Energy",1000,0.,5000.);
-    TH1F* h3=new TH1F("E_LKr","Energy LKr",1000,0.,5000.);
-    TH1F* h4=new TH1F("E_CsI","Energy CsI",1000,0.,5000.);
-    TH1F* h7=new TH1F("Momentum","Momentum",1000,0.,5000.);
+    TH1F* hncls=new TH1F("ncls","emc.ncls",12,-0.5,11.5);
+    TH1F* henergy=new TH1F("Energy","Energy EMC",1000,0.,4500.);
+    TH1F* henlkr=new TH1F("E_LKr","Energy LKr",1000,0.,4500.);
+    TH1F* hencsi=new TH1F("E_CsI","Energy CsI",1000,0.,4500.);
+    TH1F* hmom=new TH1F("Momentum","Momentum",1000,0.,5000.);
+    TH1F* hmbc=new TH1F("Mbc","Mbc",1000,0.,2000.);
+    TH1F* hep=new TH1F("E/p","E/p",100,0.,10.);
+
     TH1F* h8=new TH1F("theta","t.theta",1000,0.,185.);
     TH1F* h9=new TH1F("phi","t.phi",1000,0.,380.);
     TH1F* h10=new TH1F("theta2t","vrt.theta2t",1000,0.,185.);
@@ -81,7 +84,6 @@ int main(int argc, char* argv[])
     TH1F* h14=new TH1F("cos(t.theta)","cos(t.theta)",100,-1.,1.);
     TH1F* h15=new TH1F("cos(t.phi)","cos(t.phi)",100,-1.,1.);
     TH1F* h16=new TH1F("InvMass","InvMass",1000,0.,4000.);
-    TH1F* h17=new TH1F("Mbc","Mbc",1000,0.,2000.);
     TH1F* h18=new TH1F("de","de",1000,-10000.,10000.);
 
     TH1F* h19=new TH1F("t0tof.nhits","t0tof.nhits",20,0.,20.);
@@ -106,7 +108,6 @@ int main(int argc, char* argv[])
     TH1F* h40=new TH1F("t0chi2","t0.chi2",1000,0.,1000.);
     TH1F* h41=new TH1F("t1chi2","t1.chi2",1000,0.,1000.);
     TH1F* h42=new TH1F("h42","cos_2t",100,-1.,1.);
-    TH1F* h43=new TH1F("ncls","emc.ncls",12,0.,12.);
     TH1F* h45=new TH1F("t0.nhitsxy","t0.nhitsxy",100,0.,100.);
     TH1F* h46=new TH1F("t1.nhitsxy","t1.nhitsxy",100,0.,100.);
     TH1F* h47=new TH1F("t0.nvecxy","t0.nvecxy",100,0.,100.);
@@ -141,22 +142,21 @@ int main(int argc, char* argv[])
     for(int k=0; k<nentr; k++)
     {
 	tt->GetEntry(k);
-	if(verbose2) cout<<"ev.run="<<ev.run<<"\t"<<"t0.t="<<t0.t<<"\t"<<"t1.t="<<t1.t<<endl;
+	if(verbose2) cout<<"ev.run="<<ev.run<<"\t"<<"t0.t="<<t0.t<<"\t"<<"t1.t="<<t1.t<<"\t"<<"t2.t="<<t2.t<<"\t"<<"t3.t="<<t3.t<<endl;
 
 	if( (k %100000)==0 )cout<<k<<endl;
 
 	//momentum of particles
-	P11=0, P22=0;
-	P11=t0.p;
-	P22=t1.p;
+	P1=0, P2=0, P3=0, P4;
+	P1=t0.p; P2=t1.p; P3=t2.p; P4=t3.p;
 
-	float en0[3];
+	float en0[3], en1[3], en2[3], en3[3], engamma[4];
 	en0[0]=t0c0.e; en0[1]=t0c1.e; en0[2]=t0c2.e;      //energy clasters 0,1,2 on first track
-	float en1[3];
 	en1[0]=t1c0.e; en1[1]=t1c1.e; en1[2]=t1c2.e;      //energy clasters 0,1,2 on second track
-	float engamma[4];
+	en2[0]=t2c0.e; en2[1]=t2c1.e; en2[2]=t2c2.e;      //energy clasters 0,1,2 on third track
+	en3[0]=t3c0.e; en3[1]=t3c1.e; en3[2]=t3c2.e;      //energy clasters 0,1,2 on four track
 	engamma[0]=clgamma0.e; engamma[1]=clgamma1.e; engamma[2]=clgamma2.e; engamma[3]=clgamma3.e;  //energy clasters 0,1,2,3 from Photons
-	float e0=0,e1=0,egamma=0;
+	float e0=0,e1=0,e2=0,e3=0,egamma=0;
 
 	for(int i=0; i<t0.emc_ncls; i++){
 	    e0+=en0[i];                                   //sum energy from clasters on first track
@@ -164,7 +164,12 @@ int main(int argc, char* argv[])
 	for(int i=0; i<t1.emc_ncls; i++){
 	    e1+=en1[i];                                   //sum energy from clasters on second track
 	}
-
+	for(int i=0; i<t2.emc_ncls; i++){
+	    e2+=en2[i];                                   //sum energy from clasters on thrird track
+	}
+	for(int i=0; i<t3.emc_ncls; i++){
+	    e3+=en3[i];                                   //sum energy from clasters on four track
+	}
 	for(int i=0; i<(emc.ncls-t0.emc_ncls-t1.emc_ncls); i++)
 	{
 	    egamma+=engamma[i];                          //sum energy from clasters on Photon
@@ -175,149 +180,15 @@ int main(int argc, char* argv[])
 	{
 	    Nselect++;
 
-	    kk=0; int kk1=0; int kk2=0; int ii1=0; int ii2=0;
+	    if(verbose) cout<<ev.run<<"\t"<<ev.evdaq<<"\t"<<"\t"<<t0.p<<"\t"<<t1.p<<"\t"<<P1<<"\t"<<P2<<"\t"<<(P1/t0.p)<<"\t"<<(P2/t1.p)<<"\t"<<(P1/t0.p)/(P2/t1.p)<<"\t"<<(t0.vx*t1.vx+t0.vy*t1.vy+t0.vz*t1.vz)<<"\t"<<clgamma0.vx*clgamma1.vx+clgamma0.vy*clgamma1.vy+clgamma0.vz*clgamma1.vz<<"\t"<<t0c0.e<<"\t"<<t0c1.e<<"\t"<<t1c0.e<<"\t"<<t1c1.e<<"\t"<<clgamma0.e<<"\t"<<clgamma1.e<<"\t"<<emc.ncls<<"\t"<<t0.emc_ncls<<"\t"<<t1.emc_ncls<<"\t"<<emc.ncls-t0.emc_ncls-t1.emc_ncls<<"\t"<<t0tof.nhits<<"\t"<<t1tof.nhits<<endl;
 
-	    if(verbose) cout<<ev.run<<"\t"<<ev.evdaq<<"\t"<<"\t"<<t0.p<<"\t"<<t1.p<<"\t"<<P11<<"\t"<<P22<<"\t"<<(P11/t0.p)<<"\t"<<(P22/t1.p)<<"\t"<<(P11/t0.p)/(P22/t1.p)<<"\t"<<(t0.vx*t1.vx+t0.vy*t1.vy+t0.vz*t1.vz)<<"\t"<<clgamma0.vx*clgamma1.vx+clgamma0.vy*clgamma1.vy+clgamma0.vz*clgamma1.vz<<"\t"<<t0c0.e<<"\t"<<t0c1.e<<"\t"<<t1c0.e<<"\t"<<t1c1.e<<"\t"<<clgamma0.e<<"\t"<<clgamma1.e<<"\t"<<emc.ncls<<"\t"<<t0.emc_ncls<<"\t"<<t1.emc_ncls<<"\t"<<emc.ncls-t0.emc_ncls-t1.emc_ncls<<"\t"<<t0tof.nhits<<"\t"<<t1tof.nhits<<endl;
+	    henergy->Fill(emc.energy);
+	    henlkr->Fill(emc.elkr);
+	    hencsi->Fill(emc.ecsi);
+	    hmom->Fill(P1); hmom->Fill(P2); hmom->Fill(P3); hmom->Fill(P4);
+            for(int i=0; i<4; i++) hmbc->Fill(Dmeson.Mbc[i]);
+	    hep->Fill(e0/P1); hep->Fill(e1/P2); hep->Fill(e2/P3); hep->Fill(e3/P4);
 
-	    //cout<<t0atccr0.aerogel_region5<<"\t"<<t0atccr0.npe<<endl;
-	    n00=0, n01=0, n02=0, n03=0, n04=0;
-	    n10=0, n11=0, n12=0, n13=0, n14=0;
-
-	    cnt11=0, cnt12=0;
-	    cnt21=0, cnt22=0;
-
-            atc_cross();
-
-	    float Npe1tr=0., Npe2tr=0.;
-	    //if(kk1==1 && ( (n00+n01+n02+n03)>0 || ( (n00+n01+n02+n03)==0 && ii1==1 ) ) )
-	    //if( kk1==1 && (n00+n01+n02+n03)>0 )
-	    if( kk1==1 && ii1>1 && cnt11==1 && cnt12==1 )
-	    {
-		prthink->Fill(P11,(n00+n01+n02+n03+n04));
-
-		//if( (n00+n01+n02+n03)==0 )przero->Fill(P11,(n00+n01+n02+n03));
-		if( (n00+n01+n02+n03+n04)<=0.02 )
-		{
-		    hzero->Fill(P11);
-		    hzero1->Fill(vrt.theta2t);
-		    hzero2->Fill(cos(pi*(vrt.theta2t)/180));
-		    hzero4->Fill(emc.energy);
-		    hzero5->Fill(emc.ncls);
-		}
-
-		Natc++;
-		if(verbose1) cout<<"ev.run="<<ev.run<<"\t"<<"cnt0.npe="<<n00+n01+n02+n03+n04<<"\t"<<endl;
-		Npe1tr=n00+n01+n02+n03+n04;
-		for(int ii=0; ii<=14; ii++)
-		{
-		    p_all[ii]=100*ii+50;
-		    err_p_all[ii]=50;
-		    if(P11>100*ii&&P11<100+100*ii)
-		    {
-			if((n00+n01+n02+n03+n04)<=thicknpetrh)
-			{
-			    num_npezero[ii]=++num_npezero[ii];
-			    //cout<<"cnt.npe="<<cnt.npe<<"\t"<<"t.p="<<t.p<<"\t"<<ii<<"\t"<<"num_npezero[ii]="<<num_npezero[ii]<<endl;
-			}
-			if((n00+n01+n02+n03+n04)>thicknpetrh){num_npenotzero[ii]=++num_npenotzero[ii];}
-			num_npetotal[ii]=++num_npetotal[ii];
-			eff[ii]=num_npenotzero[ii]/num_npetotal[ii];
-			err_eff[ii]=sqrt(num_npenotzero[ii])/num_npetotal[ii];
-		    }
-		}
-	    }
-	    //if(kk2==1 && ( (n10+n11+n12+n13)>0 || ( (n10+n11+n12+n13)==0 && ii2==1 ) )  )
-	    //if( kk2==1 && (n10+n11+n12+n13)>0 )
-	    if( kk2==1 && ii2>1 && cnt21==1 && cnt22==1 )
-	    {
-		prthink->Fill(P22,(n10+n11+n12+n13+n14));
-
-		//if( (n10+n11+n12+n13)==0 )przero->Fill(P22,(n10+n11+n12+n13));
-		if( (n10+n11+n12+n13+n14)<=0.02 )
-		{
-		    hzero->Fill(P22);
-		    hzero1->Fill(vrt.theta2t);
-		    hzero2->Fill(cos(pi*(vrt.theta2t)/180));
-		    hzero4->Fill(emc.energy);
-		    hzero5->Fill(emc.ncls);
-		}
-
-		Natc++;
-		if(verbose1) cout<<"ev.run="<<ev.run<<"\t"<<"cnt1.npe="<<n10+n11+n12+n13<<"\t"<<endl;
-		Npe2tr=n10+n11+n12+n13;
-		for(int ii=0; ii<=14; ii++)
-		{
-		    p_all[ii]=100*ii+50;
-		    err_p_all[ii]=50;
-		    if(P22>100*ii&&P22<100+100*ii)
-		    {
-			if((n10+n11+n12+n13+n14)<=thicknpetrh)
-			{
-			    num_npezero[ii]=++num_npezero[ii];
-			    //cout<<"cnt.npe="<<cnt.npe<<"\t"<<"t.p="<<t.p<<"\t"<<ii<<"\t"<<"num_npezero[ii]="<<num_npezero[ii]<<endl;
-			}
-			if((n10+n11+n12+n13+n14)>thicknpetrh){num_npenotzero[ii]=++num_npenotzero[ii];}
-			num_npetotal[ii]=++num_npetotal[ii];
-			eff[ii]=num_npenotzero[ii]/num_npetotal[ii];
-			err_eff[ii]=sqrt(num_npenotzero[ii])/num_npetotal[ii];
-		    }
-		}
-	    }
-
-	    if(verbose2) cout<<"ev.run="<<ev.run<<"\t"<<"Npe1tr="<<Npe1tr<<"\t"<<"Npe2tr="<<Npe2tr<<"\t"<<endl;
-
-	    //===============================
-
-	    float E;
-	    E=ev.ebeam;
-	    if(sim==1)E=3770/2;          //psi3770
-
-	    Double_t E1, E2;
-	    if(t0.q<0)
-	    {
-		E1=abs(sqrt(P11*P11+m1*m1));   //K-     - 1 track is K-
-		E2=abs(sqrt(P22*P22+m2*m2));   //pi+    - 2 track is pi+
-	    }
-	    else
-	    {
-		E1=abs(sqrt(P22*P22+m1*m1));    //K-     - 2 track is K-
-		E2=abs(sqrt(P11*P11+m2*m2));    //pi+    - 1 track is pi+
-	    }
-
-	    Double_t pprod=abs(P11)*abs(P22)*(t0.vx*t1.vx+t0.vy*t1.vy+t0.vz*t1.vz);
-	    Double_t InvMass=sqrt(m1*m1+m2*m2+2*(E1*E2-pprod));
-	    h16->Fill(InvMass);
-
-	    Double_t mbc=pow(ev.ebeam,2)-pow(P11,2)-pow(P22,2)-P11*P22*(t0.vx*t1.vx+t0.vy*t1.vy+t0.vz*t1.vz);
-	    //*mbc = ebeam*ebeam - pow(px1+px2,2)- pow(py1+py2,2) - pow(pz1+pz2,2);
-	    if (mbc>0) mbc = sqrt(mbc); else mbc = 0;
-
-	    //if( (P11>400 && P22>1300 && Npe1tr<0.7 && Npe2tr>0.7) || (P11>1300 && P22>400 && Npe1tr>0.7 && Npe2tr<0.7) )
-	    h17->Fill(mbc);
-
-	    Double_t ekminuspiplus=0;
-	    Double_t ekpluspiminus=0;
-	    if(t0.q<0)
-	    {
-		ekminuspiplus=sqrt(m1*m1 + P11*P11) + sqrt(m2*m2 + P22*P22);
-		ekpluspiminus=sqrt(m1*m1 + P22*P22) + sqrt(m2*m2 + P11*P11);
-	    }
-	    else
-	    {
-		ekminuspiplus=sqrt(m1*m1 + P22*P22) + sqrt(m2*m2 + P11*P11);
-		ekpluspiminus=sqrt(m1*m1 + P11*P11) + sqrt(m2*m2 + P22*P22);
-	    }
-	    Double_t de = ( ekminuspiplus + ekpluspiminus )/2. - ev.ebeam;
-	    h18->Fill(de);
-
-
-	    h1->Fill(e0/P11);
-	    h1->Fill(e1/P22);
-	    h2->Fill(emc.energy);
-	    h3->Fill(emc.elkr);
-	    h4->Fill(emc.ecsi);
-	    h7->Fill(P11);
-	    h7->Fill(P22);
 	    h8->Fill(t0.theta);
 	    h8->Fill(t1.theta);
 	    h9->Fill(t0.phi);
@@ -348,8 +219,8 @@ int main(int argc, char* argv[])
 	    h31->Fill(t1tof.beta[1]);
 	    h32->Fill(t1tof.length[1]);
 
-	    h33->Fill(P11/t0.p);
-	    h34->Fill(P22/t1.p);
+	    h33->Fill(P1/t0.p);
+	    h34->Fill(P2/t1.p);
 
 	    S=(3/2)*(pow(t0.pt,2)+pow(t1.pt,2))/(pow(t0.p,2)+pow(t1.p,2));
 	    h35->Fill(S);
@@ -357,7 +228,7 @@ int main(int argc, char* argv[])
 	    h40->Fill(t0.chi2);
 	    h41->Fill(t1.chi2);
 	    h42->Fill(t0.vx*t1.vx+t0.vy*t1.vy+t0.vz*t1.vz);
-	    h43->Fill(emc.ncls);
+	    hncls->Fill(emc.ncls);
 	    h45->Fill(t0.nhitsxy);
 	    h46->Fill(t1.nhitsxy);
 	    h47->Fill(t0.nvecxy);
@@ -370,6 +241,140 @@ int main(int argc, char* argv[])
 	    h58->Fill(mu.nhits);
 
 	    if(verbose1)cout<<t0c0.theta<<"\t"<<t1c0.theta<<"\t"<<clgamma0.theta<<"\t"<<clgamma1.theta<<"\t"<<(clgamma0.theta+clgamma1.theta)/2<<"\t"<<clgamma0.theta-clgamma1.theta<<"\t"<<clgamma0.vx*clgamma1.vx+clgamma0.vy*clgamma1.vy+clgamma0.vz*clgamma1.vz<<endl;
+
+
+            //=====for fill atc=======================================================================
+	    kk=0; int kk1=0; int kk2=0; int ii1=0; int ii2=0;
+	    //cout<<t0atccr0.aerogel_region5<<"\t"<<t0atccr0.npe<<endl;
+	    n00=0, n01=0, n02=0, n03=0, n04=0;
+	    n10=0, n11=0, n12=0, n13=0, n14=0;
+
+	    cnt11=0, cnt12=0;
+	    cnt21=0, cnt22=0;
+
+            atc_cross();
+
+	    float Npe1tr=0., Npe2tr=0.;
+	    //if(kk1==1 && ( (n00+n01+n02+n03)>0 || ( (n00+n01+n02+n03)==0 && ii1==1 ) ) )
+	    //if( kk1==1 && (n00+n01+n02+n03)>0 )
+	    if( kk1==1 && ii1>1 && cnt11==1 && cnt12==1 )
+	    {
+		prthink->Fill(P1,(n00+n01+n02+n03+n04));
+
+		//if( (n00+n01+n02+n03)==0 )przero->Fill(P1,(n00+n01+n02+n03));
+		if( (n00+n01+n02+n03+n04)<=0.02 )
+		{
+		    hzero->Fill(P1);
+		    hzero1->Fill(vrt.theta2t);
+		    hzero2->Fill(cos(pi*(vrt.theta2t)/180));
+		    hzero4->Fill(emc.energy);
+		    hzero5->Fill(emc.ncls);
+		}
+
+		Natc++;
+		if(verbose1) cout<<"ev.run="<<ev.run<<"\t"<<"cnt0.npe="<<n00+n01+n02+n03+n04<<"\t"<<endl;
+		Npe1tr=n00+n01+n02+n03+n04;
+		for(int ii=0; ii<=14; ii++)
+		{
+		    p_all[ii]=100*ii+50;
+		    err_p_all[ii]=50;
+		    if(P1>100*ii&&P1<100+100*ii)
+		    {
+			if((n00+n01+n02+n03+n04)<=thicknpetrh)
+			{
+			    num_npezero[ii]=++num_npezero[ii];
+			    //cout<<"cnt.npe="<<cnt.npe<<"\t"<<"t.p="<<t.p<<"\t"<<ii<<"\t"<<"num_npezero[ii]="<<num_npezero[ii]<<endl;
+			}
+			if((n00+n01+n02+n03+n04)>thicknpetrh){num_npenotzero[ii]=++num_npenotzero[ii];}
+			num_npetotal[ii]=++num_npetotal[ii];
+			eff[ii]=num_npenotzero[ii]/num_npetotal[ii];
+			err_eff[ii]=sqrt(num_npenotzero[ii])/num_npetotal[ii];
+		    }
+		}
+	    }
+	    //if(kk2==1 && ( (n10+n11+n12+n13)>0 || ( (n10+n11+n12+n13)==0 && ii2==1 ) )  )
+	    //if( kk2==1 && (n10+n11+n12+n13)>0 )
+	    if( kk2==1 && ii2>1 && cnt21==1 && cnt22==1 )
+	    {
+		prthink->Fill(P2,(n10+n11+n12+n13+n14));
+
+		//if( (n10+n11+n12+n13)==0 )przero->Fill(P2,(n10+n11+n12+n13));
+		if( (n10+n11+n12+n13+n14)<=0.02 )
+		{
+		    hzero->Fill(P2);
+		    hzero1->Fill(vrt.theta2t);
+		    hzero2->Fill(cos(pi*(vrt.theta2t)/180));
+		    hzero4->Fill(emc.energy);
+		    hzero5->Fill(emc.ncls);
+		}
+
+		Natc++;
+		if(verbose1) cout<<"ev.run="<<ev.run<<"\t"<<"cnt1.npe="<<n10+n11+n12+n13<<"\t"<<endl;
+		Npe2tr=n10+n11+n12+n13;
+		for(int ii=0; ii<=14; ii++)
+		{
+		    p_all[ii]=100*ii+50;
+		    err_p_all[ii]=50;
+		    if(P2>100*ii&&P2<100+100*ii)
+		    {
+			if((n10+n11+n12+n13+n14)<=thicknpetrh)
+			{
+			    num_npezero[ii]=++num_npezero[ii];
+			    //cout<<"cnt.npe="<<cnt.npe<<"\t"<<"t.p="<<t.p<<"\t"<<ii<<"\t"<<"num_npezero[ii]="<<num_npezero[ii]<<endl;
+			}
+			if((n10+n11+n12+n13+n14)>thicknpetrh){num_npenotzero[ii]=++num_npenotzero[ii];}
+			num_npetotal[ii]=++num_npetotal[ii];
+			eff[ii]=num_npenotzero[ii]/num_npetotal[ii];
+			err_eff[ii]=sqrt(num_npenotzero[ii])/num_npetotal[ii];
+		    }
+		}
+	    }
+
+	    if(verbose2) cout<<"ev.run="<<ev.run<<"\t"<<"Npe1tr="<<Npe1tr<<"\t"<<"Npe2tr="<<Npe2tr<<"\t"<<endl;
+
+	    //============================================================================
+
+	    float E;
+	    E=ev.ebeam;
+	    if(sim==1)E=3770/2;          //psi3770
+
+	    Double_t E1, E2;
+	    if(t0.q<0)
+	    {
+		E1=abs(sqrt(P1*P1+m1*m1));   //K-     - 1 track is K-
+		E2=abs(sqrt(P2*P2+m2*m2));   //pi+    - 2 track is pi+
+	    }
+	    else
+	    {
+		E1=abs(sqrt(P2*P2+m1*m1));    //K-     - 2 track is K-
+		E2=abs(sqrt(P1*P1+m2*m2));    //pi+    - 1 track is pi+
+	    }
+
+	    Double_t pprod=abs(P1)*abs(P2)*(t0.vx*t1.vx+t0.vy*t1.vy+t0.vz*t1.vz);
+	    Double_t InvMass=sqrt(m1*m1+m2*m2+2*(E1*E2-pprod));
+	    h16->Fill(InvMass);
+
+	    Double_t mbc=pow(ev.ebeam,2)-pow(P1,2)-pow(P2,2)-P1*P2*(t0.vx*t1.vx+t0.vy*t1.vy+t0.vz*t1.vz);
+	    //*mbc = ebeam*ebeam - pow(px1+px2,2)- pow(py1+py2,2) - pow(pz1+pz2,2);
+	    if (mbc>0) mbc = sqrt(mbc); else mbc = 0;
+
+	    //if( (P1>400 && P2>1300 && Npe1tr<0.7 && Npe2tr>0.7) || (P1>1300 && P2>400 && Npe1tr>0.7 && Npe2tr<0.7) )
+	    //hmbc->Fill(mbc);
+
+	    Double_t ekminuspiplus=0;
+	    Double_t ekpluspiminus=0;
+	    if(t0.q<0)
+	    {
+		ekminuspiplus=sqrt(m1*m1 + P1*P1) + sqrt(m2*m2 + P2*P2);
+		ekpluspiminus=sqrt(m1*m1 + P2*P2) + sqrt(m2*m2 + P1*P1);
+	    }
+	    else
+	    {
+		ekminuspiplus=sqrt(m1*m1 + P2*P2) + sqrt(m2*m2 + P1*P1);
+		ekpluspiminus=sqrt(m1*m1 + P1*P1) + sqrt(m2*m2 + P2*P2);
+	    }
+	    Double_t de = ( ekminuspiplus + ekpluspiminus )/2. - ev.ebeam;
+	    h18->Fill(de);
 
 	}  //if  t emc ...
     }
@@ -498,7 +503,7 @@ int main(int argc, char* argv[])
     gr3->GetYaxis()->SetTitle("Efficiency");
     gr3->Write("2layer_Efficiency&Momentum");
 
-    TH1F *h38 = (TH1F*) h17->Clone();
+    TH1F *h38 = (TH1F*) hmbc->Clone();
     h38->SetName("h38");
     Double_t bb=h38->GetEntries();
     h38->Scale(1/bb);
@@ -519,11 +524,19 @@ int main(int argc, char* argv[])
     gStyle->SetOptFit(1011);
     gROOT->SetStyle("Plain");
     cc1->cd();
-    h17->Draw();
+    hmbc->Draw();
     cc1->SaveAs(KEDR+"Mbc.png");
-    h17->GetXaxis()->SetRangeUser(1600,1900);
-    h17->Draw();
+    hmbc->GetXaxis()->SetRangeUser(1600,1900);
+    hmbc->Draw();
     cc1->SaveAs(KEDR+"Mbc_zoom.png");
+    henergy->Draw();
+    cc1->SaveAs(KEDR+"emc_energy.png");
+    hmom->Draw();
+    cc1->SaveAs(KEDR+"momentum.png");
+    hncls->Draw();
+    cc1->SaveAs(KEDR+"ncls.png");
+    hep->Draw();
+    cc1->SaveAs(KEDR+"ep.png");
 
     fout->Write();
     fout->Close();
@@ -536,13 +549,13 @@ void atc_cross()
 	    //First track hit in 0, 1, 2, 3, 4 counters ATC from first layer and get number of Nph.e....
 	    if( t0atccr0.aerogel_region0==1 && t0atccr0.wlshit==0 && ( (t0atccr0.i>=ncnt1l1 && t0atccr0.i<ncnt1l2) ) )
 	    {
-		pr1->Fill(P11,t0atccr0.npe); kk=1; counter++;
+		pr1->Fill(P1,t0atccr0.npe); kk=1; counter++;
 		if(verbose1) cout<<"ev.run="<<ev.run<<"\t"<<"cnt.npe="<<t0atccr0.npe<<"\t"<<"t0atccr0.i="<<t0atccr0.i<<endl;
 		for(int ii=0; ii<=14; ii++)
 		{
 		    p_all[ii]=100*ii+50;
 		    err_p_all[ii]=50;
-		    if(P11>100*ii&&P11<100+100*ii)
+		    if(P1>100*ii&&P1<100+100*ii)
 		    {
 			if(t0atccr0.npe<=npetrh)
 			{
@@ -559,13 +572,13 @@ void atc_cross()
 	    //Second track hit in 0, 1, 2, 3, 4 counters ATC from first layer and get number of Nph.e....
 	    if( t1atccr0.aerogel_region0==1 && t1atccr0.wlshit==0 && ( (t1atccr0.i>=ncnt1l1 && t1atccr0.i<ncnt1l2) ) )
 	    {
-		pr1->Fill(P22,t1atccr0.npe); kk=1; counter++;
+		pr1->Fill(P2,t1atccr0.npe); kk=1; counter++;
 		if(verbose1) cout<<"ev.run="<<ev.run<<"\t"<<"cnt.npe="<<t1atccr0.npe<<"\t"<<"t1atccr0.i="<<t1atccr0.i<<endl;
 		for(int ii=0; ii<=14; ii++)
 		{
 		    p_all[ii]=100*ii+50;
 		    err_p_all[ii]=50;
-		    if(P22>100*ii&&P22<100+100*ii)
+		    if(P2>100*ii&&P2<100+100*ii)
 		    {
 			if(t1atccr0.npe<=npetrh)
 			{
@@ -581,13 +594,13 @@ void atc_cross()
 	    }
 	    if( t0atccr1.aerogel_region0==1 && t0atccr1.wlshit==0 && ( (t0atccr1.i>=ncnt1l1 && t0atccr1.i<ncnt1l2) ) )
 	    {
-		pr1->Fill(P11,t0atccr1.npe); kk=1; counter++;
+		pr1->Fill(P1,t0atccr1.npe); kk=1; counter++;
 		if(verbose1) cout<<"ev.run="<<ev.run<<"\t"<<"cnt.npe="<<t0atccr1.npe<<"\t"<<"t0atccr1.i="<<t0atccr1.i<<endl;
 		for(int ii=0; ii<=14; ii++)
 		{
 		    p_all[ii]=100*ii+50;
 		    err_p_all[ii]=50;
-		    if(P11>100*ii&&P11<100+100*ii)
+		    if(P1>100*ii&&P1<100+100*ii)
 		    {
 			if(t0atccr1.npe<=npetrh)
 			{
@@ -603,13 +616,13 @@ void atc_cross()
 	    }
 	    if( t1atccr1.aerogel_region0==1 && t1atccr1.wlshit==0 && ( (t1atccr1.i>=ncnt1l1 && t1atccr1.i<ncnt1l2) ) )
 	    {
-		pr1->Fill(P22,t1atccr1.npe); kk=1; counter++;
+		pr1->Fill(P2,t1atccr1.npe); kk=1; counter++;
 		if(verbose1) cout<<"ev.run="<<ev.run<<"\t"<<"cnt.npe="<<t1atccr1.npe<<"\t"<<"t1atccr1.i="<<t1atccr1.i<<endl;
 		for(int ii=0; ii<=14; ii++)
 		{
 		    p_all[ii]=100*ii+50;
 		    err_p_all[ii]=50;
-		    if(P22>100*ii&&P22<100+100*ii)
+		    if(P2>100*ii&&P2<100+100*ii)
 		    {
 			if(t1atccr1.npe<=npetrh)
 			{
@@ -625,14 +638,14 @@ void atc_cross()
 	    }
 	    if( t0atccr2.aerogel_region0==1 && t0atccr2.wlshit==0 && ( (t0atccr2.i>=ncnt1l1 && t0atccr2.i<ncnt1l2) ) )
 	    {
-		pr1->Fill(P11,t0atccr2.npe); kk=1; counter++;
+		pr1->Fill(P1,t0atccr2.npe); kk=1; counter++;
 		if(verbose1) cout<<"ev.run="<<ev.run<<"\t"<<"cnt.npe="<<t0atccr2.npe<<"\t"<<"t0atccr2.i="<<t0atccr2.i<<endl;
 
 		for(int ii=0; ii<=14; ii++)
 		{
 		    p_all[ii]=100*ii+50;
 		    err_p_all[ii]=50;
-		    if(P11>100*ii&&P11<100+100*ii)
+		    if(P1>100*ii&&P1<100+100*ii)
 		    {
 			if(t0atccr2.npe<=npetrh)
 			{
@@ -648,13 +661,13 @@ void atc_cross()
 	    }
 	    if( t1atccr2.aerogel_region0==1 && t1atccr2.wlshit==0 && ( (t1atccr2.i>=ncnt1l1 && t1atccr2.i<ncnt1l2) ) )
 	    {
-		pr1->Fill(P22,t1atccr2.npe);kk=1;  counter++;
+		pr1->Fill(P2,t1atccr2.npe);kk=1;  counter++;
 		if(verbose1) cout<<"ev.run="<<ev.run<<"\t"<<"cnt.npe="<<t1atccr2.npe<<"\t"<<"t1atccr2.i="<<t1atccr2.i<<endl;
 		for(int ii=0; ii<=14; ii++)
 		{
 		    p_all[ii]=100*ii+50;
 		    err_p_all[ii]=50;
-		    if(P22>100*ii&&P22<100+100*ii)
+		    if(P2>100*ii&&P2<100+100*ii)
 		    {
 			if(t1atccr2.npe<=npetrh)
 			{
@@ -670,13 +683,13 @@ void atc_cross()
 	    }
 	    if( t0atccr3.aerogel_region0==1 && t0atccr3.wlshit==0 && ( (t0atccr3.i>=ncnt1l1 && t0atccr3.i<ncnt1l2) ) )
 	    {
-		pr1->Fill(P11,t0atccr3.npe); kk=1; counter++;
+		pr1->Fill(P1,t0atccr3.npe); kk=1; counter++;
 		if(verbose1) cout<<"ev.run="<<ev.run<<"\t"<<"cnt.npe="<<t0atccr3.npe<<"\t"<<"t0atccr3.i="<<t0atccr3.i<<endl;
 		for(int ii=0; ii<=14; ii++)
 		{
 		    p_all[ii]=100*ii+50;
 		    err_p_all[ii]=50;
-		    if(P11>100*ii&&P11<100+100*ii)
+		    if(P1>100*ii&&P1<100+100*ii)
 		    {
 			if(t0atccr3.npe<=npetrh)
 			{
@@ -692,13 +705,13 @@ void atc_cross()
 	    }
 	    if( t1atccr3.aerogel_region0==1 && t1atccr3.wlshit==0 && ( (t1atccr3.i>=ncnt1l1 && t1atccr3.i<ncnt1l2) ) )
 	    {
-		pr1->Fill(P22,t1atccr3.npe); kk=1;  counter++;
+		pr1->Fill(P2,t1atccr3.npe); kk=1;  counter++;
 		if(verbose1) cout<<"ev.run="<<ev.run<<"\t"<<"cnt.npe="<<t1atccr3.npe<<"\t"<<"t1atccr3.i="<<t1atccr3.i<<endl;
 		for(int ii=0; ii<=14; ii++)
 		{
 		    p_all[ii]=100*ii+50;
 		    err_p_all[ii]=50;
-		    if(P22>100*ii&&P22<100+100*ii)
+		    if(P2>100*ii&&P2<100+100*ii)
 		    {
 			if(t1atccr3.npe<=npetrh)
 			{
@@ -717,13 +730,13 @@ void atc_cross()
 	    //First track hit in 0, 1, 2, 3, 4 counters ATC from second layer and get number of Nph.e....
 	    if( t0atccr0.aerogel_region0==1 && t0atccr0.wlshit==0 && ( (t0atccr0.i>=ncnt2l1 && t0atccr0.i<ncnt2l2) ) )
 	    {
-		pr2->Fill(P11,t0atccr0.npe); kk=1; counter++;
+		pr2->Fill(P1,t0atccr0.npe); kk=1; counter++;
 		if(verbose1) cout<<"ev.run="<<ev.run<<"\t"<<"cnt.npe="<<t0atccr0.npe<<"\t"<<"t0atccr0.i="<<t0atccr0.i<<endl;
 		for(int ii=0; ii<=14; ii++)
 		{
 		    p_all[ii]=100*ii+50;
 		    err_p_all[ii]=50;
-		    if(P11>100*ii&&P11<100+100*ii)
+		    if(P1>100*ii&&P1<100+100*ii)
 		       {
 			   if(t0atccr0.npe<=npetrh)
 			   {
@@ -740,13 +753,13 @@ void atc_cross()
 	    //Second track hit in 0, 1, 2, 3, 4 counters ATC from second layer and get number of Nph.e....
 	    if( t1atccr0.aerogel_region0==1 && t1atccr0.wlshit==0 && ( (t1atccr0.i>=ncnt2l1 && t1atccr0.i<ncnt2l2) ) )
 	    {
-		pr2->Fill(P22,t1atccr0.npe); kk=1; counter++;
+		pr2->Fill(P2,t1atccr0.npe); kk=1; counter++;
 		if(verbose1) cout<<"ev.run="<<ev.run<<"\t"<<"cnt.npe="<<t1atccr0.npe<<"\t"<<"t1atccr0.i="<<t1atccr0.i<<endl;
 		for(int ii=0; ii<=14; ii++)
 		{
 		    p_all[ii]=100*ii+50;
 		    err_p_all[ii]=50;
-		    if(P22>100*ii&&P22<100+100*ii)
+		    if(P2>100*ii&&P2<100+100*ii)
 		    {
 			if(t1atccr0.npe<=npetrh)
 			{
@@ -762,13 +775,13 @@ void atc_cross()
 	    }
 	    if( t0atccr1.aerogel_region0==1 && t0atccr1.wlshit==0 && ( (t0atccr1.i>=ncnt2l1 && t0atccr1.i<ncnt2l2) ) )
 	    {
-		pr2->Fill(P11,t0atccr1.npe); kk=1; counter++;
+		pr2->Fill(P1,t0atccr1.npe); kk=1; counter++;
 		if(verbose1) cout<<"ev.run="<<ev.run<<"\t"<<"cnt.npe="<<t0atccr1.npe<<"\t"<<"t0atccr1.i="<<t0atccr1.i<<endl;
 		for(int ii=0; ii<=14; ii++)
 		{
 		    p_all[ii]=100*ii+50;
 		    err_p_all[ii]=50;
-		    if(P11>100*ii&&P11<100+100*ii)
+		    if(P1>100*ii&&P1<100+100*ii)
 		    {
 			if(t0atccr1.npe<=npetrh)
 			{
@@ -784,13 +797,13 @@ void atc_cross()
 	    }
 	    if( t1atccr1.aerogel_region0==1 && t1atccr1.wlshit==0 && ( (t1atccr1.i>=ncnt2l1 && t1atccr1.i<ncnt2l2) ) )
 	    {
-		pr2->Fill(P22,t1atccr1.npe); kk=1; counter++;
+		pr2->Fill(P2,t1atccr1.npe); kk=1; counter++;
 		if(verbose1) cout<<"ev.run="<<ev.run<<"\t"<<"cnt.npe="<<t1atccr1.npe<<"\t"<<"t1atccr1.i="<<t1atccr1.i<<endl;
 		for(int ii=0; ii<=14; ii++)
 		{
 		    p_all[ii]=100*ii+50;
 		    err_p_all[ii]=50;
-		    if(P22>100*ii&&P22<100+100*ii)
+		    if(P2>100*ii&&P2<100+100*ii)
 		    {
 			if(t1atccr1.npe<=npetrh)
 			{
@@ -806,14 +819,14 @@ void atc_cross()
 	    }
 	    if( t0atccr2.aerogel_region0==1 && t0atccr2.wlshit==0 && ( (t0atccr2.i>=ncnt2l1 && t0atccr2.i<ncnt2l2) ) )
 	    {
-		pr2->Fill(P11,t0atccr2.npe); kk=1; counter++;
+		pr2->Fill(P1,t0atccr2.npe); kk=1; counter++;
 		if(verbose1) cout<<"ev.run="<<ev.run<<"\t"<<"cnt.npe="<<t0atccr2.npe<<"\t"<<"t0atccr2.i="<<t0atccr2.i<<endl;
 
 		for(int ii=0; ii<=14; ii++)
 		{
 		    p_all[ii]=100*ii+50;
 		    err_p_all[ii]=50;
-		    if(P11>100*ii&&P11<100+100*ii)
+		    if(P1>100*ii&&P1<100+100*ii)
 		    {
 			if(t0atccr2.npe<=npetrh)
 			{
@@ -829,13 +842,13 @@ void atc_cross()
 	    }
 	    if( t1atccr2.aerogel_region0==1 && t1atccr2.wlshit==0 && ( (t1atccr2.i>=ncnt2l1 && t1atccr2.i<ncnt2l2) ) )
 	    {
-		pr2->Fill(P22,t1atccr2.npe);kk=1;  counter++;
+		pr2->Fill(P2,t1atccr2.npe);kk=1;  counter++;
 		if(verbose1) cout<<"ev.run="<<ev.run<<"\t"<<"cnt.npe="<<t1atccr2.npe<<"\t"<<"t1atccr2.i="<<t1atccr2.i<<endl;
 		for(int ii=0; ii<=14; ii++)
 		{
 		    p_all[ii]=100*ii+50;
 		    err_p_all[ii]=50;
-		    if(P22>100*ii&&P22<100+100*ii)
+		    if(P2>100*ii&&P2<100+100*ii)
 		    {
 			if(t1atccr2.npe<=npetrh)
 			{
@@ -851,13 +864,13 @@ void atc_cross()
 	    }
 	    if( t0atccr3.aerogel_region0==1 && t0atccr3.wlshit==0 && ( (t0atccr3.i>=ncnt2l1 && t0atccr3.i<ncnt2l2) ) )
 	    {
-		pr2->Fill(P11,t0atccr3.npe); kk=1; counter++;
+		pr2->Fill(P1,t0atccr3.npe); kk=1; counter++;
 		if(verbose1) cout<<"ev.run="<<ev.run<<"\t"<<"cnt.npe="<<t0atccr3.npe<<"\t"<<"t0atccr3.i="<<t0atccr3.i<<endl;
 		for(int ii=0; ii<=14; ii++)
 		{
 		    p_all[ii]=100*ii+50;
 		    err_p_all[ii]=50;
-		    if(P11>100*ii&&P11<100+100*ii)
+		    if(P1>100*ii&&P1<100+100*ii)
 		    {
 			if(t0atccr3.npe<=npetrh)
 			{
@@ -873,13 +886,13 @@ void atc_cross()
 	    }
 	    if( t1atccr3.aerogel_region0==1 && t1atccr3.wlshit==0 && ( (t1atccr3.i>=ncnt2l1 && t1atccr3.i<ncnt2l2) ) )
 	    {
-		pr2->Fill(P22,t1atccr3.npe); kk=1;  counter++;
+		pr2->Fill(P2,t1atccr3.npe); kk=1;  counter++;
 		if(verbose1) cout<<"ev.run="<<ev.run<<"\t"<<"cnt.npe="<<t1atccr3.npe<<"\t"<<"t1atccr3.i="<<t1atccr3.i<<endl;
 		for(int ii=0; ii<=14; ii++)
 		{
 		    p_all[ii]=100*ii+50;
 		    err_p_all[ii]=50;
-		    if(P22>100*ii&&P22<100+100*ii)
+		    if(P2>100*ii&&P2<100+100*ii)
 		    {
 			if(t1atccr3.npe<=npetrh)
 			{

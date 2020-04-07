@@ -57,6 +57,18 @@
     data t1atccr2;
     data t1atccr3;
     data t1atccr4;
+    //for third track
+    data t2atccr0;
+    data t2atccr1;
+    data t2atccr2;
+    data t2atccr3;
+    data t2atccr4;
+    //for four track
+    data t3atccr0;
+    data t3atccr1;
+    data t3atccr2;
+    data t3atccr3;
+    data t3atccr4;
 
     //structure for track from DC
     struct data2
@@ -67,6 +79,8 @@
     };
     data2 t0;
     data2 t1;
+    data2 t2;
+    data2 t3;
 
     //TOF system
     struct data3
@@ -77,6 +91,8 @@
     };
     data3 t0tof;
     data3 t1tof;
+    data3 t2tof;
+    data3 t3tof;
 
     //EM-Calorymeter
     struct data4
@@ -98,6 +114,12 @@
     data5 t1c0;
     data5 t1c1;
     data5 t1c2;
+    data5 t2c0;
+    data5 t2c1;
+    data5 t2c2;
+    data5 t3c0;
+    data5 t3c1;
+    data5 t3c2;
     data5 clgamma0;
     data5 clgamma1;
     data5 clgamma2;
@@ -145,6 +167,12 @@
     };
     data11 atcev;
 
+    struct data12
+    {
+	float Mbc[4],InvM[4],dE[4],dP[4],E_KminusP[4],E_KplusP[4],E_PminusK[4],E_PplusK[4],Ebeam,rEv;
+    };
+    data12 Dmeson;
+
     std::vector< float > npe1;
     float Kdiff,kx1,kx2,kx3,kx4;
 
@@ -154,7 +182,8 @@
     //include samples Data/MC
     void chain(){
 	if(sim!=1){
-	    for(int i=1; i<=245; i++)
+	    //for(int i=1; i<=245; i++)
+	    for(int i=1; i<=116; i++)
 	    {
 		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/psi3770_to_D0meson_%d.root",i).Data());
 	    }
@@ -191,12 +220,32 @@
 	tt->SetBranchStatus("t1c1",1);
 	tt->SetBranchStatus("t1c2",1);
 	tt->SetBranchStatus("t1tof",1);
+	tt->SetBranchStatus("t2",1);
+	tt->SetBranchStatus("t2atccr0",1);
+	tt->SetBranchStatus("t2atccr1",1);
+	tt->SetBranchStatus("t2atccr2",1);
+	tt->SetBranchStatus("t2atccr3",1);
+	tt->SetBranchStatus("t2atccr4",1);
+	tt->SetBranchStatus("t2c0",1);
+	tt->SetBranchStatus("t2c1",1);
+	tt->SetBranchStatus("t2c2",1);
+	tt->SetBranchStatus("t2tof",1);
+	tt->SetBranchStatus("t3",1);
+	tt->SetBranchStatus("t3atccr0",1);
+	tt->SetBranchStatus("t3atccr1",1);
+	tt->SetBranchStatus("t3atccr2",1);
+	tt->SetBranchStatus("t3atccr3",1);
+	tt->SetBranchStatus("t3atccr4",1);
+	tt->SetBranchStatus("t3c0",1);
+	tt->SetBranchStatus("t3c1",1);
+	tt->SetBranchStatus("t3c2",1);
+	tt->SetBranchStatus("t3tof",1);
 	tt->SetBranchStatus("clgamma0",1);
 	tt->SetBranchStatus("clgamma1",1);
 	tt->SetBranchStatus("clgamma2",1);
 	tt->SetBranchStatus("clgamma3",1);
 	tt->SetBranchStatus("mu",1);
-	tt->SetBranchStatus("jpsi",1);
+	tt->SetBranchStatus("Dmeson",1);
     }
 
     void setbranchaddress(){
@@ -224,12 +273,32 @@
 	tt->SetBranchAddress("t1c1",&t1c1);
 	tt->SetBranchAddress("t1c2",&t1c2);
 	tt->SetBranchAddress("t1tof",&t1tof);
+	tt->SetBranchAddress("t2",&t2);
+	tt->SetBranchAddress("t2atccr0",&t2atccr0);
+	tt->SetBranchAddress("t2atccr1",&t2atccr1);
+	tt->SetBranchAddress("t2atccr2",&t2atccr2);
+	tt->SetBranchAddress("t2atccr3",&t2atccr3);
+	tt->SetBranchAddress("t2atccr4",&t2atccr4);
+	tt->SetBranchAddress("t2c0",&t2c0);
+	tt->SetBranchAddress("t2c1",&t2c1);
+	tt->SetBranchAddress("t2c2",&t2c2);
+	tt->SetBranchAddress("t2tof",&t2tof);
+	tt->SetBranchAddress("t3",&t3);
+	tt->SetBranchAddress("t3atccr0",&t3atccr0);
+	tt->SetBranchAddress("t3atccr1",&t3atccr1);
+	tt->SetBranchAddress("t3atccr2",&t3atccr2);
+	tt->SetBranchAddress("t3atccr3",&t3atccr3);
+	tt->SetBranchAddress("t3atccr4",&t3atccr4);
+	tt->SetBranchAddress("t3c0",&t3c0);
+	tt->SetBranchAddress("t3c1",&t3c1);
+	tt->SetBranchAddress("t3c2",&t3c2);
+	tt->SetBranchAddress("t3tof",&t3tof);
 	tt->SetBranchAddress("clgamma0",&clgamma0);
 	tt->SetBranchAddress("clgamma1",&clgamma1);
 	tt->SetBranchAddress("clgamma2",&clgamma2);
 	tt->SetBranchAddress("clgamma3",&clgamma3);
 	tt->SetBranchAddress("mu",&mu);
-	tt->SetBranchAddress("jpsi",&jpsi);
+	tt->SetBranchAddress("Dmeson",&Dmeson);
     }
 
     TProfile* pr1;
@@ -285,7 +354,7 @@
 
     int kk; int kk1; int kk2; int ii1; int ii2;
 
-    Double_t P11, P22;
+    Double_t P1, P2, P3, P4;
     float n00, n01, n02, n03, n04;
     float n10, n11, n12, n13, n14;
     int cnt11, cnt12;
