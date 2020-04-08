@@ -46,6 +46,7 @@ Processing prepared root-files with reconstruction for D-meson:
 
 Important plots are here http://kedr.inp.nsk.su/~ovtin/outDmeson/
 
+
 # Information about D-meson statistic:
 Runs in peak Psi(3770) -> e+e- -> DD^- (D^0D^-0 or D+D-): <br />
 
@@ -99,6 +100,20 @@ Nph.e. less then ~0.5-1.0 in momentum range for track 400-1300 MeV/c  - Kaon, ot
 
 Example from previous analysis: /home/poluektv/kedr/release/dmass2/kp/bin/dmass_kp.cc  <br />
 
+# Simulation
+
+~/3.0.0/bin/ks < mc.cards.ee_to_DD > /dev/null  <br />
+KDisplay < simout/sim000001.dat -r -R19697     <br />
+
+Information about generators is here http://kedr.inp.nsk.su/FOR_MEMBERS/SOFTWARE/SIMULATION/generators.html#60  <br />
+```
+GENE 60 Wtot SigmaW
+```
+Wtot - total energy of collision (GeV) <br />
+SigmaW - sigma total energy of collision (GeV) <br />
+pair D+D- and anti-D0D0 born equiprobably <br />
+
+Magnetic field is 6 kGs. <br />
 
 # List candidates for D0->K-pi+ decay
 Run 23930:                                                                                     <br />
