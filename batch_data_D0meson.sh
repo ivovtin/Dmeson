@@ -30,8 +30,8 @@
 #$ -m beas
 #$ -M ovtin.ivan@gmail.com
 
-#$ -t 1-16
-##$ -t 1-245
+#$ -t 1-245
+##$ -t 1-16
 ##$ -t 5-5
 
 i=${SGE_TASK_ID}
@@ -41,11 +41,11 @@ myrand=$[1000+$i]
 #Nevents=10000
 #outfile="psi3770_to_D0meson_test.root"
 #Signal
-#inruns="/home/ovtin/development/Dmeson/runsDmeson/runDmeson"$i
-#outfile="/spool/users/ovtin/psi3770_to_D0meson_"$i".root"
+inruns="/home/ovtin/development/Dmeson/runsDmeson/runDmeson"$i
+outfile="/spool/users/ovtin/outDmeson/psi3770_to_D0meson_"$i".root"
 #Bkg
-inruns="/home/ovtin/development/Dmeson/runsDmeson/runBkgDmeson"$i
-outfile="/spool/users/ovtin/psi3770_to_BkgD0meson_"$i".root"
+#inruns="/home/ovtin/development/Dmeson/runsDmeson/runBkgDmeson"$i
+#outfile="/spool/users/ovtin/psi3770_to_BkgD0meson_"$i".root"
 mintracks=4
 maxtracks=4
 minbeamtracks=2

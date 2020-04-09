@@ -179,9 +179,8 @@ static struct ATCBranch batc;
 typedef struct {Int_t numHyp; Float_t chi2[5],M[5],P1[5],P2[5];} JPSI;
 static JPSI jpsi;
 
-typedef struct {Float_t Mbc[4],InvM[4],dE[4],dP[4],E_KminusP[4],E_KplusP[4],E_PminusK[4],E_PplusK[4],Ebeam,rEv;} DMESON;
+typedef struct {Float_t Mbc[4],InvM[4],dE[4],dP[4],depmkp[4],deppkm[4],Ebeam,rEv;} DMESON;
 static DMESON Dmeson;
-//static TH1F *hbeam;
 
 double mk = 493.68;
 double mpi = 139.57;
@@ -310,6 +309,7 @@ int analyse_event()
 {
     float EMinPhot=progpar.min_cluster_energy;
     double  WTotal=2*beam_energy;                                                                 //beam_energy - How determined this energy ?
+    //if( kedrrun_cb_.Header.RunType == 64 ) { WTotal=2*1886.65; }                                  //for MC
     if( kedrrun_cb_.Header.RunType == 64 ) { WTotal=2*1865; }                                  //for MC
 
     if (progpar.verbose) cout<<"RunNumber="<<kedrraw_.Header.RunNumber<<"\t"<<"WTotal="<<WTotal<<"\t"<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"eTracksAll="<<eTracksAll<<endl;
@@ -367,7 +367,6 @@ int analyse_event()
 
 	    for (int t2 = 0; t2 < eTracksAll; t2++)                              //cycle for second track
 	    {
-		double p1pi=0, p2pi=0, p1ki=0, p2ki=0;
 		if( tCharge(t1)<0 && tCharge(t2)>0 )       		         //condition for part1: K-, part2: pi+    (D0->K-pi+)
 		{
 		    if (progpar.verbose) cout<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"Ebeam="<<WTotal/2<<"\t"<<"t1="<<t1<<"\t"<<"t2="<<t2<<"\t"<<"tCharge(t1)="<<tCharge(t1)<<"\t"<<"tCharge(t2)="<<tCharge(t2)<<endl;
@@ -377,10 +376,8 @@ int analyse_event()
 		    Dmeson.InvM[i]=0;                                           //also Invariant mass
 		    Dmeson.dE[i]=0;
 		    Dmeson.dP[i]=0;
-		    Dmeson.E_KminusP[i]=0;
-		    Dmeson.E_KplusP[i]=0;
-		    Dmeson.E_PminusK[i]=0;
-		    Dmeson.E_PplusK[i]=0;
+		    Dmeson.depmkp[i]=0;
+                    Dmeson.deppkm[i]=0;
 
 		    double px1, px2, py1, py2, pz1, pz2;                        //determine momentums
 		    px1 = tP(t1)*tVx(t1);
@@ -401,30 +398,10 @@ int analyse_event()
 
 		    if (progpar.verbose) cout<<"mbc="<<Dmeson.Mbc[i]<<"\t"<<"InvM="<<Dmeson.InvM[i]<<endl;
 
-		    p1ki = tP(t1);
-		    p1pi = tP(t2);
-		    Dmeson.E_KminusP[i] = sqrt(mk*mk + p1ki*p1ki) + sqrt(mpi*mpi + p1pi*p1pi);
-		    Dmeson.E_PminusK[i] = sqrt(mk*mk + p1pi*p1pi) + sqrt(mpi*mpi + p1ki*p1ki);
-
-                    //condition for part1: K+, part2: pi-    (D0bar->K+pi-)
-		    for(int t3=0; t3<eTracksAll; t3++  ){
-			for(int t4=0; t4<eTracksAll; t4++  ){
-			    if ( t3!=t1 && t3!=t2 && t4!=t1 && t4!=t2 && tCharge(t1)!=tCharge(t3) ){
-				if ( tCharge(t3)>0 && tCharge(t4)<0 )
-				{
-				    p2ki = tP(t3);
-				    p2pi = tP(t4);
-				    if (progpar.verbose) cout<<"P(t3)="<<tP(t3)<<"\t"<<"P(t4)="<<tP(t4)<<endl;
-				}
-			    }
-			}
-		    }
-		    Dmeson.E_KplusP[i] = sqrt(mk*mk + p2ki*p2ki) + sqrt(mpi*mpi + p2pi*p2pi);
-		    Dmeson.E_PplusK[i] = sqrt(mk*mk + p2pi*p2pi) + sqrt(mpi*mpi + p2ki*p2ki);
-		    //dE = (EkminusP + EkplusP)*0.5 - beamenergy;
-		    Dmeson.dE[i] = (Dmeson.E_KminusP[i] + Dmeson.E_KplusP[i])/2. - WTotal/2;
-		    if (progpar.verbose) cout<<"E_KminusP="<< Dmeson.E_KminusP[i]<<"\t"<<"E_KplusP="<<Dmeson.E_KplusP[i]<<"\t"<<"de="<<Dmeson.dE[i]<<endl;
-		    if (progpar.verbose) cout<<"E_PminusK="<< Dmeson.E_PminusK[i]<<"\t"<<"E_PplusK="<<Dmeson.E_PplusK[i]<<endl;
+		    Dmeson.depmkp[i] =  sqrt(mpi*mpi + tP(t1)*tP(t1)) + sqrt(mk*mk + tP(t2)*tP(t2)) - WTotal/2;
+		    Dmeson.deppkm[i] =  sqrt(mpi*mpi + tP(t2)*tP(t2)) + sqrt(mk*mk + tP(t1)*tP(t1)) - WTotal/2;
+		    Dmeson.dE[i] = (Dmeson.depmkp[i] + Dmeson.deppkm[i])/2.;
+		    if (progpar.verbose) cout<<"depmkp="<<Dmeson.depmkp[i]<<"\t"<<"deppkm="<<Dmeson.deppkm[i]<<"\t"<<"de="<<Dmeson.dE[i]<<endl;
 
 		    Dmeson.dP[i] = tP(t1)-tP(t2);
 		    if (progpar.verbose) cout<<"dP="<< Dmeson.dP[i]<<endl;
@@ -673,7 +650,7 @@ int main(int argc, char* argv[])
 
 	eventTree->Branch("mu",&bmu,MUBranchList);
 	eventTree->Branch("jpsi",&jpsi,"numHyp/I:chi2[5]/F:M[5]:P1[5]:P2[5]");
-	eventTree->Branch("Dmeson",&Dmeson,"Mbc[4]/F:InvM[4]:dE[4]:dP[4]:E_KminusP[4]:E_KplusP[4]:E_PminusK[4]:E_PplusK[4]:Ebeam:rEv");
+	eventTree->Branch("Dmeson",&Dmeson,"Mbc[4]/F:InvM[4]:dE[4]:dP[4]:depmkp[4]:deppkm[4]:Ebeam:rEv");
 
 	eventTree->Branch("strcls",&bstrip,stripClusterBranchList);
 	eventTree->Branch("strtrk",&bstriptrack,stripTrackBranchList);
