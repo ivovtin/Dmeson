@@ -310,7 +310,7 @@ int analyse_event()
 {
     float EMinPhot=progpar.min_cluster_energy;
     double  WTotal=2*beam_energy;                                                                 //beam_energy - How determined this energy ?
-    if( kedrrun_cb_.Header.RunType == 64 ) { WTotal=2*1886.75; }                                  //for MC
+    if( kedrrun_cb_.Header.RunType == 64 ) { WTotal=2*1865; }                                  //for MC
 
     if (progpar.verbose) cout<<"RunNumber="<<kedrraw_.Header.RunNumber<<"\t"<<"WTotal="<<WTotal<<"\t"<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"eTracksAll="<<eTracksAll<<endl;
 
@@ -370,7 +370,7 @@ int analyse_event()
 		double p1pi=0, p2pi=0, p1ki=0, p2ki=0;
 		if( tCharge(t1)<0 && tCharge(t2)>0 )       		         //condition for part1: K-, part2: pi+    (D0->K-pi+)
 		{
-		    if (progpar.verbose) cout<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"Ebeam="<<beam_energy<<"\t"<<"t1="<<t1<<"\t"<<"t2="<<t2<<"\t"<<"tCharge(t1)="<<tCharge(t1)<<"\t"<<"tCharge(t2)="<<tCharge(t2)<<endl;
+		    if (progpar.verbose) cout<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"Ebeam="<<WTotal/2<<"\t"<<"t1="<<t1<<"\t"<<"t2="<<t2<<"\t"<<"tCharge(t1)="<<tCharge(t1)<<"\t"<<"tCharge(t2)="<<tCharge(t2)<<endl;
 		    if (progpar.verbose) cout<<"P(t1)="<<tP(t1)<<"\t"<<"P(t2)="<<tP(t2)<<"\t"<<"tHits(t1)="<<tHits(t1)<<"\t"<<"tHits(t2)="<<tHits(t2)<<"\t"<<"tCh2(t1)="<<tCh2(t1)<<"\t"<<"tCh2(t2)="<<tCh2(t2)<<endl;
 
 		    Dmeson.Mbc[i]=0;                                            //Invariant mass or beam consraint mass
@@ -391,12 +391,12 @@ int analyse_event()
 		    pz2 = tP(t2)*tVz(t2);
 
 		    //Mbc=sqrt(Ebeam^2-(p1+p2)^2)
-		    Dmeson.Mbc[i] = beam_energy*beam_energy - pow(px1+px2,2) - pow(py1+py2,2) - pow(pz1+pz2,2);
+		    Dmeson.Mbc[i] = (WTotal/2)*(WTotal/2) - pow(px1+px2,2) - pow(py1+py2,2) - pow(pz1+pz2,2);
 		    if (Dmeson.Mbc[i]>0) Dmeson.Mbc[i] = sqrt(Dmeson.Mbc[i]); else Dmeson.Mbc[i] = 0;
 
 		    //Invariant mass of two tracks
 		    //(p1+p2)^2=p1^2+p2^2+2*p1*p2cos(theta)
-		    Dmeson.InvM[i] = pow(beam_energy,2)-pow(tP(t1),2)-pow(tP(t2),2)-2*tP(t1)*tP(t2)*(tVx(t1)*tVx(t2)+tVy(t1)*tVy(t2)+tVz(t1)*tVz(t2));
+		    Dmeson.InvM[i] = pow((WTotal/2),2)-pow(tP(t1),2)-pow(tP(t2),2)-2*tP(t1)*tP(t2)*(tVx(t1)*tVx(t2)+tVy(t1)*tVy(t2)+tVz(t1)*tVz(t2));
 		    if ( Dmeson.InvM[i]>0) Dmeson.InvM[i] = sqrt(Dmeson.InvM[i]); else Dmeson.InvM[i] = 0;
 
 		    if (progpar.verbose) cout<<"mbc="<<Dmeson.Mbc[i]<<"\t"<<"InvM="<<Dmeson.InvM[i]<<endl;
@@ -422,7 +422,7 @@ int analyse_event()
 		    Dmeson.E_KplusP[i] = sqrt(mk*mk + p2ki*p2ki) + sqrt(mpi*mpi + p2pi*p2pi);
 		    Dmeson.E_PplusK[i] = sqrt(mk*mk + p2pi*p2pi) + sqrt(mpi*mpi + p2ki*p2ki);
 		    //dE = (EkminusP + EkplusP)*0.5 - beamenergy;
-		    Dmeson.dE[i] = (Dmeson.E_KminusP[i] + Dmeson.E_KplusP[i])/2. - beam_energy;
+		    Dmeson.dE[i] = (Dmeson.E_KminusP[i] + Dmeson.E_KplusP[i])/2. - WTotal/2;
 		    if (progpar.verbose) cout<<"E_KminusP="<< Dmeson.E_KminusP[i]<<"\t"<<"E_KplusP="<<Dmeson.E_KplusP[i]<<"\t"<<"de="<<Dmeson.dE[i]<<endl;
 		    if (progpar.verbose) cout<<"E_PminusK="<< Dmeson.E_PminusK[i]<<"\t"<<"E_PplusK="<<Dmeson.E_PplusK[i]<<endl;
 
@@ -433,7 +433,7 @@ int analyse_event()
 	    }
 	}
 	Dmeson.rEv = kedrraw_.Header.Number;
-	Dmeson.Ebeam=beam_energy;
+	Dmeson.Ebeam=WTotal/2;
 
 	int nclg=0;
 	for(int cl=0; cl<semc.emc_ncls; cl++)

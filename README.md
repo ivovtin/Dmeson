@@ -114,6 +114,9 @@ SigmaW - sigma total energy of collision (GeV) <br />
 pair D+D- and anti-D0D0 born equiprobably <br />
 
 Magnetic field is 6 kGs. <br />
+D0 mass for simulation is 1864.60 MeV. <br />
+Combinatorial background from continuum events (e+e-->qq, q=u,d,s) simulation with 205 generator (Jetset 7.4). <br />
+Bkg from decay e+e-->DD simulation with apply 60 generator for which decay D0->K-pi+ is forbidden in decay table JETSET. <br />
 
 # List candidates for D0->K-pi+ decay
 Run 23930:                                                                                     <br />
