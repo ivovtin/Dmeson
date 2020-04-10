@@ -176,15 +176,11 @@ static struct StripTrackBranch bstriptrack;
 static struct ATCCounterBranch bcnt[Natccr][Ntraks];
 static struct ATCBranch batc;
 
-typedef struct {Int_t numHyp; Float_t chi2[5],M[5],P1[5],P2[5];} JPSI;
-static JPSI jpsi;
-
-typedef struct {Float_t Mbc[4],InvM[4],dE[4],dP[4],depmkp[4],deppkm[4],Ebeam,rEv;} DMESON;
+typedef struct {Int_t numHyp; Float_t Mbc[4],InvM[4],dE[4],dP[4],depmkp[4],deppkm[4],Ebeam,rEv,chi2[50],M[50],P1[50],P2[50],P3[50],P4[50];} DMESON;
 static DMESON Dmeson;
 
 double mk = 493.68;
 double mpi = 139.57;
-float Ekminuspiplus, Ekpluspiminus, Pminus, Pplus;
 
 int listtr[6],lclpi0[8],lclg[5];
 //Rejection prior to reconstruction helps to save CPU time
@@ -327,23 +323,85 @@ int analyse_event()
 	copy(&bvertex);
 	copy(&bemc);
 
-	int i=0;
+	//==========================================================================================================
+	//kinematic reconstruction
 	int ntrfromip=0;
-
-	for (int t1 = 0; t1 < eTracksAll; t1++)                                  //cycle for first track
+	for (int t=0; t<eTracksAll; t++)                                  //cycle for first track
 	{
-	    double xx=tX0IP(t1)*tX0IP(t1);
-	    double yy=tY0IP(t1)*tY0IP(t1);
+	    double xx=tX0IP(t)*tX0IP(t);
+	    double yy=tY0IP(t)*tY0IP(t);
 	    double rr=sqrt(xx+yy);
-	    if (progpar.verbose) cout<<"rr="<<rr<<endl;                          //radius begin track
+	    if (progpar.verbose) cout<<"rr="<<rr<<endl;                   //radius begin track
 
 	    if(rr<5) {
 		ntrfromip++;
 		if(ntrfromip<=6){
-		    listtr[ntrfromip-1]=t1+1;                                    //list identificator of traks ListTr[1:6]
+		    listtr[ntrfromip-1]=t+1;                             //list identificator of traks ListTr[1:6]
 		}
 	    }
+	}
+	int nclnft=0;
+	for(int cl=0; cl<semc.emc_ncls; cl++)
+	{
+	    if(semc.emc_dc_ntrk[cl]==0&&
+	       semc.emc_energy[cl]>EMinPhot){
+		nclnft++;
+		if(nclnft<=8) {
+		    lclpi0[nclnft-1]=cl+1;
+		}
+	    }
+	}
 
+	if (progpar.verbose) cout<<"Event="<<eDaqNumber<<"\t"<<"ntrfromip="<<ntrfromip<<"\t"<<"nclnft="<<nclnft<<endl;
+	Dmeson.numHyp=0;
+	for(int i=0; i<5; i++){
+	    Dmeson.chi2[i]=0;
+	    Dmeson.M[i]=0;
+	    Dmeson.P1[i]=0;
+	    Dmeson.P2[i]=0;
+	    Dmeson.P3[i]=0;
+	    Dmeson.P4[i]=0;
+	}
+
+	if(ntrfromip==4&&nclnft<=2) {
+	    int qst=0;
+	    int ntracks=4;
+	    int npi0=0;
+	    int ng=0;
+	    reckfitmulticpi0gamma(&WTotal,&ntracks,&npi0,&ng,listtr,lclpi0,lclg,&qst);
+	    if (progpar.verbose) cout<<"qst:"<<qst<<endl;
+	    if(qst>=0){
+		if (progpar.verbose) cout<<"NumOfHyp:"<<hNumOfHyp<<endl;
+		for(int ih=0; ih<hNumOfHyp; ih++){
+		    if (progpar.verbose) cout<<" chi2:"<<hHChi2(ih)<<endl;
+		    Dmeson.chi2[ih]=hHChi2(ih);
+		    for(int it=0; it<4; it++){
+			if (progpar.verbose) cout<<"track:"<<it<<"  Mass:"<<hMPc(ih,it)<<"\t"<< "P:"<<hPPc(ih,it)<<endl;
+			if(it==0){
+			    Dmeson.M[ih]=hMPc(ih,it);
+			    Dmeson.P1[ih]=hPPc(ih,it);
+			}
+			if(it==1){
+			    Dmeson.P2[ih]=hPPc(ih,it);
+			}
+			if(it==2){
+			    Dmeson.P3[ih]=hPPc(ih,it);
+			}
+			if(it==3){
+			    Dmeson.P4[ih]=hPPc(ih,it);
+			}
+		    }
+		}
+	    }
+	}
+	Dmeson.numHyp=hNumOfHyp;
+	if (progpar.verbose) cout<<"Dmeson.numHyp="<<Dmeson.numHyp<<"\t"<<"hNumOfHyp="<<hNumOfHyp<<endl;
+	//===============================================================================================
+
+	int i=0;
+
+	for (int t1 = 0; t1 < eTracksAll; t1++)                                  //cycle for first track
+	{
 	    copy(&btrack[t1],t1);
 	    copy(&btof[t1],t1);
 	    copy(&bmu,t1,nhits);
@@ -398,9 +456,9 @@ int analyse_event()
 
 		    if (progpar.verbose) cout<<"mbc="<<Dmeson.Mbc[i]<<"\t"<<"InvM="<<Dmeson.InvM[i]<<endl;
 
-		    Dmeson.depmkp[i] =  sqrt(mpi*mpi + tP(t1)*tP(t1)) + sqrt(mk*mk + tP(t2)*tP(t2)) - WTotal/2;
-		    Dmeson.deppkm[i] =  sqrt(mpi*mpi + tP(t2)*tP(t2)) + sqrt(mk*mk + tP(t1)*tP(t1)) - WTotal/2;
-		    Dmeson.dE[i] = (Dmeson.depmkp[i] + Dmeson.deppkm[i])/2.;
+		    Dmeson.depmkp[i] =  sqrt(mpi*mpi + tP(t1)*tP(t1)) + sqrt(mk*mk + tP(t2)*tP(t2));
+		    Dmeson.deppkm[i] =  sqrt(mpi*mpi + tP(t2)*tP(t2)) + sqrt(mk*mk + tP(t1)*tP(t1));
+		    Dmeson.dE[i] = (Dmeson.depmkp[i] + Dmeson.deppkm[i])/2. - WTotal/2;
 		    if (progpar.verbose) cout<<"depmkp="<<Dmeson.depmkp[i]<<"\t"<<"deppkm="<<Dmeson.deppkm[i]<<"\t"<<"de="<<Dmeson.dE[i]<<endl;
 
 		    Dmeson.dP[i] = tP(t1)-tP(t2);
@@ -425,103 +483,18 @@ int analyse_event()
 	for(int c=0; c<semc.str_ncls; c++) {
 	    copy(&bstrip,c);
 	}
-	/*
-	     //====================================================================
-	    int nclnft=0;
-	    for(int cl=0; cl<semc.emc_ncls; cl++)       //цикл по числу кластеров
-	    {
-		if(semc.emc_dc_ntrk[cl]==0&&            //если кластер не привязан к треку и его энергия больше минимальной (50 МэВ)
-		   semc.emc_energy[cl]>EMinPhot){
-		    nclnft++;                           //подсчитываем число таких кластеров
-		    if(nclnft<=8) {
-			lclpi0[nclnft-1]=cl+1;          //Список идентификаторов кластеров для построения  pi0 ListPi0[1:8]
 
-            }
-		}
-	    }
+	if(eNumber%10==0) cout<<"Ev:"<<eNumber<<endl;
+	//==================================================================
 
-	    //cout<<"Event="<<eDaqNumber<<"\t"<<"ntrfromip="<<ntrfromip<<"\t"<<"nclnft="<<nclnft<<endl;   //radius begin track
-            //cout<<"tP(0)="<<tP(0)<<"\t"<<"tP(1)="<<tP(1)<<endl;
-	    jpsi.numHyp=0;
-	    for(int i=0; i<5; i++){
-	    jpsi.chi2[i]=0;
-	    jpsi.M[i]=0;
-	    jpsi.P1[i]=0;
-	    jpsi.P2[i]=0;
-	    }
-
-	    if(ntrfromip==2&&nclnft==0) {
-		//printf("nclnft==0 event %d: %d tracks, %d from I.P., %d close to beam line\n",eDaqNumber,eTracksAll,eTracksIP,eTracksBeam);
-		int qst=0;
-		int ntracks=2;
-		int npi0=0;
-		int ng=0;
-		//lclg[0]=lclpi0[0];
-		reckfitmulticpi0gamma(&WTotal,&ntracks,&npi0,&ng,listtr,lclpi0,lclg,&qst);
-		//cout<<"qst:"<<qst<<endl;
-		if(qst>=0){
-		    //cout<<"NumOfHyp:"<<hNumOfHyp<<endl;
-		    for(int ih=0; ih<hNumOfHyp; ih++){
-			//cout<<" chi2:"<<hHChi2(ih)<<endl;
-			jpsi.chi2[ih]=hHChi2(ih);
-			for(int it=0; it<2; it++){
-			    //cout<<"track:"<<it<<"  Mass:"<<hMPc(ih,it)<<"\t"<< "P:"<<hPPc(ih,it)<<endl;
-			    if(it==0){
-				jpsi.M[ih]=hMPc(ih,it);
-				jpsi.P1[ih]=hPPc(ih,it);
-			    }
-			    if(it==1){
-				jpsi.P2[ih]=hPPc(ih,it);
-			    }
-			}
-		    }
-		}
-	    }
-
-	    if(ntrfromip==2&&nclnft<=2) {
-		//printf("nclnft==1 event %d: %d tracks, %d from I.P., %d close to beam line\n",eDaqNumber,eTracksAll,eTracksIP,eTracksBeam);
-		int qst=0;
-		int ntracks=2;
-		int npi0=0;
-		int ng=1;
-		//lclg[0]=lclpi0[0];
-		reckfitmulticpi0gamma(&WTotal,&ntracks,&npi0,&ng,listtr,lclpi0,lclg,&qst);
-		//cout<<"qst:"<<qst<<endl;
-		if(qst>=0){
-		    //cout<<"NumOfHyp:"<<hNumOfHyp<<endl;
-		    for(int ih=0; ih<hNumOfHyp; ih++){
-			//cout<<" chi2:"<<hHChi2(ih)<<endl;
-			jpsi.chi2[ih]=hHChi2(ih);
-			for(int it=0; it<2; it++){
-			    //cout<<"track:"<<it<<"  Mass:"<<hMPc(ih,it)<<"\t"<< "P:"<<hPPc(ih,it)<<endl;
-			    if(it==0){
-				jpsi.M[ih]=hMPc(ih,it);
-				jpsi.P1[ih]=hPPc(ih,it);
-			    }
-			    if(it==1){
-				jpsi.P2[ih]=hPPc(ih,it);
-			    }
-			}
-		    }
-		}
-	    }
-
-	    //hpx->Fill(hNumOfHyp);
-	    jpsi.numHyp=hNumOfHyp;
-            */
+	eventTree->Fill();
 
 
-                if(eNumber%10==0) cout<<"Ev:"<<eNumber<<endl;
-	    //==================================================================
+	if( progpar.process_only ) return 1;
 
-            eventTree->Fill();
-
-
-	    if( progpar.process_only ) return 1;
-
-	    return 0;
-	}
-	    return 0;
+	return 0;
+    }
+    return 0;
 }
 
 static const char* optstring="ra:d:b:p:h:s:j:t:e:c:l:k:i:u:q:o:v:n:z:x";
@@ -649,19 +622,11 @@ int main(int argc, char* argv[])
 	}
 
 	eventTree->Branch("mu",&bmu,MUBranchList);
-	eventTree->Branch("jpsi",&jpsi,"numHyp/I:chi2[5]/F:M[5]:P1[5]:P2[5]");
-	eventTree->Branch("Dmeson",&Dmeson,"Mbc[4]/F:InvM[4]:dE[4]:dP[4]:depmkp[4]:deppkm[4]:Ebeam:rEv");
+	eventTree->Branch("Dmeson",&Dmeson,"numHyp/I"
+			  ":Mbc[4]/F:InvM[4]:dE[4]:dP[4]:depmkp[4]:deppkm[4]:Ebeam:rEv:chi2[50]:M[50]:P1[50]:P2[50]:P3[50]:P4[50]");
 
 	eventTree->Branch("strcls",&bstrip,stripClusterBranchList);
 	eventTree->Branch("strtrk",&bstriptrack,stripTrackBranchList);
-
-	//jpsiTree = new TTree("jpsi","pi+pi-pi0 tree");
-	//jpsiTree->Branch("jpsi",&jpsi,"numHyp/I:chi2[5]/F:M[5]:P1[5]:P2[5]");
-	//piTree->Branch("pi",&bpi,piBranchList);
-	//hpx=new TH1F("hyp","This is the hyp distribution",6,0,6);
-
-	//TH1F;
-	//hbeam = new TH1F("hbeam", "Energy of beam", 4096, 0, 4096);
 
 //----------------- Configure kframework -----------------//
 	//Set kframework signal handling
