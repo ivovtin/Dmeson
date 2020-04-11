@@ -151,13 +151,13 @@
     };
     data9 vrt;
 
-    //kinematic reconstruction
     struct data10
     {
+	//float Mbc[4],InvM[4],dE[4],dP[4],E_KminusP[4],E_KplusP[4],E_PminusK[4],E_PplusK[4],Ebeam,rEv;
 	int numHyp;
-	float chi2[5],M[5],P1[5],P2[5];
+	float Mbc[4],InvM[4],dE[4],dP[4],depmkp[4],deppkm[4],Ebeam,rEv,chi2[50],M[50],P1[50],P2[50],P3[50],P4[50];
     };
-    data10 jpsi;
+    data10 Dmeson;
 
    //atc
     struct data11
@@ -166,12 +166,6 @@
 	float dt;
     };
     data11 atcev;
-
-    struct data12
-    {
-	float Mbc[4],InvM[4],dE[4],dP[4],E_KminusP[4],E_KplusP[4],E_PminusK[4],E_PplusK[4],Ebeam,rEv;
-    };
-    data12 Dmeson;
 
     std::vector< float > npe1;
     float Kdiff,kx1,kx2,kx3,kx4;
@@ -182,15 +176,17 @@
     //include samples Data/MC
     void chain(){
 	if(sim!=1){
-	    //for(int i=1; i<=245; i++)
-	    for(int i=1; i<=116; i++)
+	    //for(int i=1; i<=245; i++)   //signal 2016+2017
+	    //for(int i=1; i<=116; i++)   //signal 2016
+	    for(int i=1; i<=155; i++)   //signal 2016
+	    //for(int i=1; i<=16; i++)     //bkg 2016
 	    {
 		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/psi3770_to_D0meson_%d.root",i).Data());
+		//tt->Add(TString::Format("/spool/users/ovtin/outDmeson/psi3770_to_BkgD0meson_%d.root",i).Data());
 	    }
 	}
 	else{
-	    tt->Add("/home/ovtin/development/ATC/Jpsi_to_3pi/sim_jpsito3pi/jpsito3pi_sim_31.root");
-	    tt->Add("/home/ovtin/development/ATC/Jpsi_to_3pi/sim_jpsito3pi/jpsito3pi_sim_32.root");
+	    tt->Add("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson.root");
 	}
     }
 
@@ -301,8 +297,17 @@
 	tt->SetBranchAddress("Dmeson",&Dmeson);
     }
 
+    TH1F* hInvM;
+    TH1F* hde;
+
     TProfile* pr1;
     TProfile* pr2;
+    TProfile* prthink;
+    TH1F* hzero;
+    TH1F* hzero1;
+    TH1F* hzero2;
+    TH1F* hzero4;
+    TH1F* hzero5;
 
     vector<float> chi2min;
     float mom=0;
@@ -359,6 +364,5 @@
     float n10, n11, n12, n13, n14;
     int cnt11, cnt12;
     int cnt21, cnt22;
-
 
 #endif

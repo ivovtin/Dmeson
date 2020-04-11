@@ -51,11 +51,14 @@ int main(int argc, char* argv[])
     TFile *fout=0;
     TString fnameout;
     sim=fl_sim_exp;
+    TString KEDR;
     if( sim!=1 ){
 	fnameout=TString::Format("res_%d_%d_%d_%d_exp_Dmeson.root",first_cnt,end_cnt,region,momentum).Data();
+        KEDR = "/home/ovtin/public_html/outDmeson/";
     }else
     {
 	fnameout=TString::Format("res_%d_%d_%d_%d_sim_Dmeson.root",first_cnt,end_cnt,region,momentum).Data();
+        KEDR = "/home/ovtin/public_html/outDmeson/simulation/";
     }
     cout<<fnameout<<endl;
     fout = new TFile(fnameout,"RECREATE");
@@ -74,6 +77,10 @@ int main(int argc, char* argv[])
     TH1F* hncls=new TH1F("ncls","emc.ncls",12,-0.5,11.5);
     TH1F* hep=new TH1F("E/p","E/p",100,0.,10.);
     TH1F* hmbc=new TH1F("Mbc","Mbc",1000,0.,2000.);
+    TH1F* hdepmkp=new TH1F("depmkp","depmkp",1000,0.,2000.);
+    TH1F* hdeppkm=new TH1F("deppkm","deppkm",1000,0.,2000.);
+    TH1F* hdE=new TH1F("dE","dE",1000,-3000.,3000.);
+    TH1F* hEbeam=new TH1F("Ebeam","Ebeam",200,1800.,1950.);
 
     TH1F* hvrtntrk=new TH1F("vrt.ntrk","vrt.ntrk",10,-0.5,9.5);
     TH1F* hvrtnip=new TH1F("vrt.nip","vrt.nip",10,-0.5,9.5);
@@ -103,9 +110,6 @@ int main(int argc, char* argv[])
 
     TH1F* hMUnhits=new TH1F("munhits","mu.nhits",30,-0.5,29.5);
 
-    TH1F* h16=new TH1F("InvMass","InvMass",1000,0.,4000.);
-    TH1F* h18=new TH1F("de","de",1000,-10000.,10000.);
-
     TH1F* htofnhits=new TH1F("tof.nhits","tof.nhits",20,-0.5,19.5);
     TH1F* htofdchits=new TH1F("tof.dchits","tof.dchits",20,-0.5,19.5);
     TH1F* htofnamps=new TH1F("tof.namps","tof.namps",20,-0.5,19.5);
@@ -114,12 +118,14 @@ int main(int argc, char* argv[])
     //TH1F* htofbeta=new TH1F("t0tof.beta","t0tof.beta",1000,-1.,5.);
     //TH1F* htoflenght=new TH1F("t0tof.length","t0tof.length",1000,0.,250.);
 
+    hInvM=new TH1F("InvMass","InvMass",1000,0.,4000.);
+
     //TH1F* hS=new TH1F("S","S",150,0.,1.5);
-    TH1F* hzero=new TH1F("hzero","Jpsi->pi^{+}pi^{-}pi^{0}",1600,0,1600);
-    TH1F* hzero1=new TH1F("hzero1","vrt.theta2t",1000,0.,185.);
-    TH1F* hzero2=new TH1F("hzero2","cos(theta2t)",100,-1.,1.);
-    TH1F* hzero4=new TH1F("hzero4","Energy",1000,0.,5000.);
-    TH1F* hzero5=new TH1F("hzero5","emc.ncls",12,0.,12.);
+    hzero=new TH1F("hzero","Jpsi->pi^{+}pi^{-}pi^{0}",1600,0,1600);
+    hzero1=new TH1F("hzero1","vrt.theta2t",1000,0.,185.);
+    hzero2=new TH1F("hzero2","cos(theta2t)",100,-1.,1.);
+    hzero4=new TH1F("hzero4","Energy",1000,0.,5000.);
+    hzero5=new TH1F("hzero5","emc.ncls",12,0.,12.);
 
     char branchname[1];
     char branchname1[161];
@@ -127,7 +133,7 @@ int main(int argc, char* argv[])
     char namepr[0], namepr1[0], namepr2[0];
     if(sim==1)sprintf(namepr,"Simulation");
     if(sim!=1)sprintf(namepr,"Experiment");
-    TProfile* prthink=new TProfile(namepr,namepr,50,0,1600,0,500);
+    prthink=new TProfile(namepr,namepr,50,0,1600,0,500);
     if(sim==1)sprintf(namepr1,"Simulation - 1 layer");
     if(sim!=1)sprintf(namepr1,"Experiment - 1 layer");
     pr1=new TProfile(namepr1,namepr1,50,0,1600,0,500);
@@ -179,6 +185,7 @@ int main(int argc, char* argv[])
 	    Nselect++;
 
 	    if(verbose) cout<<ev.run<<"\t"<<ev.evdaq<<"\t"<<"\t"<<t0.p<<"\t"<<t1.p<<"\t"<<P1<<"\t"<<P2<<"\t"<<(P1/t0.p)<<"\t"<<(P2/t1.p)<<"\t"<<(P1/t0.p)/(P2/t1.p)<<"\t"<<(t0.vx*t1.vx+t0.vy*t1.vy+t0.vz*t1.vz)<<"\t"<<clgamma0.vx*clgamma1.vx+clgamma0.vy*clgamma1.vy+clgamma0.vz*clgamma1.vz<<"\t"<<t0c0.e<<"\t"<<t0c1.e<<"\t"<<t1c0.e<<"\t"<<t1c1.e<<"\t"<<clgamma0.e<<"\t"<<clgamma1.e<<"\t"<<emc.ncls<<"\t"<<t0.emc_ncls<<"\t"<<t1.emc_ncls<<"\t"<<emc.ncls-t0.emc_ncls-t1.emc_ncls<<"\t"<<t0tof.nhits<<endl;
+	    if(verbose1)cout<<t0c0.theta<<"\t"<<t1c0.theta<<"\t"<<clgamma0.theta<<"\t"<<clgamma1.theta<<"\t"<<(clgamma0.theta+clgamma1.theta)/2<<"\t"<<clgamma0.theta-clgamma1.theta<<"\t"<<clgamma0.vx*clgamma1.vx+clgamma0.vy*clgamma1.vy+clgamma0.vz*clgamma1.vz<<endl;
 
 	    hvrtntrk->Fill(vrt.ntrk);
 	    hvrtnip->Fill(vrt.nip);
@@ -187,7 +194,13 @@ int main(int argc, char* argv[])
 	    henlkr->Fill(emc.elkr);
 	    hencsi->Fill(emc.ecsi);
 	    hmom->Fill(P1); hmom->Fill(P2); hmom->Fill(P3); hmom->Fill(P4);
-            for(int i=0; i<4; i++) hmbc->Fill(Dmeson.Mbc[i]);
+	    for(int i=0; i<4; i++){
+		hmbc->Fill(Dmeson.Mbc[i]);
+		hdepmkp->Fill(Dmeson.depmkp[i]);
+		hdeppkm->Fill(Dmeson.deppkm[i]);
+		hdE->Fill(Dmeson.dE[i]);
+	    }
+            hEbeam->Fill(Dmeson.Ebeam);
 	    hep->Fill(e0/P1); hep->Fill(e1/P2); hep->Fill(e2/P3); hep->Fill(e3/P4);
 
 	    htheta->Fill(t0.theta); htheta->Fill(t1.theta); htheta->Fill(t2.theta); htheta->Fill(t3.theta);
@@ -214,143 +227,8 @@ int main(int argc, char* argv[])
 	    //S=(3/2)*(pow(t0.pt,2)+pow(t1.pt,2))/(pow(t0.p,2)+pow(t1.p,2));
 	    //hS->Fill(S);
 
-	    if(verbose1)cout<<t0c0.theta<<"\t"<<t1c0.theta<<"\t"<<clgamma0.theta<<"\t"<<clgamma1.theta<<"\t"<<(clgamma0.theta+clgamma1.theta)/2<<"\t"<<clgamma0.theta-clgamma1.theta<<"\t"<<clgamma0.vx*clgamma1.vx+clgamma0.vy*clgamma1.vy+clgamma0.vz*clgamma1.vz<<endl;
-
-
-	    float E;
-	    E=ev.ebeam;
-	    if(sim==1)E=3770/2;              //psi3770
-
-	    Double_t E1, E2;
-	    if(t0.q<0)
-	    {
-		E1=abs(sqrt(P1*P1+m1*m1));   //K-     - 1 track is K-
-		E2=abs(sqrt(P2*P2+m2*m2));   //pi+    - 2 track is pi+
-	    }
-	    else
-	    {
-		E1=abs(sqrt(P2*P2+m1*m1));    //K-     - 2 track is K-
-		E2=abs(sqrt(P1*P1+m2*m2));    //pi+    - 1 track is pi+
-	    }
-
-	    Double_t pprod=abs(P1)*abs(P2)*(t0.vx*t1.vx+t0.vy*t1.vy+t0.vz*t1.vz);
-	    Double_t InvMass=sqrt(m1*m1+m2*m2+2*(E1*E2-pprod));
-	    h16->Fill(InvMass);
-
-	    Double_t mbc=pow(ev.ebeam,2)-pow(P1,2)-pow(P2,2)-P1*P2*(t0.vx*t1.vx+t0.vy*t1.vy+t0.vz*t1.vz);
-	    //*mbc = ebeam*ebeam - pow(px1+px2,2)- pow(py1+py2,2) - pow(pz1+pz2,2);
-	    if (mbc>0) mbc = sqrt(mbc); else mbc = 0;
-
-	    //if( (P1>400 && P2>1300 && Npe1tr<0.7 && Npe2tr>0.7) || (P1>1300 && P2>400 && Npe1tr>0.7 && Npe2tr<0.7) )
-	    //hmbc->Fill(mbc);
-
-	    Double_t ekminuspiplus=0;
-	    Double_t ekpluspiminus=0;
-	    if(t0.q<0)
-	    {
-		ekminuspiplus=sqrt(m1*m1 + P1*P1) + sqrt(m2*m2 + P2*P2);
-		ekpluspiminus=sqrt(m1*m1 + P2*P2) + sqrt(m2*m2 + P1*P1);
-	    }
-	    else
-	    {
-		ekminuspiplus=sqrt(m1*m1 + P2*P2) + sqrt(m2*m2 + P1*P1);
-		ekpluspiminus=sqrt(m1*m1 + P1*P1) + sqrt(m2*m2 + P2*P2);
-	    }
-	    Double_t de = ( ekminuspiplus + ekpluspiminus )/2. - ev.ebeam;
-	    h18->Fill(de);
-
-
-            //=====for fill atc=======================================================================
-	    kk=0; int kk1=0; int kk2=0; int ii1=0; int ii2=0;
-	    //cout<<t0atccr0.aerogel_region5<<"\t"<<t0atccr0.npe<<endl;
-	    n00=0, n01=0, n02=0, n03=0, n04=0;
-	    n10=0, n11=0, n12=0, n13=0, n14=0;
-
-	    cnt11=0, cnt12=0;
-	    cnt21=0, cnt22=0;
-
             atc_cross();
-
-	    float Npe1tr=0., Npe2tr=0.;
-	    //if(kk1==1 && ( (n00+n01+n02+n03)>0 || ( (n00+n01+n02+n03)==0 && ii1==1 ) ) )
-	    //if( kk1==1 && (n00+n01+n02+n03)>0 )
-	    if( kk1==1 && ii1>1 && cnt11==1 && cnt12==1 )
-	    {
-		prthink->Fill(P1,(n00+n01+n02+n03+n04));
-
-		//if( (n00+n01+n02+n03)==0 )przero->Fill(P1,(n00+n01+n02+n03));
-		if( (n00+n01+n02+n03+n04)<=0.02 )
-		{
-		    hzero->Fill(P1);
-		    hzero1->Fill(vrt.theta2t);
-		    hzero2->Fill(cos(pi*(vrt.theta2t)/180));
-		    hzero4->Fill(emc.energy);
-		    hzero5->Fill(emc.ncls);
-		}
-
-		Natc++;
-		if(verbose1) cout<<"ev.run="<<ev.run<<"\t"<<"cnt0.npe="<<n00+n01+n02+n03+n04<<"\t"<<endl;
-		Npe1tr=n00+n01+n02+n03+n04;
-		for(int ii=0; ii<=14; ii++)
-		{
-		    p_all[ii]=100*ii+50;
-		    err_p_all[ii]=50;
-		    if(P1>100*ii&&P1<100+100*ii)
-		    {
-			if((n00+n01+n02+n03+n04)<=thicknpetrh)
-			{
-			    num_npezero[ii]=++num_npezero[ii];
-			    //cout<<"cnt.npe="<<cnt.npe<<"\t"<<"t.p="<<t.p<<"\t"<<ii<<"\t"<<"num_npezero[ii]="<<num_npezero[ii]<<endl;
-			}
-			if((n00+n01+n02+n03+n04)>thicknpetrh){num_npenotzero[ii]=++num_npenotzero[ii];}
-			num_npetotal[ii]=++num_npetotal[ii];
-			eff[ii]=num_npenotzero[ii]/num_npetotal[ii];
-			err_eff[ii]=sqrt(num_npenotzero[ii])/num_npetotal[ii];
-		    }
-		}
-	    }
-	    //if(kk2==1 && ( (n10+n11+n12+n13)>0 || ( (n10+n11+n12+n13)==0 && ii2==1 ) )  )
-	    //if( kk2==1 && (n10+n11+n12+n13)>0 )
-	    if( kk2==1 && ii2>1 && cnt21==1 && cnt22==1 )
-	    {
-		prthink->Fill(P2,(n10+n11+n12+n13+n14));
-
-		//if( (n10+n11+n12+n13)==0 )przero->Fill(P2,(n10+n11+n12+n13));
-		if( (n10+n11+n12+n13+n14)<=0.02 )
-		{
-		    hzero->Fill(P2);
-		    hzero1->Fill(vrt.theta2t);
-		    hzero2->Fill(cos(pi*(vrt.theta2t)/180));
-		    hzero4->Fill(emc.energy);
-		    hzero5->Fill(emc.ncls);
-		}
-
-		Natc++;
-		if(verbose1) cout<<"ev.run="<<ev.run<<"\t"<<"cnt1.npe="<<n10+n11+n12+n13<<"\t"<<endl;
-		Npe2tr=n10+n11+n12+n13;
-		for(int ii=0; ii<=14; ii++)
-		{
-		    p_all[ii]=100*ii+50;
-		    err_p_all[ii]=50;
-		    if(P2>100*ii&&P2<100+100*ii)
-		    {
-			if((n10+n11+n12+n13+n14)<=thicknpetrh)
-			{
-			    num_npezero[ii]=++num_npezero[ii];
-			    //cout<<"cnt.npe="<<cnt.npe<<"\t"<<"t.p="<<t.p<<"\t"<<ii<<"\t"<<"num_npezero[ii]="<<num_npezero[ii]<<endl;
-			}
-			if((n10+n11+n12+n13+n14)>thicknpetrh){num_npenotzero[ii]=++num_npenotzero[ii];}
-			num_npetotal[ii]=++num_npetotal[ii];
-			eff[ii]=num_npenotzero[ii]/num_npetotal[ii];
-			err_eff[ii]=sqrt(num_npenotzero[ii])/num_npetotal[ii];
-		    }
-		}
-	    }
-
-	    if(verbose2) cout<<"ev.run="<<ev.run<<"\t"<<"Npe1tr="<<Npe1tr<<"\t"<<"Npe2tr="<<Npe2tr<<"\t"<<endl;
-
-	    //============================================================================
-	}  //if  t emc ...
+	}
     }
 
     //cout<<"Natc="<<Natc<<"\t"<<"ATC from selected events, % "<<float(Natc*100/(Nselect*2))<<endl;
@@ -492,7 +370,6 @@ int main(int argc, char* argv[])
 	h38->SetLineColor(kBlue);
     }
 
-    TString KEDR = "/home/ovtin/public_html/outDmeson/";
     TCanvas *cc1 = new TCanvas();
     gStyle->SetOptStat(1111);
     gStyle->SetOptFit(1011);
@@ -501,6 +378,10 @@ int main(int argc, char* argv[])
     hmbc->Draw(); cc1->SaveAs(KEDR+"Mbc.png");
     hmbc->GetXaxis()->SetRangeUser(1600,1900);
     hmbc->Draw(); cc1->SaveAs(KEDR+"Mbc_zoom.png");
+    hdepmkp->Draw(); cc1->SaveAs(KEDR+"depmkp.png");
+    hdeppkm->Draw(); cc1->SaveAs(KEDR+"deppkm.png");
+    hdE->Draw(); cc1->SaveAs(KEDR+"dE.png");
+    hEbeam->Draw(); cc1->SaveAs(KEDR+"Ebeam.png");
     henergy->Draw(); cc1->SaveAs(KEDR+"emc_energy.png");
     hmom->Draw(); cc1->SaveAs(KEDR+"momentum.png");
     hncls->Draw(); cc1->SaveAs(KEDR+"ncls.png");
@@ -537,8 +418,95 @@ int main(int argc, char* argv[])
     fout->Close();
 }
 
+
 void atc_cross()
 {
+	    kk=0; int kk1=0; int kk2=0; int ii1=0; int ii2=0;
+	    //cout<<t0atccr0.aerogel_region5<<"\t"<<t0atccr0.npe<<endl;
+	    n00=0, n01=0, n02=0, n03=0, n04=0;
+	    n10=0, n11=0, n12=0, n13=0, n14=0;
+
+	    cnt11=0, cnt12=0;
+	    cnt21=0, cnt22=0;
+
+	    float Npe1tr=0., Npe2tr=0.;
+	    //if(kk1==1 && ( (n00+n01+n02+n03)>0 || ( (n00+n01+n02+n03)==0 && ii1==1 ) ) )
+	    //if( kk1==1 && (n00+n01+n02+n03)>0 )
+	    if( kk1==1 && ii1>1 && cnt11==1 && cnt12==1 )
+	    {
+		prthink->Fill(P1,(n00+n01+n02+n03+n04));
+
+		//if( (n00+n01+n02+n03)==0 )przero->Fill(P1,(n00+n01+n02+n03));
+		if( (n00+n01+n02+n03+n04)<=0.02 )
+		{
+		    hzero->Fill(P1);
+		    hzero1->Fill(vrt.theta2t);
+		    hzero2->Fill(cos(pi*(vrt.theta2t)/180));
+		    hzero4->Fill(emc.energy);
+		    hzero5->Fill(emc.ncls);
+		}
+
+		Natc++;
+		if(verbose1) cout<<"ev.run="<<ev.run<<"\t"<<"cnt0.npe="<<n00+n01+n02+n03+n04<<"\t"<<endl;
+		Npe1tr=n00+n01+n02+n03+n04;
+		for(int ii=0; ii<=14; ii++)
+		{
+		    p_all[ii]=100*ii+50;
+		    err_p_all[ii]=50;
+		    if(P1>100*ii&&P1<100+100*ii)
+		    {
+			if((n00+n01+n02+n03+n04)<=thicknpetrh)
+			{
+			    num_npezero[ii]=++num_npezero[ii];
+			    //cout<<"cnt.npe="<<cnt.npe<<"\t"<<"t.p="<<t.p<<"\t"<<ii<<"\t"<<"num_npezero[ii]="<<num_npezero[ii]<<endl;
+			}
+			if((n00+n01+n02+n03+n04)>thicknpetrh){num_npenotzero[ii]=++num_npenotzero[ii];}
+			num_npetotal[ii]=++num_npetotal[ii];
+			eff[ii]=num_npenotzero[ii]/num_npetotal[ii];
+			err_eff[ii]=sqrt(num_npenotzero[ii])/num_npetotal[ii];
+		    }
+		}
+	    }
+	    //if(kk2==1 && ( (n10+n11+n12+n13)>0 || ( (n10+n11+n12+n13)==0 && ii2==1 ) )  )
+	    //if( kk2==1 && (n10+n11+n12+n13)>0 )
+	    if( kk2==1 && ii2>1 && cnt21==1 && cnt22==1 )
+	    {
+		prthink->Fill(P2,(n10+n11+n12+n13+n14));
+
+		//if( (n10+n11+n12+n13)==0 )przero->Fill(P2,(n10+n11+n12+n13));
+		if( (n10+n11+n12+n13+n14)<=0.02 )
+		{
+		    hzero->Fill(P2);
+		    hzero1->Fill(vrt.theta2t);
+		    hzero2->Fill(cos(pi*(vrt.theta2t)/180));
+		    hzero4->Fill(emc.energy);
+		    hzero5->Fill(emc.ncls);
+		}
+
+		Natc++;
+		if(verbose1) cout<<"ev.run="<<ev.run<<"\t"<<"cnt1.npe="<<n10+n11+n12+n13<<"\t"<<endl;
+		Npe2tr=n10+n11+n12+n13;
+		for(int ii=0; ii<=14; ii++)
+		{
+		    p_all[ii]=100*ii+50;
+		    err_p_all[ii]=50;
+		    if(P2>100*ii&&P2<100+100*ii)
+		    {
+			if((n10+n11+n12+n13+n14)<=thicknpetrh)
+			{
+			    num_npezero[ii]=++num_npezero[ii];
+			    //cout<<"cnt.npe="<<cnt.npe<<"\t"<<"t.p="<<t.p<<"\t"<<ii<<"\t"<<"num_npezero[ii]="<<num_npezero[ii]<<endl;
+			}
+			if((n10+n11+n12+n13+n14)>thicknpetrh){num_npenotzero[ii]=++num_npenotzero[ii];}
+			num_npetotal[ii]=++num_npetotal[ii];
+			eff[ii]=num_npenotzero[ii]/num_npetotal[ii];
+			err_eff[ii]=sqrt(num_npenotzero[ii])/num_npetotal[ii];
+		    }
+		}
+	    }
+
+	    if(verbose2) cout<<"ev.run="<<ev.run<<"\t"<<"Npe1tr="<<Npe1tr<<"\t"<<"Npe2tr="<<Npe2tr<<"\t"<<endl;
+
 
     //=======================
 	    //First track hit in 0, 1, 2, 3, 4 counters ATC from first layer and get number of Nph.e....
