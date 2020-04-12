@@ -305,8 +305,7 @@ int analyse_event()
 {
     float EMinPhot=progpar.min_cluster_energy;
     double  WTotal=2*beam_energy;                                                                 //beam_energy - How determined this energy ?
-    //if( kedrrun_cb_.Header.RunType == 64 ) { WTotal=2*1886.65; }                                  //for MC
-    if( kedrrun_cb_.Header.RunType == 64 ) { WTotal=2*1865; }                                  //for MC
+    if( kedrrun_cb_.Header.RunType == 64 ) { WTotal=2*1886.75; }                                  //for MC
 
     if (progpar.verbose) cout<<"RunNumber="<<kedrraw_.Header.RunNumber<<"\t"<<"WTotal="<<WTotal<<"\t"<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"eTracksAll="<<eTracksAll<<endl;
 

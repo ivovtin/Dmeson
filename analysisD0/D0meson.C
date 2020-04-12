@@ -13,7 +13,7 @@ string progname;
 
 int Usage(string status)
 {
-	cout<<"Usage: "<<progname<<"\t"<<"1)Range ATC->1,2..  2)Hit in aer(0,1)  3)Hit in wls  4)First cnt   5)End cnt  6)Maximum momentum  7)Data/MC (0,1)"<<endl;
+	cout<<"Usage: "<<progname<<"\t"<<"1)Range ATC->1,2..  2)Hit in aer(0,1)  3)Hit in wls  4)First cnt   5)End cnt  6)Data/MC (0,1)"<<endl;
         exit(0);
 }
 
@@ -25,7 +25,6 @@ int main(int argc, char* argv[])
     int hit_wls=0;
     int first_cnt=0;
     int end_cnt=160;
-    int momentum=5000;
     int fl_sim_exp=0;
     if( argc>1 )
     {
@@ -34,8 +33,7 @@ int main(int argc, char* argv[])
 	hit_wls=atoi(argv[3]);
 	first_cnt=atoi(argv[4]);
 	end_cnt=atoi(argv[5]);
-	momentum=atoi(argv[6]);
-	fl_sim_exp=atoi(argv[7]);
+	fl_sim_exp=atoi(argv[6]);
 	if(region>10){ Usage(progname); return 0;}
 	if(hit_aer>1 || hit_wls>1 || fl_sim_exp>1){ Usage(progname); return 0;}
 	if(hit_aer<0 || hit_wls<0 || fl_sim_exp<0){ Usage(progname); return 0;}
@@ -53,11 +51,11 @@ int main(int argc, char* argv[])
     sim=fl_sim_exp;
     TString KEDR;
     if( sim!=1 ){
-	fnameout=TString::Format("res_%d_%d_%d_%d_exp_Dmeson.root",first_cnt,end_cnt,region,momentum).Data();
+	fnameout=TString::Format("res_%d_%d_%d_%d_exp_Dmeson.root",first_cnt,end_cnt,region,max_pt).Data();
         KEDR = "/home/ovtin/public_html/outDmeson/";
     }else
     {
-	fnameout=TString::Format("res_%d_%d_%d_%d_sim_Dmeson.root",first_cnt,end_cnt,region,momentum).Data();
+	fnameout=TString::Format("res_%d_%d_%d_%d_sim_Dmeson.root",first_cnt,end_cnt,region,max_pt).Data();
         KEDR = "/home/ovtin/public_html/outDmeson/simulation/";
     }
     cout<<fnameout<<endl;
@@ -76,11 +74,16 @@ int main(int argc, char* argv[])
     TH1F* hencsi=new TH1F("E_CsI","Energy CsI",1000,0.,4500.);
     TH1F* hncls=new TH1F("ncls","emc.ncls",12,-0.5,11.5);
     TH1F* hep=new TH1F("E/p","E/p",100,0.,10.);
-    TH1F* hmbc=new TH1F("Mbc","Mbc",1000,0.,2000.);
-    TH1F* hdepmkp=new TH1F("depmkp","depmkp",1000,0.,2000.);
-    TH1F* hdeppkm=new TH1F("deppkm","deppkm",1000,0.,2000.);
-    TH1F* hdE=new TH1F("dE","dE",1000,-3000.,3000.);
-    TH1F* hEbeam=new TH1F("Ebeam","Ebeam",200,1800.,1950.);
+    TH1F* hmbc=new TH1F("Mbc","Mbc",200,0.,2000.);
+    TH1F* hdepmkp=new TH1F("depmkp","depmkp",200,-1500.,1500.);
+    TH1F* hdeppkm=new TH1F("deppkm","deppkm",200,-1500.,1500.);
+    TH1F* hdiffepmkpeppkm=new TH1F("depmkp-deppkm","depmkp-deppkm",100,-300.,300.);
+    TH2D *h2depmkpdeppkm=new TH2D("depmkp:deppkm", "depmkp:deppkm", 100,-1500,1500,100,-1500,1500);
+    TH1F* hdE=new TH1F("dE","dE",200,-3000.,3000.);
+    TH1F* hdP=new TH1F("dP","dP",200,-1000.,1000.);
+    TH1F* hEbeam=new TH1F("Ebeam","Ebeam",100,1880.,1895.);
+    TH2D *h2PpiktodEkpi=new TH2D("dP:depmkp", "dP:depmkp", 100,200,1500,100,-1000,1000);
+    TH2D *h2MbcdE=new TH2D("Mbc:dE", "Mbc:dE", 100,1700,1900,100,-300,300);
 
     TH1F* hvrtntrk=new TH1F("vrt.ntrk","vrt.ntrk",10,-0.5,9.5);
     TH1F* hvrtnip=new TH1F("vrt.nip","vrt.nip",10,-0.5,9.5);
@@ -95,6 +98,10 @@ int main(int argc, char* argv[])
     TH1F* ht1nhitsxy=new TH1F("t1.nhitsxy","t1.nhitsxy",50,0.,50.);
     TH1F* ht2nhitsxy=new TH1F("t2.nhitsxy","t2.nhitsxy",50,0.,50.);
     TH1F* ht3nhitsxy=new TH1F("t3.nhitsxy","t3.nhitsxy",50,0.,50.);
+    TH1F* ht0nhits=new TH1F("t0.nhits","t0.nhits",80,0.,80.);
+    TH1F* ht1nhits=new TH1F("t1.nhits","t1.nhits",80,0.,80.);
+    TH1F* ht2nhits=new TH1F("t2.nhits","t2.nhits",80,0.,80.);
+    TH1F* ht3nhits=new TH1F("t3.nhits","t3.nhits",80,0.,80.);
     TH1F* ht0nvecxy=new TH1F("t0.nvecxy","t0.nvecxy",30,0.,30.);
     TH1F* ht1nvecxy=new TH1F("t1.nvecxy","t1.nvecxy",30,0.,30.);
     TH1F* ht2nvecxy=new TH1F("t2.nvecxy","t2.nvecxy",30,0.,30.);
@@ -104,7 +111,7 @@ int main(int argc, char* argv[])
     TH1F* ht2nvec=new TH1F("t2.nvec","t2.nvec",30,0.,30.);
     TH1F* ht3nvec=new TH1F("t3.nvec","t3.nvec",30,0.,30.);
     TH1F* htheta=new TH1F("theta","t.theta",185,0.,185.);
-    TH1F* hphi=new TH1F("phi","t.phi",380,0.,380.);
+    TH1F* hphi=new TH1F("phi","t.phi",180,0.,360.);
     TH1F* hcostheta=new TH1F("cos(t.theta)","cos(t.theta)",100,-1.,1.);
     TH1F* hcosphi=new TH1F("cos(t.phi)","cos(t.phi)",100,-1.,1.);
 
@@ -141,11 +148,12 @@ int main(int argc, char* argv[])
     if(sim!=1)sprintf(namepr2,"Experiment - 2 layer");
     pr2=new TProfile(namepr2,namepr2,50,0,1600,0,500);
 
+    ofstream Result(TString::Format("run_event.dat"),ios_base::out);
+
     //event loop
     for(int k=0; k<nentr; k++)
     {
 	tt->GetEntry(k);
-	if(verbose2) cout<<"ev.run="<<ev.run<<"\t"<<"t0.t="<<t0.t<<"\t"<<"t1.t="<<t1.t<<"\t"<<"t2.t="<<t2.t<<"\t"<<"t3.t="<<t3.t<<endl;
 
 	if( (k %100000)==0 )cout<<k<<endl;
 
@@ -161,16 +169,16 @@ int main(int argc, char* argv[])
 	engamma[0]=clgamma0.e; engamma[1]=clgamma1.e; engamma[2]=clgamma2.e; engamma[3]=clgamma3.e;  //energy clasters 0,1,2,3 from Photons
 	float e0=0,e1=0,e2=0,e3=0,egamma=0;
 
-	for(int i=0; i<t0.emc_ncls; i++){
+	for(int i=0; i<t0c0.c; i++){
 	    e0+=en0[i];                                   //sum energy from clasters on first track
 	}
-	for(int i=0; i<t1.emc_ncls; i++){
+	for(int i=0; i<t1c0.c; i++){
 	    e1+=en1[i];                                   //sum energy from clasters on second track
 	}
-	for(int i=0; i<t2.emc_ncls; i++){
+	for(int i=0; i<t2c0.c; i++){
 	    e2+=en2[i];                                   //sum energy from clasters on thrird track
 	}
-	for(int i=0; i<t3.emc_ncls; i++){
+	for(int i=0; i<t3c0.c; i++){
 	    e3+=en3[i];                                   //sum energy from clasters on four track
 	}
 	for(int i=0; i<(emc.ncls-t0.emc_ncls-t1.emc_ncls); i++)
@@ -179,13 +187,16 @@ int main(int argc, char* argv[])
 	}
 
         //Apply cut conditions - determine in cuts.h
-	if( vrt.ntrk==ntrk && vrt.nip==nip && vrt.nbeam==nbeam && t0.emc_ncls>=min_trk_ncls && t1.emc_ncls>=min_trk_ncls && t2.emc_ncls>=min_trk_ncls && t3.emc_ncls>=min_trk_ncls
-	   && emc.ncls>=min_tot_ncls && emc.ncls<=max_tot_ncls && mu.nhits<=maxmunhits && e0>minenontrk && e1>minenontrk && e2>minenontrk && e3>minenontrk && t0tof.nhits>=mintofnhits )
+	if( vrt.ntrk==ntrk && vrt.nip>=nip && vrt.nbeam>=nbeam && t0.pt>min_pt && t1.pt>min_pt && t2.pt>min_pt && t3.pt>min_pt && t0.pt<max_pt && t1.pt<max_pt && t2.pt<max_pt
+	   && t3.pt<max_pt && emc.ncls>=min_tot_ncls && emc.ncls<=max_tot_ncls && mu.nhits<=maxmunhits
+	  )
 	{
 	    Nselect++;
-
-	    if(verbose) cout<<ev.run<<"\t"<<ev.evdaq<<"\t"<<"\t"<<t0.p<<"\t"<<t1.p<<"\t"<<P1<<"\t"<<P2<<"\t"<<(P1/t0.p)<<"\t"<<(P2/t1.p)<<"\t"<<(P1/t0.p)/(P2/t1.p)<<"\t"<<(t0.vx*t1.vx+t0.vy*t1.vy+t0.vz*t1.vz)<<"\t"<<clgamma0.vx*clgamma1.vx+clgamma0.vy*clgamma1.vy+clgamma0.vz*clgamma1.vz<<"\t"<<t0c0.e<<"\t"<<t0c1.e<<"\t"<<t1c0.e<<"\t"<<t1c1.e<<"\t"<<clgamma0.e<<"\t"<<clgamma1.e<<"\t"<<emc.ncls<<"\t"<<t0.emc_ncls<<"\t"<<t1.emc_ncls<<"\t"<<emc.ncls-t0.emc_ncls-t1.emc_ncls<<"\t"<<t0tof.nhits<<endl;
+	    Result<< ev.run <<"\t"<< ev.evdaq << endl;
+	    if(verbose2) cout<<"ev.run="<<ev.run<<"\t"<<"ev.event="<<ev.event<<"\t"<<"ev.evdaq="<<ev.evdaq<<"\t"<<"t0.t="<<t0.t<<"\t"<<"t1.t="<<t1.t<<"\t"<<"t2.t="<<t2.t<<"\t"<<"t3.t="<<t3.t<<endl;
 	    if(verbose1)cout<<t0c0.theta<<"\t"<<t1c0.theta<<"\t"<<clgamma0.theta<<"\t"<<clgamma1.theta<<"\t"<<(clgamma0.theta+clgamma1.theta)/2<<"\t"<<clgamma0.theta-clgamma1.theta<<"\t"<<clgamma0.vx*clgamma1.vx+clgamma0.vy*clgamma1.vy+clgamma0.vz*clgamma1.vz<<endl;
+            if(verbose1) cout<<"e0="<<e0<<"\t"<<"e1="<<e1<<"\t"<<"e2="<<e2<<"\t"<<"e3="<<e3<<"\t"<<endl;
+            if(verbose2) cout<<"Dmeson.Mbc[0]="<<Dmeson.Mbc[0]<<"\t"<<"Dmeson.Mbc[1]="<<Dmeson.Mbc[1]<<"\t"<<"Dmeson.Mbc[2]="<<Dmeson.Mbc[2]<<"\t"<<"Dmeson.Mbc[3]="<<Dmeson.Mbc[3]<<"\t"<<endl;
 
 	    hvrtntrk->Fill(vrt.ntrk);
 	    hvrtnip->Fill(vrt.nip);
@@ -195,12 +206,23 @@ int main(int argc, char* argv[])
 	    hencsi->Fill(emc.ecsi);
 	    hmom->Fill(P1); hmom->Fill(P2); hmom->Fill(P3); hmom->Fill(P4);
 	    for(int i=0; i<4; i++){
-		hmbc->Fill(Dmeson.Mbc[i]);
-		hdepmkp->Fill(Dmeson.depmkp[i]);
-		hdeppkm->Fill(Dmeson.deppkm[i]);
-		hdE->Fill(Dmeson.dE[i]);
+		//if( Dmeson.Mbc[i]>min_Mbc && Dmeson.Mbc[i]<max_Mbc && Dmeson.dE[i]>min_dE && Dmeson.dE[0]< max_dE )
+		//{
+		    hmbc->Fill(Dmeson.Mbc[i]);
+		    hdepmkp->Fill(Dmeson.depmkp[i]-Dmeson.Ebeam);
+		    hdeppkm->Fill(Dmeson.deppkm[i]-Dmeson.Ebeam);
+		    hdiffepmkpeppkm->Fill((Dmeson.depmkp[i]-Dmeson.Ebeam)-(Dmeson.deppkm[i]-Dmeson.Ebeam));
+		    h2depmkpdeppkm->Fill( (Dmeson.depmkp[i]-Dmeson.Ebeam), (Dmeson.deppkm[i]-Dmeson.Ebeam) );
+		    hdE->Fill(Dmeson.dE[i]);
+		    hdP->Fill(Dmeson.dP[i]);
+                    h2MbcdE->Fill(Dmeson.Mbc[i], Dmeson.dE[i]);
+		//}
 	    }
-            hEbeam->Fill(Dmeson.Ebeam);
+	    if(t0.q<0) h2PpiktodEkpi->Fill( P1, (Dmeson.depmkp[0]-Dmeson.Ebeam) );
+	    if(t1.q<0) h2PpiktodEkpi->Fill( P2, (Dmeson.depmkp[1]-Dmeson.Ebeam) );
+	    if(t2.q<0) h2PpiktodEkpi->Fill( P3, (Dmeson.depmkp[2]-Dmeson.Ebeam) );
+	    if(t3.q<0) h2PpiktodEkpi->Fill( P4, (Dmeson.depmkp[3]-Dmeson.Ebeam) );
+	    hEbeam->Fill(Dmeson.Ebeam);
 	    hep->Fill(e0/P1); hep->Fill(e1/P2); hep->Fill(e2/P3); hep->Fill(e3/P4);
 
 	    htheta->Fill(t0.theta); htheta->Fill(t1.theta); htheta->Fill(t2.theta); htheta->Fill(t3.theta);
@@ -211,6 +233,7 @@ int main(int argc, char* argv[])
 
 	    ht0chi2->Fill(t0.chi2); ht1chi2->Fill(t1.chi2); ht2chi2->Fill(t2.chi2); ht3chi2->Fill(t3.chi2);
 	    hncls->Fill(emc.ncls);
+	    ht0nhits->Fill(t0.nhits); ht1nhits->Fill(t1.nhits); ht2nhits->Fill(t2.nhits); ht3nhits->Fill(t3.nhits);
 	    ht0nhitsxy->Fill(t0.nhitsxy); ht1nhitsxy->Fill(t1.nhitsxy); ht2nhitsxy->Fill(t2.nhitsxy); ht3nhitsxy->Fill(t3.nhitsxy);
 	    ht0nvecxy->Fill(t0.nvecxy); ht1nvecxy->Fill(t1.nvecxy); ht2nvecxy->Fill(t2.nvecxy); ht3nvecxy->Fill(t3.nvecxy);
 	    ht0nvec->Fill(t0.nvec); ht1nvec->Fill(t1.nvec); ht2nvec->Fill(t2.nvec); ht3nvec->Fill(t3.nvec);
@@ -227,12 +250,10 @@ int main(int argc, char* argv[])
 	    //S=(3/2)*(pow(t0.pt,2)+pow(t1.pt,2))/(pow(t0.p,2)+pow(t1.p,2));
 	    //hS->Fill(S);
 
-            atc_cross();
+            //atc_cross();
 	}
     }
-
-    //cout<<"Natc="<<Natc<<"\t"<<"ATC from selected events, % "<<float(Natc*100/(Nselect*2))<<endl;
-    cout<<"Nselect="<<Nselect<<endl;
+    Result.close();
 
     if(verbose1) cout<<counter<<endl;
 
@@ -380,8 +401,13 @@ int main(int argc, char* argv[])
     hmbc->Draw(); cc1->SaveAs(KEDR+"Mbc_zoom.png");
     hdepmkp->Draw(); cc1->SaveAs(KEDR+"depmkp.png");
     hdeppkm->Draw(); cc1->SaveAs(KEDR+"deppkm.png");
+    hdiffepmkpeppkm->Draw(); cc1->SaveAs(KEDR+"diffepmkpeppkm.png");
+    h2depmkpdeppkm->Draw(); cc1->SaveAs(KEDR+"depmkpdeppkm.png");
+    h2MbcdE->Draw(); cc1->SaveAs(KEDR+"MbcdE.png");
     hdE->Draw(); cc1->SaveAs(KEDR+"dE.png");
+    hdP->Draw(); cc1->SaveAs(KEDR+"dP.png");
     hEbeam->Draw(); cc1->SaveAs(KEDR+"Ebeam.png");
+    h2PpiktodEkpi->Draw(); cc1->SaveAs(KEDR+"PpiktodEkpi.png");
     henergy->Draw(); cc1->SaveAs(KEDR+"emc_energy.png");
     hmom->Draw(); cc1->SaveAs(KEDR+"momentum.png");
     hncls->Draw(); cc1->SaveAs(KEDR+"ncls.png");
@@ -390,6 +416,10 @@ int main(int argc, char* argv[])
     ht1chi2->Draw(); cc1->SaveAs(KEDR+"t1chi2.png");
     ht2chi2->Draw(); cc1->SaveAs(KEDR+"t2chi2.png");
     ht3chi2->Draw(); cc1->SaveAs(KEDR+"t3chi2.png");
+    ht0nhits->Draw(); cc1->SaveAs(KEDR+"t0nhits.png");
+    ht1nhits->Draw(); cc1->SaveAs(KEDR+"t1nhits.png");
+    ht2nhits->Draw(); cc1->SaveAs(KEDR+"t2nhits.png");
+    ht3nhits->Draw(); cc1->SaveAs(KEDR+"t3nhits.png");
     ht0nhitsxy->Draw(); cc1->SaveAs(KEDR+"t0nhitsxy.png");
     ht1nhitsxy->Draw(); cc1->SaveAs(KEDR+"t1nhitsxy.png");
     ht2nhitsxy->Draw(); cc1->SaveAs(KEDR+"t2nhitsxy.png");
@@ -418,7 +448,7 @@ int main(int argc, char* argv[])
     fout->Close();
 }
 
-
+/*
 void atc_cross()
 {
 	    kk=0; int kk1=0; int kk2=0; int ii1=0; int ii2=0;
@@ -935,5 +965,5 @@ void atc_cross()
 	    }
 
 }
-
+*/
 

@@ -50,25 +50,21 @@
     data t0atccr1;
     data t0atccr2;
     data t0atccr3;
-    data t0atccr4;
     //for second track
     data t1atccr0;
     data t1atccr1;
     data t1atccr2;
     data t1atccr3;
-    data t1atccr4;
     //for third track
     data t2atccr0;
     data t2atccr1;
     data t2atccr2;
     data t2atccr3;
-    data t2atccr4;
     //for four track
     data t3atccr0;
     data t3atccr1;
     data t3atccr2;
     data t3atccr3;
-    data t3atccr4;
 
     //structure for track from DC
     struct data2
@@ -153,7 +149,6 @@
 
     struct data10
     {
-	//float Mbc[4],InvM[4],dE[4],dP[4],E_KminusP[4],E_KplusP[4],E_PminusK[4],E_PplusK[4],Ebeam,rEv;
 	int numHyp;
 	float Mbc[4],InvM[4],dE[4],dP[4],depmkp[4],deppkm[4],Ebeam,rEv,chi2[50],M[50],P1[50],P2[50],P3[50],P4[50];
     };
@@ -176,9 +171,8 @@
     //include samples Data/MC
     void chain(){
 	if(sim!=1){
-	    //for(int i=1; i<=245; i++)   //signal 2016+2017
+	    for(int i=1; i<=245; i++)   //signal 2016+2017
 	    //for(int i=1; i<=116; i++)   //signal 2016
-	    for(int i=1; i<=155; i++)   //signal 2016
 	    //for(int i=1; i<=16; i++)     //bkg 2016
 	    {
 		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/psi3770_to_D0meson_%d.root",i).Data());
@@ -201,7 +195,6 @@
 	tt->SetBranchStatus("t0atccr1",1);
 	tt->SetBranchStatus("t0atccr2",1);
 	tt->SetBranchStatus("t0atccr3",1);
-	tt->SetBranchStatus("t0atccr4",1);
 	tt->SetBranchStatus("t0c0",1);
 	tt->SetBranchStatus("t0c1",1);
 	tt->SetBranchStatus("t0c2",1);
@@ -211,7 +204,6 @@
 	tt->SetBranchStatus("t1atccr1",1);
 	tt->SetBranchStatus("t1atccr2",1);
 	tt->SetBranchStatus("t1atccr3",1);
-	tt->SetBranchStatus("t1atccr4",1);
 	tt->SetBranchStatus("t1c0",1);
 	tt->SetBranchStatus("t1c1",1);
 	tt->SetBranchStatus("t1c2",1);
@@ -221,7 +213,6 @@
 	tt->SetBranchStatus("t2atccr1",1);
 	tt->SetBranchStatus("t2atccr2",1);
 	tt->SetBranchStatus("t2atccr3",1);
-	tt->SetBranchStatus("t2atccr4",1);
 	tt->SetBranchStatus("t2c0",1);
 	tt->SetBranchStatus("t2c1",1);
 	tt->SetBranchStatus("t2c2",1);
@@ -231,7 +222,6 @@
 	tt->SetBranchStatus("t3atccr1",1);
 	tt->SetBranchStatus("t3atccr2",1);
 	tt->SetBranchStatus("t3atccr3",1);
-	tt->SetBranchStatus("t3atccr4",1);
 	tt->SetBranchStatus("t3c0",1);
 	tt->SetBranchStatus("t3c1",1);
 	tt->SetBranchStatus("t3c2",1);
@@ -254,7 +244,6 @@
 	tt->SetBranchAddress("t0atccr1",&t0atccr1);
 	tt->SetBranchAddress("t0atccr2",&t0atccr2);
 	tt->SetBranchAddress("t0atccr3",&t0atccr3);
-	tt->SetBranchAddress("t0atccr4",&t0atccr4);
 	tt->SetBranchAddress("t0c0",&t0c0);
 	tt->SetBranchAddress("t0c1",&t0c1);
 	tt->SetBranchAddress("t0c2",&t0c2);
@@ -264,7 +253,6 @@
 	tt->SetBranchAddress("t1atccr1",&t1atccr1);
 	tt->SetBranchAddress("t1atccr2",&t1atccr2);
 	tt->SetBranchAddress("t1atccr3",&t1atccr3);
-	tt->SetBranchAddress("t1atccr4",&t1atccr4);
 	tt->SetBranchAddress("t1c0",&t1c0);
 	tt->SetBranchAddress("t1c1",&t1c1);
 	tt->SetBranchAddress("t1c2",&t1c2);
@@ -274,7 +262,6 @@
 	tt->SetBranchAddress("t2atccr1",&t2atccr1);
 	tt->SetBranchAddress("t2atccr2",&t2atccr2);
 	tt->SetBranchAddress("t2atccr3",&t2atccr3);
-	tt->SetBranchAddress("t2atccr4",&t2atccr4);
 	tt->SetBranchAddress("t2c0",&t2c0);
 	tt->SetBranchAddress("t2c1",&t2c1);
 	tt->SetBranchAddress("t2c2",&t2c2);
@@ -284,7 +271,6 @@
 	tt->SetBranchAddress("t3atccr1",&t3atccr1);
 	tt->SetBranchAddress("t3atccr2",&t3atccr2);
 	tt->SetBranchAddress("t3atccr3",&t3atccr3);
-	tt->SetBranchAddress("t3atccr4",&t3atccr4);
 	tt->SetBranchAddress("t3c0",&t3c0);
 	tt->SetBranchAddress("t3c1",&t3c1);
 	tt->SetBranchAddress("t3c2",&t3c2);
@@ -346,11 +332,6 @@
     //counters for first and second layers ATC
     int ncnt1l1=0, ncnt1l2=80;
     int ncnt2l1=80, ncnt2l2=160;
-
-    //for print DEBUG information
-    bool verbose=0;
-    bool verbose1=0;
-    bool verbose2=0;
 
     int counter=0;
 

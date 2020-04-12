@@ -6,7 +6,7 @@ void mergeruns(){
     string inruns;
     string inrunsAll;
 
-    for(int i=1; i<=116; i++)
+    for(int i=1; i<=245; i++)
     {
 	inruns=TString::Format("/spool/users/ovtin/outDmeson/psi3770_to_D0meson_%d.root ",i).Data());
         inrunsAll.append(inruns);
