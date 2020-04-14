@@ -1,0 +1,18 @@
+*
+*  Add particles to GEANT ones: name, number of tracking routine
+*
+ADDintional particles
+*
+*D0  3
+*
+anti-D0 3
+*
+END of section with additional particles
+*
+* New or modified decays, groups can be separated with *
+*
+DECays addition or modification
+anti-D0 geant2 K- pi+ 100.
+*
+*D0 geant2 pi0 pi0 100.
+END of decays section

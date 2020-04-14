@@ -23,14 +23,14 @@
 #$ -soft
 ##$ -hard
 #$ -l time=24:00:00
-#$ -q remote
-##$ -q extralong
+##$ -q remote
+#$ -q extralong
 #
 # -- Send mail at submission and completion of script --
 #$ -m beas
 #$ -M ovtin.ivan@gmail.com
 
-##$ -t 1-16
+#$ -t 11-20
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]
@@ -42,23 +42,29 @@ myrand=$[1000+$i]
 #inruns="/home/ovtin/development/Dmeson/runsDmeson/runDmeson"$i
 #outfile="/spool/users/ovtin/psi3770_to_D0meson_"$i".root"
 #Bkg
-inruns="/spool/users/ovtin/outDmeson/simulation/simDmeson000001.dat"
-outfile="/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson.root"
-mintracks=4
-maxtracks=4
-minbeamtracks=2
-minIPtracks=2
-maxIPtracks=4
+##inruns="/spool/users/ovtin/outDmeson/simulation/simDmeson000009.dat"
+##outfile="/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson6.root"
+##inruns="/spool/users/ovtin/outDmeson/simulation/simDmeson_eetoqq3_0"$i".dat"
+##outfile="/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson_ee_to_qq3_"$i".root"
+inruns="/spool/users/ovtin/outDmeson/simulation/simDmesonSignal0"$i".dat"
+outfile="/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0mesonSignal_"$i".root"
+##inruns="/spool/users/ovtin/outDmeson/simulation/simDmesonSignal10.dat"
+##outfile="/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0mesonSignal_10.root"
+mintracks=2
+maxtracks=6
+minbeamtracks=1
+minIPtracks=1
+maxIPtracks=6
 minPt=10
-maxPt=5000
+maxPt=3000
 minClusterEnergy=15
 minTotalEnergy=45
-minClusters=2
-maxClusters=8
+minClusters=1
+maxClusters=10
 minClustersLKr=0
 minClustersCsI=0
-maxtchi2=50
-minNhits=25
+maxtchi2=200
+minNhits=0
 
 ##$HOME/development/Dmeson/analysis_D0meson -n 200000 -o $outfile $inruns
 $HOME/development/Dmeson/analysis_D0meson -v 23665 -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile $inruns

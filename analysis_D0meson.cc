@@ -101,19 +101,19 @@ struct ProgramParameters {
 };
 //=======================================================================================================================================
 //Selection conditions:
-//1)minimal number of tracks 4 (2K and 2pi)
-//2)maximal number of tracks 4
-//3)minimal number of beam tracks 2
-//4)minimal number of tracks form IP 2
-//5)maximal number of tracks form IP 4
+//1)minimal number of tracks 2 (2K and 2pi)
+//2)maximal number of tracks 6
+//3)minimal number of beam tracks 1
+//4)minimal number of tracks form IP 1
+//5)maximal number of tracks form IP 6
 //6)minimal transverse momentum 100 νάχ/c
 //6)maximal transverse momentum 2000 νάχ/c
 //7)minimal energy of cluster 15 νάχ
 //8)sum ennergy on all clusters large 45 MeV
 //9)minimal number of clusters with energy large minimal 2
 //10)maximal number of clusters with energy large minimal 8
-//11) tChi2<50 - fit quality
-//12) number hits on track Nhits>25
+//11) tChi2<200 - fit quality
+//12) number hits on track Nhits>15
 
 //....
 //10)tracks from VRTX tVertex(t)==1
@@ -121,7 +121,7 @@ struct ProgramParameters {
 //=======================================================================================================================================
 
 //set selection conditions
-static const struct ProgramParameters def_progpar={false,4,4,2,2,4,100,2000,15,45,2,8,0,0,50,25,"/store/users/ovtin/out.root",19862,0,false,0};
+static const struct ProgramParameters def_progpar={false,2,6,1,1,6,100,2000,15,45,2,8,0,0,200,15,"/store/users/ovtin/out.root",19862,0,false,0};
 
 static struct ProgramParameters progpar(def_progpar);
 
@@ -176,7 +176,7 @@ static struct StripTrackBranch bstriptrack;
 static struct ATCCounterBranch bcnt[Natccr][Ntraks];
 static struct ATCBranch batc;
 
-typedef struct {Int_t numHyp; Float_t Mbc[4],InvM[4],dE[4],dP[4],depmkp[4],deppkm[4],Ebeam,rEv,chi2[50],M[50],P1[50],P2[50],P3[50],P4[50];} DMESON;
+typedef struct {Int_t numHyp; Float_t Mbc[6],InvM[6],dE[6],dP[6],depmkp[6],deppkm[6],Ebeam,rEv,chi2[50],M[50],P1[50],P2[50],P3[50],P4[50];} DMESON;
 static DMESON Dmeson;
 
 double mk = 493.68;
@@ -214,9 +214,9 @@ int vddc_event_rejection()
 	if( tPt(t)>=progpar.max_momentum )  return MaxMomentumCut;
 	if( tCh2(t)>progpar.max_tchi2 )  return Chi2Cut;
 	if( tHits(t)<progpar.min_Nhits )  return tHitsCut;
-	charge += tCharge(t);
+	//charge += tCharge(t);
     }
-    if( (charge)!=0 )  return ChargeCut;   //if sum charge of tracks do not equal 0 then delete event
+    //if( (charge)!=0 )  return ChargeCut;   //if sum charge of tracks do not equal 0 then delete event
 
     return 0;
 }
@@ -622,7 +622,7 @@ int main(int argc, char* argv[])
 
 	eventTree->Branch("mu",&bmu,MUBranchList);
 	eventTree->Branch("Dmeson",&Dmeson,"numHyp/I"
-			  ":Mbc[4]/F:InvM[4]:dE[4]:dP[4]:depmkp[4]:deppkm[4]:Ebeam:rEv:chi2[50]:M[50]:P1[50]:P2[50]:P3[50]:P4[50]");
+			  ":Mbc[6]/F:InvM[6]:dE[6]:dP[6]:depmkp[6]:deppkm[6]:Ebeam:rEv:chi2[50]:M[50]:P1[50]:P2[50]:P3[50]:P4[50]");
 
 	eventTree->Branch("strcls",&bstrip,stripClusterBranchList);
 	eventTree->Branch("strtrk",&bstriptrack,stripTrackBranchList);

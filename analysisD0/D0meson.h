@@ -65,6 +65,16 @@
     data t3atccr1;
     data t3atccr2;
     data t3atccr3;
+    //for five track
+    data t4atccr0;
+    data t4atccr1;
+    data t4atccr2;
+    data t4atccr3;
+    //for six track
+    data t5atccr0;
+    data t5atccr1;
+    data t5atccr2;
+    data t5atccr3;
 
     //structure for track from DC
     struct data2
@@ -77,6 +87,8 @@
     data2 t1;
     data2 t2;
     data2 t3;
+    data2 t4;
+    data2 t5;
 
     //TOF system
     struct data3
@@ -116,6 +128,12 @@
     data5 t3c0;
     data5 t3c1;
     data5 t3c2;
+    data5 t4c0;
+    data5 t4c1;
+    data5 t4c2;
+    data5 t5c0;
+    data5 t5c1;
+    data5 t5c2;
     data5 clgamma0;
     data5 clgamma1;
     data5 clgamma2;
@@ -150,7 +168,7 @@
     struct data10
     {
 	int numHyp;
-	float Mbc[4],InvM[4],dE[4],dP[4],depmkp[4],deppkm[4],Ebeam,rEv,chi2[50],M[50],P1[50],P2[50],P3[50],P4[50];
+	float Mbc[6],InvM[6],dE[6],dP[6],depmkp[6],deppkm[6],Ebeam,rEv,chi2[50],M[50],P1[50],P2[50],P3[50],P4[50];
     };
     data10 Dmeson;
 
@@ -165,12 +183,12 @@
     std::vector< float > npe1;
     float Kdiff,kx1,kx2,kx3,kx4;
 
-    bool sim;
+    int sim;
     TChain *tt=new TChain("et");
 
     //include samples Data/MC
     void chain(){
-	if(sim!=1){
+	if(sim==0){
 	    for(int i=1; i<=245; i++)   //signal 2016+2017
 	    //for(int i=1; i<=116; i++)   //signal 2016
 	    //for(int i=1; i<=16; i++)     //bkg 2016
@@ -179,8 +197,31 @@
 		//tt->Add(TString::Format("/spool/users/ovtin/outDmeson/psi3770_to_BkgD0meson_%d.root",i).Data());
 	    }
 	}
+	else if (sim==1){
+	    for(int i=1; i<=20; i++)
+	    {
+		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0mesonSignal_%d.root",i).Data());
+	    }
+	}
+	else if (sim==2){
+	    tt->Add("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson_ee_to_qq1_1.root");
+	    tt->Add("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson_ee_to_qq1_2.root");
+	    tt->Add("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson_ee_to_qq1_3.root");
+	    tt->Add("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson_ee_to_qq1_4.root");
+	    tt->Add("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson_ee_to_qq2_1.root");
+	    tt->Add("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson_ee_to_qq2_2.root");
+	    tt->Add("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson_ee_to_qq2_3.root");
+	    tt->Add("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson_ee_to_qq2_4.root");
+	    tt->Add("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson_ee_to_qq3_1.root");
+	    tt->Add("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson_ee_to_qq3_2.root");
+	    tt->Add("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson_ee_to_qq3_3.root");
+	    tt->Add("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson_ee_to_qq3_4.root");
+	}
 	else{
-	    tt->Add("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson.root");
+	    for(int i=1; i<=6; i++)
+	    {
+	    		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson%d.root",i).Data());
+	    }
 	}
     }
 
@@ -226,6 +267,22 @@
 	tt->SetBranchStatus("t3c1",1);
 	tt->SetBranchStatus("t3c2",1);
 	//tt->SetBranchStatus("t3tof",1);
+	tt->SetBranchStatus("t4",1);
+	tt->SetBranchStatus("t4atccr0",1);
+	tt->SetBranchStatus("t4atccr1",1);
+	tt->SetBranchStatus("t4atccr2",1);
+	tt->SetBranchStatus("t4atccr3",1);
+	tt->SetBranchStatus("t4c0",1);
+	tt->SetBranchStatus("t4c1",1);
+	tt->SetBranchStatus("t4c2",1);
+	tt->SetBranchStatus("t5",1);
+	tt->SetBranchStatus("t5atccr0",1);
+	tt->SetBranchStatus("t5atccr1",1);
+	tt->SetBranchStatus("t5atccr2",1);
+	tt->SetBranchStatus("t5atccr3",1);
+	tt->SetBranchStatus("t5c0",1);
+	tt->SetBranchStatus("t5c1",1);
+	tt->SetBranchStatus("t5c2",1);
 	tt->SetBranchStatus("clgamma0",1);
 	tt->SetBranchStatus("clgamma1",1);
 	tt->SetBranchStatus("clgamma2",1);
@@ -274,6 +331,22 @@
 	tt->SetBranchAddress("t3c0",&t3c0);
 	tt->SetBranchAddress("t3c1",&t3c1);
 	tt->SetBranchAddress("t3c2",&t3c2);
+	tt->SetBranchAddress("t4",&t4);
+	tt->SetBranchAddress("t4atccr0",&t4atccr0);
+	tt->SetBranchAddress("t4atccr1",&t4atccr1);
+	tt->SetBranchAddress("t4atccr2",&t4atccr2);
+	tt->SetBranchAddress("t4atccr3",&t4atccr3);
+	tt->SetBranchAddress("t4c0",&t4c0);
+	tt->SetBranchAddress("t4c1",&t4c1);
+	tt->SetBranchAddress("t4c2",&t4c2);
+	tt->SetBranchAddress("t5",&t5);
+	tt->SetBranchAddress("t5atccr0",&t5atccr0);
+	tt->SetBranchAddress("t5atccr1",&t5atccr1);
+	tt->SetBranchAddress("t5atccr2",&t5atccr2);
+	tt->SetBranchAddress("t5atccr3",&t5atccr3);
+	tt->SetBranchAddress("t5c0",&t5c0);
+	tt->SetBranchAddress("t5c1",&t5c1);
+	tt->SetBranchAddress("t5c2",&t5c2);
 	//tt->SetBranchAddress("t3tof",&t3tof);
 	tt->SetBranchAddress("clgamma0",&clgamma0);
 	tt->SetBranchAddress("clgamma1",&clgamma1);
@@ -340,7 +413,9 @@
 
     int kk; int kk1; int kk2; int ii1; int ii2;
 
-    Double_t P1, P2, P3, P4;
+    int q[6], nhits[6], nhitsxy[6], nvec[6];
+    float p[6], chi2[6], theta[6], phi[6];
+
     float n00, n01, n02, n03, n04;
     float n10, n11, n12, n13, n14;
     int cnt11, cnt12;

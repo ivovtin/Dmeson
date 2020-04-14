@@ -4,7 +4,7 @@
 #$ -S /bin/bash
 # -------------------------------------------
 # --             batch name                --
-#$ -N atcmc
+#$ -N DmesonMC
 # -------------------------------------------
 # --     What to redirect to where         --
 #$ -cwd
@@ -17,18 +17,20 @@
 # --             Queue list                --
 #$ -soft
 #$ -l time=24:00:00
-#$ -q remote
-##$ -q extralong
+##$ -q remote
+#$ -q extralong
 #$ -m beas
 #$ -M ovtin.ivan@gmail.com
 
-###$ -t 1-18
+#$ -t 11-20
 
-##i=${SGE_TASK_ID}
-##myrand=$[1000+$i]
+i=${SGE_TASK_ID}
+myrand=$[1000+$i]
 
 #start the job
-$HOME/3.0.0/bin/ks < $HOME/development/Dmeson/simulation/mc.cards.ee_to_DD > /dev/null
+##$HOME/3.0.0/bin/ks < $HOME/development/Dmeson/simulation/mc.cards.ee_to_DD_10 > /dev/null
+$HOME/3.0.0/bin/ks < $HOME/development/Dmeson/simulation/mc.cards.ee_to_DD_"$i" > /dev/null
+##$HOME/3.0.0/bin/ks < $HOME/development/Dmeson/simulation/mc.cards.ee_to_qq_3 > /dev/null
 status=$?
 if [ $status != 0 ]; then
   echo "Program exited with status $status"
