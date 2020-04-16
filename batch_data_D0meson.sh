@@ -23,15 +23,15 @@
 #$ -soft
 ##$ -hard
 #$ -l time=24:00:00
-#$ -q remote
-##$ -q extralong
+##$ -q remote
+#$ -q extralong
 #
 # -- Send mail at submission and completion of script --
 #$ -m beas
 #$ -M ovtin.ivan@gmail.com
 
-#$ -t 1-245
-##$ -t 1-16
+##$ -t 1-245
+#$ -t 43-50
 ##$ -t 5-5
 
 i=${SGE_TASK_ID}

@@ -118,22 +118,6 @@ D0 mass for simulation is 1864.60 MeV. <br />
 Combinatorial background from continuum events (e+e-->qq, q=u,d,s) simulation with 205 generator (Jetset 7.4). <br />
 Bkg from decay e+e-->DD simulation with apply 60 generator for which decay D0->K-pi+ is forbidden in decay table JETSET. <br />
 
-# List candidates for D0->K-pi+ decay
-Run 23930:                                                                                     <br />
-Event=12208	Raw event=12439	eTracksAll=4	eTracksBeam=4	eTracksIP=4    +   -e12195     <br />
-root [5] et->Scan("ev.run:ev.evdaq");           <br />
-    Row   |    ev.run |  ev.evdaq               <br />
-       0  |    23206 |     70250                <br />
-       1  |    23215 |     32843                <br />
-       9  |    23218 |      3306                <br />
-      14  |    23219 |      4596                <br />
-      15  |    23219 |     16396                <br />
-      16  |    23219 |     20915                <br />
-      24  |    23220 |     19317                <br />
-      25  |    23220 |     31429                <br />
-et->Scan("ev.run:ev.evdaq:Dmeson.Mbc:Dmeson.dE","Dmeson.dE>0");    <br />
-et->Draw("Dmeson.Mbc","emc.ncls>2 && emc.ncls<6")                  <br />
-
 
 
 

@@ -167,8 +167,8 @@
 
     struct data10
     {
-	int numHyp;
-	float Mbc[6],InvM[6],dE[6],dP[6],depmkp[6],deppkm[6],Ebeam,rEv,chi2[50],M[50],P1[50],P2[50],P3[50],P4[50];
+	int numHyp,nhitst1[15],nhitst2[15],ncomb;
+	float Mbc[15],InvM[15],dE[15],dP[15],depmkp[15],deppkm[15],Ebeam,rEv,P1[15],P2[15],chi2t1[15],chi2t2[15];
     };
     data10 Dmeson;
 
@@ -189,7 +189,8 @@
     //include samples Data/MC
     void chain(){
 	if(sim==0){
-	    for(int i=1; i<=245; i++)   //signal 2016+2017
+	    for(int i=1; i<=232; i++)   //signal 2016+2017
+	    //for(int i=1; i<=245; i++)   //signal 2016+2017
 	    //for(int i=1; i<=116; i++)   //signal 2016
 	    //for(int i=1; i<=16; i++)     //bkg 2016
 	    {
@@ -217,10 +218,10 @@
 	    tt->Add("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson_ee_to_qq3_3.root");
 	    tt->Add("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson_ee_to_qq3_4.root");
 	}
-	else{
-	    for(int i=1; i<=6; i++)
+	else if (sim==3){
+	    for(int i=1; i<=20; i++)
 	    {
-	    		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson%d.root",i).Data());
+	    		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0mesonBkg_eetoDD_%d.root",i).Data());
 	    }
 	}
     }

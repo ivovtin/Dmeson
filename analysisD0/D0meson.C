@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
 	end_cnt=atoi(argv[5]);
 	fl_sim_exp=atoi(argv[6]);
 	if(region>10){ Usage(progname); return 0;}
-	if(hit_aer>1 || hit_wls>1 || fl_sim_exp>2){ Usage(progname); return 0;}
+	if(hit_aer>1 || hit_wls>1 || fl_sim_exp>3){ Usage(progname); return 0;}
 	if(hit_aer<0 || hit_wls<0 || fl_sim_exp<0){ Usage(progname); return 0;}
 	if(first_cnt<0 || first_cnt>160){ Usage(progname); return 0;}
 	if(end_cnt<0 || first_cnt>160){ Usage(progname); return 0;}
@@ -52,17 +52,22 @@ int main(int argc, char* argv[])
     TString KEDR;
     if( sim==0 ){
 	fnameout=TString::Format("res_%d_%d_%d_%d_exp_Dmeson.root",first_cnt,end_cnt,region,max_pt).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/";
+        KEDR = "/home/ovtin/public_html/outDmeson/data/";
     }
     else if (sim==1)
     {
-	fnameout=TString::Format("res_%d_%d_%d_%d_sim_Dmeson.root",first_cnt,end_cnt,region,max_pt).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/simulation/";
+	fnameout=TString::Format("res_%d_%d_%d_%d_sim_Dmeson_sig.root",first_cnt,end_cnt,region,max_pt).Data();
+        KEDR = "/home/ovtin/public_html/outDmeson/simulation_Sig/";
     }
-    else
+    else if (sim==2)
     {
-	fnameout=TString::Format("res_%d_%d_%d_%d_sim_Dmeson_continium.root",first_cnt,end_cnt,region,max_pt).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/simulation_continium/";
+	fnameout=TString::Format("res_%d_%d_%d_%d_sim_Dmeson_Bkg_continium.root",first_cnt,end_cnt,region,max_pt).Data();
+        KEDR = "/home/ovtin/public_html/outDmeson/simulation_Bkg_continium/";
+    }
+    else if (sim==3)
+    {
+	fnameout=TString::Format("res_%d_%d_%d_%d_sim_Dmeson_Bkg_eetoDD.root",first_cnt,end_cnt,region,max_pt).Data();
+        KEDR = "/home/ovtin/public_html/outDmeson/simulation_Bkg_eetodd/";
     }
     cout<<fnameout<<endl;
     fout = new TFile(fnameout,"RECREATE");
@@ -80,18 +85,24 @@ int main(int argc, char* argv[])
     TH1F* hencsi=new TH1F("E_CsI","Energy CsI",1000,0.,4500.);
     TH1F* hncls=new TH1F("ncls","emc.ncls",12,-0.5,11.5);
     TH1F* hep=new TH1F("E/p","E/p",100,0.,10.);
-    TH1F* hmbc=new TH1F("Mbc","Mbc",100,0.,2000.);
-    TH1F* hmbc_zoom=new TH1F("Mbc_zoom","Mbc_zoom",100,1700.,1900.);
-    TH1F* hdepmkp=new TH1F("depmkp","depmkp",200,-1500.,1500.);
-    TH1F* hdeppkm=new TH1F("deppkm","deppkm",200,-1500.,1500.);
-    TH1F* hdiffepmkpeppkm=new TH1F("depmkp-deppkm","depmkp-deppkm",100,-300.,300.);
-    TH2D *h2depmkpdeppkm=new TH2D("depmkp:deppkm", "depmkp:deppkm", 100,-1500,1500,100,-1500,1500);
-    TH1F* hdE=new TH1F("dE","dE",100,-3000.,3000.);
-    TH1F* hdE_zoom=new TH1F("dE_zoom","dE_zoom",30,-300.,300.);
-    TH1F* hdP=new TH1F("dP","dP",200,-1000.,1000.);
+    TH1F* hmbc=new TH1F("Mbc_full","Mbc_full",100,0.,2000.);
+    TH1F* hmbc_zoom;
+    if( sim==0 || sim==1 ){
+	hmbc_zoom=new TH1F("M_{bc}","M_{bc}",50,1800.,1900.);}
+    else{
+	hmbc_zoom=new TH1F("M_{bc}","M_{bc}",100,1700.,1900.);
+    }
+    TH1F* hdepmkp=new TH1F("depmkp","depmkp",100,-400.,300.);
+    TH1F* hdeppkm=new TH1F("deppkm","deppkm",100,-400.,300.);
+    TH1F* hdiffepmkpeppkm=new TH1F("depmkp-deppkm","depmkp-deppkm",100,-100.,100.);
+    TH2D *h2depmkpdeppkm=new TH2D("depmkp:deppkm", "depmkp:deppkm", 100,-300,300,100,-300,300);
+    TH1F* hdE=new TH1F("#Delta E_full","#Delta E_full",100,-3000.,3000.);
+    TH1F* hdE_zoom=new TH1F("#Delta E","#Delta E",30,-300.,300.);
+    TH1F* hdP=new TH1F("#Delta P","#Delta P",200,-1000.,1000.);
     TH1F* hEbeam=new TH1F("Ebeam","Ebeam",100,1880.,1895.);
-    TH2D *h2PpiktodEkpi=new TH2D("dP:depmkp", "dP:depmkp", 200,200,1500,200,-1000,1000);
-    TH2D *h2MbcdE=new TH2D("Mbc:dE", "Mbc:dE", 200,1700,1900,200,-300,300);
+    TH2D *h2PpiktodEkpi=new TH2D("Ppik:dekmpip", "Ppik:dekmpip", 200,600,1100,200,-250,250);
+    TH2D *h2MbcdE=new TH2D("M_{bc}:#Delta E", "M_{bc}:#Delta E", 200,1700,1900,200,-300,300);
+    TH2D *h2MbcdP=new TH2D("M_{bc}:#Delta P", "M_{bc}:#Delta P", 200,-500,500,200,1825,1890);
 
     TH1F* hvrtntrk=new TH1F("vrt.ntrk","vrt.ntrk",10,-0.5,9.5);
     TH1F* hvrtnip=new TH1F("vrt.nip","vrt.nip",10,-0.5,9.5);
@@ -200,7 +211,6 @@ int main(int argc, char* argv[])
 	    Result<< ev.run <<"\t"<< ev.evdaq << endl;
 	    if(verbose2) cout<<"ev.run="<<ev.run<<"\t"<<"ev.event="<<ev.event<<"\t"<<"ev.evdaq="<<ev.evdaq<<"\t"<<"t0.t="<<t0.t<<"\t"<<"t1.t="<<t1.t<<"\t"<<"t2.t="<<t2.t<<"\t"<<"t3.t="<<t3.t<<endl;
 	    if(verbose1)cout<<t0c0.theta<<"\t"<<t1c0.theta<<"\t"<<clgamma0.theta<<"\t"<<clgamma1.theta<<"\t"<<(clgamma0.theta+clgamma1.theta)/2<<"\t"<<clgamma0.theta-clgamma1.theta<<"\t"<<clgamma0.vx*clgamma1.vx+clgamma0.vy*clgamma1.vy+clgamma0.vz*clgamma1.vz<<endl;
-	    if(verbose2) cout<<"Dmeson.Mbc[0]="<<Dmeson.Mbc[0]<<"\t"<<"Dmeson.Mbc[1]="<<Dmeson.Mbc[1]<<"\t"<<"Dmeson.Mbc[2]="<<Dmeson.Mbc[2]<<"\t"<<"Dmeson.Mbc[3]="<<Dmeson.Mbc[3]<<"\t"<<endl;
 
 	    hvrtntrk->Fill(vrt.ntrk);
 	    hvrtnip->Fill(vrt.nip);
@@ -216,10 +226,9 @@ int main(int argc, char* argv[])
 	    htofntimes->Fill(t0tof.ntimes);
 	    hEbeam->Fill(Dmeson.Ebeam);
 
-	    for(int i=0; i<ntrk; i++){
-		if( p[i]>min_pt && p[i]<max_pt && chi2[i]<max_chi2 && nhits[i]>min_nhits && Dmeson.Mbc[i]>min_Mbc && Dmeson.Mbc[i]<max_Mbc && Dmeson.dE[i]>min_dE && Dmeson.dE[i]< max_dE )
+	    for(int i=0; i<vrt.ntrk; i++){
+		if( p[i]>min_pt && p[i]<max_pt && chi2[i]<max_chi2 && nhits[i]>min_nhits )
 		{
-		    if(q[i]<0) h2PpiktodEkpi->Fill( p[i], (Dmeson.depmkp[i]-Dmeson.Ebeam) );
 		    hmom->Fill(p[i]);
 		    hep->Fill(e[i]/p[i]);
 		    htchi2->Fill(chi2[i]);
@@ -230,19 +239,42 @@ int main(int argc, char* argv[])
 		    htnvec->Fill(nvec[i]);
 		    hcostheta->Fill(cos(pi*theta[i]/180));
 		    hcosphi->Fill(cos(pi*phi[i]/180));
+		}
+	    }
+
+	    if(verbose2) cout<<"Dmeson.ncomb="<<Dmeson.ncomb<<"\t"<<endl;
+
+	    for(int i=0; i<Dmeson.ncomb; i++){
+		if( Dmeson.P1[i]>min_pt && Dmeson.P1[i]<max_pt && Dmeson.P2[i]>min_pt && Dmeson.P2[i]<max_pt && Dmeson.chi2t1[i]<max_chi2 && Dmeson.chi2t2[i]<max_chi2
+		   && Dmeson.nhitst1[i]>min_nhits && Dmeson.nhitst2[i]>min_nhits
+		   && Dmeson.Mbc[i]>min_Mbc && Dmeson.Mbc[i]<max_Mbc
+		   && Dmeson.dE[i]>min_dE && Dmeson.dE[i]< max_dE
+		  )
+		{
+		    if(q[i]<0) h2PpiktodEkpi->Fill( p[i], (Dmeson.deppkm[i]-Dmeson.Ebeam) );
 		    hmbc->Fill(Dmeson.Mbc[i]);
-		    hmbc_zoom->Fill(Dmeson.Mbc[i]);
+
+		    if (Dmeson.dE[i]>-100 && Dmeson.dE[i]< 100 )
+		    {
+			hmbc_zoom->Fill(Dmeson.Mbc[i]);
+		    }
+		    if( Dmeson.Mbc[i]>1855 && Dmeson.Mbc[i]<1875  )
+		    {
+			hdE->Fill(Dmeson.dE[i]);
+			hdE_zoom->Fill(Dmeson.dE[i]);
+		    }
 		    hdepmkp->Fill(Dmeson.depmkp[i]-Dmeson.Ebeam);
 		    hdeppkm->Fill(Dmeson.deppkm[i]-Dmeson.Ebeam);
 		    hdiffepmkpeppkm->Fill((Dmeson.depmkp[i]-Dmeson.Ebeam)-(Dmeson.deppkm[i]-Dmeson.Ebeam));
 		    h2depmkpdeppkm->Fill( (Dmeson.depmkp[i]-Dmeson.Ebeam), (Dmeson.deppkm[i]-Dmeson.Ebeam) );
-		    hdE->Fill(Dmeson.dE[i]);
-		    hdE_zoom->Fill(Dmeson.dE[i]);
 		    hdP->Fill(Dmeson.dP[i]);
 		    h2MbcdE->Fill(Dmeson.Mbc[i], Dmeson.dE[i]);
+		    h2MbcdP->Fill(Dmeson.dP[i], Dmeson.Mbc[i]);
+		    if(verbose2) cout<<i<<"\t"<<"vrt.ntrk="<<vrt.ntrk<<"\t"<<"Dmeson.Mbc="<<Dmeson.Mbc[i]<<"\t"<<"Dmeson.dE="<<Dmeson.dE[i]<<"\t"<<endl;
 		}
 	    }
-            //atc_cross();
+
+	    //atc_cross();
 	}
     }
     Result.close();
@@ -384,22 +416,44 @@ int main(int argc, char* argv[])
     }
 
     TCanvas *cc1 = new TCanvas();
+    gStyle->SetOptTitle(0);
     gStyle->SetOptStat(1111);
+    //gStyle->SetOptStat(0);
     gStyle->SetOptFit(1011);
-    gROOT->SetStyle("Plain");
+    //gROOT->SetStyle("Plain");
     cc1->cd();
-    hmbc->Draw("E1"); cc1->SaveAs(KEDR+"Mbc.png");
-    //hmbc->GetXaxis()->SetRangeUser(1700,1900);
-    hmbc_zoom->Draw("E1"); cc1->SaveAs(KEDR+"Mbc_zoom.png");
+
+    TString format1=".eps";
+    TString format2=".png";
+    TString format3=".pdf";
+    TString nameMbc, nameMbc_zoom, nameMbcdE, nameMbcdP, namedE, namedE_zoom, namedP;
+    nameMbc = "Mbc_full";
+    nameMbc_zoom = "Mbc_zoom";
+    nameMbcdE = "MbcdE";
+    nameMbcdP = "MbcdP";
+    namedE = "dE";
+    namedE_zoom = "dE_zoom";
+    namedP = "dP";
+
+    hmbc->Draw("E1"); cc1->SaveAs(KEDR + nameMbc + format1);  cc1->SaveAs(KEDR + nameMbc + format2);   cc1->SaveAs(KEDR + nameMbc + format3);
+    hmbc_zoom->GetXaxis()->SetTitle("M_{bc} (MeV)");
+    hmbc_zoom->Draw("E1"); cc1->SaveAs(KEDR + nameMbc_zoom + format1); cc1->SaveAs(KEDR + nameMbc_zoom + format2); cc1->SaveAs(KEDR + nameMbc_zoom + format3);
+    h2MbcdE->GetXaxis()->SetTitle("M_{bc} (MeV)");
+    h2MbcdE->GetYaxis()->SetTitle("#Delta E (MeV)");
+    h2MbcdE->Draw(); cc1->SaveAs(KEDR + nameMbcdE + format1); cc1->SaveAs(KEDR + nameMbcdE + format2);  cc1->SaveAs(KEDR + nameMbcdE + format3);
+    h2MbcdP->GetXaxis()->SetTitle("#Delta P (MeV)");
+    h2MbcdP->GetYaxis()->SetTitle("M_{bc} (MeV)");
+    h2MbcdP->Draw(); cc1->SaveAs(KEDR + nameMbcdP + format1); cc1->SaveAs(KEDR + nameMbcdP + format2);  cc1->SaveAs(KEDR + nameMbcdP + format3);
+    hdE->Draw("E1"); cc1->SaveAs(KEDR + namedE + format1); cc1->SaveAs(KEDR + namedE + format2); cc1->SaveAs(KEDR + namedE + format3);
+    hdE_zoom->GetXaxis()->SetTitle("#Delta E (MeV)");
+    hdE_zoom->Draw("E1"); cc1->SaveAs(KEDR + namedE_zoom + format1); cc1->SaveAs(KEDR + namedE_zoom + format2); cc1->SaveAs(KEDR + namedE_zoom + format3);
+    hdP->GetXaxis()->SetTitle("#Delta P (MeV)");
+    hdP->Draw(); cc1->SaveAs(KEDR + namedP + format1);  cc1->SaveAs(KEDR + namedP + format2); cc1->SaveAs(KEDR + namedP + format3);
+
     hdepmkp->Draw(); cc1->SaveAs(KEDR+"depmkp.png");
     hdeppkm->Draw(); cc1->SaveAs(KEDR+"deppkm.png");
     hdiffepmkpeppkm->Draw(); cc1->SaveAs(KEDR+"diffepmkpeppkm.png");
     h2depmkpdeppkm->Draw(); cc1->SaveAs(KEDR+"depmkpdeppkm.png");
-    h2MbcdE->Draw(); cc1->SaveAs(KEDR+"MbcdE.png");
-    hdE->Draw("E1"); cc1->SaveAs(KEDR+"dE.png");
-    //hdE->GetXaxis()->SetRangeUser(-300,300);
-    hdE_zoom->Draw("E1"); cc1->SaveAs(KEDR+"dE_zoom.png");
-    hdP->Draw(); cc1->SaveAs(KEDR+"dP.png");
     hEbeam->Draw(); cc1->SaveAs(KEDR+"Ebeam.png");
     h2PpiktodEkpi->Draw(); cc1->SaveAs(KEDR+"PpiktodEkpi.png");
     henergy->Draw(); cc1->SaveAs(KEDR+"emc_energy.png");

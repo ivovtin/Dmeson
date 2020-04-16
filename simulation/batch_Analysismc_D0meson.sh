@@ -30,7 +30,7 @@
 #$ -m beas
 #$ -M ovtin.ivan@gmail.com
 
-#$ -t 11-20
+#$ -t 1-4
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]
@@ -42,14 +42,12 @@ myrand=$[1000+$i]
 #inruns="/home/ovtin/development/Dmeson/runsDmeson/runDmeson"$i
 #outfile="/spool/users/ovtin/psi3770_to_D0meson_"$i".root"
 #Bkg
-##inruns="/spool/users/ovtin/outDmeson/simulation/simDmeson000009.dat"
-##outfile="/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson6.root"
-##inruns="/spool/users/ovtin/outDmeson/simulation/simDmeson_eetoqq3_0"$i".dat"
-##outfile="/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson_ee_to_qq3_"$i".root"
-inruns="/spool/users/ovtin/outDmeson/simulation/simDmesonSignal0"$i".dat"
-outfile="/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0mesonSignal_"$i".root"
-##inruns="/spool/users/ovtin/outDmeson/simulation/simDmesonSignal10.dat"
-##outfile="/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0mesonSignal_10.root"
+inruns="/spool/users/ovtin/outDmeson/simulation/simDmeson_eetoqq3_0"$i".dat"
+outfile="/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson_ee_to_qq3_"$i".root"
+##inruns="/spool/users/ovtin/outDmeson/simulation/simDmesonSignal"$i".dat"
+##outfile="/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0mesonSignal_"$i".root"
+##inruns="/spool/users/ovtin/outDmeson/simulation/simDmesonBkg_eetoDD"$i".dat"
+##outfile="/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0mesonBkg_eetoDD_"$i".root"
 mintracks=2
 maxtracks=6
 minbeamtracks=1
