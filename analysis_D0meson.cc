@@ -70,7 +70,7 @@
 using namespace std;
 
 const int Natccr=4;           //number crossing ATC counters on track
-const int Ntraks=6;           //number tracks
+const int Ntraks=8;           //number tracks
 const int Nclcr=4;            //number crossing clusters on track
 const int Nclcrg=4;
 
@@ -176,8 +176,8 @@ static struct StripTrackBranch bstriptrack;
 static struct ATCCounterBranch bcnt[Natccr][Ntraks];
 static struct ATCBranch batc;
 
-//typedef struct {Int_t numHyp; Float_t Mbc[15],InvM[15],dE[15],dP[15],depmkp[15],deppkm[15],Ebeam,rEv,chi2[50],M[50],P1[50],P2[50],P3[50],P4[50];} DMESON;
-typedef struct {Int_t numHyp,nhitst1[15],nhitst2[15],ncomb; Float_t Mbc[15],InvM[15],dE[15],dP[15],depmkp[15],deppkm[15],Ebeam,rEv,P1[15],P2[15],chi2t1[15],chi2t2[15];} DMESON;
+typedef struct {Int_t nhitst1[20],nhitst2[20],ncomb; Float_t Mbc[20],InvM[20],dE[20],dP[20],depmkp[20],deppkm[20],Ebeam,rEv,P1[20],P2[20],chi2t1[20],chi2t2[20],e1[20],e2[20],
+    rr1[20],rr2[20],Zip1[20],Zip2[20];} DMESON;
 
 static DMESON Dmeson;
 
@@ -185,6 +185,7 @@ double mk = 493.68;
 double mpi = 139.57;
 
 int listtr[6],lclpi0[8],lclg[5];
+int minElementIndex;
 //Rejection prior to reconstruction helps to save CPU time
 extern "C" void kemc_energy_(float Ecsi[2],float *Elkr);
 
@@ -248,11 +249,11 @@ int emc_event_rejection()
 	}
 	if( energy_on_track<progpar.min_cluster_energy )             //if energy cluster large setup minimal energy
 	{
-	    return CutClusterEnergy;
+	    //return CutClusterEnergy;
 	}
 	if( semc.dc_emc_ncls[t]<1 )                                 //if track do not have cluster - cut event
 	{
-	    return Cut_nclntrack;
+	    //return Cut_nclntrack;
 	}
     }
 
@@ -272,7 +273,7 @@ int emc_event_rejection()
 	//if(semc.emc_theta[c]<20 || semc.emc_theta[c]>31 || semc.emc_theta[c]<39 || semc.emc_theta[c]>141 || semc.emc_theta[c]<149 || semc.emc_theta[c]>160) return EMCthetaCut;
     }
 
-    if( tot_energy<progpar.min_total_energy )           return CutTotalEnergy;
+    //if( tot_energy<progpar.min_total_energy )           return CutTotalEnergy;
     if( nemc<progpar.min_cluster_number )               return CutMINClusterNumber;
     if( nemc>progpar.max_cluster_number )               return CutMAXClusterNumber;
     if( nlkr<progpar.min_lkrcl_number )                 return CutLkrClusterNumber;
@@ -311,210 +312,168 @@ int analyse_event()
 
     if (progpar.verbose) cout<<"RunNumber="<<kedrraw_.Header.RunNumber<<"\t"<<"WTotal="<<WTotal<<"\t"<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"eTracksAll="<<eTracksAll<<endl;
 
-    //apply tracks cut conditions
-    if(eTracksBeam>=progpar.min_beam_track_number&&eTracksIP>=progpar.min_ip_track_number&&eTracksAll<=progpar.max_track_number)
-    {
-	if (progpar.verbose) cout<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"eTracksAll="<<eTracksAll<<"\t"<<"eTracksBeam="<<eTracksBeam<<"\t"<<"eTracksIP="<<eTracksIP<<endl;
 
-	copy(&bevent);
-	bevent.event=kdcenum_.EvNum;
+    if (progpar.verbose) cout<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"eTracksAll="<<eTracksAll<<"\t"<<"eTracksBeam="<<eTracksBeam<<"\t"<<"eTracksIP="<<eTracksIP<<endl;
 
-	unsigned short nhits=mu_next_event();
+    copy(&bevent);
+    bevent.event=kdcenum_.EvNum;
 
-	copy(&bvertex);
-	copy(&bemc);
+    unsigned short nhits=mu_next_event();
 
-	//==========================================================================================================
-        /*
-	//kinematic reconstruction
-	int ntrfromip=0;
-	for (int t=0; t<eTracksAll; t++)                                  //cycle for first track
-	{
-	    double xx=tX0IP(t)*tX0IP(t);
-	    double yy=tY0IP(t)*tY0IP(t);
-	    double rr=sqrt(xx+yy);
-	    if (progpar.verbose) cout<<"rr="<<rr<<endl;                   //radius begin track
+    copy(&bvertex);
+    copy(&bemc);
 
-	    if(rr<5) {
-		ntrfromip++;
-		if(ntrfromip<=6){
-		    listtr[ntrfromip-1]=t+1;                             //list identificator of traks ListTr[1:6]
-		}
-	    }
-	}
-	int nclnft=0;
-	for(int cl=0; cl<semc.emc_ncls; cl++)
-	{
-	    if(semc.emc_dc_ntrk[cl]==0&&
-	       semc.emc_energy[cl]>EMinPhot){
-		nclnft++;
-		if(nclnft<=8) {
-		    lclpi0[nclnft-1]=cl+1;
-		}
-	    }
-	}
-
-	if (progpar.verbose) cout<<"Event="<<eDaqNumber<<"\t"<<"ntrfromip="<<ntrfromip<<"\t"<<"nclnft="<<nclnft<<endl;
-	Dmeson.numHyp=0;
-	for(int i=0; i<5; i++){
-	    Dmeson.chi2[i]=0;
-	    Dmeson.M[i]=0;
-	    Dmeson.P1[i]=0;
-	    Dmeson.P2[i]=0;
-	    Dmeson.P3[i]=0;
-	    Dmeson.P4[i]=0;
-	}
-
-	if(ntrfromip==4&&nclnft<=2) {
-	    int qst=0;
-	    int ntracks=4;
-	    int npi0=0;
-	    int ng=0;
-	    reckfitmulticpi0gamma(&WTotal,&ntracks,&npi0,&ng,listtr,lclpi0,lclg,&qst);
-	    if (progpar.verbose) cout<<"qst:"<<qst<<endl;
-	    if(qst>=0){
-		if (progpar.verbose) cout<<"NumOfHyp:"<<hNumOfHyp<<endl;
-		for(int ih=0; ih<hNumOfHyp; ih++){
-		    if (progpar.verbose) cout<<" chi2:"<<hHChi2(ih)<<endl;
-		    Dmeson.chi2[ih]=hHChi2(ih);
-		    for(int it=0; it<4; it++){
-			if (progpar.verbose) cout<<"track:"<<it<<"  Mass:"<<hMPc(ih,it)<<"\t"<< "P:"<<hPPc(ih,it)<<endl;
-			if(it==0){
-			    Dmeson.M[ih]=hMPc(ih,it);
-			    Dmeson.P1[ih]=hPPc(ih,it);
-			}
-			if(it==1){
-			    Dmeson.P2[ih]=hPPc(ih,it);
-			}
-			if(it==2){
-			    Dmeson.P3[ih]=hPPc(ih,it);
-			}
-			if(it==3){
-			    Dmeson.P4[ih]=hPPc(ih,it);
-			}
-		    }
-		}
-	    }
-	}
-	Dmeson.numHyp=hNumOfHyp;
-	if (progpar.verbose) cout<<"Dmeson.numHyp="<<Dmeson.numHyp<<"\t"<<"hNumOfHyp="<<hNumOfHyp<<endl;
-        */
-	//===============================================================================================
-
-	for(int i=0; i<15; i++){
-	    Dmeson.Mbc[i]=0;                                            //Invariant mass or beam consraint mass
-	    Dmeson.InvM[i]=0;                                           //also Invariant mass
-	    Dmeson.dE[i]=0;
-	    Dmeson.dP[i]=0;
-	    Dmeson.depmkp[i]=0;
-	    Dmeson.deppkm[i]=0;
-	    Dmeson.P1[i]=0;
-	    Dmeson.P2[i]=0;
-	    Dmeson.chi2t1[i] = 0;
-	    Dmeson.chi2t2[i] = 0;
-	    Dmeson.nhitst1[i] = 0;
-	    Dmeson.nhitst2[i] = 0;
-	}
-	Dmeson.ncomb = 0;
-
-	int i=0;
-
-	for (int t1 = 0; t1 < eTracksAll; t1++)                                  //cycle for first track
-	{
-	    copy(&btrack[t1],t1);
-	    copy(&btof[t1],t1);
-	    copy(&bmu,t1,nhits);
-	    copy(&batc);
-
-	    for(int k=0; k<Natccr;  k++)                                         //cycle for number of crossing ATC counters on track
-	    {
-		if (progpar.verbose) cout<<"Event="<<kdcenum_.EvNum<<"\t"<<"Track="<<t1<<"\t"<<"i="<<i<<"\t"<<"atc_track.cnt_cross[t][k]="<<atc_track.cnt_cross[t1][k]<<"\t"<<"atc_rec.npe="<<atc_rec.npe[atc_track.cnt_cross[t1][k]-1]<<endl;
-		copy(&bcnt[k][t1],(atc_track.cnt_cross[t1][k]-1),t1);
-	    }
-
-	    for(int c=0; c<semc.dc_emc_ncls[t1]; c++)                            //dc_emc_ncls[NDCH_TRK] - number clusters of emc on track
-	    {
-		if (progpar.verbose) cout<<"Event="<<kdcenum_.EvNum<<"\t"<<"Track="<<t1<<"\t"<<"semc.dc_emc_ncls[t]="<<semc.dc_emc_ncls[t1]<<endl;
-		copy(&bcluster[c][t1],(semc.dc_emc_cls[t1][c]-1));               //dc_emc_cls[NDCH_TRK][NEMC_CLS] - number clusters
-	    }
-
-	    for(int t=0; t<semc.str_ntracks; t++) {
-		copy(&bstriptrack,t);
-	    }
-
-
-	    for (int t2 = 0; t2 < eTracksAll; t2++)                              //cycle for second track
-	    {
-		if( tCharge(t1)<0 && tCharge(t2)>0 )       		         //condition for part1: K-, part2: pi+    (D0->K-pi+)
-		{
-		    if (progpar.verbose) cout<<"i="<< i<<endl;
-		    if (progpar.verbose) cout<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"Ebeam="<<WTotal/2<<"\t"<<"t1="<<t1<<"\t"<<"t2="<<t2<<"\t"<<"tCharge(t1)="<<tCharge(t1)<<"\t"<<"tCharge(t2)="<<tCharge(t2)<<endl;
-		    if (progpar.verbose) cout<<"P(t1)="<<tP(t1)<<"\t"<<"P(t2)="<<tP(t2)<<"\t"<<"tHits(t1)="<<tHits(t1)<<"\t"<<"tHits(t2)="<<tHits(t2)<<"\t"<<"tCh2(t1)="<<tCh2(t1)<<"\t"<<"tCh2(t2)="<<tCh2(t2)<<endl;
-
-		    double px1, px2, py1, py2, pz1, pz2;                        //determine momentums
-		    px1 = tP(t1)*tVx(t1);
-		    px2 = tP(t2)*tVx(t2);
-		    py1 = tP(t1)*tVy(t1);
-		    py2 = tP(t2)*tVy(t2);
-		    pz1 = tP(t1)*tVz(t1);
-		    pz2 = tP(t2)*tVz(t2);
-
-		    //Mbc=sqrt(Ebeam^2-(p1+p2)^2)
-		    Dmeson.Mbc[i] = (WTotal/2)*(WTotal/2) - pow(px1+px2,2) - pow(py1+py2,2) - pow(pz1+pz2,2);
-		    if (Dmeson.Mbc[i]>0) Dmeson.Mbc[i] = sqrt(Dmeson.Mbc[i]); else Dmeson.Mbc[i] = 0;
-
-		    //Invariant mass of two tracks
-		    //(p1+p2)^2=p1^2+p2^2+2*p1*p2cos(theta)
-		    Dmeson.InvM[i] = pow((WTotal/2),2)-pow(tP(t1),2)-pow(tP(t2),2)-2*tP(t1)*tP(t2)*(tVx(t1)*tVx(t2)+tVy(t1)*tVy(t2)+tVz(t1)*tVz(t2));
-		    if ( Dmeson.InvM[i]>0) Dmeson.InvM[i] = sqrt(Dmeson.InvM[i]); else Dmeson.InvM[i] = 0;
-
-		    if (progpar.verbose) cout<<"mbc="<<Dmeson.Mbc[i]<<"\t"<<"InvM="<<Dmeson.InvM[i]<<endl;
-
-		    Dmeson.depmkp[i] =  sqrt(mpi*mpi + tP(t1)*tP(t1)) + sqrt(mk*mk + tP(t2)*tP(t2));
-		    Dmeson.deppkm[i] =  sqrt(mpi*mpi + tP(t2)*tP(t2)) + sqrt(mk*mk + tP(t1)*tP(t1));
-		    Dmeson.dE[i] = (Dmeson.depmkp[i] + Dmeson.deppkm[i])/2. - WTotal/2;
-		    if (progpar.verbose) cout<<"depmkp="<<Dmeson.depmkp[i]<<"\t"<<"deppkm="<<Dmeson.deppkm[i]<<"\t"<<"de="<<Dmeson.dE[i]<<endl;
-
-		    Dmeson.dP[i] = tP(t1)-tP(t2);
-                    Dmeson.P1[i] = tP(t1);
-                    Dmeson.P2[i] = tP(t2);
-                    Dmeson.chi2t1[i] = tCh2(t1);
-		    Dmeson.chi2t2[i] = tCh2(t2);
-                    Dmeson.nhitst1[i] = tHits(t1);
-                    Dmeson.nhitst2[i] = tHits(t2);
-		    if (progpar.verbose) cout<<"dP="<< Dmeson.dP[i]<<endl;
-		    i++;
-		}
-	    }
-	}
-	Dmeson.ncomb = i;
-	Dmeson.rEv = kedrraw_.Header.Number;
-	Dmeson.Ebeam=WTotal/2;
-
-	int nclg=0;
-	for(int cl=0; cl<semc.emc_ncls; cl++)
-	{
-	    if(semc.emc_dc_ntrk[cl]==0)                                               //cluster do not connected with track
-	    {
-		copy(&bclgamma[nclg],cl);                                             //ncls=semc.emc_emc_ncls[c];       ntracks=semc.emc_dc_ntrk[c];
-		nclg++;
-	    }
-	}
-
-	for(int c=0; c<semc.str_ncls; c++) {
-	    copy(&bstrip,c);
-	}
-
-	if(eNumber%10==0) cout<<"Ev:"<<eNumber<<endl;
-	//==================================================================
-
-	eventTree->Fill();
-
-
-	if( progpar.process_only ) return 1;
-
-	return 0;
+    for(int i=0; i<20; i++){
+	Dmeson.Mbc[i]=0;                                            //Invariant mass or beam consraint mass
+	Dmeson.InvM[i]=0;                                           //also Invariant mass
+	Dmeson.dE[i]=0;
+	Dmeson.dP[i]=0;
+	Dmeson.depmkp[i]=0;
+	Dmeson.deppkm[i]=0;
+	Dmeson.P1[i]=0;
+	Dmeson.P2[i]=0;
+	Dmeson.chi2t1[i] = 0;
+	Dmeson.chi2t2[i] = 0;
+	Dmeson.nhitst1[i] = 0;
+	Dmeson.nhitst2[i] = 0;
+	Dmeson.e1[i]=0;
+	Dmeson.e2[i]=0;
+	Dmeson.rr1[i] = 0;
+	Dmeson.rr2[i] = 0;
+	Dmeson.Zip1[i] = 0;
+	Dmeson.Zip2[i] = 0;
     }
+    Dmeson.ncomb = 0;
+
+    int i=0;
+
+    for (int t1 = 0; t1 < eTracksAll; t1++)                                  //cycle for first track
+    {
+	copy(&btrack[t1],t1);
+	copy(&btof[t1],t1);
+	copy(&bmu,t1,nhits);
+	copy(&batc);
+
+	for(int k=0; k<Natccr;  k++)                                         //cycle for number of crossing ATC counters on track
+	{
+	    //if (progpar.verbose) cout<<"Event="<<kdcenum_.EvNum<<"\t"<<"Track="<<t1<<"\t"<<"i="<<i<<"\t"<<"atc_track.cnt_cross[t][k]="<<atc_track.cnt_cross[t1][k]<<"\t"<<"atc_rec.npe="<<atc_rec.npe[atc_track.cnt_cross[t1][k]-1]<<endl;
+	    copy(&bcnt[k][t1],(atc_track.cnt_cross[t1][k]-1),t1);
+	}
+
+	for(int c=0; c<semc.dc_emc_ncls[t1]; c++)                            //dc_emc_ncls[NDCH_TRK] - number clusters of emc on track
+	{
+	    if (progpar.verbose) cout<<"Event="<<kdcenum_.EvNum<<"\t"<<"Track="<<t1<<"\t"<<"semc.dc_emc_ncls[t]="<<semc.dc_emc_ncls[t1]<<endl;
+	    copy(&bcluster[c][t1],(semc.dc_emc_cls[t1][c]-1));               //dc_emc_cls[NDCH_TRK][NEMC_CLS] - number clusters
+	}
+
+	for(int t=0; t<semc.str_ntracks; t++) {
+	    copy(&bstriptrack,t);
+	}
+
+
+	for (int t2 = 0; t2 < eTracksAll; t2++)                              //cycle for second track
+	{
+	    double xx1=tX0IP(t1)*tX0IP(t1);
+	    double yy1=tY0IP(t1)*tY0IP(t1);
+	    double rr1=sqrt(xx1+yy1);
+	    double xx2=tX0IP(t2)*tX0IP(t2);
+	    double yy2=tY0IP(t2)*tY0IP(t2);
+	    double rr2=sqrt(xx2+yy2);
+
+	    if (progpar.verbose) cout<<"rr1="<<rr1<<"\t"<<"fabs(tZ0IP(t1))="<<fabs(tZ0IP(t1))<<endl;
+	    if (progpar.verbose) cout<<"rr2="<<rr2<<"\t"<<"fabs(tZ0IP(t2))="<<fabs(tZ0IP(t2))<<endl;
+
+	    if( tCharge(t1)<0 && tCharge(t2)>0 && rr1<8 && fabs(tZ0IP(t1))<40 && rr2<8 && fabs(tZ0IP(t2))<40 )       		         //condition for part1: K-, part2: pi+    (D0->K-pi+)
+	    {
+		Dmeson.rr1[i] = rr1;
+		Dmeson.rr2[i] = rr2;
+		Dmeson.Zip1[i] = tZ0IP(t1);
+		Dmeson.Zip2[i] = tZ0IP(t2);
+		if (progpar.verbose) cout<<"i="<< i<<endl;
+		if (progpar.verbose) cout<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"Ebeam="<<WTotal/2<<"\t"<<"t1="<<t1<<"\t"<<"t2="<<t2<<"\t"<<"tCharge(t1)="<<tCharge(t1)<<"\t"<<"tCharge(t2)="<<tCharge(t2)<<endl;
+		if (progpar.verbose) cout<<"P(t1)="<<tP(t1)<<"\t"<<"P(t2)="<<tP(t2)<<"\t"<<"tHits(t1)="<<tHits(t1)<<"\t"<<"tHits(t2)="<<tHits(t2)<<"\t"<<"tCh2(t1)="<<tCh2(t1)<<"\t"<<"tCh2(t2)="<<tCh2(t2)<<endl;
+
+		double px1, px2, py1, py2, pz1, pz2;                        //determine momentums
+		px1 = tP(t1)*tVx(t1);
+		px2 = tP(t2)*tVx(t2);
+		py1 = tP(t1)*tVy(t1);
+		py2 = tP(t2)*tVy(t2);
+		pz1 = tP(t1)*tVz(t1);
+		pz2 = tP(t2)*tVz(t2);
+
+		//Mbc=sqrt(Ebeam^2-(p1+p2)^2)
+		Dmeson.Mbc[i] = (WTotal/2)*(WTotal/2) - pow(px1+px2,2) - pow(py1+py2,2) - pow(pz1+pz2,2);
+		if (Dmeson.Mbc[i]>0) Dmeson.Mbc[i] = sqrt(Dmeson.Mbc[i]); else Dmeson.Mbc[i] = 0;
+
+		//Invariant mass of two tracks
+		//(p1+p2)^2=p1^2+p2^2+2*p1*p2cos(theta)
+		Dmeson.InvM[i] = pow((WTotal/2),2)-pow(tP(t1),2)-pow(tP(t2),2)-2*tP(t1)*tP(t2)*(tVx(t1)*tVx(t2)+tVy(t1)*tVy(t2)+tVz(t1)*tVz(t2));
+		if ( Dmeson.InvM[i]>0) Dmeson.InvM[i] = sqrt(Dmeson.InvM[i]); else Dmeson.InvM[i] = 0;
+
+		if (progpar.verbose) cout<<"mbc="<<Dmeson.Mbc[i]<<"\t"<<"InvM="<<Dmeson.InvM[i]<<endl;
+
+		Dmeson.depmkp[i] =  sqrt(mpi*mpi + tP(t1)*tP(t1)) + sqrt(mk*mk + tP(t2)*tP(t2));
+		Dmeson.deppkm[i] =  sqrt(mpi*mpi + tP(t2)*tP(t2)) + sqrt(mk*mk + tP(t1)*tP(t1));
+		Dmeson.dE[i] = (Dmeson.depmkp[i] + Dmeson.deppkm[i])/2. - WTotal/2;
+		if (progpar.verbose) cout<<"depmkp="<<Dmeson.depmkp[i]<<"\t"<<"deppkm="<<Dmeson.deppkm[i]<<"\t"<<"de="<<Dmeson.dE[i]<<endl;
+
+		Dmeson.dP[i] = tP(t1)-tP(t2);
+		Dmeson.P1[i] = tP(t1);
+		Dmeson.P2[i] = tP(t2);
+		Dmeson.chi2t1[i] = tCh2(t1);
+		Dmeson.chi2t2[i] = tCh2(t2);
+		Dmeson.nhitst1[i] = tHits(t1);
+		Dmeson.nhitst2[i] = tHits(t2);
+		if (progpar.verbose) cout<<"dP="<< Dmeson.dP[i]<<endl;
+
+		float energy_on_track1=0;
+		int cl_tr1=0;
+		for(int c1=0; c1<semc.dc_emc_ncls[t1]; c1++)                     //dc_emc_ncls[NDCH_TRK] - number clusters for track
+		{
+		    cl_tr1=semc.dc_emc_cls[t1][c1]-1;                           //dc_emc_cls[NDCH_TRK][NEMC_CLS]-1 - number of clusters on track
+		    energy_on_track1+=semc.emc_energy[cl_tr1];
+		}
+		float energy_on_track2=0;
+		int cl_tr2=0;
+		for(int c2=0; c2<semc.dc_emc_ncls[t2]; c2++)                     //dc_emc_ncls[NDCH_TRK] - number clusters for track
+		{
+		    cl_tr2=semc.dc_emc_cls[t2][c2]-1;                           //dc_emc_cls[NDCH_TRK][NEMC_CLS]-1 - number of clusters on track
+		    energy_on_track2+=semc.emc_energy[cl_tr2];
+		}
+		Dmeson.e1[i] = energy_on_track1;
+		Dmeson.e2[i] = energy_on_track2;
+		if (progpar.verbose) cout<<"Dmeson.e1[i]="<<Dmeson.e1[i]<<"\t"<<"Dmeson.e2[i]="<<Dmeson.e2[i]<<endl;
+
+		i++;
+	    }
+	}
+    }
+    Dmeson.ncomb = i;
+    Dmeson.rEv = kedrraw_.Header.Number;
+    Dmeson.Ebeam=WTotal/2;
+
+    int nclg=0;
+    for(int cl=0; cl<semc.emc_ncls; cl++)
+    {
+	if(semc.emc_dc_ntrk[cl]==0)                                               //cluster do not connected with track
+	{
+	    copy(&bclgamma[nclg],cl);                                             //ncls=semc.emc_emc_ncls[c];       ntracks=semc.emc_dc_ntrk[c];
+	    nclg++;
+	}
+    }
+
+    for(int c=0; c<semc.str_ncls; c++) {
+	copy(&bstrip,c);
+    }
+
+    if(eNumber%10==0) cout<<"Ev:"<<eNumber<<endl;
+    //==================================================================
+
+    eventTree->Fill();
+
+
+    if( progpar.process_only ) return 1;
+
     return 0;
 }
 
@@ -643,10 +602,8 @@ int main(int argc, char* argv[])
 	}
 
 	eventTree->Branch("mu",&bmu,MUBranchList);
-	//eventTree->Branch("Dmeson",&Dmeson,"numHyp/I"
-			  //":Mbc[15]/F:InvM[15]:dE[15]:dP[15]:depmkp[15]:deppkm[15]:Ebeam:rEv:chi2[50]:M[50]:P1[50]:P2[50]:P3[50]:P4[50]");
-	eventTree->Branch("Dmeson",&Dmeson,"numHyp/I:nhitst1[15]:nhitst2[15]:ncomb"
-			  ":Mbc[15]/F:InvM[15]:dE[15]:dP[15]:depmkp[15]:deppkm[15]:Ebeam:rEv:P1[15]:P2[15]:chi2t1[15]:chi2t2[15]");
+	eventTree->Branch("Dmeson",&Dmeson,"nhitst1[20]/I:nhitst2[20]:ncomb"
+			  ":Mbc[20]/F:InvM[20]:dE[20]:dP[20]:depmkp[20]:deppkm[20]:Ebeam:rEv:P1[20]:P2[20]:chi2t1[20]:chi2t2[20]:e1[20]:e2[20]:rr1[20]:rr2[20]:Zip1[20]:Zip2[20]");
 
 	eventTree->Branch("strcls",&bstrip,stripClusterBranchList);
 	eventTree->Branch("strtrk",&bstriptrack,stripTrackBranchList);
@@ -668,8 +625,8 @@ int main(int argc, char* argv[])
 	sprintf(buf,"momentum >= %5.fMeV/c",progpar.max_momentum);
 	kf_add_cut(KF_VDDC_SEL,MaxMomentumCut,buf);
 	kf_add_cut(KF_VDDC_SEL,ChargeCut,"Charge from track: (tCharge(0)+tCharge(1))!=0");
-	kf_add_cut(KF_VDDC_SEL,Chi2Cut,"tChi2<50");
-	kf_add_cut(KF_VDDC_SEL,tHitsCut,"tHits>=24");
+	kf_add_cut(KF_VDDC_SEL,Chi2Cut,"tChi2>50");
+	kf_add_cut(KF_VDDC_SEL,tHitsCut,"tHits<24");
 	sprintf(buf,"minimum number of tracks equally %d and maximum number of tracks equally %d<",progpar.min_track_number,progpar.max_track_number);
 	kf_add_cut(KF_VDDC_SEL,CutTrackNumber,buf);
 	sprintf(buf,"number of beam tracks <%d",progpar.min_beam_track_number);

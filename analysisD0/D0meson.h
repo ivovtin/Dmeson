@@ -167,8 +167,13 @@
 
     struct data10
     {
-	int numHyp,nhitst1[15],nhitst2[15],ncomb;
-	float Mbc[15],InvM[15],dE[15],dP[15],depmkp[15],deppkm[15],Ebeam,rEv,P1[15],P2[15],chi2t1[15],chi2t2[15];
+	//int numHyp,nhitst1[15],nhitst2[15],ncomb;
+	//float Mbc[15],InvM[15],dE[15],dP[15],depmkp[15],deppkm[15],Ebeam,rEv,P1[15],P2[15],chi2t1[15],chi2t2[15];
+	//int nhitst1[15],nhitst2[15],ncomb;
+	//float Mbc[15],InvM[15],dE[15],dP[15],depmkp[15],deppkm[15],Ebeam,rEv,P1[15],P2[15],chi2t1[15],chi2t2[15],Pkin1[15],Pkin2[15],
+	//Mbckin[15],dEkin[15],depmkpkin[15],deppkmkin[15],e1[15],e2[15],chi2kin[15];
+	int nhitst1[20],nhitst2[20],ncomb;
+	float Mbc[20],InvM[20],dE[20],dP[20],depmkp[20],deppkm[20],Ebeam,rEv,P1[20],P2[20],chi2t1[20],chi2t2[20],e1[20],e2[20],rr1[20],rr2[20],Zip1[20],Zip2[20];;
     };
     data10 Dmeson;
 
@@ -189,13 +194,10 @@
     //include samples Data/MC
     void chain(){
 	if(sim==0){
-	    for(int i=1; i<=232; i++)   //signal 2016+2017
-	    //for(int i=1; i<=245; i++)   //signal 2016+2017
-	    //for(int i=1; i<=116; i++)   //signal 2016
-	    //for(int i=1; i<=16; i++)     //bkg 2016
+	    //for(int i=1; i<=862; i++)   //signal 2016+2017
+	    for(int i=1; i<=820; i++)   //signal 2016+2017
 	    {
 		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/psi3770_to_D0meson_%d.root",i).Data());
-		//tt->Add(TString::Format("/spool/users/ovtin/outDmeson/psi3770_to_BkgD0meson_%d.root",i).Data());
 	    }
 	}
 	else if (sim==1){
