@@ -66,11 +66,13 @@
 #include "KcSys/fortran.h"
 
 #define PI 3.14159265358979
+#define THETA_CL_CUT 30.
+#define DIST_CL_CUT 20.
 
 using namespace std;
 
 const int Natccr=4;           //number crossing ATC counters on track
-const int Ntraks=8;           //number tracks
+const int Ntraks=12;           //number tracks
 const int Nclcr=4;            //number crossing clusters on track
 const int Nclcrg=4;
 
@@ -108,7 +110,7 @@ struct ProgramParameters {
 //5)maximal number of tracks form IP 6
 //6)minimal transverse momentum 100 МэВ/c
 //6)maximal transverse momentum 2000 МэВ/c
-//7)minimal energy of cluster 15 МэВ
+//7)minimal energy of cluster 15 GeV
 //8)sum ennergy on all clusters large 45 MeV
 //9)minimal number of clusters with energy large minimal 2
 //10)maximal number of clusters with energy large minimal 8
@@ -130,7 +132,8 @@ enum {
 	CutLongVdRecord,
         AtcEventDamageCut,
         AtcIllegalTrackCut,
-	CutTrackNumber,
+	CutTrackNumberMin,
+	CutTrackNumberMax,
 	CutBeamTrackNumber,
 	CutIPTrackNumber_min,
 	CutIPTrackNumber_max,
@@ -176,8 +179,8 @@ static struct StripTrackBranch bstriptrack;
 static struct ATCCounterBranch bcnt[Natccr][Ntraks];
 static struct ATCBranch batc;
 
-typedef struct {Int_t nhitst1[20],nhitst2[20],ncomb; Float_t Mbc[20],InvM[20],dE[20],dP[20],depmkp[20],deppkm[20],Ebeam,rEv,P1[20],P2[20],chi2t1[20],chi2t2[20],e1[20],e2[20],
-    rr1[20],rr2[20],Zip1[20],Zip2[20];} DMESON;
+typedef struct {Int_t nhitst1[50],nhitst2[50],ncomb,ncls1[50],ncls2[50]; Float_t Mbc[50],InvM[50],dE[50],dP[50],depmkp[50],deppkm[50],Ebeam,rEv,P1[50],P2[50],Pt1[50],Pt2[50],chi2t1[50],chi2t2[50],e1[50],
+    e2[50],rr1[50],rr2[50],Zip1[50],Zip2[50],ecls1[50],ecls2[50],tcls1[50],tcls2[50],pcls1[50],pcls2[50]; } DMESON;
 
 static DMESON Dmeson;
 
@@ -205,12 +208,13 @@ int pre_event_rejection()
 
 int vddc_event_rejection()
 {
-    if( eTracksAll<progpar.min_track_number )       return CutTrackNumber;
-    if( eTracksAll>progpar.max_track_number )       return CutTrackNumber;
+    if( eTracksAll<progpar.min_track_number )       return CutTrackNumberMin;
+    if( eTracksAll>progpar.max_track_number )       return CutTrackNumberMax;
     if( eTracksBeam<progpar.min_beam_track_number ) return CutBeamTrackNumber;
     if( eTracksIP<progpar.min_ip_track_number )     return CutIPTrackNumber_min;
     if( eTracksIP>progpar.max_ip_track_number )     return CutIPTrackNumber_max;
 
+    /*
     double charge=0;
     for (int t = 0; t< eTracksAll; t++) {
 	if( tPt(t)<=progpar.min_momentum )  return MinMomentumCut;
@@ -220,7 +224,7 @@ int vddc_event_rejection()
 	//charge += tCharge(t);
     }
     //if( (charge)!=0 )  return ChargeCut;   //if sum charge of tracks do not equal 0 then delete event
-
+    */
     return 0;
 }
 
@@ -274,10 +278,10 @@ int emc_event_rejection()
     }
 
     //if( tot_energy<progpar.min_total_energy )           return CutTotalEnergy;
-    if( nemc<progpar.min_cluster_number )               return CutMINClusterNumber;
-    if( nemc>progpar.max_cluster_number )               return CutMAXClusterNumber;
-    if( nlkr<progpar.min_lkrcl_number )                 return CutLkrClusterNumber;
-    if( ncsi<progpar.min_csicl_number )                 return CutCsiClusterNumber;
+    //if( nemc<progpar.min_cluster_number )               return CutMINClusterNumber;
+    //if( nemc>progpar.max_cluster_number )               return CutMAXClusterNumber;
+    //if( nlkr<progpar.min_lkrcl_number )                 return CutLkrClusterNumber;
+    //if( ncsi<progpar.min_csicl_number )                 return CutCsiClusterNumber;
 
     return 0;
 }
@@ -285,10 +289,10 @@ int emc_event_rejection()
 int atc_rejection()
 {
     //ATC raw record damaged in any way (including when DeltaT is absent or out of range)
-    if( atc_rec.eventdamage ) return AtcEventDamageCut;
+    //if( atc_rec.eventdamage ) return AtcEventDamageCut;
 
     //track determined as illegal by atcrec
-    if( atc_track.illtrack[0] ) return AtcIllegalTrackCut;
+    //if( atc_track.illtrack[0] ) return AtcIllegalTrackCut;
 
     //no counters on tracks, very strange if occurs
     //if( atc_track.ncnt_on_track[0]==0 ) return NoAtcOnTrackCut;
@@ -298,11 +302,31 @@ int atc_rejection()
 
 int mu_event_rejection()
 {
-    if( mu_next_event()>0 ) return MUCut;           //for delete cosmic events
+    //if( mu_next_event()>0 ) return MUCut;           //for delete cosmic events
 
     return 0;
 }
 
+
+// Distance of track to cluster (in x,y plane)
+double clust_dist(int t, int cl) {
+  double cx = semc.emc_x[cl];
+  double cy = semc.emc_y[cl];
+  double cz = semc.emc_z[cl];
+
+  double tx   = tXc(t);
+  double ty   = tYc(t);
+  double tr   = tRc(t);
+
+  double r = sqrt(pow(tx-cx,2) + pow(ty-cy,2)) - tr;
+
+  if (fabs(semc.emc_phi[cl]-ktrrec_.FITRAK[t]) < 90. ||
+      fabs(semc.emc_phi[cl]-ktrrec_.FITRAK[t] - 360.) < 90. ||
+      fabs(semc.emc_phi[cl]-ktrrec_.FITRAK[t] + 360.) < 90. ) {
+    return r;
+  }
+  return sqrt(cx*cx+cy*cy);
+}
 
 int analyse_event()
 {
@@ -323,7 +347,7 @@ int analyse_event()
     copy(&bvertex);
     copy(&bemc);
 
-    for(int i=0; i<20; i++){
+    for(int i=0; i<50; i++){
 	Dmeson.Mbc[i]=0;                                            //Invariant mass or beam consraint mass
 	Dmeson.InvM[i]=0;                                           //also Invariant mass
 	Dmeson.dE[i]=0;
@@ -342,6 +366,14 @@ int analyse_event()
 	Dmeson.rr2[i] = 0;
 	Dmeson.Zip1[i] = 0;
 	Dmeson.Zip2[i] = 0;
+	Dmeson.ncls1[i] = 0;
+	Dmeson.ncls2[i] = 0;
+	Dmeson.ecls1[i] = 0;
+	Dmeson.ecls2[i] = 0;
+	Dmeson.tcls1[i] = 0;
+	Dmeson.tcls2[i] = 0;
+	Dmeson.pcls1[i] = 0;
+	Dmeson.pcls2[i] = 0;
     }
     Dmeson.ncomb = 0;
 
@@ -373,22 +405,36 @@ int analyse_event()
 
 	for (int t2 = 0; t2 < eTracksAll; t2++)                              //cycle for second track
 	{
-	    double xx1=tX0IP(t1)*tX0IP(t1);
-	    double yy1=tY0IP(t1)*tY0IP(t1);
-	    double rr1=sqrt(xx1+yy1);
-	    double xx2=tX0IP(t2)*tX0IP(t2);
-	    double yy2=tY0IP(t2)*tY0IP(t2);
-	    double rr2=sqrt(xx2+yy2);
-
-	    if (progpar.verbose) cout<<"rr1="<<rr1<<"\t"<<"fabs(tZ0IP(t1))="<<fabs(tZ0IP(t1))<<endl;
-	    if (progpar.verbose) cout<<"rr2="<<rr2<<"\t"<<"fabs(tZ0IP(t2))="<<fabs(tZ0IP(t2))<<endl;
-
-	    if( tCharge(t1)<0 && tCharge(t2)>0 && rr1<8 && fabs(tZ0IP(t1))<40 && rr2<8 && fabs(tZ0IP(t2))<40 )       		         //condition for part1: K-, part2: pi+    (D0->K-pi+)
+	    if( tCharge(t1)==-1 && tCharge(t2)==1 )       	 //condition for part1: K-, part2: pi+    (D0->K-pi+)
 	    {
+		double xx1=tX0IP(t1)*tX0IP(t1);
+		double yy1=tY0IP(t1)*tY0IP(t1);
+		double rr1=sqrt(xx1+yy1);
+		double xx2=tX0IP(t2)*tX0IP(t2);
+		double yy2=tY0IP(t2)*tY0IP(t2);
+		double rr2=sqrt(xx2+yy2);
+
+		if (progpar.verbose) cout<<"rr1="<<rr1<<"\t"<<"fabs(tZ0IP(t1))="<<fabs(tZ0IP(t1))<<endl;
+		if (progpar.verbose) cout<<"rr2="<<rr2<<"\t"<<"fabs(tZ0IP(t2))="<<fabs(tZ0IP(t2))<<endl;
+
+		if ( fabs(tZ0IP(t1))>40. ) continue;
+		if ( fabs(tZ0IP(t2))>40. ) continue;
+		if ( rr1>8 ) continue;
+		if ( rr2>8 ) continue;
+
+		if( tPt(t1)<=progpar.min_momentum || tPt(t1)>=progpar.max_momentum )  continue;
+		if( tCh2(t1)>progpar.max_tchi2 )  continue;
+		if( tHits(t1)<progpar.min_Nhits )  continue;
+
+		if( tPt(t2)<=progpar.min_momentum || tPt(t2)>=progpar.max_momentum )  continue;
+		if( tCh2(t2)>progpar.max_tchi2 )  continue;
+		if( tHits(t2)<progpar.min_Nhits )  continue;
+
 		Dmeson.rr1[i] = rr1;
 		Dmeson.rr2[i] = rr2;
 		Dmeson.Zip1[i] = tZ0IP(t1);
 		Dmeson.Zip2[i] = tZ0IP(t2);
+
 		if (progpar.verbose) cout<<"i="<< i<<endl;
 		if (progpar.verbose) cout<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"Ebeam="<<WTotal/2<<"\t"<<"t1="<<t1<<"\t"<<"t2="<<t2<<"\t"<<"tCharge(t1)="<<tCharge(t1)<<"\t"<<"tCharge(t2)="<<tCharge(t2)<<endl;
 		if (progpar.verbose) cout<<"P(t1)="<<tP(t1)<<"\t"<<"P(t2)="<<tP(t2)<<"\t"<<"tHits(t1)="<<tHits(t1)<<"\t"<<"tHits(t2)="<<tHits(t2)<<"\t"<<"tCh2(t1)="<<tCh2(t1)<<"\t"<<"tCh2(t2)="<<tCh2(t2)<<endl;
@@ -420,6 +466,8 @@ int analyse_event()
 		Dmeson.dP[i] = tP(t1)-tP(t2);
 		Dmeson.P1[i] = tP(t1);
 		Dmeson.P2[i] = tP(t2);
+		Dmeson.Pt1[i] = tPt(t1);
+		Dmeson.Pt2[i] = tPt(t2);
 		Dmeson.chi2t1[i] = tCh2(t1);
 		Dmeson.chi2t2[i] = tCh2(t2);
 		Dmeson.nhitst1[i] = tHits(t1);
@@ -443,6 +491,26 @@ int analyse_event()
 		Dmeson.e1[i] = energy_on_track1;
 		Dmeson.e2[i] = energy_on_track2;
 		if (progpar.verbose) cout<<"Dmeson.e1[i]="<<Dmeson.e1[i]<<"\t"<<"Dmeson.e2[i]="<<Dmeson.e2[i]<<endl;
+
+
+		for (int cl=0; cl<semc.emc_ncls; cl++) {
+
+		    if (fabs(semc.emc_theta[cl]-ktrrec_.TETRAK[t1]) < THETA_CL_CUT &&
+			fabs(clust_dist(t1, cl)) < DIST_CL_CUT) {
+			Dmeson.ecls1[i] += semc.emc_energy[cl];
+			Dmeson.tcls1[i] = semc.emc_theta[cl]-ktrrec_.TETRAK[t1];
+			Dmeson.pcls1[i] = clust_dist(t1, cl);
+			Dmeson.ncls1[i]++;
+		    }
+
+		    if (fabs(semc.emc_theta[cl]-ktrrec_.TETRAK[t2]) < THETA_CL_CUT &&
+			fabs(clust_dist(t2, cl)) < DIST_CL_CUT) {
+			Dmeson.ecls2[i] += semc.emc_energy[cl];
+			Dmeson.tcls2[i] = semc.emc_theta[cl]-ktrrec_.TETRAK[t2];
+			Dmeson.pcls2[i] = clust_dist(t2, cl);
+			Dmeson.ncls2[i]++;
+		    }
+		}
 
 		i++;
 	    }
@@ -575,35 +643,36 @@ int main(int argc, char* argv[])
 	eventTree->Branch("atcev",&batc,atcBranchList);
 
 	for(int i=0; i<Ntraks; i++) {
-	    char branchname[10];
+	    char branchname[20];
 	    sprintf(branchname,"t%d",i);
 	    TBranch* b1=eventTree->Branch(branchname,&btrack[i],trackBranchList);
 	    for(int ii=0; ii<Natccr; ii++) {
-		char branchname2[10];
+		char branchname2[20];
 		sprintf(branchname2,"t%datccr%d",i,ii);
 		eventTree->Branch(branchname2,&bcnt[ii][i],atcCounterBranchList);
 	    }
 	    for (int ii=0; ii<Nclcr; ii++)
 	    {
-		char clastername[10];
+		char clastername[20];
 		sprintf(clastername,"t%dc%d",i,ii);
 		eventTree->Branch(clastername,&bcluster[ii][i],towerClusterBranchList);
 	    }
-	    char tofname[10];
+	    char tofname[20];
 	    sprintf(tofname,"t%dtof",i);
 	    eventTree->Branch(tofname,&btof[i],ToFBranchList);
 	}
 
 	for (int ii=0; ii<Nclcrg; ii++)
 	{
-	    char clgammaname[10];
+	    char clgammaname[20];
 	    sprintf(clgammaname,"clgamma%d",ii);
 	    eventTree->Branch(clgammaname,&bclgamma[ii],towerClusterBranchList);
 	}
 
 	eventTree->Branch("mu",&bmu,MUBranchList);
-	eventTree->Branch("Dmeson",&Dmeson,"nhitst1[20]/I:nhitst2[20]:ncomb"
-			  ":Mbc[20]/F:InvM[20]:dE[20]:dP[20]:depmkp[20]:deppkm[20]:Ebeam:rEv:P1[20]:P2[20]:chi2t1[20]:chi2t2[20]:e1[20]:e2[20]:rr1[20]:rr2[20]:Zip1[20]:Zip2[20]");
+	eventTree->Branch("Dmeson",&Dmeson,"nhitst1[50]/I:nhitst2[50]:ncomb:ncls1[50]:ncls2[50]"
+			  ":Mbc[50]/F:InvM[50]:dE[50]:dP[50]:depmkp[50]:deppkm[50]:Ebeam:rEv:P1[50]:P2[50]:Pt1[50]:Pt2[50]:chi2t1[50]:chi2t2[50]:e1[50]"
+			  ":e2[50]:rr1[50]:rr2[50]:Zip1[50]:Zip2[50]:ecls1[50]:ecls2[50]:tcls1[50]:tcls2[50]:pcls1[50]:pcls2[50]");
 
 	eventTree->Branch("strcls",&bstrip,stripClusterBranchList);
 	eventTree->Branch("strtrk",&bstriptrack,stripTrackBranchList);
@@ -627,8 +696,10 @@ int main(int argc, char* argv[])
 	kf_add_cut(KF_VDDC_SEL,ChargeCut,"Charge from track: (tCharge(0)+tCharge(1))!=0");
 	kf_add_cut(KF_VDDC_SEL,Chi2Cut,"tChi2>50");
 	kf_add_cut(KF_VDDC_SEL,tHitsCut,"tHits<24");
-	sprintf(buf,"minimum number of tracks equally %d and maximum number of tracks equally %d<",progpar.min_track_number,progpar.max_track_number);
-	kf_add_cut(KF_VDDC_SEL,CutTrackNumber,buf);
+	sprintf(buf,"minimum number of tracks equally %d<",progpar.min_track_number);
+	kf_add_cut(KF_VDDC_SEL,CutTrackNumberMin,buf);
+	sprintf(buf,"maximum number of tracks equally %d<",progpar.max_track_number);
+	kf_add_cut(KF_VDDC_SEL,CutTrackNumberMax,buf);
 	sprintf(buf,"number of beam tracks <%d",progpar.min_beam_track_number);
 	kf_add_cut(KF_VDDC_SEL,CutBeamTrackNumber,buf);
 	sprintf(buf,"number of IP tracks <%d",progpar.min_ip_track_number);
@@ -666,7 +737,7 @@ int main(int argc, char* argv[])
 
 	//Register an analysis routine
 	kf_register_analysis(analyse_event);
-        //if(verbose)cout<<"analyse_event="<<analyse_event<<endl;
+        if(progpar.verbose) cout<<"analyse_event="<<analyse_event<<endl;
 
 	//Do not reconstruct, read reconstruction records from file
 	kf_reco_from_file(progpar.read_reco);
@@ -679,9 +750,7 @@ int main(int argc, char* argv[])
 	benchmark->Start("test");
 
 	//Call analysis job
-	cout<<"NEvents="<<progpar.NEvents<<"\t"<<"argv[optind]="<<argv[optind]<<"\t"<<"&argv[optind]="<<&argv[optind]<<"\t"<<"argc-optind="<<argc-optind<<endl;               //argv[optind]:/space/runs/daq021949.nat.bz2
-
-//	kf_process(argc-optind,&argv[optind],0);
+	if (progpar.verbose) cout<<"NEvents="<<progpar.NEvents<<"\t"<<"argv[optind]="<<argv[optind]<<"\t"<<"&argv[optind]="<<&argv[optind]<<"\t"<<"argc-optind="<<argc-optind<<endl;               //argv[optind]:/space/runs/daq021949.nat.bz2
 	kf_process(argc-optind,&argv[optind],progpar.NEvents);             //установка ограничения на число обрабатываемых событий
 
 	benchmark->Show("test");
