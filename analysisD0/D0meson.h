@@ -89,6 +89,11 @@
     data2 t3;
     data2 t4;
     data2 t5;
+    data2 t6;
+    data2 t7;
+    data2 t8;
+    data2 t9;
+    data2 t10;
 
     //TOF system
     struct data3
@@ -134,6 +139,18 @@
     data5 t5c0;
     data5 t5c1;
     data5 t5c2;
+    data5 t6c0;
+    data5 t6c1;
+    data5 t6c2;
+    data5 t7c0;
+    data5 t7c1;
+    data5 t7c2;
+    data5 t8c0;
+    data5 t8c1;
+    data5 t8c2;
+    data5 t9c0;
+    data5 t9c1;
+    data5 t9c2;
     data5 clgamma0;
     data5 clgamma1;
     data5 clgamma2;
@@ -167,13 +184,9 @@
 
     struct data10
     {
-	//int numHyp,nhitst1[15],nhitst2[15],ncomb;
-	//float Mbc[15],InvM[15],dE[15],dP[15],depmkp[15],deppkm[15],Ebeam,rEv,P1[15],P2[15],chi2t1[15],chi2t2[15];
-	//int nhitst1[15],nhitst2[15],ncomb;
-	//float Mbc[15],InvM[15],dE[15],dP[15],depmkp[15],deppkm[15],Ebeam,rEv,P1[15],P2[15],chi2t1[15],chi2t2[15],Pkin1[15],Pkin2[15],
-	//Mbckin[15],dEkin[15],depmkpkin[15],deppkmkin[15],e1[15],e2[15],chi2kin[15];
-	int nhitst1[20],nhitst2[20],ncomb;
-	float Mbc[20],InvM[20],dE[20],dP[20],depmkp[20],deppkm[20],Ebeam,rEv,P1[20],P2[20],chi2t1[20],chi2t2[20],e1[20],e2[20],rr1[20],rr2[20],Zip1[20],Zip2[20];;
+	int  nhitst1[20],nhitst2[20],ncomb,ncls1[20],ncls2[20];
+	float Mbc[20],InvM[20],dE[20],dP[20],depmkp[20],deppkm[20],Ebeam,rEv,P1[20],P2[20],Pt1[20],Pt2[20],chi2t1[20],chi2t2[20],e1[20],e2[20],rr1[20],rr2[20],Zip1[20],
+	    Zip2[20],ecls1[20],ecls2[20],tcls1[20],tcls2[20],pcls1[20],pcls2[20];
     };
     data10 Dmeson;
 
@@ -190,15 +203,22 @@
 
     int sim;
     TChain *tt=new TChain("et");
-
     //include samples Data/MC
     void chain(){
 	if(sim==0){
 	    //for(int i=1; i<=862; i++)   //signal 2016+2017
-	    for(int i=1; i<=820; i++)   //signal 2016+2017
+	    for(int i=1; i<=350; i++)   //signal 2016+2017
+	    //for(int i=1; i<=5; i++)   //signal 2016+2017
 	    {
 		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/psi3770_to_D0meson_%d.root",i).Data());
+		//tt->Add(TString::Format("/spool/users/ovtin/outDmeson/runs2016-17_bestres/psi3770_to_D0meson_%d.root",i).Data());
 	    }
+            /*
+	    for(int i=1; i<=606; i++)   //signal 2016+2017
+	    {
+		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/runs2005/psi3770_to_D0meson_%d.root",i).Data());
+	    }
+            */
 	}
 	else if (sim==1){
 	    for(int i=1; i<=20; i++)
@@ -286,6 +306,23 @@
 	tt->SetBranchStatus("t5c0",1);
 	tt->SetBranchStatus("t5c1",1);
 	tt->SetBranchStatus("t5c2",1);
+	tt->SetBranchStatus("t6",1);
+	tt->SetBranchStatus("t6c0",1);
+	tt->SetBranchStatus("t6c1",1);
+	tt->SetBranchStatus("t6c2",1);
+	tt->SetBranchStatus("t7",1);
+	tt->SetBranchStatus("t7c0",1);
+	tt->SetBranchStatus("t7c1",1);
+	tt->SetBranchStatus("t7c2",1);
+	tt->SetBranchStatus("t8",1);
+	tt->SetBranchStatus("t8c0",1);
+	tt->SetBranchStatus("t8c1",1);
+	tt->SetBranchStatus("t8c2",1);
+	tt->SetBranchStatus("t9",1);
+	tt->SetBranchStatus("t9c0",1);
+	tt->SetBranchStatus("t9c1",1);
+	tt->SetBranchStatus("t9c2",1);
+
 	tt->SetBranchStatus("clgamma0",1);
 	tt->SetBranchStatus("clgamma1",1);
 	tt->SetBranchStatus("clgamma2",1);
@@ -350,6 +387,23 @@
 	tt->SetBranchAddress("t5c0",&t5c0);
 	tt->SetBranchAddress("t5c1",&t5c1);
 	tt->SetBranchAddress("t5c2",&t5c2);
+	tt->SetBranchAddress("t6",&t6);
+	tt->SetBranchAddress("t6c0",&t6c0);
+	tt->SetBranchAddress("t6c1",&t6c1);
+	tt->SetBranchAddress("t6c2",&t6c2);
+	tt->SetBranchAddress("t7",&t7);
+	tt->SetBranchAddress("t7c0",&t7c0);
+	tt->SetBranchAddress("t7c1",&t7c1);
+	tt->SetBranchAddress("t7c2",&t7c2);
+	tt->SetBranchAddress("t8",&t8);
+	tt->SetBranchAddress("t8c0",&t8c0);
+	tt->SetBranchAddress("t8c1",&t8c1);
+	tt->SetBranchAddress("t8c2",&t8c2);
+	tt->SetBranchAddress("t9",&t9);
+	tt->SetBranchAddress("t9c0",&t9c0);
+	tt->SetBranchAddress("t9c1",&t9c1);
+	tt->SetBranchAddress("t9c2",&t9c2);
+
 	//tt->SetBranchAddress("t3tof",&t3tof);
 	tt->SetBranchAddress("clgamma0",&clgamma0);
 	tt->SetBranchAddress("clgamma1",&clgamma1);
@@ -416,8 +470,8 @@
 
     int kk; int kk1; int kk2; int ii1; int ii2;
 
-    int q[6], nhits[6], nhitsxy[6], nvec[6];
-    float p[6], chi2[6], theta[6], phi[6];
+    int nhitsxy[10], nvec[10];
+    float theta[10], phi[10];
 
     float n00, n01, n02, n03, n04;
     float n10, n11, n12, n13, n14;

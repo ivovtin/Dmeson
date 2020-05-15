@@ -53,6 +53,7 @@ int main(int argc, char* argv[])
     if( sim==0 ){
 	fnameout=TString::Format("res_%d_%d_%d_%d_exp_Dmeson.root",first_cnt,end_cnt,region,max_pt).Data();
         KEDR = "/home/ovtin/public_html/outDmeson/data/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/data2005/";
     }
     else if (sim==1)
     {
@@ -106,12 +107,23 @@ int main(int argc, char* argv[])
     TH2D *h2PpiktodEkpi=new TH2D("Ppik:dekmpip", "Ppik:dekmpip", 200,600,1100,200,-250,250);
     TH2D *h2MbcdE=new TH2D("M_{bc}:#Delta E", "M_{bc}:#Delta E", 200,1700,1900,200,-300,300);
     TH2D *h2MbcdP=new TH2D("M_{bc}:#Delta P", "M_{bc}:#Delta P", 200,-500,500,200,1825,1890);
+    TH1F* hDncomb=new TH1F("Dmseon.ncomb","Dmseon.ncomb",20,0.,20.);
+
+
+    TH1F* hnclst1=new TH1F("nclst1","nclst1",6,-0.5,5.5);
+    TH1F* hnclst2=new TH1F("nclst2","nclst2",6,-0.5,5.5);
+    TH1F* heclst1=new TH1F("eclst1","eclst1",100,0.,2500.);
+    TH1F* heclst2=new TH1F("eclst2","eclst2",100,0.,2500.);
+    TH1F* htclst1=new TH1F("tclst1","tclst1",100,-30.,30.);
+    TH1F* htclst2=new TH1F("tclst2","tclst2",100,-30.,30.);
+    TH1F* hpclst1=new TH1F("pclst1","pclst1",100,-20.,20.);
+    TH1F* hpclst2=new TH1F("pclst2","pclst2",100,-20.,20.);
 
     TH1F* hvrtntrk=new TH1F("vrt.ntrk","vrt.ntrk",10,-0.5,9.5);
     TH1F* hvrtnip=new TH1F("vrt.nip","vrt.nip",10,-0.5,9.5);
     TH1F* hvrtnbeam=new TH1F("vrt.nbeam","vrt.nbeam",10,-0.5,9.5);
 
-    TH1F* hmom=new TH1F("Momentum","Momentum",100,0.,3000.);
+    TH1F* hmom=new TH1F("Pt","Pt",100,0.,3000.);
     TH1F* htchi2=new TH1F("tchi2","tchi2",100,0.,100.);
     TH1F* htnhitsxy=new TH1F("tnhitsxy","tnhitsxy",50,0.,50.);
     TH1F* htnhits=new TH1F("tnhits","tnhits",80,0.,80.);
@@ -154,89 +166,47 @@ int main(int argc, char* argv[])
 
 	if( (k %100000)==0 )cout<<k<<endl;
 
-        q[0]=0; q[1]=0; q[2]=0; q[3]=0; q[4]=0; q[5]=0;
-        q[0]=t0.q; q[1]=t1.q; q[2]=t2.q; q[3]=t3.q; q[4]=t4.q; q[5]=t5.q;
-        p[0]=0; p[1]=0; p[2]=0; p[3]=0; p[4]=0; p[5]=0;
-        p[0]=t0.p; p[1]=t1.p; p[2]=t2.p; p[3]=t3.p; p[4]=t4.p; p[5]=t5.p;
-        chi2[0]=0; chi2[1]=0; chi2[2]=0; chi2[3]=0; chi2[4]=0; chi2[5]=0;
-        chi2[0]=t0.chi2; chi2[1]=t1.chi2; chi2[2]=t2.chi2; chi2[3]=t3.chi2; chi2[4]=t4.chi2; chi2[5]=t5.chi2;
         theta[0]=0; theta[1]=0; theta[2]=0; theta[3]=0; theta[4]=0; theta[5]=0;
         theta[0]=t0.theta; theta[1]=t1.theta; theta[2]=t2.theta; theta[3]=t3.theta; theta[4]=t4.theta; theta[5]=t5.theta;
         phi[0]=0; phi[1]=0; phi[2]=0; phi[3]=0; phi[4]=0; phi[5]=0;
         phi[0]=t0.phi; phi[1]=t1.phi; phi[2]=t2.phi; phi[3]=t3.phi; phi[4]=t4.phi; phi[5]=t5.phi;
-        nhits[0]=0; nhits[1]=0; nhits[2]=0; nhits[3]=0; nhits[4]=0; nhits[5]=0;
-        nhits[0]=t0.nhits; nhits[1]=t1.nhits; nhits[2]=t2.nhits; nhits[3]=t3.nhits; nhits[4]=t4.nhits; nhits[5]=t5.nhits;
         nhitsxy[0]=0; nhitsxy[1]=0; nhitsxy[2]=0; nhitsxy[3]=0; nhitsxy[4]=0; nhitsxy[5]=0;
         nhitsxy[0]=t0.nhitsxy; nhitsxy[1]=t1.nhitsxy; nhitsxy[2]=t2.nhitsxy; nhitsxy[3]=t3.nhitsxy; nhitsxy[4]=t4.nhitsxy; nhitsxy[5]=t5.nhitsxy;
         nvec[0]=0; nvec[1]=0; nvec[2]=0; nvec[3]=0; nvec[4]=0; nvec[5]=0;
         nvec[0]=t0.nvec; nvec[1]=t1.nvec; nvec[2]=t2.nvec; nvec[3]=t3.nvec; nvec[4]=t4.nvec; nvec[5]=t5.nvec;
 
-	float en0[3], en1[3], en2[3], en3[3], en4[3], en5[3], engamma[4];
-	en0[0]=t0c0.e; en0[1]=t0c1.e; en0[2]=t0c2.e;      //energy clasters 0,1,2 on first track
-	en1[0]=t1c0.e; en1[1]=t1c1.e; en1[2]=t1c2.e;      //energy clasters 0,1,2 on second track
-	en2[0]=t2c0.e; en2[1]=t2c1.e; en2[2]=t2c2.e;      //energy clasters 0,1,2 on third track
-	en3[0]=t3c0.e; en3[1]=t3c1.e; en3[2]=t3c2.e;      //energy clasters 0,1,2 on four track
-	en4[0]=t4c0.e; en4[1]=t4c1.e; en4[2]=t4c2.e;      //energy clasters 0,1,2 on five track
-	en5[0]=t5c0.e; en5[1]=t5c1.e; en5[2]=t5c2.e;      //energy clasters 0,1,2 on six track
-	engamma[0]=clgamma0.e; engamma[1]=clgamma1.e; engamma[2]=clgamma2.e; engamma[3]=clgamma3.e;  //energy clasters 0,1,2,3 from Photons
-	float e[6], egamma=0;
-        e[0]=0, e[1]=0, e[2]=0, e[3]=0, e[4]=0, e[5]=0;
-
-	for(int i=0; i<t0c0.c; i++){
-	    e[0]+=en0[i];                                   //sum energy from clasters on first track
-	}
-	for(int i=0; i<t1c0.c; i++){
-	    e[1]+=en1[i];                                   //sum energy from clasters on second track
-	}
-	for(int i=0; i<t2c0.c; i++){
-	    e[2]+=en2[i];                                   //sum energy from clasters on thrird track
-	}
-	for(int i=0; i<t3c0.c; i++){
-	    e[3]+=en3[i];                                   //sum energy from clasters on four track
-	}
-	for(int i=0; i<t4c0.c; i++){
-	    e[4]+=en4[i];                                   //sum energy from clasters on five track
-	}
-	for(int i=0; i<t5c0.c; i++){
-	    e[5]+=en5[i];                                   //sum energy from clasters on six track
-	}
-	for(int i=0; i<(emc.ncls-t0.emc_ncls-t1.emc_ncls); i++)
-	{
-	    egamma+=engamma[i];                          //sum energy from clasters on Photon
-	}
-
         //Apply cut conditions - determine in cuts.h
 	if(
-	   vrt.ntrk>=ntrk && emc.ncls>=min_tot_ncls && emc.ncls<=max_tot_ncls && mu.nhits<=maxmunhits
-           //&& e[0]/p[0]>0 && e[1]/p[1]>0
-	   //&& e[0]+e[1]<1000
-	   && emc.energy<3300
+	   //vrt.ntrk>=ntrk && emc.ncls>=min_tot_ncls && emc.ncls<=max_tot_ncls && mu.nhits<=maxmunhits
+	   vrt.ntrk>=ntrk && mu.nhits<=maxmunhits
+	   //&& emc.energy<3300
+           //&& vrt.theta2t<174 && vrt.phi2t<174
            //&& (theta[0]>46 && theta[1]>46)
            //&& (theta[0]<135 && theta[1]<135)
 	  )
 	{
 	    Nselect++;
 	    Result<< ev.run <<"\t"<< ev.evdaq << endl;
-	    if(verbose2) cout<<"ev.run="<<ev.run<<"\t"<<"ev.event="<<ev.event<<"\t"<<"ev.evdaq="<<ev.evdaq<<"\t"<<"t0.t="<<t0.t<<"\t"<<"t1.t="<<t1.t<<"\t"<<"t2.t="<<t2.t<<"\t"<<"t3.t="<<t3.t<<endl;
-	    if(verbose1)cout<<t0c0.theta<<"\t"<<t1c0.theta<<"\t"<<clgamma0.theta<<"\t"<<clgamma1.theta<<"\t"<<(clgamma0.theta+clgamma1.theta)/2<<"\t"<<clgamma0.theta-clgamma1.theta<<"\t"<<clgamma0.vx*clgamma1.vx+clgamma0.vy*clgamma1.vy+clgamma0.vz*clgamma1.vz<<endl;
+	    if(verbose) cout<<"<<<<<<<<<<<<<<<<<<<<<<<<<<< Next event >>>>>>>>>>>>>>>>>>>>>>>>>>>>"<<endl;
+	    if(verbose) cout<<"ev.run="<<ev.run<<"\t"<<"ev.event="<<ev.event<<"\t"<<"ev.evdaq="<<ev.evdaq<<endl;
 
-	    if(verbose2) cout<<"Dmeson.ncomb="<<Dmeson.ncomb<<"\t"<<endl;
+	    if(verbose) cout<<"Dmeson.ncomb="<<Dmeson.ncomb<<"\t"<<endl;
+	    hDncomb->Fill(Dmeson.ncomb);
 
 	    for(int i=0; i<Dmeson.ncomb; i++){
 		if(
-		   Dmeson.P1[i]>min_pt && Dmeson.P1[i]<max_pt && Dmeson.P2[i]>min_pt && Dmeson.P2[i]<max_pt
-		   && Dmeson.chi2t1[i]<max_chi2 && Dmeson.chi2t2[i]<max_chi2
-		   && Dmeson.nhitst1[i]>min_nhits && Dmeson.nhitst2[i]>min_nhits
-		   && Dmeson.Mbc[i]>min_Mbc && Dmeson.Mbc[i]<max_Mbc
-		   && Dmeson.dE[i]>min_dE && Dmeson.dE[i]< max_dE
-		   //&& (Dmeson.e1[i]+Dmeson.e2[i])<2000
-		   && (Dmeson.e1[i]/Dmeson.P1[i]>0.35 || Dmeson.e2[i]/Dmeson.P2[i]>0.35)
-		   //&& (Dmeson.e1[i]/Dmeson.P1[i]<1.35 || Dmeson.e2[i]/Dmeson.P2[i]<1.35)
-		   && Dmeson.rr1[i]<3 && Dmeson.rr2[i]<3 && fabs(Dmeson.Zip1[i])<20 && fabs(Dmeson.Zip2[i])<20
-                   //&& fabs(Dmeson.dP[i])<100
+		   Dmeson.Pt1[i]>min_pt && Dmeson.Pt1[i]<max_pt && Dmeson.Pt2[i]>min_pt && Dmeson.Pt2[i]<max_pt
+		   //&& Dmeson.chi2t1[i]<max_chi2 && Dmeson.chi2t2[i]<max_chi2
+		   //&& Dmeson.nhitst1[i]>min_nhits && Dmeson.nhitst2[i]>min_nhits
+		   //&& Dmeson.nhitst1[i]<max_nhits && Dmeson.nhitst2[i]<max_nhits
+		   //&& Dmeson.Mbc[i]>min_Mbc && Dmeson.Mbc[i]<max_Mbc
+		   //&& Dmeson.dE[i]>min_dE && Dmeson.dE[i]< max_dE
+		   //&& Dmeson.rr1[i]<6 && Dmeson.rr2[i]<6 && fabs(Dmeson.Zip1[i])<20 && fabs(Dmeson.Zip2[i])<20
 		  )
 		{
-                    /*
+                    //if( Dmeson.ecls1[i]>1000 || Dmeson.ecls2[i]>1000 ) continue;
+
+		    /*
                     cout<<"emc.energy="<<emc.energy<<"\t"<<"P1="<<Dmeson.P1[i]<<"\t"<<"P2="<<Dmeson.P2[i]<<endl;
 		    cout<<"e1/P1="<<Dmeson.e1[i]/Dmeson.P1[i]<<"\t"<<"e2/P2="<<Dmeson.e2[i]/Dmeson.P2[i]<<endl;
                     cout<<"(e1[i]+e2[i])="<<Dmeson.e1[i]+Dmeson.e2[i]<<endl;
@@ -245,6 +215,23 @@ int main(int argc, char* argv[])
 		    cout<<"fabs(fabs(Dmeson.Zip1[i])-fabs(Dmeson.Zip2[i]))="<<fabs(fabs(Dmeson.Zip1[i])-fabs(Dmeson.Zip2[i]))<<endl;
                     */
 		    //if(q[i]<0) h2PpiktodEkpi->Fill( p[i], (Dmeson.deppkm[i]-Dmeson.Ebeam) );
+
+		    hEbeam->Fill(Dmeson.Ebeam);
+		    htnhits->Fill(Dmeson.nhitst1[i]);
+		    htnhits->Fill(Dmeson.nhitst2[i]);
+		    hmom->Fill(Dmeson.Pt1[i]);
+		    hmom->Fill(Dmeson.Pt2[i]);
+		    htchi2->Fill(Dmeson.chi2t1[i]);
+		    htchi2->Fill(Dmeson.chi2t2[i]);
+
+                    hnclst1->Fill(Dmeson.ncls1[i]);
+		    hnclst2->Fill(Dmeson.ncls2[i]);
+		    heclst1->Fill(Dmeson.ecls1[i]);
+		    heclst2->Fill(Dmeson.ecls2[i]);
+		    htclst1->Fill(Dmeson.tcls1[i]);
+		    htclst2->Fill(Dmeson.tcls2[i]);
+		    hpclst1->Fill(Dmeson.pcls1[i]);
+		    hpclst2->Fill(Dmeson.pcls2[i]);
 
                     //===
 		    hvrtntrk->Fill(vrt.ntrk);
@@ -259,29 +246,23 @@ int main(int argc, char* argv[])
 		    htofdchits->Fill(t0tof.dchits);
 		    htofnamps->Fill(t0tof.namps);
 		    htofntimes->Fill(t0tof.ntimes);
-		    hEbeam->Fill(Dmeson.Ebeam);
 
 		    for(int k=0; k<vrt.ntrk; k++){
-			if( p[k]>min_pt && p[k]<max_pt && chi2[k]<max_chi2 && nhits[k]>min_nhits )
-			{
-			    hmom->Fill(p[k]);
-			    htchi2->Fill(chi2[k]);
-			    htheta->Fill(theta[k]);
-			    hphi->Fill(phi[k]);
-			    htnhits->Fill(nhits[k]);
-			    htnhitsxy->Fill(nhitsxy[k]);
-			    htnvec->Fill(nvec[k]);
-			    hcostheta->Fill(cos(pi*theta[k]/180));
-			    hcosphi->Fill(cos(pi*phi[k]/180));
-			}
+			htheta->Fill(theta[k]);
+			hphi->Fill(phi[k]);
+			htnhitsxy->Fill(nhitsxy[k]);
+			htnvec->Fill(nvec[k]);
+			hcostheta->Fill(cos(pi*theta[k]/180));
+			hcosphi->Fill(cos(pi*phi[k]/180));
 		    }
-                    //===
+		    //===
 
-		    h2PpiktodEkpi->Fill( p[i], (Dmeson.deppkm[i]-Dmeson.Ebeam) );
+		    h2PpiktodEkpi->Fill( Dmeson.P1[i], (Dmeson.deppkm[i]-Dmeson.Ebeam) );
 
 		    hep->Fill(Dmeson.e1[i]/Dmeson.P1[i]);
 		    hep->Fill(Dmeson.e2[i]/Dmeson.P2[i]);
-		    henass->Fill(Dmeson.e1[i]+Dmeson.e2[i]);
+		    henass->Fill(Dmeson.e1[i]);
+		    henass->Fill(Dmeson.e2[i]);
 
 		    hrr->Fill(Dmeson.rr1[i]);
 		    hrr->Fill(Dmeson.rr2[i]);
@@ -290,17 +271,15 @@ int main(int argc, char* argv[])
 
 		    hmbc->Fill(Dmeson.Mbc[i]);
 
-		    if (Dmeson.dE[i]>-100 && Dmeson.dE[i]< 100 )
-		    {
+		    //if (Dmeson.dE[i]>-100 && Dmeson.dE[i]< 100 )
+		    //{
 			hmbc_zoom->Fill(Dmeson.Mbc[i]);
-			//hmbc_zoom->Fill(Dmeson.Mbckin[i]);
-		    }
-		    if( Dmeson.Mbc[i]>1855 && Dmeson.Mbc[i]<1875  )
-		    {
+		    //}
+		    //if( Dmeson.Mbc[i]>1855 && Dmeson.Mbc[i]<1875  )
+		    //{
 			hdE->Fill(Dmeson.dE[i]);
 			hdE_zoom->Fill(Dmeson.dE[i]);
-			//hdE_zoom->Fill(Dmeson.dEkin[i]);
-		    }
+		    //}
 		    hdepmkp->Fill(Dmeson.depmkp[i]-Dmeson.Ebeam);
 		    hdeppkm->Fill(Dmeson.deppkm[i]-Dmeson.Ebeam);
 		    hdiffepmkpeppkm->Fill((Dmeson.depmkp[i]-Dmeson.Ebeam)-(Dmeson.deppkm[i]-Dmeson.Ebeam));
@@ -308,7 +287,7 @@ int main(int argc, char* argv[])
 		    hdP->Fill(Dmeson.dP[i]);
 		    h2MbcdE->Fill(Dmeson.Mbc[i], Dmeson.dE[i]);
 		    h2MbcdP->Fill(Dmeson.dP[i], Dmeson.Mbc[i]);
-		    if(verbose2) cout<<i<<"\t"<<"vrt.ntrk="<<vrt.ntrk<<"\t"<<"Dmeson.Mbc="<<Dmeson.Mbc[i]<<"\t"<<"Dmeson.dE="<<Dmeson.dE[i]<<"\t"<<endl;
+		    if(verbose) cout<<i<<"\t"<<"vrt.ntrk="<<vrt.ntrk<<"\t"<<"Dmeson.Mbc="<<Dmeson.Mbc[i]<<"\t"<<"Dmeson.dE="<<Dmeson.dE[i]<<"\t"<<endl;
 		}
 	    }
 
@@ -317,7 +296,7 @@ int main(int argc, char* argv[])
     }
     Result.close();
 
-    if(verbose1) cout<<counter<<endl;
+    if(verbose) cout<<counter<<endl;
 
     TF1* myfit=new TF1("myfit","[0]+[1]*(x^2-[2]^2)/(x^2)*(TMath::Erf(x-[2])+1)/2",200.,1450.);
     myfit->SetParameter(0,prthink->GetMinimum());
@@ -493,6 +472,16 @@ int main(int argc, char* argv[])
     hdeppkm->Draw(); cc1->SaveAs(KEDR+"deppkm.png");
     hdiffepmkpeppkm->Draw(); cc1->SaveAs(KEDR+"diffepmkpeppkm.png");
     h2depmkpdeppkm->Draw(); cc1->SaveAs(KEDR+"depmkpdeppkm.png");
+    hDncomb->Draw(); cc1->SaveAs(KEDR + "Dncomb" + format2);
+    hnclst1->Draw(); cc1->SaveAs(KEDR + "nclst1" + format2);
+    hnclst2->Draw(); cc1->SaveAs(KEDR + "nclst2" + format2);
+    heclst1->Draw(); cc1->SaveAs(KEDR + "eclst1" + format2);
+    heclst2->Draw(); cc1->SaveAs(KEDR + "eclst2" + format2);
+    htclst1->Draw(); cc1->SaveAs(KEDR + "tclst1" + format2);
+    htclst2->Draw(); cc1->SaveAs(KEDR + "tclst2" + format2);
+    hpclst1->Draw(); cc1->SaveAs(KEDR + "pclst1" + format2);
+    hpclst2->Draw(); cc1->SaveAs(KEDR + "pclst2" + format2);
+
     hrr->Draw(); cc1->SaveAs(KEDR+"rr.png");
     hZip->Draw(); cc1->SaveAs(KEDR+"Zip.png");
     hEbeam->Draw(); cc1->SaveAs(KEDR+"Ebeam.png");
