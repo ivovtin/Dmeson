@@ -30,7 +30,7 @@
 #$ -m beas
 #$ -M ovtin.ivan@gmail.com
 
-#$ -t 1-4
+#$ -t 10-20
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]
@@ -38,34 +38,34 @@ myrand=$[1000+$i]
 #inruns=23219
 #Nevents=10000
 #outfile="psi3770_to_D0meson_test.root"
-#Signal
-#inruns="/home/ovtin/development/Dmeson/runsDmeson/runDmeson"$i
-#outfile="/spool/users/ovtin/psi3770_to_D0meson_"$i".root"
 #Bkg
-inruns="/spool/users/ovtin/outDmeson/simulation/simDmeson_eetoqq3_0"$i".dat"
-outfile="/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson_ee_to_qq3_"$i".root"
-##inruns="/spool/users/ovtin/outDmeson/simulation/simDmesonSignal"$i".dat"
-##outfile="/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0mesonSignal_"$i".root"
+##inruns="/spool/users/ovtin/outDmeson/simulation/simDmeson_eetoqq3_0"$i".dat"
+##outfile="/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson_ee_to_qq3_"$i".root"
+#Signal
+##inruns="/spool/users/ovtin/outDmeson/simulation/simDmesonSignal0"$i".dat"
+inruns="/spool/users/ovtin/outDmeson/simulation/simDmesonSignal"$i".dat"
+outfile="/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0mesonSignal_kin_"$i".root"
 ##inruns="/spool/users/ovtin/outDmeson/simulation/simDmesonBkg_eetoDD"$i".dat"
 ##outfile="/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0mesonBkg_eetoDD_"$i".root"
 mintracks=2
-maxtracks=6
-minbeamtracks=1
-minIPtracks=1
-maxIPtracks=6
-minPt=10
-maxPt=3000
-minClusterEnergy=15
-minTotalEnergy=45
-minClusters=1
-maxClusters=10
+maxtracks=12
+minbeamtracks=0
+minIPtracks=0
+maxIPtracks=12
+minPt=100
+maxPt=2000
+minClusterEnergy=0
+minTotalEnergy=0
+minClusters=0
+maxClusters=30
 minClustersLKr=0
 minClustersCsI=0
-maxtchi2=200
-minNhits=0
+maxtchi2=100
+minNhits=20
+kinefit=1
 
 ##$HOME/development/Dmeson/analysis_D0meson -n 200000 -o $outfile $inruns
-$HOME/development/Dmeson/analysis_D0meson -v 23665 -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile $inruns
+$HOME/development/Dmeson/analysis_D0meson -v 23665 -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile -f $kinefit $inruns
 
 status=$?
 if [ $status != 0 ]; then

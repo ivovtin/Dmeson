@@ -8,16 +8,16 @@
 # -------------------------------------------
 # --     What to redirect to where         --
 # -- working directory --
-#$ -cwd
+#$ -cwd             # run the job in the directory specified.
 #$ -o $JOB_NAME.o$JOB_ID
 # -- Merge the standard out and standard error to one file --
 #$ -j y
 ##$ -shell n
-##$ -V
+#$ -V                 ##will pass all environment variables to the job
 ##$ -e /dev/null
 # -------------------------------------------
 # --             Enviroment                --
-#$ -v PATH=$PATH:$HOME/release/KdRunFastMon,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/alexbarn/release/lib,KDBHOST=bison-2
+##$ -v PATH=$PATH:$HOME/development/lib:/home/ovtin/development/KrKRec,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/ovtin/development/lib,KDBHOST=bison-2
 # -------------------------------------------
 # --             Queue list                --
 #$ -soft
@@ -30,40 +30,45 @@
 #$ -m beas
 #$ -M ovtin.ivan@gmail.com
 
-##$ -t 1-245
-#$ -t 43-50
-##$ -t 5-5
+#$ -t 301-350
+##$ -t 43-50
+##$ -t 1-1
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]
 
-#inruns=23219
-#Nevents=10000
-#outfile="psi3770_to_D0meson_test.root"
+##inruns=23219
+##Nevents=10000
 #Signal
-inruns="/home/ovtin/development/Dmeson/runsDmeson/runDmeson"$i
+inruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/runDmeson"$i
+##inruns="/home/ovtin/development/Dmeson/runsDmeson/runs2005/runDmeson"$i
 outfile="/spool/users/ovtin/outDmeson/psi3770_to_D0meson_"$i".root"
 #Bkg
 #inruns="/home/ovtin/development/Dmeson/runsDmeson/runBkgDmeson"$i
 #outfile="/spool/users/ovtin/psi3770_to_BkgD0meson_"$i".root"
 mintracks=2
-maxtracks=6
-minbeamtracks=1
-minIPtracks=1
-maxIPtracks=6
-minPt=10
-maxPt=3000
-minClusterEnergy=15
-minTotalEnergy=45
-minClusters=1
-maxClusters=10
+maxtracks=12
+minbeamtracks=0
+minIPtracks=0
+maxIPtracks=12
+minPt=100
+maxPt=2000
+#minClusterEnergy=15
+#minTotalEnergy=45
+minClusterEnergy=0
+minTotalEnergy=0
+minClusters=0
+maxClusters=30
 minClustersLKr=0
 minClustersCsI=0
-maxtchi2=200
-minNhits=0
+maxtchi2=100
+minNhits=20
+kinefit=0
+#verbose=1
 
 ##$HOME/development/Dmeson/analysis_D0meson -n 200000 -o $outfile $inruns
-$HOME/development/Dmeson/analysis_D0meson -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile $inruns
+$HOME/development/Dmeson/analysis_D0meson -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile -f $kinefit $inruns
+##$HOME/development/Dmeson/analysis_D0meson -n 3000 -z $verbose -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile -f $kinefit $inruns
 
 status=$?
 if [ $status != 0 ]; then

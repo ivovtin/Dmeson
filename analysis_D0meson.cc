@@ -65,6 +65,10 @@
 
 #include "KcSys/fortran.h"
 
+//#include <minuit.h>
+//#include <hbook.h>
+#include "TMinuit.h"
+
 #define PI 3.14159265358979
 #define THETA_CL_CUT 30.
 #define DIST_CL_CUT 20.
@@ -99,6 +103,7 @@ struct ProgramParameters {
 	int MCCalibRunNumber;                 //19862 - number of run - download from DB calibration for processe MC-file in runs interval
 	int NEvents;                          //number of processed events
 	bool process_only;                    //process one event only
+	bool Dkine_fit;                       //perfome kinematic fit
         bool verbose;                         //print debug information
 };
 //=======================================================================================================================================
@@ -123,7 +128,7 @@ struct ProgramParameters {
 //=======================================================================================================================================
 
 //set selection conditions
-static const struct ProgramParameters def_progpar={false,2,6,1,1,6,100,2000,15,45,2,8,0,0,200,15,"/store/users/ovtin/out.root",19862,0,false,0};
+static const struct ProgramParameters def_progpar={false,2,6,1,1,6,100,2000,15,45,2,8,0,0,200,15,"/store/users/ovtin/out.root",19862,0,false,false,0};
 
 static struct ProgramParameters progpar(def_progpar);
 
@@ -179,13 +184,18 @@ static struct StripTrackBranch bstriptrack;
 static struct ATCCounterBranch bcnt[Natccr][Ntraks];
 static struct ATCBranch batc;
 
-typedef struct {Int_t nhitst1[50],nhitst2[50],ncomb,ncls1[50],ncls2[50]; Float_t Mbc[50],InvM[50],dE[50],dP[50],depmkp[50],deppkm[50],Ebeam,rEv,P1[50],P2[50],Pt1[50],Pt2[50],chi2t1[50],chi2t2[50],e1[50],
-    e2[50],rr1[50],rr2[50],Zip1[50],Zip2[50],ecls1[50],ecls2[50],tcls1[50],tcls2[50],pcls1[50],pcls2[50]; } DMESON;
+typedef struct {Int_t nhitst1[20],nhitst2[20],ncomb,ncls1[20],ncls2[20]; Float_t Mbc[20],Mbckin[20],InvM[20],dE[20],dEkin[20],
+    dP[20],dPkin[20],depmkp[20],deppkm[20],Ebeam,rEv,P1[20],P2[20],Pt1[20],Pt2[20],chi2t1[20],chi2t2[20],e1[20],
+    e2[20],rr1[20],rr2[20],Zip1[20],Zip2[20],ecls1[20],ecls2[20],tcls1[20],tcls2[20],pcls1[20],pcls2[20]; } DMESON;
 
 static DMESON Dmeson;
 
 double mk = 493.68;
 double mpi = 139.57;
+
+int dcand_t1;
+int dcand_t2;
+double ebeam;
 
 int listtr[6],lclpi0[8],lclg[5];
 int minElementIndex;
@@ -307,6 +317,135 @@ int mu_event_rejection()
     return 0;
 }
 
+//function
+void kine_fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t iflag) {
+    double pp1 = par[0];
+    double pp2 = par[1];
+
+    double p1i = tP(dcand_t1);
+    double p2i = tP(dcand_t2);
+
+    double sp1 = sqrt(ktrrec_h_.FitTrack[dcand_t1][fitSigCC]/
+		      pow(ktrrec_h_.FitTrack[dcand_t1][fitC],2)+
+		      ktrrec_h_.FitTrack[dcand_t1][fitSigTheThe]/
+		      pow(tan(ktrrec_.TETRAK[dcand_t1]/180.*PI),2))*p1i;
+
+    double sp2 = sqrt(ktrrec_h_.FitTrack[dcand_t2][fitSigCC]/
+		      pow(ktrrec_h_.FitTrack[dcand_t2][fitC],2)+
+		      ktrrec_h_.FitTrack[dcand_t2][fitSigTheThe]/
+		      pow(tan(ktrrec_.TETRAK[dcand_t2]/180.*PI),2))*p2i;
+
+    double de = (sqrt(mk*mk + pp1*pp1) + sqrt(mpi*mpi+pp1*pp1) +
+		 sqrt(mk*mk + pp2*pp2) + sqrt(mpi*mpi+pp2*pp2))/2. - ebeam;
+
+    double chi2 = pow((pp1-p1i)/sp1,2) + pow((pp2-p2i)/sp2,2) +
+	pow(de/0.1,2);
+
+    if (progpar.verbose)
+	printf("  p1i=%lf, p2i=%lf, p1=%lf, p2=%lf, de=%lf, chi2=%lf\n",
+	       p1i, p2i, pp1, pp2, de, chi2);
+
+    f = chi2;
+}
+
+void refit(int t, double p, double* phi, double* theta) {
+    double p0 = ktrrec_.PTRAK[t];
+    double r0 = tRc(t);
+
+    double phi0 = ktrrec_.FITRAK[t]*PI/180.;
+    double theta0 = ktrrec_.TETRAK[t]*PI/180.;
+
+    double r = r0*(p/p0);
+
+    ktrk_hits_.RcFixR = r;
+    PhiFixR = phi0;
+    ThetaFixR = theta0;
+    //ktrk_hits_.FixUserR = 1;  //default is 0
+
+    int track = t+1;
+    ktrkhits_(&track);
+
+    double phi1 = PhiFixR;
+    double theta1 = ThetaFixR;
+
+    double p1 = p*sin(theta0)/sin(theta1);
+
+    if (progpar.verbose) {
+	printf("Track refit: p0=%lg, r0=%lg, p=%lg\n", p0, r0, p);
+	printf("             phi0=%lg, theta0=%lg\n", phi0, theta0);
+	printf("             phi1=%lg, theta1=%lg\n", phi1, theta1);
+	printf("             p1=%lg\n", p1);
+    }
+
+    *phi = phi1;
+    *theta = theta1;
+}
+
+void kine_fit(int ip1, int ip2, double* mbc, double* de, double* dp) {
+    dcand_t1 = ip1;
+    dcand_t2 = ip2;
+
+    double p1i = tP(dcand_t1);
+    double p2i = tP(dcand_t2);
+
+    TMinuit *dMinuit = new TMinuit(2); //initialise Minuit with a maximum of 2 parameters to minimise
+    dMinuit->SetFCN(kine_fcn);         //set the function to minimise
+    if (progpar.verbose) {
+	dMinuit->SetPrintLevel(3);         //set print out level for Minuit
+    }
+    Double_t arglist[10];
+    arglist[0]=1;
+    Int_t iflag;
+    dMinuit->mnexcm("SET PAR",arglist,1,iflag);    //Interprets command
+    double lowerLimit = 0.0;
+    double upperLimit = 0.0;
+    dMinuit->mnparm(0,"p1", p1i, 1., lowerLimit, upperLimit, iflag);    //set the parameters used in the fit
+    dMinuit->mnparm(1,"p2", p2i, 1., lowerLimit, upperLimit, iflag);
+    dMinuit->mnexcm("CALL FCN",arglist,1,iflag);                        //call the user defined function, to calculate the value FCN, and print the result out to the screen.
+    dMinuit->mnexcm("MIGRAD",arglist,2,iflag);                          //run the minimisation Using MIGRAD
+
+    double pp1, pp2;
+    Double_t val[2],err[2],bnd1[2],bnd2[2];
+    TString para0,para1;
+    int ivar;
+
+    gMinuit->mnpout(0,para0,val[0],err[0],bnd1[0],bnd2[0],ivar);
+    pp1 = val[0];
+    gMinuit->mnpout(1,para1,val[1],err[1],bnd1[1],bnd2[1],ivar);
+    pp2 = val[1];
+
+    if (progpar.verbose) {
+	printf("Kinematic fitter: \n");
+	printf("  Input: p1=%lf, p2=%lf\n", p1i, p2i);
+	printf("  Out:   p1=%lf, p2=%lf\n", pp1, pp2);
+    }
+
+    double theta1 = ktrrec_.TETRAK[dcand_t1]/180.*PI;
+    double phi1 = ktrrec_.FITRAK[dcand_t1]/180.*PI;
+    double theta2 = ktrrec_.TETRAK[dcand_t2]/180.*PI;
+    double phi2 = ktrrec_.FITRAK[dcand_t2]/180.*PI;
+
+    refit(dcand_t1, pp1, &phi1, &theta1);
+    refit(dcand_t2, pp2, &phi2, &theta2);
+
+    double px1 = pp1*sin(theta1)*cos(phi1);
+    double py1 = pp1*sin(theta1)*sin(phi1);
+    double pz1 = pp1*cos(theta1);
+
+    double px2 = pp2*sin(theta2)*cos(phi2);
+    double py2 = pp2*sin(theta2)*sin(phi2);
+    double pz2 = pp2*cos(theta2);
+
+    *mbc = ebeam*ebeam - pow(px1+px2,2) - pow(py1+py2,2) - pow(pz1+pz2,2);
+    if (*mbc>0) *mbc = sqrt(*mbc); else *mbc = 0;
+
+    *de = (sqrt(mpi*mpi + tP(dcand_t1)*tP(dcand_t1)) + sqrt(mk*mk + tP(dcand_t2)*tP(dcand_t2)) +
+	   sqrt(mpi*mpi + tP(dcand_t2)*tP(dcand_t2)) + sqrt(mk*mk + tP(dcand_t1)*tP(dcand_t1)))/2. - ebeam ;
+
+    *dp = pp1-pp2;
+
+    if (progpar.verbose) printf("mbc=%lf, de=%lf\n", *mbc, *de);
+}
 
 // Distance of track to cluster (in x,y plane)
 double clust_dist(int t, int cl) {
@@ -328,11 +467,13 @@ double clust_dist(int t, int cl) {
   return sqrt(cx*cx+cy*cy);
 }
 
+
 int analyse_event()
 {
     float EMinPhot=progpar.min_cluster_energy;
     double  WTotal=2*beam_energy;                                                                 //beam_energy - How determined this energy ?
     if( kedrrun_cb_.Header.RunType == 64 ) { WTotal=2*1886.75; }                                  //for MC
+    ebeam=WTotal/2;
 
     if (progpar.verbose) cout<<"RunNumber="<<kedrraw_.Header.RunNumber<<"\t"<<"WTotal="<<WTotal<<"\t"<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"eTracksAll="<<eTracksAll<<endl;
 
@@ -347,7 +488,7 @@ int analyse_event()
     copy(&bvertex);
     copy(&bemc);
 
-    for(int i=0; i<50; i++){
+    for(int i=0; i<20; i++){
 	Dmeson.Mbc[i]=0;                                            //Invariant mass or beam consraint mass
 	Dmeson.InvM[i]=0;                                           //also Invariant mass
 	Dmeson.dE[i]=0;
@@ -374,6 +515,9 @@ int analyse_event()
 	Dmeson.tcls2[i] = 0;
 	Dmeson.pcls1[i] = 0;
 	Dmeson.pcls2[i] = 0;
+	Dmeson.Mbckin[i] = 0;
+	Dmeson.dEkin[i] = 0;
+	Dmeson.dPkin[i] = 0;
     }
     Dmeson.ncomb = 0;
 
@@ -512,6 +656,15 @@ int analyse_event()
 		    }
 		}
 
+		double mbc, de, dp;
+		if (progpar.Dkine_fit)
+		{
+		    kine_fit(t1, t2, &mbc, &de, &dp);
+		    Dmeson.Mbckin[i] = mbc;
+		    Dmeson.dEkin[i] = de;
+		    Dmeson.dPkin[i] = dp;
+		}
+
 		i++;
 	    }
 	}
@@ -545,7 +698,7 @@ int analyse_event()
     return 0;
 }
 
-static const char* optstring="ra:d:b:p:h:s:j:t:e:c:l:k:i:u:q:o:v:n:z:x";
+static const char* optstring="ra:d:b:p:h:s:j:t:e:c:l:k:i:u:q:o:v:n:f:z:x";
 
 void Usage(int status)
 {
@@ -572,8 +725,9 @@ void Usage(int status)
 	        <<"  -q min_Nhits   Nininum number hits on track (default to "<<def_progpar.min_Nhits<<")\n"
 	        <<"  -o RootFile    Output ROOT file name (default to "<<def_progpar.rootfile<<")\n"
             	<<"  -v MCCalibRunNumber    MCCalibRunNumber (default to "<<def_progpar.MCCalibRunNumber<<")\n"
-            	<<"  -n NEvents     Number events in process "<<def_progpar.NEvents<<")\n"
-            	<<"  -z Debug       Print debug information "<<def_progpar.verbose<<")\n"
+            	<<"  -n NEvents     Number events in process "<<def_progpar.NEvents<<"\n"
+            	<<"  -f Fit         Performe kinematic fit "<<def_progpar.Dkine_fit<<"\n"
+            	<<"  -z Debug       Print debug information "<<def_progpar.verbose<<"\n"
 		<<"  -x             Process the events specified after file exclusively and print debug information"
 	    <<endl;
 	exit(status);
@@ -609,6 +763,7 @@ int main(int argc, char* argv[])
 		        case 'o': progpar.rootfile=optarg; break;
                         case 'v': progpar.MCCalibRunNumber=atoi(optarg); break;
                         case 'n': progpar.NEvents=atoi(optarg); break;
+                        case 'f': progpar.Dkine_fit=atoi(optarg); break;
                         case 'z': progpar.verbose=atoi(optarg); break;
 			case 'x': progpar.process_only=true; break;
 			default : Usage(1);
@@ -670,9 +825,9 @@ int main(int argc, char* argv[])
 	}
 
 	eventTree->Branch("mu",&bmu,MUBranchList);
-	eventTree->Branch("Dmeson",&Dmeson,"nhitst1[50]/I:nhitst2[50]:ncomb:ncls1[50]:ncls2[50]"
-			  ":Mbc[50]/F:InvM[50]:dE[50]:dP[50]:depmkp[50]:deppkm[50]:Ebeam:rEv:P1[50]:P2[50]:Pt1[50]:Pt2[50]:chi2t1[50]:chi2t2[50]:e1[50]"
-			  ":e2[50]:rr1[50]:rr2[50]:Zip1[50]:Zip2[50]:ecls1[50]:ecls2[50]:tcls1[50]:tcls2[50]:pcls1[50]:pcls2[50]");
+	eventTree->Branch("Dmeson",&Dmeson,"nhitst1[20]/I:nhitst2[20]:ncomb:ncls1[20]:ncls2[20]"
+			  ":Mbc[20]/F:Mbckin[20]:InvM[20]:dE[20]:dEkin[20]:dP[20]:dPkin[20]:depmkp[20]:deppkm[20]:Ebeam:rEv:P1[20]:P2[20]:Pt1[20]:Pt2[20]:chi2t1[20]:chi2t2[20]:e1[20]"
+			  ":e2[20]:rr1[20]:rr2[20]:Zip1[20]:Zip2[20]:ecls1[20]:ecls2[20]:tcls1[20]:tcls2[20]:pcls1[20]:pcls2[20]");
 
 	eventTree->Branch("strcls",&bstrip,stripClusterBranchList);
 	eventTree->Branch("strtrk",&bstriptrack,stripTrackBranchList);
