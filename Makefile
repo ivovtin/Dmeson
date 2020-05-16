@@ -1,7 +1,8 @@
 #--------------------------------------------------------------------------
 # следующие 3 строки лучше не трогать
 ifeq (,$(WORKDIR))
-WORKDIR=../
+WORKDIR=..
+##WORKDIR=../
 endif
 
 # Всё что делается делается вслух :) - желательно оставить как есть
@@ -22,7 +23,7 @@ F77_LOCAL := g77
 #LD_MULTI := ""
 
 # Дополнительные опции для компилятора C/C++
-COPTS = -I. `root-config --cflags` #-ansi -pedantic
+COPTS = -I. `root-config --cflags`  -I/cern/pro/include/cfortran/ -Df2cFortran #-ansi -pedantic
 NOOPT = ""
 # Дополнительные опции для компилятора Fortran
 #FOPTS = -I.
@@ -34,6 +35,7 @@ FOPTS  = -g -fvxt -Wall -fno-automatic -finit-local-zero \
 # Дополнительные опции для линкера
 #LDOPTS = -Xlinker -rpath -Xlinker `root-config --libdir`
 LDOPTS = -lg2c -Wl,-rpath=`root-config --libdir`
+#LDOPTS = -lg2c -Wl,-rpath=`root-config --libdir`
 
 #Если определена переменная ONLYBINARY, то библиотека в пакете отсутствует
 ONLYBINARY=""
@@ -48,23 +50,28 @@ CERNLIBRARY = ""
 # расширяем по требованию. В любом случае необходимо раскомментировать
 # CERNLIBRARY
 #CERNLIBS =
-CERNLIBS = jetset74 mathlib graflib geant lapack3 blas packlib
+CERNLIBS = jetset74 mathlib graflib grafX11 geant lapack3 blas packlib
 
 # где вываливать исполняемые файлы
 BINDIR := ./
 
 # Дополнительные либы (вставляются после либ)
-#LIB_LOCAL= `root-config --libs` -lMinuit -lpq -lcrypt -lbz2 -ldl -lg2c
-LIB_LOCAL= `root-config --libs` -lMinuit -lcrypt -lpq -lbz2 -lg2c
+LIB_LOCAL= `root-config --libs` -lMinuit -lpq -lcrypt -lbz2 -ldl -lg2c
+##LIB_LOCAL= `root-config --libs` -lMinuit -lcrypt -lpq -lbz2 -lg2c
 
 # Определим, какие программы мы будем собирать
-BINARIES = analysis_D0meson
+BINARIES = analysis_D0meson analysis_D+meson
 
 # укажем, из каких модулей этого пакета они состоят
 # (эти модули не будут включены в библиотеку)
 # и какие библиотеки надо подключить при сборке
 analysis_D0meson_MODULES := analysis_D0meson
 analysis_D0meson_LIBS := KaFramework KrAtc KDisplay VDDCRec KrVDDCMu KrMu \
+KrdEdxPId KrDCCalibdEdx DchdEdxDataRoot VDDCRec KrToF KsToF KEmcRec LKrTools \
+VDDCRec KsTrg KdConvert KrObjects KdDCSim FitTools DchGeom ReadNat KDB AppFramework KrKRec KrDONLP2
+
+analysis_D+meson_MODULES := analysis_D+meson
+analysis_D+meson_LIBS := KaFramework KrAtc KDisplay VDDCRec KrVDDCMu KrMu \
 KrdEdxPId KrDCCalibdEdx DchdEdxDataRoot VDDCRec KrToF KsToF KEmcRec LKrTools \
 VDDCRec KsTrg KdConvert KrObjects KdDCSim FitTools DchGeom ReadNat KDB AppFramework KrKRec KrDONLP2
 
