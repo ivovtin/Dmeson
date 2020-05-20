@@ -184,10 +184,10 @@
 
     struct data10
     {
-	int nhitst1[20],nhitst2[20],nhitst3[20],ncomb,ncls1[20],ncls2[20],ncls3[20];
-	float Mbc[20],Mbckin[20],dE[20],dEkin[20],Ebeam,rEv,P1[20],P2[20],P3[20],Pt1[20],Pt2[20],Pt3[20],chi2t1[20],chi2t2[20],chi2t3[20],e1[20],e2[20],e3[20],rr1[20],rr2[20],
-	      rr3[20],Zip1[20],Zip2[20],Zip3[20],ecls1[20],ecls2[20],ecls3[20],tcls1[20],tcls2[20],tcls3[20],pcls1[20],pcls2[20],pcls3[20], timet1[20],betat1[20],lengtht1[20],
-	      timet2[20],betat2[20],lengtht2[20],timet3[20],betat3[20],lengtht3[20];
+	int nhitst1[50],nhitst2[50],nhitst3[50],ncomb,ncls1[50],ncls2[50],ncls3[50];
+	float Mbc[50],Mbckin[50],dE[50],dEkin[50],Ebeam,rEv,P1[50],P2[50],P3[50],Pt1[50],Pt2[50],Pt3[50],chi2t1[50],chi2t2[50],chi2t3[50],e1[50],e2[50],e3[50],rr1[50],rr2[50],
+	      rr3[50],Zip1[50],Zip2[50],Zip3[50],ecls1[50],ecls2[50],ecls3[50],tcls1[50],tcls2[50],tcls3[50],pcls1[50],pcls2[50],pcls3[50],timet1[50],betat1[50],lengtht1[50],
+	      timet2[50],betat2[50],lengtht2[50],timet3[50],betat3[50],lengtht3[50];
     };
     data10 Dmeson;
 
@@ -209,7 +209,7 @@
 	if(sim==0){
 
 	    //for(int i=1; i<=862; i++)   //signal 2016+2017
-	    for(int i=1; i<=113; i++)
+	    for(int i=1; i<=709; i++)
 	    {
 		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/Dplus/data/psi3770_to_D0meson_%d.root",i).Data());
 	    }
@@ -451,6 +451,9 @@
     int npipi=0;
     //Mass Kaon and Pion
     Double_t m1=493.667, m2=139.57;
+
+    float tof1,dtof1;
+
     //trheshold for ATC counter in number of photoelectrons
     float npetrh=0.5;
     float thicknpetrh=0.5;

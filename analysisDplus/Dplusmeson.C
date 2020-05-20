@@ -105,8 +105,14 @@ int main(int argc, char* argv[])
     TH1F* hEbeam=new TH1F("Ebeam","Ebeam",100,1880.,1895.);
     TH2D *h2MbcdE=new TH2D("M_{bc}:#Delta E", "M_{bc}:#Delta E", 200,1700,1900,200,-300,300);
     TH2D *h2MbcdEkin=new TH2D("M_{bckin}:#Delta Ekin", "M_{bckin}:#Delta Ekin", 200,1700,1900,200,-300,300);
-    TH1F* hDncomb=new TH1F("Dmseon.ncomb","Dmseon.ncomb",20,0.,20.);
+    TH1F* hDncomb=new TH1F("Dmseon.ncomb","Dmseon.ncomb",50,0.,50.);
 
+    TH1F* htime=new TH1F("time","time",140,-40.,100.);
+    TH1F* hbeta=new TH1F("beta","beta",50,0.,4.);
+    TH1F* hlength=new TH1F("length","length",160,0.,160.);
+    TH2D *h2betaP=new TH2D("P:1/#beta", "P:1/#beta", 1000,0,1000,100,0,2.5);
+
+    TH1D *hdtof1=new TH1D("dtof1", "dtof1",100,-10.,10);
 
     TH1F* hnclst1=new TH1F("nclst1","nclst1",6,-0.5,5.5);
     TH1F* heclst1=new TH1F("eclst1","eclst1",100,0.,2500.);
@@ -186,7 +192,9 @@ int main(int argc, char* argv[])
 	   //&& emc.energy<3300
            //&& vrt.theta2t<172 && vrt.phi2t<172
            //&& (theta[0]>46 && theta[1]>46)
-           //&& (theta[0]<135 && theta[1]<135)
+	   //&& (theta[0]<135 && theta[1]<135)
+           && (ev.run!=23911 && ev.run!=23879 && ev.run!=23818 && ev.run!=23758 && ev.run!=23700 && ev.run!=23699 && ev.run!=23644 &&
+	   ev.run!=23535 && ev.run!=23930 && ev.run!=23792 && ev.run!=23745 && ev.run!=23701)
 	  )
 	{
 	    Nselect++;
@@ -208,6 +216,35 @@ int main(int argc, char* argv[])
 		  )
 		{
                     if( Dmeson.ecls1[i]>1000 || Dmeson.ecls2[i]>1000 || Dmeson.ecls3[i]>1000) continue;
+
+		    htime->Fill(Dmeson.timet1[i]);
+		    hbeta->Fill(Dmeson.betat1[i]);
+		    hlength->Fill(Dmeson.lengtht1[i]);
+
+		    htime->Fill(Dmeson.timet2[i]);
+		    hbeta->Fill(Dmeson.betat2[i]);
+		    hlength->Fill(Dmeson.lengtht2[i]);
+
+		    htime->Fill(Dmeson.timet3[i]);
+		    hbeta->Fill(Dmeson.betat3[i]);
+		    hlength->Fill(Dmeson.lengtht3[i]);
+
+                    if ( Dmeson.betat1[i]>0 ) h2betaP->Fill(Dmeson.P1[i], 1/Dmeson.betat1[i]);
+                    if ( Dmeson.betat2[i]>0 ) h2betaP->Fill(Dmeson.P2[i], 1/Dmeson.betat2[i]);
+                    if ( Dmeson.betat3[i]>0 ) h2betaP->Fill(Dmeson.P3[i], 1/Dmeson.betat3[i]);
+
+		    //tof = sqrt(494.*494. + p*p)/p*tlen/30.    time=len/v       beta=v/c    v=beta*c   beta=sqrt(1-(mc^2)^2/E^2)  E^2=(mc^2)^2+(pc)^2
+                    tof1=sqrt(494.*494. + Dmeson.P1[i]*Dmeson.P1[i])/Dmeson.P1[i]*Dmeson.lengtht1[i]/30.;
+		    dtof1=Dmeson.timet1[i]-tof1;
+		    hdtof1->Fill(dtof1);
+		    /*
+		    tof2=sqrt(494.*494. + Dmeson.P2[i]*Dmeson.P2[i])/Dmeson.P2[i]*Dmeson.lengtht2[i]/30.
+		    dtof2=Dmeson.timet2[i] - tof2;
+                    tof3=sqrt(494.*494. + Dmeson.P3[i]*Dmeson.P3[i])/Dmeson.P3[i]*Dmeson.lengtht3[i]/30.
+		    dtof3=Dmeson.timet3[i] - tof3;
+		    */
+
+                    if( dtof1<-0.8 ) continue;
 
 		    Result<< ev.run <<"\t"<< ev.evdaq << endl;
 
@@ -509,6 +546,12 @@ int main(int argc, char* argv[])
     heclst3->Draw(); cc1->SaveAs(KEDR + "eclst3" + format2);
     htclst3->Draw(); cc1->SaveAs(KEDR + "tclst3" + format2);
     hpclst3->Draw(); cc1->SaveAs(KEDR + "pclst3" + format2);
+
+    htime->Draw(); cc1->SaveAs(KEDR + "time" + format2); cc1->SaveAs(KEDR + "time" + format3);
+    hbeta->Draw(); cc1->SaveAs(KEDR + "beta" + format2); cc1->SaveAs(KEDR + "beta" + format3);
+    hlength->Draw(); cc1->SaveAs(KEDR + "length" + format2); cc1->SaveAs(KEDR + "length" + format3);
+    h2betaP->Draw(); cc1->SaveAs(KEDR + "betatoP" + format2); cc1->SaveAs(KEDR + "betatoP" + format3);
+    hdtof1->Draw(); cc1->SaveAs(KEDR + "dtof1" + format2); cc1->SaveAs(KEDR + "dtof1" + format3);
 
     hrr->Draw(); cc1->SaveAs(KEDR+"rr.png");
     hZip->Draw(); cc1->SaveAs(KEDR+"Zip.png");
