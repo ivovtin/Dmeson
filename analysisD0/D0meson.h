@@ -185,7 +185,7 @@
     struct data10
     {
 	int  nhitst1[20],nhitst2[20],ncomb,ncls1[20],ncls2[20];
-	float Mbc[20],InvM[20],dE[20],dP[20],depmkp[20],deppkm[20],Ebeam,rEv,P1[20],P2[20],Pt1[20],Pt2[20],chi2t1[20],chi2t2[20],e1[20],e2[20],rr1[20],rr2[20],Zip1[20],
+	float Mbc[20],Mbckin[20],InvM[20],dE[20],dEkin[20],dP[20],dPkin[20],depmkp[20],deppkm[20],Ebeam,rEv,P1[20],P2[20],Pt1[20],Pt2[20],chi2t1[20],chi2t2[20],e1[20],e2[20],rr1[20],rr2[20],Zip1[20],
 	    Zip2[20],ecls1[20],ecls2[20],tcls1[20],tcls2[20],pcls1[20],pcls2[20];
     };
     data10 Dmeson;
@@ -206,24 +206,23 @@
     //include samples Data/MC
     void chain(){
 	if(sim==0){
-	    //for(int i=1; i<=862; i++)   //signal 2016+2017
-	    for(int i=1; i<=350; i++)   //signal 2016+2017
-	    //for(int i=1; i<=5; i++)   //signal 2016+2017
+
+	    for(int i=1; i<=862; i++)   //signal 2016+2017
 	    {
-		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/psi3770_to_D0meson_%d.root",i).Data());
-		//tt->Add(TString::Format("/spool/users/ovtin/outDmeson/runs2016-17_bestres/psi3770_to_D0meson_%d.root",i).Data());
+		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/data/psi3770_to_D0meson_%d.root",i).Data());
 	    }
             /*
-	    for(int i=1; i<=606; i++)   //signal 2016+2017
+	    for(int i=1; i<=608; i++)   //signal 2004+2005
 	    {
-		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/runs2005/psi3770_to_D0meson_%d.root",i).Data());
+		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/data2004/psi3770_to_D0meson_%d.root",i).Data());
 	    }
             */
 	}
 	else if (sim==1){
 	    for(int i=1; i<=20; i++)
 	    {
-		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0mesonSignal_%d.root",i).Data());
+		//tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0mesonSignal_%d.root",i).Data());
+		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0mesonSignal_kin_%d.root",i).Data());
 	    }
 	}
 	else if (sim==2){
