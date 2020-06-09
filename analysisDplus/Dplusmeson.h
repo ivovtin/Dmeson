@@ -208,10 +208,11 @@
     void chain(){
 	if(sim==0){
 
-	    //for(int i=1; i<=862; i++)   //signal 2016+2017
-	    for(int i=1; i<=709; i++)
+	    for(int i=1; i<=862; i++)   //signal 2016+2017
+	    //for(int i=1; i<=608; i++)   //signal 2004
 	    {
 		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/Dplus/data/psi3770_to_D0meson_%d.root",i).Data());
+		//tt->Add(TString::Format("/spool/users/ovtin/outDmeson/Dplus/data2004/psi3770_to_D0meson_%d.root",i).Data());
 	    }
 	}
 	else if (sim==1){

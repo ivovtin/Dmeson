@@ -53,6 +53,7 @@ int main(int argc, char* argv[])
     if( sim==0 ){
 	fnameout=TString::Format("res_%d_%d_%d_%d_exp_Dmeson.root",first_cnt,end_cnt,region,max_pt).Data();
         KEDR = "/home/ovtin/public_html/outDmeson/Dplus/data/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/Dplus/data2004/";
     }
     else if (sim==1)
     {
@@ -229,22 +230,26 @@ int main(int argc, char* argv[])
 		    hbeta->Fill(Dmeson.betat3[i]);
 		    hlength->Fill(Dmeson.lengtht3[i]);
 
+		    //tof = sqrt(494.*494. + p*p)/p*tlen/30.    time=len/v       beta=v/c    v=beta*c   beta=sqrt(1-(mc^2)^2/E^2)  E^2=(mc^2)^2+(pc)^2
+                    tof1=sqrt(494.*494. + Dmeson.P1[i]*Dmeson.P1[i])/Dmeson.P1[i]*Dmeson.lengtht1[i]/30.;
+		    dtof1=Dmeson.timet1[i]-tof1;
+
+		    if( dtof1<-1.0 || dtof1>1.0 ) continue;
+		    //if( dtof1<-0.8 ) continue;
+                    /*
+                    int inBar=1;
+		    for(int k=0; k<vrt.ntrk; k++){
+			htheta->Fill(theta[k]);
+                        if( theta[k]<40 || theta[k]>140 ) inBar=0;
+		    }
+
+		    if( dtof1<-0.8 && inBar==1 ) continue;
+                    */
+		    hdtof1->Fill(dtof1);
                     if ( Dmeson.betat1[i]>0 ) h2betaP->Fill(Dmeson.P1[i], 1/Dmeson.betat1[i]);
                     if ( Dmeson.betat2[i]>0 ) h2betaP->Fill(Dmeson.P2[i], 1/Dmeson.betat2[i]);
                     if ( Dmeson.betat3[i]>0 ) h2betaP->Fill(Dmeson.P3[i], 1/Dmeson.betat3[i]);
 
-		    //tof = sqrt(494.*494. + p*p)/p*tlen/30.    time=len/v       beta=v/c    v=beta*c   beta=sqrt(1-(mc^2)^2/E^2)  E^2=(mc^2)^2+(pc)^2
-                    tof1=sqrt(494.*494. + Dmeson.P1[i]*Dmeson.P1[i])/Dmeson.P1[i]*Dmeson.lengtht1[i]/30.;
-		    dtof1=Dmeson.timet1[i]-tof1;
-		    hdtof1->Fill(dtof1);
-		    /*
-		    tof2=sqrt(494.*494. + Dmeson.P2[i]*Dmeson.P2[i])/Dmeson.P2[i]*Dmeson.lengtht2[i]/30.
-		    dtof2=Dmeson.timet2[i] - tof2;
-                    tof3=sqrt(494.*494. + Dmeson.P3[i]*Dmeson.P3[i])/Dmeson.P3[i]*Dmeson.lengtht3[i]/30.
-		    dtof3=Dmeson.timet3[i] - tof3;
-		    */
-
-                    if( dtof1<-0.8 ) continue;
 
 		    Result<< ev.run <<"\t"<< ev.evdaq << endl;
 
@@ -324,7 +329,8 @@ int main(int argc, char* argv[])
 		    hmbc->Fill(Dmeson.Mbc[i]);
 		    hdE->Fill(Dmeson.dE[i]);
 
-		    if (Dmeson.dE[i]>-70 && Dmeson.dE[i]< 70 )
+		    //if (Dmeson.dE[i]>-70 && Dmeson.dE[i]< 70 )
+		    if (Dmeson.dEkin[i]>-90 && Dmeson.dEkin[i]< 50 )
 		    {
 			hmbc_zoom->Fill(Dmeson.Mbc[i]);
 		    }
@@ -333,7 +339,8 @@ int main(int argc, char* argv[])
 			hdE_zoom->Fill(Dmeson.dE[i]);
 		    }
 
-		    if (Dmeson.dEkin[i]>-70 && Dmeson.dEkin[i]< 70 )
+		    //if (Dmeson.dEkin[i]>-70 && Dmeson.dEkin[i]< 70 )
+		    if (Dmeson.dEkin[i]>-90 && Dmeson.dEkin[i]< 50 )
 		    {
 			hmbckin_zoom->Fill(Dmeson.Mbckin[i]);
 		    }
