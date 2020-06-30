@@ -35,8 +35,8 @@ hitAer=1
 hitWLS=0
 firstCNT=0
 endCNT=160
+##dataORmc=0
 dataORmc=0
-##dataORmc=1
 
 $HOME/development/Dmeson/analysisDplus/Dplusmeson $atcrange $hitAer $hitWLS $firstCNT $endCNT $dataORmc
 

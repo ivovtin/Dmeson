@@ -207,39 +207,41 @@
     //include samples Data/MC
     void chain(){
 	if(sim==0){
-
 	    for(int i=1; i<=862; i++)   //signal 2016+2017
-	    //for(int i=1; i<=608; i++)   //signal 2004
 	    {
 		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/Dplus/data/psi3770_to_D0meson_%d.root",i).Data());
-		//tt->Add(TString::Format("/spool/users/ovtin/outDmeson/Dplus/data2004/psi3770_to_D0meson_%d.root",i).Data());
+	    }
+	}
+	else if (sim==4){
+	    for(int i=1; i<=608; i++)   //signal 2004
+	    {
+		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/Dplus/data2004/psi3770_to_D0meson_%d.root",i).Data());
 	    }
 	}
 	else if (sim==1){
 	    for(int i=1; i<=20; i++)
 	    {
-		//tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0mesonSignal_%d.root",i).Data());
-		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0mesonSignal_kin_%d.root",i).Data());
+		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/outsimDplus/Signal/psi3770_to_simDplusmesonSignal_%d.root",i).Data());
 	    }
 	}
 	else if (sim==2){
-	    tt->Add("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson_ee_to_qq1_1.root");
-	    tt->Add("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson_ee_to_qq1_2.root");
-	    tt->Add("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson_ee_to_qq1_3.root");
-	    tt->Add("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson_ee_to_qq1_4.root");
-	    tt->Add("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson_ee_to_qq2_1.root");
-	    tt->Add("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson_ee_to_qq2_2.root");
-	    tt->Add("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson_ee_to_qq2_3.root");
-	    tt->Add("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson_ee_to_qq2_4.root");
-	    tt->Add("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson_ee_to_qq3_1.root");
-	    tt->Add("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson_ee_to_qq3_2.root");
-	    tt->Add("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson_ee_to_qq3_3.root");
-	    tt->Add("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0meson_ee_to_qq3_4.root");
+	    tt->Add("/spool/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_continium/psi3770_to_simDplusmeson_ee_to_qq1_1.root");
+	    tt->Add("/spool/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_continium/psi3770_to_simDplusmeson_ee_to_qq1_2.root");
+	    tt->Add("/spool/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_continium/psi3770_to_simDplusmeson_ee_to_qq1_3.root");
+	    tt->Add("/spool/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_continium/psi3770_to_simDplusmeson_ee_to_qq1_4.root");
+	    tt->Add("/spool/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_continium/psi3770_to_simDplusmeson_ee_to_qq2_1.root");
+	    tt->Add("/spool/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_continium/psi3770_to_simDplusmeson_ee_to_qq2_2.root");
+	    tt->Add("/spool/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_continium/psi3770_to_simDplusmeson_ee_to_qq2_3.root");
+	    tt->Add("/spool/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_continium/psi3770_to_simDplusmeson_ee_to_qq2_4.root");
+	    tt->Add("/spool/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_continium/psi3770_to_simDplusmeson_ee_to_qq3_1.root");
+	    tt->Add("/spool/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_continium/psi3770_to_simDplusmeson_ee_to_qq3_2.root");
+	    tt->Add("/spool/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_continium/psi3770_to_simDplusmeson_ee_to_qq3_3.root");
+	    tt->Add("/spool/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_continium/psi3770_to_simDplusmeson_ee_to_qq3_4.root");
 	}
 	else if (sim==3){
 	    for(int i=1; i<=20; i++)
 	    {
-	    		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0mesonBkg_eetoDD_%d.root",i).Data());
+	    		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_eetoDD/psi3770_to_simD0mesonBkg_eetoDD_%d.root",i).Data());
 	    }
 	}
     }
@@ -476,5 +478,8 @@
     float n10, n11, n12, n13, n14;
     int cnt11, cnt12;
     int cnt21, cnt22;
+
+    double deCut1, deCut2;
+    double mbcCut1, mbcCut2;
 
 #endif
