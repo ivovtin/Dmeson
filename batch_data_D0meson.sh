@@ -23,15 +23,15 @@
 #$ -soft
 ##$ -hard
 #$ -l time=24:00:00
-#$ -q remote
-##$ -q extralong
+##$ -q remote
+#$ -q extralong
 #
 # -- Send mail at submission and completion of script --
 #$ -m beas
 #$ -M ovtin.ivan@gmail.com
 
 ##$ -t 1-862
-#$ -t 609-911
+#$ -t 151-200
 ##$ -t 1-608
 ##$ -t 1-1
 
@@ -41,13 +41,14 @@ myrand=$[1000+$i]
 ##inruns=23219
 ##Nevents=10000
 #Signal
-##inruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/runDmeson"$i
-inruns="/home/ovtin/development/Dmeson/runsDmeson/runs2005/runDmeson"$i
-outfile="/spool/users/ovtin/outDmeson/runs2005/psi3770_to_D0meson_"$i".root"
+inruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/runDmeson"$i
+outfile="/spool/users/ovtin/outDmeson/D0/dataPcor/psi3770_to_D0meson_"$i".root"
+##inruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/runDmeson"$i
+##outfile="/spool/users/ovtin/outDmeson/D0/data2004/psi3770_to_D0meson_"$i".root"
 #Bkg
 #inruns="/home/ovtin/development/Dmeson/runsDmeson/runBkgDmeson"$i
 #outfile="/spool/users/ovtin/psi3770_to_BkgD0meson_"$i".root"
-mintracks=3
+mintracks=2
 maxtracks=12
 minbeamtracks=0
 minIPtracks=0

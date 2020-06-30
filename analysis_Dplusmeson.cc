@@ -102,6 +102,8 @@ struct ProgramParameters {
 	const char* rootfile;
 	int MCCalibRunNumber;                 //19862 - number of run - download from DB calibration for processe MC-file in runs interval
 	int NEvents;                          //number of processed events
+	int NEvbegin;
+	int NEvend;
 	bool process_only;                    //process one event only
 	bool Dkine_fit;                       //perfome kinematic fit
         bool verbose;                         //print debug information
@@ -128,11 +130,12 @@ struct ProgramParameters {
 //=======================================================================================================================================
 
 //set selection conditions
-static const struct ProgramParameters def_progpar={false,2,6,1,1,6,100,2000,15,45,2,8,0,0,200,15,"/store/users/ovtin/out.root",19862,0,false,false,0};
+static const struct ProgramParameters def_progpar={false,2,6,1,1,6,100,2000,15,45,2,8,0,0,200,15,"/store/users/ovtin/out.root",19862,0,0,0,false,false,0};
 
 static struct ProgramParameters progpar(def_progpar);
 
 enum {
+	CutEvents=1,
 	CutLongDcRecord=1,
 	CutLongVdRecord,
         AtcEventDamageCut,
@@ -201,6 +204,7 @@ double ebeam;
 
 int listtr[6],lclpi0[8],lclg[5];
 int minElementIndex;
+
 //Rejection prior to reconstruction helps to save CPU time
 extern "C" void kemc_energy_(float Ecsi[2],float *Elkr);
 
@@ -214,6 +218,12 @@ int pre_event_rejection()
 
     //if( RawLength(SS_DC)>maxDClen ) return CutLongDcRecord; //too long DC event
     //if( RawLength(SS_VD)>maxVDlen ) return CutLongVdRecord; //too long VD event
+
+    //if(progpar.verbose) cout<<"NEvbegin="<<progpar.NEvbegin<<"\t"<<"NEvend="<<progpar.NEvend<<endl;
+    if ( progpar.NEvend!=0 ){
+	if ( kedrraw_.Header.Number <= progpar.NEvbegin )    return CutEvents;
+	if ( kedrraw_.Header.Number > progpar.NEvend-1 )      return CutEvents;
+    }
 
     return 0;
 }
@@ -320,15 +330,15 @@ int mu_event_rejection()
 }
 
 //function
-void kine_fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t iflag) {
-    double pp1 = par[0];
-    double pp2 = par[1];
+void kine_fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *parval, Int_t iflag) {
+    double pp1 = parval[0];
+    double pp2 = parval[1];
 
     double ek = ebeam - sqrt(mpi*mpi+pp1*pp1) - sqrt(mpi*mpi+pp2*pp2);
     double pk;
     if (ek < mk) pk = 0.;
     else
-	pk = sqrt(ek*ek-mk*mk);
+	pk = sqrt(ek*ek-mk*mk);       //from condition dE=0
 
     double p1i = tP(dcand_t2);
     double p2i = tP(dcand_t3);
@@ -406,13 +416,13 @@ void kine_fit(int ip1, int ip2, int ip3, double* mbc, double* de) {
 
     TMinuit *dMinuit = new TMinuit(2); //initialise Minuit with a maximum of 2 parameters to minimise
     dMinuit->SetFCN(kine_fcn);         //set the function to minimise
-    if (progpar.verbose) {
-	dMinuit->SetPrintLevel(3);         //set print out level for Minuit
-    }
-    Double_t arglist[10];
+    dMinuit->SetPrintLevel(progpar.verbose-1); //set print out level for Minuit
+    Double_t arglist[2];
     arglist[0]=1;
-    Int_t iflag;
-    dMinuit->mnexcm("SET PAR",arglist,1,iflag);    //Interprets command
+    arglist[1]=1;
+    Int_t iflag=0;
+    dMinuit->mnexcm("SET ERR",arglist,2,iflag);    //Interprets command
+    //gMinuit->mninit(1,1,1);
     double lowerLimit = 0.0;
     double upperLimit = 0.0;
     dMinuit->mnparm(0,"p1", p1i, 1., lowerLimit, upperLimit, iflag);    //set the parameters used in the fit
@@ -422,14 +432,14 @@ void kine_fit(int ip1, int ip2, int ip3, double* mbc, double* de) {
 
     double pp1, pp2;
     double pk;
-    Double_t val[2],err[2],bnd1[2],bnd2[2];
+    Double_t parval[2],err[2],bnd1[2],bnd2[2];
     TString para0,para1;
     int ivar;
 
-    gMinuit->mnpout(0,para0,val[0],err[0],bnd1[0],bnd2[0],ivar);
-    pp1 = val[0];
-    gMinuit->mnpout(1,para1,val[1],err[1],bnd1[1],bnd2[1],ivar);
-    pp2 = val[1];
+    gMinuit->mnpout(0,para0,parval[0],err[0],bnd1[0],bnd2[0],ivar);
+    pp1 = parval[0];
+    gMinuit->mnpout(1,para1,parval[1],err[1],bnd1[1],bnd2[1],ivar);
+    pp2 = parval[1];
 
     double ek = ebeam - sqrt(mpi*mpi+pp1*pp1) - sqrt(mpi*mpi+pp2*pp2);
     if (ek < mk) pk = 0.;
@@ -472,7 +482,9 @@ void kine_fit(int ip1, int ip2, int ip3, double* mbc, double* de) {
     *mbc = ebeam*ebeam - pow(px1+px2+pxk,2) - pow(py1+py2+pyk,2) - pow(pz1+pz2+pzk,2);
     if (*mbc>0) *mbc = sqrt(*mbc); else *mbc = 0;
 
-    *de = -ebeam + sqrt(mk*mk+pk*pk) + sqrt(mpi*mpi+pp1*pp1) + sqrt(mpi*mpi+pp2*pp2);
+    if (progpar.verbose) printf("pk=%lf, pp1=%lf, pp2=%lf\n", pk, pp1, pp2);
+
+    *de = -ebeam + sqrt(mk*mk+p3i*p3i) + sqrt(mpi*mpi+p1i*p1i) + sqrt(mpi*mpi+p2i*p2i);
 
     if (progpar.verbose) printf("mbc=%lf, de=%lf\n", *mbc, *de);
 }
@@ -663,7 +675,8 @@ int analyse_event()
 
 			if (progpar.verbose) cout<<"mbc="<<Dmeson.Mbc[i]<<endl;
 
-			Dmeson.dE[i] = sqrt(mk*mk + tP(t1)*tP(t1)) + sqrt(mpi*mpi + tP(t2)*tP(t2)) + sqrt(mpi*mpi + tP(t3)*tP(t3)) - WTotal/2;
+			Dmeson.dE[i] = sqrt(mk*mk + tP(t1)*tP(t1)) +
+			    sqrt(mpi*mpi + tP(t2)*tP(t2)) + sqrt(mpi*mpi + tP(t3)*tP(t3)) - WTotal/2;
 			if (progpar.verbose) cout<<"de="<<Dmeson.dE[i]<<endl;
 
 			Dmeson.P1[i] = tP(t1);
@@ -779,7 +792,7 @@ int analyse_event()
 	copy(&bstrip,c);
     }
 
-    if(eNumber%10==0) cout<<"Ev:"<<eNumber<<endl;
+    if(eNumber%1000==0) cout<<"Ev:"<<eNumber<<endl;
     //==================================================================
 
     eventTree->Fill();
@@ -790,7 +803,7 @@ int analyse_event()
     return 0;
 }
 
-static const char* optstring="ra:d:b:p:h:s:j:t:e:c:l:k:i:u:q:o:v:n:f:z:x";
+static const char* optstring="ra:d:b:p:h:s:j:t:e:c:l:k:i:u:q:o:v:n:w:g:f:z:x";
 
 void Usage(int status)
 {
@@ -818,6 +831,8 @@ void Usage(int status)
 	        <<"  -o RootFile    Output ROOT file name (default to "<<def_progpar.rootfile<<")\n"
             	<<"  -v MCCalibRunNumber    MCCalibRunNumber (default to "<<def_progpar.MCCalibRunNumber<<")\n"
             	<<"  -n NEvents     Number events in process "<<def_progpar.NEvents<<"\n"
+            	<<"  -w NEvbegin    First event to process "<<def_progpar.NEvbegin<<"\n"
+            	<<"  -g NEvend      End event in process "<<def_progpar.NEvend<<"\n"
             	<<"  -f Fit         Performe kinematic fit "<<def_progpar.Dkine_fit<<"\n"
             	<<"  -z Debug       Print debug information "<<def_progpar.verbose<<"\n"
 		<<"  -x             Process the events specified after file exclusively and print debug information"
@@ -855,6 +870,8 @@ int main(int argc, char* argv[])
 		        case 'o': progpar.rootfile=optarg; break;
                         case 'v': progpar.MCCalibRunNumber=atoi(optarg); break;
                         case 'n': progpar.NEvents=atoi(optarg); break;
+                        case 'w': progpar.NEvbegin=atoi(optarg); break;
+                        case 'g': progpar.NEvend=atoi(optarg); break;
                         case 'f': progpar.Dkine_fit=atoi(optarg); break;
                         case 'z': progpar.verbose=atoi(optarg); break;
 			case 'x': progpar.process_only=true; break;
@@ -934,6 +951,7 @@ int main(int argc, char* argv[])
 
 	//Register to kframework used cuts
 	char buf[100];
+	kf_add_cut(KF_PRE_SEL,CutEvents,"Cut events");
 	kf_add_cut(KF_PRE_SEL,CutLongDcRecord,"DC event length >1940 words");
 	kf_add_cut(KF_PRE_SEL,CutLongVdRecord,"VD event length >156 words");
 

@@ -102,6 +102,8 @@ struct ProgramParameters {
 	const char* rootfile;
 	int MCCalibRunNumber;                 //19862 - number of run - download from DB calibration for processe MC-file in runs interval
 	int NEvents;                          //number of processed events
+	int NEvbegin;
+	int NEvend;
 	bool process_only;                    //process one event only
 	bool Dkine_fit;                       //perfome kinematic fit
         bool verbose;                         //print debug information
@@ -128,11 +130,12 @@ struct ProgramParameters {
 //=======================================================================================================================================
 
 //set selection conditions
-static const struct ProgramParameters def_progpar={false,2,6,1,1,6,100,2000,15,45,2,8,0,0,200,15,"/store/users/ovtin/out.root",19862,0,false,false,0};
+static const struct ProgramParameters def_progpar={false,2,6,1,1,6,100,2000,15,45,2,8,0,0,200,15,"/store/users/ovtin/out.root",19862,0,0,0,false,false,0};
 
 static struct ProgramParameters progpar(def_progpar);
 
 enum {
+	CutEvents=1,
 	CutLongDcRecord=1,
 	CutLongVdRecord,
         AtcEventDamageCut,
@@ -212,6 +215,10 @@ int pre_event_rejection()
 
     //if( RawLength(SS_DC)>maxDClen ) return CutLongDcRecord; //too long DC event
     //if( RawLength(SS_VD)>maxVDlen ) return CutLongVdRecord; //too long VD event
+    if ( progpar.NEvend!=0 ){
+	if ( kedrraw_.Header.Number <= progpar.NEvbegin )    return CutEvents;
+	if ( kedrraw_.Header.Number > progpar.NEvend-1 )      return CutEvents;
+    }
 
     return 0;
 }
@@ -317,13 +324,21 @@ int mu_event_rejection()
     return 0;
 }
 
+
+double pcorr(double p) {
+
+    double pc =p*1.0345;
+
+    return fabs(pc);
+}
+
 //function
 void kine_fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t iflag) {
     double pp1 = par[0];
     double pp2 = par[1];
 
-    double p1i = tP(dcand_t1);
-    double p2i = tP(dcand_t2);
+    double p1i = pcorr(tP(dcand_t1));
+    double p2i = pcorr(tP(dcand_t2));
 
     double sp1 = sqrt(ktrrec_h_.FitTrack[dcand_t1][fitSigCC]/
 		      pow(ktrrec_h_.FitTrack[dcand_t1][fitC],2)+
@@ -385,18 +400,18 @@ void kine_fit(int ip1, int ip2, double* mbc, double* de, double* dp) {
     dcand_t1 = ip1;
     dcand_t2 = ip2;
 
-    double p1i = tP(dcand_t1);
-    double p2i = tP(dcand_t2);
+    double p1i = pcorr(tP(dcand_t1));
+    double p2i = pcorr(tP(dcand_t2));
 
     TMinuit *dMinuit = new TMinuit(2); //initialise Minuit with a maximum of 2 parameters to minimise
     dMinuit->SetFCN(kine_fcn);         //set the function to minimise
-    if (progpar.verbose) {
-	dMinuit->SetPrintLevel(3);         //set print out level for Minuit
-    }
-    Double_t arglist[10];
+    dMinuit->SetPrintLevel(progpar.verbose-1); //set print out level for Minuit
+    Double_t arglist[2];
     arglist[0]=1;
-    Int_t iflag;
-    dMinuit->mnexcm("SET PAR",arglist,1,iflag);    //Interprets command
+    arglist[1]=1;
+    Int_t iflag=0;
+    dMinuit->mnexcm("SET ERR",arglist,2,iflag);    //Interprets command
+    //gMinuit->mninit(1,1,1);
     double lowerLimit = 0.0;
     double upperLimit = 0.0;
     dMinuit->mnparm(0,"p1", p1i, 1., lowerLimit, upperLimit, iflag);    //set the parameters used in the fit
@@ -568,11 +583,11 @@ int analyse_event()
 		if ( rr1>8 ) continue;
 		if ( rr2>8 ) continue;
 
-		if( tPt(t1)<=progpar.min_momentum || tPt(t1)>=progpar.max_momentum )  continue;
+		if( pcorr(tPt(t1))<=progpar.min_momentum || pcorr(tPt(t1))>=progpar.max_momentum )  continue;
 		if( tCh2(t1)>progpar.max_tchi2 )  continue;
 		if( tHits(t1)<progpar.min_Nhits )  continue;
 
-		if( tPt(t2)<=progpar.min_momentum || tPt(t2)>=progpar.max_momentum )  continue;
+		if( pcorr(tPt(t2))<=progpar.min_momentum || pcorr(tPt(t2))>=progpar.max_momentum )  continue;
 		if( tCh2(t2)>progpar.max_tchi2 )  continue;
 		if( tHits(t2)<progpar.min_Nhits )  continue;
 
@@ -586,12 +601,12 @@ int analyse_event()
 		if (progpar.verbose) cout<<"P(t1)="<<tP(t1)<<"\t"<<"P(t2)="<<tP(t2)<<"\t"<<"tHits(t1)="<<tHits(t1)<<"\t"<<"tHits(t2)="<<tHits(t2)<<"\t"<<"tCh2(t1)="<<tCh2(t1)<<"\t"<<"tCh2(t2)="<<tCh2(t2)<<endl;
 
 		double px1, px2, py1, py2, pz1, pz2;                        //determine momentums
-		px1 = tP(t1)*tVx(t1);
-		px2 = tP(t2)*tVx(t2);
-		py1 = tP(t1)*tVy(t1);
-		py2 = tP(t2)*tVy(t2);
-		pz1 = tP(t1)*tVz(t1);
-		pz2 = tP(t2)*tVz(t2);
+		px1 = pcorr(tP(t1))*tVx(t1);
+		px2 = pcorr(tP(t2))*tVx(t2);
+		py1 = pcorr(tP(t1))*tVy(t1);
+		py2 = pcorr(tP(t2))*tVy(t2);
+		pz1 = pcorr(tP(t1))*tVz(t1);
+		pz2 = pcorr(tP(t2))*tVz(t2);
 
 		//Mbc=sqrt(Ebeam^2-(p1+p2)^2)
 		Dmeson.Mbc[i] = (WTotal/2)*(WTotal/2) - pow(px1+px2,2) - pow(py1+py2,2) - pow(pz1+pz2,2);
@@ -604,16 +619,16 @@ int analyse_event()
 
 		if (progpar.verbose) cout<<"mbc="<<Dmeson.Mbc[i]<<"\t"<<"InvM="<<Dmeson.InvM[i]<<endl;
 
-		Dmeson.depmkp[i] =  sqrt(mpi*mpi + tP(t1)*tP(t1)) + sqrt(mk*mk + tP(t2)*tP(t2));
-		Dmeson.deppkm[i] =  sqrt(mpi*mpi + tP(t2)*tP(t2)) + sqrt(mk*mk + tP(t1)*tP(t1));
+		Dmeson.depmkp[i] =  sqrt(mpi*mpi + pcorr(tP(t1))*pcorr(tP(t1))) + sqrt(mk*mk + pcorr(tP(t2))*pcorr(tP(t2)));
+		Dmeson.deppkm[i] =  sqrt(mpi*mpi + pcorr(tP(t2))*pcorr(tP(t2))) + sqrt(mk*mk + pcorr(tP(t1))*pcorr(tP(t1)));
 		Dmeson.dE[i] = (Dmeson.depmkp[i] + Dmeson.deppkm[i])/2. - WTotal/2;
 		if (progpar.verbose) cout<<"depmkp="<<Dmeson.depmkp[i]<<"\t"<<"deppkm="<<Dmeson.deppkm[i]<<"\t"<<"de="<<Dmeson.dE[i]<<endl;
 
-		Dmeson.dP[i] = tP(t1)-tP(t2);
-		Dmeson.P1[i] = tP(t1);
-		Dmeson.P2[i] = tP(t2);
-		Dmeson.Pt1[i] = tPt(t1);
-		Dmeson.Pt2[i] = tPt(t2);
+		Dmeson.dP[i] = pcorr(tP(t1))-pcorr(tP(t2));
+		Dmeson.P1[i] = pcorr(tP(t1));
+		Dmeson.P2[i] = pcorr(tP(t2));
+		Dmeson.Pt1[i] = pcorr(tPt(t1));
+		Dmeson.Pt2[i] = pcorr(tPt(t2));
 		Dmeson.chi2t1[i] = tCh2(t1);
 		Dmeson.chi2t2[i] = tCh2(t2);
 		Dmeson.nhitst1[i] = tHits(t1);
@@ -700,7 +715,7 @@ int analyse_event()
     return 0;
 }
 
-static const char* optstring="ra:d:b:p:h:s:j:t:e:c:l:k:i:u:q:o:v:n:f:z:x";
+static const char* optstring="ra:d:b:p:h:s:j:t:e:c:l:k:i:u:q:o:v:n:w:g:f:z:x";
 
 void Usage(int status)
 {
@@ -728,6 +743,8 @@ void Usage(int status)
 	        <<"  -o RootFile    Output ROOT file name (default to "<<def_progpar.rootfile<<")\n"
             	<<"  -v MCCalibRunNumber    MCCalibRunNumber (default to "<<def_progpar.MCCalibRunNumber<<")\n"
             	<<"  -n NEvents     Number events in process "<<def_progpar.NEvents<<"\n"
+            	<<"  -w NEvbegin    First event to process "<<def_progpar.NEvbegin<<"\n"
+            	<<"  -g NEvend      End event in process "<<def_progpar.NEvend<<"\n"
             	<<"  -f Fit         Performe kinematic fit "<<def_progpar.Dkine_fit<<"\n"
             	<<"  -z Debug       Print debug information "<<def_progpar.verbose<<"\n"
 		<<"  -x             Process the events specified after file exclusively and print debug information"
@@ -765,6 +782,8 @@ int main(int argc, char* argv[])
 		        case 'o': progpar.rootfile=optarg; break;
                         case 'v': progpar.MCCalibRunNumber=atoi(optarg); break;
                         case 'n': progpar.NEvents=atoi(optarg); break;
+                        case 'w': progpar.NEvbegin=atoi(optarg); break;
+                        case 'g': progpar.NEvend=atoi(optarg); break;
                         case 'f': progpar.Dkine_fit=atoi(optarg); break;
                         case 'z': progpar.verbose=atoi(optarg); break;
 			case 'x': progpar.process_only=true; break;
@@ -843,6 +862,7 @@ int main(int argc, char* argv[])
 
 	//Register to kframework used cuts
 	char buf[100];
+	kf_add_cut(KF_PRE_SEL,CutEvents,"Cut events");
 	kf_add_cut(KF_PRE_SEL,CutLongDcRecord,"DC event length >1940 words");
 	kf_add_cut(KF_PRE_SEL,CutLongVdRecord,"VD event length >156 words");
 
