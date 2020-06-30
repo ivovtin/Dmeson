@@ -9,7 +9,7 @@
 # --     What to redirect to where         --
 # -- working directory --
 #$ -cwd             # run the job in the directory specified.
-#$ -o $JOB_NAME.o$JOB_ID
+#$ -o /spool/users/ovtin/$JOB_NAME.o$JOB_ID
 # -- Merge the standard out and standard error to one file --
 #$ -j y
 ##$ -shell n
@@ -35,8 +35,8 @@ hitAer=1
 hitWLS=0
 firstCNT=0
 endCNT=160
-##dataORmc=0
-dataORmc=1
+dataORmc=0
+##dataORmc=1
 
 $HOME/development/Dmeson/analysisD0/D0meson $atcrange $hitAer $hitWLS $firstCNT $endCNT $dataORmc
 

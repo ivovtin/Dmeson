@@ -4,7 +4,8 @@
 //for print DEBUG information
 bool verbose=0;
 
-int ntrk=2;
+int ntrk=3;
+//int ntrk=2;
 int nip=0;
 int nbeam=0;
 float min_pt=100; //MeV
