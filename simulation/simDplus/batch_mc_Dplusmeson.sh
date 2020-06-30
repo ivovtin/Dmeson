@@ -28,9 +28,9 @@ i=${SGE_TASK_ID}
 myrand=$[1000+$i]
 
 #start the job
-##$HOME/3.0.0/bin/ks < $HOME/development/Dmeson/simulation/simD0/mccards/mc.cards.ee_to_DD_10 > /dev/null
-$HOME/3.0.0/bin/ks < $HOME/development/Dmeson/simulation/simD0/mccards/mc.cards.ee_to_DD_"$i" > /dev/null
-##$HOME/3.0.0/bin/ks < $HOME/development/Dmeson/simulation/simD0/mccards/mc.cards.ee_to_qq_3 > /dev/null
+##$HOME/3.0.0/bin/ks < $HOME/development/Dmeson/simulation/simDplus/mccards/mc.cards.ee_to_DD_10 > /dev/null
+$HOME/3.0.0/bin/ks < $HOME/development/Dmeson/simulation/simDplus/mccards/mc.cards.ee_to_DD_"$i" > /dev/null
+##$HOME/3.0.0/bin/ks < $HOME/development/Dmeson/simulation/simDplus/mccards/mc.cards.ee_to_qq_3 > /dev/null
 status=$?
 if [ $status != 0 ]; then
   echo "Program exited with status $status"
