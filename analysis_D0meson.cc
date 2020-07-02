@@ -104,6 +104,7 @@ struct ProgramParameters {
 	int NEvents;                          //number of processed events
 	int NEvbegin;
 	int NEvend;
+        float pSF;                            //momentum correction
 	bool process_only;                    //process one event only
 	bool Dkine_fit;                       //perfome kinematic fit
         bool verbose;                         //print debug information
@@ -130,7 +131,7 @@ struct ProgramParameters {
 //=======================================================================================================================================
 
 //set selection conditions
-static const struct ProgramParameters def_progpar={false,2,6,1,1,6,100,2000,15,45,2,8,0,0,200,15,"/store/users/ovtin/out.root",19862,0,0,0,false,false,0};
+static const struct ProgramParameters def_progpar={false,2,6,1,1,6,100,2000,15,45,2,8,0,0,200,15,"/store/users/ovtin/out.root",19862,0,0,0,1.0,false,false,0};
 
 static struct ProgramParameters progpar(def_progpar);
 
@@ -217,7 +218,7 @@ int pre_event_rejection()
     //if( RawLength(SS_VD)>maxVDlen ) return CutLongVdRecord; //too long VD event
     if ( progpar.NEvend!=0 ){
 	if ( kedrraw_.Header.Number <= progpar.NEvbegin )    return CutEvents;
-	if ( kedrraw_.Header.Number > progpar.NEvend-1 )      return CutEvents;
+	if ( kedrraw_.Header.Number > progpar.NEvend-1 )     return CutEvents;
     }
 
     return 0;
@@ -327,7 +328,9 @@ int mu_event_rejection()
 
 double pcorr(double p) {
 
-    double pc =p*1.0345;
+    //double pc =p*1.0345;
+    double pc =p*progpar.pSF;
+    if (progpar.verbose) cout<<"pc="<<pc<<"\t"<<"p="<<p<<"\t"<<"progpar.pSF="<<progpar.pSF<<endl;
 
     return fabs(pc);
 }
@@ -492,7 +495,6 @@ int analyse_event()
 
     if (progpar.verbose) cout<<"RunNumber="<<kedrraw_.Header.RunNumber<<"\t"<<"WTotal="<<WTotal<<"\t"<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"eTracksAll="<<eTracksAll<<endl;
 
-
     if (progpar.verbose) cout<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"eTracksAll="<<eTracksAll<<"\t"<<"eTracksBeam="<<eTracksBeam<<"\t"<<"eTracksIP="<<eTracksIP<<endl;
 
     copy(&bevent);
@@ -619,6 +621,11 @@ int analyse_event()
 
 		if (progpar.verbose) cout<<"mbc="<<Dmeson.Mbc[i]<<"\t"<<"InvM="<<Dmeson.InvM[i]<<endl;
 
+		Dmeson.depmkp[i] =  sqrt(mpi*mpi + tP(t1)*tP(t1)) + sqrt(mk*mk + tP(t2)*tP(t2));
+		Dmeson.deppkm[i] =  sqrt(mpi*mpi + tP(t2)*tP(t2)) + sqrt(mk*mk + tP(t1)*tP(t1));
+		Dmeson.dE[i] = (Dmeson.depmkp[i] + Dmeson.deppkm[i])/2. - WTotal/2;
+		if (progpar.verbose) cout<<"Not correct"<<"depmkp="<<Dmeson.depmkp[i]<<"\t"<<"deppkm="<<Dmeson.deppkm[i]<<"\t"<<"de="<<Dmeson.dE[i]<<endl;
+
 		Dmeson.depmkp[i] =  sqrt(mpi*mpi + pcorr(tP(t1))*pcorr(tP(t1))) + sqrt(mk*mk + pcorr(tP(t2))*pcorr(tP(t2)));
 		Dmeson.deppkm[i] =  sqrt(mpi*mpi + pcorr(tP(t2))*pcorr(tP(t2))) + sqrt(mk*mk + pcorr(tP(t1))*pcorr(tP(t1)));
 		Dmeson.dE[i] = (Dmeson.depmkp[i] + Dmeson.deppkm[i])/2. - WTotal/2;
@@ -704,7 +711,7 @@ int analyse_event()
 	copy(&bstrip,c);
     }
 
-    if(eNumber%10==0) cout<<"Ev:"<<eNumber<<endl;
+    if(eNumber%1000==0) cout<<"Ev:"<<eNumber<<endl;
     //==================================================================
 
     eventTree->Fill();
@@ -715,7 +722,7 @@ int analyse_event()
     return 0;
 }
 
-static const char* optstring="ra:d:b:p:h:s:j:t:e:c:l:k:i:u:q:o:v:n:w:g:f:z:x";
+static const char* optstring="ra:d:b:p:h:s:j:t:e:c:l:k:i:u:q:o:v:n:w:g:y:f:z:x";
 
 void Usage(int status)
 {
@@ -745,6 +752,7 @@ void Usage(int status)
             	<<"  -n NEvents     Number events in process "<<def_progpar.NEvents<<"\n"
             	<<"  -w NEvbegin    First event to process "<<def_progpar.NEvbegin<<"\n"
             	<<"  -g NEvend      End event in process "<<def_progpar.NEvend<<"\n"
+            	<<"  -y SF          Momentum correction "<<def_progpar.pSF<<"\n"
             	<<"  -f Fit         Performe kinematic fit "<<def_progpar.Dkine_fit<<"\n"
             	<<"  -z Debug       Print debug information "<<def_progpar.verbose<<"\n"
 		<<"  -x             Process the events specified after file exclusively and print debug information"
@@ -784,6 +792,7 @@ int main(int argc, char* argv[])
                         case 'n': progpar.NEvents=atoi(optarg); break;
                         case 'w': progpar.NEvbegin=atoi(optarg); break;
                         case 'g': progpar.NEvend=atoi(optarg); break;
+                        case 'y': progpar.pSF=atof(optarg); break;
                         case 'f': progpar.Dkine_fit=atoi(optarg); break;
                         case 'z': progpar.verbose=atoi(optarg); break;
 			case 'x': progpar.process_only=true; break;

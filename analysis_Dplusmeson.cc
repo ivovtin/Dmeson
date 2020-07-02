@@ -104,6 +104,7 @@ struct ProgramParameters {
 	int NEvents;                          //number of processed events
 	int NEvbegin;
 	int NEvend;
+	float pSF;                            //momentum correction
 	bool process_only;                    //process one event only
 	bool Dkine_fit;                       //perfome kinematic fit
         bool verbose;                         //print debug information
@@ -130,7 +131,7 @@ struct ProgramParameters {
 //=======================================================================================================================================
 
 //set selection conditions
-static const struct ProgramParameters def_progpar={false,2,6,1,1,6,100,2000,15,45,2,8,0,0,200,15,"/store/users/ovtin/out.root",19862,0,0,0,false,false,0};
+static const struct ProgramParameters def_progpar={false,2,6,1,1,6,100,2000,15,45,2,8,0,0,200,15,"/store/users/ovtin/out.root",19862,0,0,0,1.0,false,false,0};
 
 static struct ProgramParameters progpar(def_progpar);
 
@@ -327,6 +328,13 @@ int mu_event_rejection()
     //if( mu_next_event()>0 ) return MUCut;           //for delete cosmic events
 
     return 0;
+}
+
+double pcorr(double p) {
+
+    double pc =p*progpar.pSF;
+
+    return fabs(pc);
 }
 
 //function
@@ -803,7 +811,7 @@ int analyse_event()
     return 0;
 }
 
-static const char* optstring="ra:d:b:p:h:s:j:t:e:c:l:k:i:u:q:o:v:n:w:g:f:z:x";
+static const char* optstring="ra:d:b:p:h:s:j:t:e:c:l:k:i:u:q:o:v:n:w:g:y:f:z:x";
 
 void Usage(int status)
 {
@@ -833,6 +841,7 @@ void Usage(int status)
             	<<"  -n NEvents     Number events in process "<<def_progpar.NEvents<<"\n"
             	<<"  -w NEvbegin    First event to process "<<def_progpar.NEvbegin<<"\n"
             	<<"  -g NEvend      End event in process "<<def_progpar.NEvend<<"\n"
+            	<<"  -y SF          Momentum correction "<<def_progpar.pSF<<"\n"
             	<<"  -f Fit         Performe kinematic fit "<<def_progpar.Dkine_fit<<"\n"
             	<<"  -z Debug       Print debug information "<<def_progpar.verbose<<"\n"
 		<<"  -x             Process the events specified after file exclusively and print debug information"
@@ -872,6 +881,7 @@ int main(int argc, char* argv[])
                         case 'n': progpar.NEvents=atoi(optarg); break;
                         case 'w': progpar.NEvbegin=atoi(optarg); break;
                         case 'g': progpar.NEvend=atoi(optarg); break;
+                        case 'y': progpar.pSF=atof(optarg); break;
                         case 'f': progpar.Dkine_fit=atoi(optarg); break;
                         case 'z': progpar.verbose=atoi(optarg); break;
 			case 'x': progpar.process_only=true; break;
