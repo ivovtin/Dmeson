@@ -184,9 +184,12 @@
 
     struct data10
     {
-	int  nhitst1[20],nhitst2[20],ncomb,ncls1[20],ncls2[20];
-	float Mbc[20],Mbckin[20],InvM[20],dE[20],dEkin[20],dP[20],dPkin[20],depmkp[20],deppkm[20],Ebeam,rEv,P1[20],P2[20],Pt1[20],Pt2[20],chi2t1[20],chi2t2[20],e1[20],e2[20],rr1[20],rr2[20],Zip1[20],
-	    Zip2[20],ecls1[20],ecls2[20],tcls1[20],tcls2[20],pcls1[20],pcls2[20];
+	//int  nhitst1[20],nhitst2[20],ncomb,ncls1[20],ncls2[20];
+	//float Mbc[20],Mbckin[20],InvM[20],dE[20],dEkin[20],dP[20],dPkin[20],depmkp[20],deppkm[20],Ebeam,rEv,P1[20],P2[20],Pt1[20],Pt2[20],chi2t1[20],chi2t2[20],e1[20],e2[20],rr1[20],rr2[20],Zip1[20],
+	//    Zip2[20],ecls1[20],ecls2[20],tcls1[20],tcls2[20],pcls1[20],pcls2[20];
+    	int  nhitst1[50],nhitst2[50],ncomb,ncls1[50],ncls2[50];
+	float Mbc[50],Mbckin[50],InvM[50],dE[50],dEkin[50],dP[50],dPkin[50],depmkp[50],deppkm[50],Ebeam,rEv,P1[50],P2[50],Pt1[50],Pt2[50],chi2t1[50],chi2t2[50],e1[50],e2[50],rr1[50],rr2[50],Zip1[50],
+	    Zip2[50],ecls1[50],ecls2[50],tcls1[50],tcls2[50],pcls1[50],pcls2[50];
     };
     data10 Dmeson;
 
@@ -209,13 +212,18 @@
 
 	    for(int i=1; i<=862; i++)   //signal 2016+2017
 	    {
-		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/data/psi3770_to_D0meson_%d.root",i).Data());
+		//tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/data/psi3770_to_D0meson_%d.root",i).Data());
+		//tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/dataPcorr_v1/psi3770_to_D0meson_%d.root",i).Data());
+		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/dataPcorr/psi3770_to_D0meson_%d.root",i).Data());
 	    }
 	}
 	else if (sim==4){
 	    for(int i=1; i<=608; i++)   //signal 2004+2005
 	    {
-		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/data2004/psi3770_to_D0meson_%d.root",i).Data());
+		//tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/data2004/psi3770_to_D0meson_%d.root",i).Data());
+		//tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/dataPcorr2004_v1/psi3770_to_D0meson_%d.root",i).Data());
+		//tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/dataPcorr2004_v2/psi3770_to_D0meson_%d.root",i).Data());
+		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/dataPcorr2004/psi3770_to_D0meson_%d.root",i).Data());
 	    }
 	}
 	else if (sim==1){

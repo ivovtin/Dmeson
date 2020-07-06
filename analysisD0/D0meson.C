@@ -51,18 +51,21 @@ int main(int argc, char* argv[])
     sim=fl_sim_exp;
     TString KEDR;
     if( sim==0 ){
-	deCut1=-140; deCut2=60;
+	deCut1=-100; deCut2=100;
 	mbcCut1=1855, mbcCut2=1875;
 	fnameout=TString::Format("res_%d_%d_%d_%d_exp_Dmeson.root",first_cnt,end_cnt,region,max_pt).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/D0/data/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/data/";
+        KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr/";
         //KEDR = "/home/ovtin/public_html/outDmeson/D0/data/datantrack2/";
     }
     else if (sim==4)
     {
-	deCut1=-140; deCut2=60;
+	deCut1=-100; deCut2=100;
+	//deCut1=-80; deCut2=120;
 	mbcCut1=1855, mbcCut2=1875;
 	fnameout=TString::Format("res_%d_%d_%d_%d_exp_Dmeson_2004.root",first_cnt,end_cnt,region,max_pt).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/D0/data2004/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/data2004/";
+        KEDR = "/home/ovtin/public_html/outDmeson/D0/data2004Pcorr/";
     }
     else if (sim==1)
     {
@@ -96,11 +99,14 @@ int main(int argc, char* argv[])
     setbranchstatus();
     setbranchaddress();
 
+    //gROOT->SetStyle("Plain");
+    //gStyle->SetOptStat(0111);
+
     TH1F* henergy=new TH1F("Energy","Energy EMC",100,0.,4500.);
-    TH1F* henlkr=new TH1F("E_LKr","Energy LKr",1000,0.,4500.);
-    TH1F* hencsi=new TH1F("E_CsI","Energy CsI",1000,0.,4500.);
+    TH1F* henlkr=new TH1F("ELKr","Energy LKr",1000,0.,4500.);
+    TH1F* hencsi=new TH1F("ECsI","Energy CsI",1000,0.,4500.);
     TH1F* hncls=new TH1F("ncls","emc.ncls",12,-0.5,11.5);
-    TH1F* hep=new TH1F("E/p","E/p",100,0.,10.);
+    TH1F* hep=new TH1F("Etop","E/p",100,0.,10.);
     TH1F* hmbc=new TH1F("Mbc","Mbc",100,0.,2000.);
     TH1F* hmbc_zoom;
     TH1F* hmbckin_zoom;
@@ -114,7 +120,7 @@ int main(int argc, char* argv[])
     }
     TH1F* hrr=new TH1F("rr","rr",50,0.,10.);
     TH1F* hZip=new TH1F("ZIP","ZIP",100,-50.,50.);
-    TH1F* henass=new TH1F("Energy_ass","Energy ass",100,0.,4500.);
+    TH1F* henass=new TH1F("Energy ass","Energy ass",100,0.,4500.);
     TH1F* hdepmkp=new TH1F("depmkp","depmkp",100,-400.,300.);
     TH1F* hdeppkm=new TH1F("deppkm","deppkm",100,-400.,300.);
     TH1F* hdiffepmkpeppkm=new TH1F("depmkp-deppkm","depmkp-deppkm",100,-100.,100.);
@@ -129,7 +135,7 @@ int main(int argc, char* argv[])
     TH2D *h2MbcdEkin=new TH2D("M_{bc}:#Delta E", "M_{bc}:#Delta E", 200,1700,1900,200,-300,300);
     TH2D *h2MbcdP=new TH2D("M_{bc}:#Delta P", "M_{bc}:#Delta P", 200,-500,500,200,1825,1890);
     TH2D *h2MbckindP=new TH2D("M_{bc}:#Delta P", "M_{bc}:#Delta P", 200,-500,500,200,1825,1890);
-    TH1F* hDncomb=new TH1F("Dmseon.ncomb","Dmseon.ncomb",20,0.,20.);
+    TH1F* hDncomb=new TH1F("Dmseon.ncomb","Dmseon.ncomb",50,0.,50.);
 
 
     TH1F* hnclst1=new TH1F("nclst1","nclst1",6,-0.5,5.5);
@@ -246,40 +252,44 @@ int main(int argc, char* argv[])
            ////&& (theta[0]<135 && theta[1]<135)
 	   ////vrt.ntrk>=ntrk && emc.ncls>=min_tot_ncls && emc.ncls<=max_tot_ncls && mu.nhits<=maxmunhits
 	   ////&& emc.energy<3300
+           //&& mu.nhits<=maxmunhits
 	  )
 	{
 	    Nselect++;
-	    if(verbose) cout<<"<<<<<<<<<<<<<<<<<<<<<<<<<<< Next event >>>>>>>>>>>>>>>>>>>>>>>>>>>>"<<endl;
-	    if(verbose) cout<<"ev.run="<<ev.run<<"\t"<<"ev.event="<<ev.event<<"\t"<<"ev.evdaq="<<ev.evdaq<<endl;
-
-	    if(verbose) cout<<"Dmeson.ncomb="<<Dmeson.ncomb<<"\t"<<endl;
+	    //if(verbose && Dmeson.ncomb>0) cout<<"<<<<<<<<<<<<<<<<<<<<<<<<<<< Next event >>>>>>>>>>>>>>>>>>>>>>>>>>>>"<<endl;
+	    //if(verbose && Dmeson.ncomb>0) cout<<"ev.run="<<ev.run<<"\t"<<"ev.event="<<ev.event<<"\t"<<"ev.evdaq="<<ev.evdaq<<endl;
+	    //if(verbose && Dmeson.ncomb>0) cout<<"Dmeson.ncomb="<<Dmeson.ncomb<<"\t"<<endl;
 	    if ( Dmeson.ncomb>0 ) hDncomb->Fill(Dmeson.ncomb);
 
 	    for(int i=0; i<Dmeson.ncomb; i++){
+
 		if(
 		   Dmeson.Pt1[i]>min_pt && Dmeson.Pt1[i]<max_pt && Dmeson.Pt2[i]>min_pt && Dmeson.Pt2[i]<max_pt
 		   && Dmeson.chi2t1[i]<max_chi2 && Dmeson.chi2t2[i]<max_chi2
-		   && Dmeson.nhitst1[i]>min_nhits && Dmeson.nhitst2[i]>min_nhits
-		   && Dmeson.nhitst1[i]<max_nhits && Dmeson.nhitst2[i]<max_nhits
+		   && Dmeson.nhitst1[i]>=min_nhits && Dmeson.nhitst2[i]>=min_nhits
+		   && Dmeson.nhitst1[i]<=max_nhits && Dmeson.nhitst2[i]<=max_nhits
 		   //&& Dmeson.Mbc[i]>min_Mbc && Dmeson.Mbc[i]<max_Mbc
-		   && Dmeson.Mbckin[i]>min_Mbc && Dmeson.Mbckin[i]<max_Mbc
-		   && Dmeson.dE[i]>min_dE && Dmeson.dE[i]< max_dE
-		   && Dmeson.rr1[i]<0.5 && Dmeson.rr2[i]<0.5 && fabs(Dmeson.Zip1[i])<10 && fabs(Dmeson.Zip2[i])<10
+		   && Dmeson.Mbckin[i]>=min_Mbc && Dmeson.Mbckin[i]<=max_Mbc
+		   && Dmeson.dE[i]>=min_dE && Dmeson.dE[i]<=max_dE
+		   && Dmeson.rr1[i]<0.5 && Dmeson.rr2[i]<0.5 && fabs(Dmeson.Zip1[i])<12 && fabs(Dmeson.Zip2[i])<12
 		  )
 		{
-                    if( Dmeson.ecls1[i]>1000 || Dmeson.ecls2[i]>1000 ) continue;
-
-		    Result<< ev.run <<"\t"<< ev.evdaq << endl;
-
 		    if ( verbose )
 		    {
-			cout<<"emc.energy="<<emc.energy<<"\t"<<"P1="<<Dmeson.P1[i]<<"\t"<<"P2="<<Dmeson.P2[i]<<endl;
+			cout<<"emc.energy="<<emc.energy<<"\t"<<"Pt1="<<Dmeson.Pt1[i]<<"\t"<<"Pt2="<<Dmeson.Pt2[i]<<endl;
 			cout<<"e1/P1="<<Dmeson.e1[i]/Dmeson.P1[i]<<"\t"<<"e2/P2="<<Dmeson.e2[i]/Dmeson.P2[i]<<endl;
 			cout<<"(e1[i]+e2[i])="<<Dmeson.e1[i]+Dmeson.e2[i]<<endl;
+			cout<<"chi2t1="<<Dmeson.chi2t1[i]<<"\t"<<"chi2t2="<<Dmeson.chi2t2[i]<<"\t"<<endl;
+			cout<<"nhitst1="<<Dmeson.nhitst1[i]<<"\t"<<"nhitst2="<<Dmeson.nhitst2[i]<<"\t"<<endl;
 			cout<<"rr1="<<Dmeson.rr1[i]<<"\t"<<"rr2="<<Dmeson.rr2[i]<<"\t"<<endl;
 			cout<<"Zip1="<<Dmeson.Zip1[i]<<"\t"<<"Zip2="<<Dmeson.Zip2[i]<<"\t"<<endl;
 			cout<<"fabs(fabs(Dmeson.Zip1[i])-fabs(Dmeson.Zip2[i]))="<<fabs(fabs(Dmeson.Zip1[i])-fabs(Dmeson.Zip2[i]))<<endl;
+			cout<<i<<"\t"<<"Dmeson.Mbc="<<Dmeson.Mbc[i]<<"\t"<<"Dmeson.Mbckin="<<Dmeson.Mbckin[i]<<"\t"<<"Dmeson.dE="<<Dmeson.dE[i]<<"\t"<<endl;
 		    }
+
+		    if( Dmeson.ecls1[i]>1000 || Dmeson.ecls2[i]>1000 ) continue;
+
+		    Result<< ev.run <<"\t"<< ev.evdaq << endl;
 
 		    hEbeam->Fill(Dmeson.Ebeam);
 		    htnhits->Fill(Dmeson.nhitst1[i]);
@@ -365,7 +375,7 @@ int main(int argc, char* argv[])
 		    h2MbcdEkin->Fill(Dmeson.Mbckin[i], Dmeson.dE[i]);
 		    h2MbcdP->Fill(Dmeson.dP[i], Dmeson.Mbc[i]);
 		    h2MbckindP->Fill(Dmeson.dP[i], Dmeson.Mbckin[i]);
-		    if(verbose) cout<<i<<"\t"<<"vrt.ntrk="<<vrt.ntrk<<"\t"<<"Dmeson.Mbc="<<Dmeson.Mbc[i]<<"\t"<<"Dmeson.dE="<<Dmeson.dE[i]<<"\t"<<endl;
+		    if(verbose) cout<<i<<"\t"<<"vrt.ntrk="<<vrt.ntrk<<"\t"<<"Dmeson.Mbc="<<Dmeson.Mbc[i]<<"\t"<<"Dmeson.Mbckin="<<Dmeson.Mbckin[i]<<"\t"<<"Dmeson.dE="<<Dmeson.dE[i]<<"\t"<<endl;
 		}
 	    }
 
