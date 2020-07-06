@@ -23,15 +23,15 @@
 #$ -soft
 ##$ -hard
 #$ -l time=24:00:00
-##$ -q remote
-#$ -q extralong
+#$ -q remote
+##$ -q extralong
 #
 # -- Send mail at submission and completion of script --
 #$ -m beas
 #$ -M ovtin.ivan@gmail.com
 
 ##$ -t 1-862
-#$ -t 151-200
+#$ -t 601-862
 ##$ -t 1-608
 ##$ -t 1-1
 
@@ -42,9 +42,9 @@ myrand=$[1000+$i]
 ##Nevents=10000
 #Signal
 inruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/runDmeson"$i
-outfile="/spool/users/ovtin/outDmeson/D0/dataPcor/psi3770_to_D0meson_"$i".root"
+outfile="/spool/users/ovtin/outDmeson/D0/dataPcorr/psi3770_to_D0meson_"$i".root"
 ##inruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/runDmeson"$i
-##outfile="/spool/users/ovtin/outDmeson/D0/data2004/psi3770_to_D0meson_"$i".root"
+##outfile="/spool/users/ovtin/outDmeson/D0/dataPcorr2004/psi3770_to_D0meson_"$i".root"
 #Bkg
 #inruns="/home/ovtin/development/Dmeson/runsDmeson/runBkgDmeson"$i
 #outfile="/spool/users/ovtin/psi3770_to_BkgD0meson_"$i".root"
@@ -66,10 +66,16 @@ minClustersCsI=0
 maxtchi2=100
 minNhits=20
 kinefit=1
+#pSF=1.0345   ##data 2016-17
+#pSF=1.0242   ##data 2016-17 v2
+pSF=1.0200    ##data 2016-17 v3
+###pSF=1.0387   ##data 2004  v1
+###pSF=1.0311   ##data 2004   v2
+#pSF=1.0461   ##data 2004   v3  best
 #verbose=1
 
-##$HOME/development/Dmeson/analysis_D0meson -n 200000 -o $outfile $inruns
-$HOME/development/Dmeson/analysis_D0meson -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile -f $kinefit $inruns
+
+$HOME/development/Dmeson/analysis_D0meson -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile -f $kinefit $inruns -y $pSF
 ##$HOME/development/Dmeson/analysis_D0meson -n 3000 -z $verbose -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile -f $kinefit $inruns
 
 status=$?

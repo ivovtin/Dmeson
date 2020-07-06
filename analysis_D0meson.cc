@@ -188,9 +188,9 @@ static struct StripTrackBranch bstriptrack;
 static struct ATCCounterBranch bcnt[Natccr][Ntraks];
 static struct ATCBranch batc;
 
-typedef struct {Int_t nhitst1[20],nhitst2[20],ncomb,ncls1[20],ncls2[20]; Float_t Mbc[20],Mbckin[20],InvM[20],dE[20],dEkin[20],
-    dP[20],dPkin[20],depmkp[20],deppkm[20],Ebeam,rEv,P1[20],P2[20],Pt1[20],Pt2[20],chi2t1[20],chi2t2[20],e1[20],
-    e2[20],rr1[20],rr2[20],Zip1[20],Zip2[20],ecls1[20],ecls2[20],tcls1[20],tcls2[20],pcls1[20],pcls2[20]; } DMESON;
+typedef struct {Int_t nhitst1[50],nhitst2[50],ncomb,ncls1[50],ncls2[50]; Float_t Mbc[50],Mbckin[50],InvM[50],dE[50],dEkin[50],
+    dP[50],dPkin[50],depmkp[50],deppkm[50],Ebeam,rEv,P1[50],P2[50],Pt1[50],Pt2[50],chi2t1[50],chi2t2[50],e1[50],
+    e2[50],rr1[50],rr2[50],Zip1[50],Zip2[50],ecls1[50],ecls2[50],tcls1[50],tcls2[50],pcls1[50],pcls2[50]; } DMESON;
 
 static DMESON Dmeson;
 
@@ -457,8 +457,10 @@ void kine_fit(int ip1, int ip2, double* mbc, double* de, double* dp) {
     *mbc = ebeam*ebeam - pow(px1+px2,2) - pow(py1+py2,2) - pow(pz1+pz2,2);
     if (*mbc>0) *mbc = sqrt(*mbc); else *mbc = 0;
 
-    *de = (sqrt(mpi*mpi + pp1*pp1) + sqrt(mk*mk + pp2*pp2) +
-	   sqrt(mpi*mpi + pp2*pp2) + sqrt(mk*mk + pp1*pp1))/2. - ebeam ;
+    //*de = (sqrt(mpi*mpi + pp1*pp1) + sqrt(mk*mk + pp2*pp2) +
+	//   sqrt(mpi*mpi + pp2*pp2) + sqrt(mk*mk + pp1*pp1))/2. - ebeam;
+    *de = (sqrt(mpi*mpi + p1i*p1i) + sqrt(mk*mk + p2i*p2i) +
+	   sqrt(mpi*mpi + p2i*p2i) + sqrt(mk*mk + p1i*p1i))/2. - ebeam;
 
     *dp = pp1-pp2;
 
@@ -505,7 +507,7 @@ int analyse_event()
     copy(&bvertex);
     copy(&bemc);
 
-    for(int i=0; i<20; i++){
+    for(int i=0; i<50; i++){
 	Dmeson.Mbc[i]=0;                                            //Invariant mass or beam consraint mass
 	Dmeson.InvM[i]=0;                                           //also Invariant mass
 	Dmeson.dE[i]=0;
@@ -621,10 +623,10 @@ int analyse_event()
 
 		if (progpar.verbose) cout<<"mbc="<<Dmeson.Mbc[i]<<"\t"<<"InvM="<<Dmeson.InvM[i]<<endl;
 
-		Dmeson.depmkp[i] =  sqrt(mpi*mpi + tP(t1)*tP(t1)) + sqrt(mk*mk + tP(t2)*tP(t2));
-		Dmeson.deppkm[i] =  sqrt(mpi*mpi + tP(t2)*tP(t2)) + sqrt(mk*mk + tP(t1)*tP(t1));
-		Dmeson.dE[i] = (Dmeson.depmkp[i] + Dmeson.deppkm[i])/2. - WTotal/2;
-		if (progpar.verbose) cout<<"Not correct"<<"depmkp="<<Dmeson.depmkp[i]<<"\t"<<"deppkm="<<Dmeson.deppkm[i]<<"\t"<<"de="<<Dmeson.dE[i]<<endl;
+		//Dmeson.depmkp[i] =  sqrt(mpi*mpi + tP(t1)*tP(t1)) + sqrt(mk*mk + tP(t2)*tP(t2));
+		//Dmeson.deppkm[i] =  sqrt(mpi*mpi + tP(t2)*tP(t2)) + sqrt(mk*mk + tP(t1)*tP(t1));
+		//Dmeson.dE[i] = (Dmeson.depmkp[i] + Dmeson.deppkm[i])/2. - WTotal/2;
+		//if (progpar.verbose) cout<<"Not correct"<<"depmkp="<<Dmeson.depmkp[i]<<"\t"<<"deppkm="<<Dmeson.deppkm[i]<<"\t"<<"de="<<Dmeson.dE[i]<<endl;
 
 		Dmeson.depmkp[i] =  sqrt(mpi*mpi + pcorr(tP(t1))*pcorr(tP(t1))) + sqrt(mk*mk + pcorr(tP(t2))*pcorr(tP(t2)));
 		Dmeson.deppkm[i] =  sqrt(mpi*mpi + pcorr(tP(t2))*pcorr(tP(t2))) + sqrt(mk*mk + pcorr(tP(t1))*pcorr(tP(t1)));
@@ -855,9 +857,9 @@ int main(int argc, char* argv[])
 	}
 
 	eventTree->Branch("mu",&bmu,MUBranchList);
-	eventTree->Branch("Dmeson",&Dmeson,"nhitst1[20]/I:nhitst2[20]:ncomb:ncls1[20]:ncls2[20]"
-			  ":Mbc[20]/F:Mbckin[20]:InvM[20]:dE[20]:dEkin[20]:dP[20]:dPkin[20]:depmkp[20]:deppkm[20]:Ebeam:rEv:P1[20]:P2[20]:Pt1[20]:Pt2[20]:chi2t1[20]:chi2t2[20]:e1[20]"
-			  ":e2[20]:rr1[20]:rr2[20]:Zip1[20]:Zip2[20]:ecls1[20]:ecls2[20]:tcls1[20]:tcls2[20]:pcls1[20]:pcls2[20]");
+	eventTree->Branch("Dmeson",&Dmeson,"nhitst1[50]/I:nhitst2[50]:ncomb:ncls1[50]:ncls2[50]"
+			  ":Mbc[50]/F:Mbckin[50]:InvM[50]:dE[50]:dEkin[50]:dP[50]:dPkin[50]:depmkp[50]:deppkm[50]:Ebeam:rEv:P1[50]:P2[50]:Pt1[50]:Pt2[50]:chi2t1[50]:chi2t2[50]:e1[50]"
+			  ":e2[50]:rr1[50]:rr2[50]:Zip1[50]:Zip2[50]:ecls1[50]:ecls2[50]:tcls1[50]:tcls2[50]:pcls1[50]:pcls2[50]");
 
 	eventTree->Branch("strcls",&bstrip,stripClusterBranchList);
 	eventTree->Branch("strtrk",&bstriptrack,stripTrackBranchList);
