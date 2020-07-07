@@ -348,9 +348,9 @@ void kine_fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *parval, Int_t i
     else
 	pk = sqrt(ek*ek-mk*mk);       //from condition dE=0
 
-    double p1i = tP(dcand_t2);
-    double p2i = tP(dcand_t3);
-    double pki = tP(dcand_t1);
+    double p1i = pcorr(tP(dcand_t2));
+    double p2i = pcorr(tP(dcand_t3));
+    double pki = pcorr(tP(dcand_t1));
 
     double sp1 = sqrt(ktrrec_h_.FitTrack[dcand_t2][fitSigCC]/
 		      pow(ktrrec_h_.FitTrack[dcand_t2][fitC],2)+
@@ -418,9 +418,9 @@ void kine_fit(int ip1, int ip2, int ip3, double* mbc, double* de) {
     dcand_t2 = ip2;
     dcand_t3 = ip3;
 
-    double p1i = tP(dcand_t2);
-    double p2i = tP(dcand_t3);
-    double p3i = tP(dcand_t1);
+    double p1i = pcorr(tP(dcand_t2));
+    double p2i = pcorr(tP(dcand_t3));
+    double p3i = pcorr(tP(dcand_t1));
 
     TMinuit *dMinuit = new TMinuit(2); //initialise Minuit with a maximum of 2 parameters to minimise
     dMinuit->SetFCN(kine_fcn);         //set the function to minimise
@@ -643,15 +643,15 @@ int analyse_event()
 			if ( rr2>8 ) continue;
 			if ( rr3>8 ) continue;
 
-			if( tPt(t1)<=progpar.min_momentum || tPt(t1)>=progpar.max_momentum )  continue;
+			if( pcorr(tPt(t1))<=progpar.min_momentum || pcorr(tPt(t1))>=progpar.max_momentum )  continue;
 			if( tCh2(t1)>progpar.max_tchi2 )  continue;
 			if( tHits(t1)<progpar.min_Nhits )  continue;
 
-			if( tPt(t2)<=progpar.min_momentum || tPt(t2)>=progpar.max_momentum )  continue;
+			if( pcorr(tPt(t2))<=progpar.min_momentum || pcorr(tPt(t2))>=progpar.max_momentum )  continue;
 			if( tCh2(t2)>progpar.max_tchi2 )  continue;
 			if( tHits(t2)<progpar.min_Nhits )  continue;
 
-			if( tPt(t3)<=progpar.min_momentum || tPt(t3)>=progpar.max_momentum )  continue;
+			if( pcorr(tPt(t3))<=progpar.min_momentum || pcorr(tPt(t3))>=progpar.max_momentum )  continue;
 			if( tCh2(t3)>progpar.max_tchi2 )  continue;
 			if( tHits(t3)<progpar.min_Nhits )  continue;
 
@@ -665,17 +665,18 @@ int analyse_event()
 			if (progpar.verbose) cout<<"i="<< i<<endl;
 			if (progpar.verbose) cout<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"Ebeam="<<WTotal/2<<"\t"<<"t1="<<t1<<"\t"<<"t2="<<t2<<"\t"<<"t3="<<t3<<"\t"<<"tCharge(t1)="<<tCharge(t1)<<"\t"<<"tCharge(t2)="<<tCharge(t2)<<"\t"<<"tCharge(t3)="<<tCharge(t3)<<endl;
 			if (progpar.verbose) cout<<"P(t1)="<<tP(t1)<<"\t"<<"P(t2)="<<tP(t2)<<"\t"<<"P(t3)="<<tP(t3)<<"\t"<<"tHits(t1)="<<tHits(t1)<<"\t"<<"tHits(t2)="<<tHits(t2)<<"\t"<<"tHits(t3)="<<tHits(t3)<<"\t"<<"tCh2(t1)="<<tCh2(t1)<<"\t"<<"tCh2(t2)="<<tCh2(t2)<<"\t"<<"tCh2(t3)="<<tCh2(t3)<<endl;
+			if (progpar.verbose) cout<<"Pcor(t1)="<<pcorr(tP(t1))<<"\t"<<"Pcor(t2)="<<pcorr(tP(t2))<<"\t"<<"Pcor(t3)="<<pcorr(tP(t3))<<endl;
 
 			double px1, px2, px3, py1, py2, py3, pz1, pz2, pz3;
-			px1 = tP(t1)*tVx(t1);
-			px2 = tP(t2)*tVx(t2);
-			px3 = tP(t3)*tVx(t3);
-			py1 = tP(t1)*tVy(t1);
-			py2 = tP(t2)*tVy(t2);
-			py3 = tP(t3)*tVy(t3);
-			pz1 = tP(t1)*tVz(t1);
-			pz2 = tP(t2)*tVz(t2);
-			pz3 = tP(t3)*tVz(t3);
+			px1 = pcorr(tP(t1))*tVx(t1);
+			px2 = pcorr(tP(t2))*tVx(t2);
+			px3 = pcorr(tP(t3))*tVx(t3);
+			py1 = pcorr(tP(t1))*tVy(t1);
+			py2 = pcorr(tP(t2))*tVy(t2);
+			py3 = pcorr(tP(t3))*tVy(t3);
+			pz1 = pcorr(tP(t1))*tVz(t1);
+			pz2 = pcorr(tP(t2))*tVz(t2);
+			pz3 = pcorr(tP(t3))*tVz(t3);
 
 			//Mbc=sqrt(Ebeam^2-(p1+p2)^2)
 			Dmeson.Mbc[i] = (WTotal/2)*(WTotal/2) - pow(px1+px2+px3,2) - pow(py1+py2+py3,2) - pow(pz1+pz2+pz3,2);
@@ -683,16 +684,16 @@ int analyse_event()
 
 			if (progpar.verbose) cout<<"mbc="<<Dmeson.Mbc[i]<<endl;
 
-			Dmeson.dE[i] = sqrt(mk*mk + tP(t1)*tP(t1)) +
-			    sqrt(mpi*mpi + tP(t2)*tP(t2)) + sqrt(mpi*mpi + tP(t3)*tP(t3)) - WTotal/2;
+			Dmeson.dE[i] = sqrt(mk*mk + pcorr(tP(t1))*pcorr(tP(t1))) +
+			    sqrt(mpi*mpi + pcorr(tP(t2))*pcorr(tP(t2))) + sqrt(mpi*mpi + pcorr(tP(t3))*pcorr(tP(t3))) - WTotal/2;
 			if (progpar.verbose) cout<<"de="<<Dmeson.dE[i]<<endl;
 
-			Dmeson.P1[i] = tP(t1);
-			Dmeson.P2[i] = tP(t2);
-			Dmeson.P3[i] = tP(t3);
-			Dmeson.Pt1[i] = tPt(t1);
-			Dmeson.Pt2[i] = tPt(t2);
-			Dmeson.Pt3[i] = tPt(t3);
+			Dmeson.P1[i] = pcorr(tP(t1));
+			Dmeson.P2[i] = pcorr(tP(t2));
+			Dmeson.P3[i] = pcorr(tP(t3));
+			Dmeson.Pt1[i] = pcorr(tPt(t1));
+			Dmeson.Pt2[i] = pcorr(tPt(t2));
+			Dmeson.Pt3[i] = pcorr(tPt(t3));
 			Dmeson.chi2t1[i] = tCh2(t1);
 			Dmeson.chi2t2[i] = tCh2(t2);
 			Dmeson.chi2t3[i] = tCh2(t3);

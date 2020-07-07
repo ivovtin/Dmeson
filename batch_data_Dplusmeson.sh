@@ -31,8 +31,8 @@
 #$ -M ovtin.ivan@gmail.com
 
 ##$ -t 1-862
-#$ -t 1-862
 ##$ -t 1-608
+#$ -t 401-608
 ##$ -t 1-1
 
 i=${SGE_TASK_ID}
@@ -41,10 +41,11 @@ myrand=$[1000+$i]
 ##inruns=23219
 ##Nevents=10000
 #Signal
-inruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/runDmeson"$i
-##inruns="/home/ovtin/development/Dmeson/runsDmeson/runs2005/runDmeson"$i
-##outfile="/spool/users/ovtin/outDmeson/psi3770_to_D0meson_"$i".root"
-outfile="/spool/users/ovtin/outDmeson/Dplus/data/psi3770_to_D0meson_"$i".root"
+##inruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/runDmeson"$i
+##outfile="/spool/users/ovtin/outDmeson/Dplus/data/psi3770_to_D0meson_"$i".root"
+inruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/runDmeson"$i
+#outfile="/spool/users/ovtin/outDmeson/Dplus/data2004/psi3770_to_D0meson_"$i".root"
+outfile="/spool/users/ovtin/outDmeson/Dplus/dataPcorr2004/psi3770_to_D0meson_"$i".root"
 #Bkg
 #inruns="/home/ovtin/development/Dmeson/runsDmeson/runBkgDmeson"$i
 #outfile="/spool/users/ovtin/psi3770_to_BkgD0meson_"$i".root"
@@ -66,9 +67,11 @@ minClustersCsI=0
 maxtchi2=100
 minNhits=20
 kinefit=1
+pSF=1.0381   ##data 2004
 #verbose=1
 
-$HOME/development/Dmeson/analysis_Dplusmeson -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile -f $kinefit $inruns
+##$HOME/development/Dmeson/analysis_Dplusmeson -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile -f $kinefit $inruns
+$HOME/development/Dmeson/analysis_Dplusmeson -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile -f $kinefit $inruns -y $pSF
 
 status=$?
 if [ $status != 0 ]; then
