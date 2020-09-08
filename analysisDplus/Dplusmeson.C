@@ -13,32 +13,18 @@ string progname;
 
 int Usage(string status)
 {
-	cout<<"Usage: "<<progname<<"\t"<<"1)Range ATC->1,2..  2)Hit in aer(0,1)  3)Hit in wls  4)First cnt   5)End cnt  6)Data/MC (0,1)"<<endl;
-        exit(0);
+	cout<<"Usage: "<<progname<<"\t"<<"Data (0 - 2016-17, 4 - 2004) or MC (1 - Signal, 2 - BG continium, 3 - BG DD)"<<endl;
+	exit(0);
 }
 
 int main(int argc, char* argv[])
 {
     progname=argv[0];
-    int region=1;
-    int hit_aer=1;
-    int hit_wls=0;
-    int first_cnt=0;
-    int end_cnt=160;
-    int fl_sim_exp=0;
     if( argc>1 )
     {
-	region=atoi(argv[1]);
-	hit_aer=atoi(argv[2]);
-	hit_wls=atoi(argv[3]);
-	first_cnt=atoi(argv[4]);
-	end_cnt=atoi(argv[5]);
-	fl_sim_exp=atoi(argv[6]);
-	if(region>10){ Usage(progname); return 0;}
-	if(hit_aer>1 || hit_wls>1 || fl_sim_exp>4){ Usage(progname); return 0;}
-	if(hit_aer<0 || hit_wls<0 || fl_sim_exp<0){ Usage(progname); return 0;}
-	if(first_cnt<0 || first_cnt>160){ Usage(progname); return 0;}
-	if(end_cnt<0 || first_cnt>160){ Usage(progname); return 0;}
+	sim=atoi(argv[1]);
+	if( sim>4 ){ Usage(progname); return 0;}
+	if( sim<0 ){ Usage(progname); return 0;}
     }
     else
     {
@@ -48,40 +34,42 @@ int main(int argc, char* argv[])
     //determine name output file
     TFile *fout=0;
     TString fnameout;
-    sim=fl_sim_exp;
     TString KEDR;
     if( sim==0 ){
 	deCut1=-100; deCut2=40;
 	mbcCut1=1860, mbcCut2=1880;
-	fnameout=TString::Format("res_%d_%d_%d_%d_exp_Dmeson.root",first_cnt,end_cnt,region,max_pt).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/Dplus/data/";
+	fnameout=TString::Format("res_exp_Dmeson_data_%d.root",sim).Data();
+        //KEDR = "/home/ovtin/public_html/outDmeson/Dplus/data/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/Dplus/data_out_runs24613-25687/";
+        KEDR = "/home/ovtin/public_html/outDmeson/Dplus/data_test/";
     }
     else if (sim==4)
     {
-	deCut1=-100; deCut2=40;
+	deCut1=-80; deCut2=60;
 	mbcCut1=1860, mbcCut2=1880;
-	fnameout=TString::Format("res_%d_%d_%d_%d_exp_Dmeson_2004.root",first_cnt,end_cnt,region,max_pt).Data();
+	fnameout=TString::Format("res_exp_Dmeson_data2004_%d.root",sim).Data();
         KEDR = "/home/ovtin/public_html/outDmeson/Dplus/data2004/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/Dplus/data2004Pcorr/";
     }
     else if (sim==1)
     {
 	deCut1=-300; deCut2=300;
-	mbcCut1=1700, mbcCut2=1900;
-	fnameout=TString::Format("res_%d_%d_%d_%d_sim_Dmeson_sig.root",first_cnt,end_cnt,region,max_pt).Data();
+	mbcCut1=1800, mbcCut2=1900;
+	fnameout=TString::Format("res_sim_Dmeson_sig_%d.root",sim).Data();
         KEDR = "/home/ovtin/public_html/outDmeson/Dplus/simulation_Sig/";
     }
     else if (sim==2)
     {
 	deCut1=-300; deCut2=300;
 	mbcCut1=1700, mbcCut2=1900;
-	fnameout=TString::Format("res_%d_%d_%d_%d_sim_Dmeson_Bkg_continium.root",first_cnt,end_cnt,region,max_pt).Data();
+	fnameout=TString::Format("res_sim_Dmeson_BG_continium.root",sim).Data();
         KEDR = "/home/ovtin/public_html/outDmeson/Dplus/simulation_Bkg_continium/";
     }
     else if (sim==3)
     {
 	deCut1=-300; deCut2=300;
 	mbcCut1=1700, mbcCut2=1900;
-	fnameout=TString::Format("res_%d_%d_%d_%d_sim_Dmeson_Bkg_eetoDD.root",first_cnt,end_cnt,region,max_pt).Data();
+	fnameout=TString::Format("res_sim_Dmeson_BG_eetoDD_%d.root",sim).Data();
         KEDR = "/home/ovtin/public_html/outDmeson/Dplus/simulation_Bkg_eetodd/";
     }
     cout<<fnameout<<endl;
@@ -105,11 +93,11 @@ int main(int argc, char* argv[])
     TH1F* hmbckin_zoom;
     if( sim==0 || sim==4 || sim==1 ){
 	hmbc_zoom=new TH1F("M_{bc}","M_{bc}",50,1800.,1900.);
-	hmbckin_zoom=new TH1F("M_{bc}","M_{bc}",50,1800.,1900.);
+	hmbckin_zoom=new TH1F("M_{bc}kin","M_{bc}kin",50,1800.,1900.);
     }
     else{
-	hmbc_zoom=new TH1F("M_{bc}","M_{bc}",50,1700.,1900.);
-	hmbckin_zoom=new TH1F("M_{bc}","M_{bc}",50,1700.,1900.);
+	hmbc_zoom=new TH1F("M_{bc}","M_{bc}",100,1700.,1900.);
+	hmbckin_zoom=new TH1F("M_{bc}kin","M_{bc}kin",100,1700.,1900.);
     }
     TH1F* hrr=new TH1F("rr","rr",50,0.,10.);
     TH1F* hZip=new TH1F("ZIP","ZIP",100,-50.,50.);
@@ -118,8 +106,28 @@ int main(int argc, char* argv[])
     TH1F* hdE_zoom=new TH1F("#Delta E","#Delta E",30,-300.,300.);
     TH1F* hdEkin_zoom=new TH1F("#Delta E","#Delta E",30,-300.,300.);
     TH1F* hEbeam=new TH1F("Ebeam","Ebeam",100,1880.,1895.);
-    TH2D *h2MbcdE=new TH2D("M_{bc}:#Delta E", "M_{bc}:#Delta E", 200,1700,1900,200,-300,300);
-    TH2D *h2MbcdEkin=new TH2D("M_{bc}:#Delta E", "M_{bc}:#Delta E", 200,1700,1900,200,-300,300);
+
+    TH1F *hRun;
+    if( sim==0 )
+    {
+	hRun = new TH1F("Run","Run", 100, 23206., 26248.);
+    }
+    else
+    {
+	hRun = new TH1F("Run","Run", 100, 4100., 4709.);
+    }
+
+    TH2D *h2MbcdE;
+    TH2D *h2MbcdEkin;
+    if( sim==4 || sim==1 ){
+        h2MbcdE=new TH2D("M_{bc}:#Delta E", "M_{bc}:#Delta E", 100,1800,1900,200,-300,300);
+        h2MbcdEkin=new TH2D("M_{bc}:#Delta E", "M_{bc}:#Delta E", 100,1800,1900,200,-300,300);
+    }
+    else{
+        h2MbcdE=new TH2D("M_{bc}:#Delta E", "M_{bc}:#Delta E", 50,1700,1900,50,-300,300);
+        h2MbcdEkin=new TH2D("M_{bc}:#Delta E", "M_{bc}:#Delta E", 50,1700,1900,50,-300,300);
+    }
+
     TH1F* hDncomb=new TH1F("Dmseon.ncomb","Dmseon.ncomb",50,0.,50.);
 
     TH1F* htime=new TH1F("time","time",140,-40.,100.);
@@ -168,19 +176,10 @@ int main(int argc, char* argv[])
 
     hInvM=new TH1F("InvMass","InvMass",1000,0.,4000.);
 
-    char branchname[1];
-    char branchname1[161];
-
-    char namepr[0], namepr1[0], namepr2[0];
-    if(sim==1)sprintf(namepr,"Simulation");
-    if(sim!=1)sprintf(namepr,"Experiment");
-    prthink=new TProfile(namepr,namepr,50,0,1600,0,500);
-    if(sim==1)sprintf(namepr1,"Simulation - 1 layer");
-    if(sim!=1)sprintf(namepr1,"Experiment - 1 layer");
-    pr1=new TProfile(namepr1,namepr1,50,0,1600,0,500);
-    if(sim==1)sprintf(namepr2,"Simulation - 2 layer");
-    if(sim!=1)sprintf(namepr2,"Experiment - 2 layer");
-    pr2=new TProfile(namepr2,namepr2,50,0,1600,0,500);
+    TTree *forFit = new TTree("forFit","forFit");
+    Float_t forFitMbc, forFitdE, forFitdP;
+    forFit->Branch("Mbc",&forFitMbc,"Mbc/F");
+    forFit->Branch("dE",&forFitdE,"dE/F");
 
     ofstream Result(TString::Format("run_event.dat"),ios_base::out);
 
@@ -188,6 +187,46 @@ int main(int argc, char* argv[])
     for(int k=0; k<nentr; k++)
     {
 	tt->GetEntry(k);
+
+        //if( ev.run<=24613 || ev.run>=25687 ) continue;   //selected only runs from 24613-25687 range
+        //if( ev.run>=24613 && ev.run<=25687 ) continue;   //selected runs w/o 24613-25687 range
+
+	if (
+	    ev.run==23209
+	    || ev.run==23211
+	    || ev.run==23911
+	    || ev.run==23700
+	    || ev.run==23699
+	    || ev.run==23792
+	    || ev.run==23745
+	    || ev.run==24850
+	    || ev.run==24852
+	    || ev.run==24860
+	    || ev.run==25086
+	    || ev.run==25172
+	    || ev.run==25174
+	    || ev.run==25175
+	    || ev.run==25217
+	    || ev.run==25233
+	    || ev.run==25327
+	    || ev.run==25331
+	    || ev.run==25337
+	    || ev.run==25338
+	    || ev.run==25357
+	    || ev.run==25360
+	    || ev.run==25365
+	    || ev.run==25368
+	    || ev.run==25369
+	    || ev.run==25370
+	    || ev.run==25598
+	    || ev.run==25658
+	    || ev.run==25659
+	    || ev.run==26070
+	    || ev.run==26071
+	    || ev.run==26099
+	    || ev.run==26246
+	   ) continue;
+
 
 	if( (k %100000)==0 )cout<<k<<endl;
 
@@ -203,16 +242,12 @@ int main(int argc, char* argv[])
         //Apply cut conditions - determine in cuts.h
 	if(
 	   vrt.ntrk>=ntrk
-	   //vrt.ntrk>=ntrk && emc.ncls>=min_tot_ncls && emc.ncls<=max_tot_ncls && mu.nhits<=maxmunhits
-	   //&& emc.energy<3300
-           //&& vrt.theta2t<172 && vrt.phi2t<172
-           //&& (theta[0]>46 && theta[1]>46)
-	   //&& (theta[0]<135 && theta[1]<135)
            && (ev.run!=23911 && ev.run!=23879 && ev.run!=23818 && ev.run!=23758 && ev.run!=23700 && ev.run!=23699 && ev.run!=23644 &&
 	   ev.run!=23535 && ev.run!=23930 && ev.run!=23792 && ev.run!=23745 && ev.run!=23701)
 	  )
 	{
-	    Nselect++;
+	    if( sim==1 && vrt.ntrk<=4 ) continue;      //for cut D0->K-pi+ in MC D+->K-pi+pi+
+
 	    if(verbose) cout<<"<<<<<<<<<<<<<<<<<<<<<<<<<<< Next event >>>>>>>>>>>>>>>>>>>>>>>>>>>>"<<endl;
 	    if(verbose) cout<<"ev.run="<<ev.run<<"\t"<<"ev.event="<<ev.event<<"\t"<<"ev.evdaq="<<ev.evdaq<<endl;
 
@@ -225,9 +260,9 @@ int main(int argc, char* argv[])
 		   && Dmeson.chi2t1[i]<max_chi2 && Dmeson.chi2t2[i]<max_chi2 && Dmeson.chi2t3[i]<max_chi2
 		   && Dmeson.nhitst1[i]>min_nhits && Dmeson.nhitst2[i]>min_nhits && Dmeson.nhitst3[i]>min_nhits
 		   && Dmeson.nhitst1[i]<max_nhits && Dmeson.nhitst2[i]<max_nhits && Dmeson.nhitst3[i]<max_nhits
-		   && Dmeson.Mbckin[i]>min_Mbc && Dmeson.Mbckin[i]<max_Mbc
-		   && Dmeson.dE[i]>min_dE && Dmeson.dE[i]< max_dE
-		   && Dmeson.rr1[i]<0.5 && Dmeson.rr2[i]<0.5 && Dmeson.rr3[i]<0.5 && fabs(Dmeson.Zip1[i])<10 && fabs(Dmeson.Zip2[i])<10 && fabs(Dmeson.Zip3[i])<10
+		   //&& Dmeson.Mbckin[i]>min_Mbc && Dmeson.Mbckin[i]<max_Mbc
+		   //&& Dmeson.dE[i]>min_dE && Dmeson.dE[i]< max_dE
+		   && Dmeson.rr1[i]<0.5 && Dmeson.rr2[i]<0.5 && Dmeson.rr3[i]<0.5 && fabs(Dmeson.Zip1[i])<12 && fabs(Dmeson.Zip2[i])<12 && fabs(Dmeson.Zip3[i])<12
 		   //&& Dmeson.rr1[i]<3 && Dmeson.rr2[i]<3 && Dmeson.rr3[i]<3 && fabs(Dmeson.Zip1[i])<20 && fabs(Dmeson.Zip2[i])<20 && fabs(Dmeson.Zip3[i])<20
 		  )
 		{
@@ -252,6 +287,7 @@ int main(int argc, char* argv[])
 		    //if( dtof1<-1.0 || dtof1>1.0 ) continue;           //!!!!!
 		    //if( dtof1<-0.8 || dtof1>0.8 ) continue;
 		    if( dtof1<-0.8 ) continue;
+
 		    //if( dtof1<-0.8 && Dmeson.betat1[i]>0 ) continue;          //for Kaon - it is t1, P1
 
 		    hdtof1->Fill(dtof1);
@@ -347,7 +383,7 @@ int main(int argc, char* argv[])
 			hdE_zoom->Fill(Dmeson.dE[i]);
 		    }
 
-		    if( Dmeson.dEkin[i]>deCut1 && Dmeson.dEkin[i]<deCut2 )
+		    if( Dmeson.dE[i]>deCut1 && Dmeson.dE[i]<deCut2 )
 		    {
 			hmbckin_zoom->Fill(Dmeson.Mbckin[i]);
 		    }
@@ -357,9 +393,14 @@ int main(int argc, char* argv[])
 		    }
 
 		    h2MbcdE->Fill(Dmeson.Mbc[i], Dmeson.dE[i]);
-		    //h2MbcdEkin->Fill(Dmeson.Mbckin[i], Dmeson.dEkin[i]);
 		    h2MbcdEkin->Fill(Dmeson.Mbckin[i], Dmeson.dE[i]);
 		    if(verbose) cout<<i<<"\t"<<"vrt.ntrk="<<vrt.ntrk<<"\t"<<"Dmeson.Mbc="<<Dmeson.Mbc[i]<<"\t"<<"Dmeson.dE="<<Dmeson.dE[i]<<"\t"<<endl;
+
+		    hRun->Fill(ev.run);
+
+		    forFitMbc=Dmeson.Mbc[i];
+		    forFitdE=Dmeson.dE[i];
+		    forFit->Fill();
 		}
 	    }
 
@@ -368,148 +409,10 @@ int main(int argc, char* argv[])
     }
     Result.close();
 
-    if(verbose) cout<<counter<<endl;
-
-    TF1* myfit=new TF1("myfit","[0]+[1]*(x^2-[2]^2)/(x^2)*(TMath::Erf(x-[2])+1)/2",200.,1450.);
-    myfit->SetParameter(0,prthink->GetMinimum());
-    myfit->SetParameter(1,prthink->GetMaximum());
-    myfit->SetParameter(2,430);
-    myfit->SetParNames("#mu_{0}","#mu_{max}","P_{thr}");
-    if(sim!=1)
-    {
-	myfit->SetLineColor(kRed);
-	prthink->SetLineColor(kRed);
-    }
-    else
-    {
-	myfit->SetLineColor(kBlue);
-	prthink->SetLineColor(kBlue);
-    }
-    prthink->Fit("myfit","","",200,1450);
-    cout<<"pr->GetMinimum()="<<prthink->GetMinimum()<<"\t"<<"pr->GetMaximum()"<<prthink->GetMaximum()<<endl;
-    prthink->SetXTitle("P, MeV/c");
-    prthink->SetYTitle("N_{ph.e.}");
-    prthink->Draw("prof");
-
-
-    TF1* myfit1=new TF1("myfit1","[0]+[1]*(x^2-[2]^2)/(x^2)*(TMath::Erf(x-[2])+1)/2",200.,1450.);
-    myfit1->SetParameter(0,pr1->GetMinimum());
-    myfit1->SetParameter(1,pr1->GetMaximum());
-    myfit1->SetParameter(2,90);
-    myfit1->SetParNames("#mu_{0}","#mu_{max}","P_{thr}");
-    if(sim!=1)
-    {
-	myfit1->SetLineColor(kRed);
-	pr1->SetLineColor(kRed);
-    }
-    else
-    {
-	myfit1->SetLineColor(kBlue);
-	pr1->SetLineColor(kBlue);
-    }
-    pr1->Fit("myfit1","","",200,1450);
-    cout<<"pr1->GetMinimum()="<<pr1->GetMinimum()<<"\t"<<"pr1->GetMaximum()"<<pr1->GetMaximum()<<endl;
-    pr1->SetXTitle("P, MeV/c");
-    pr1->SetYTitle("N_{ph.e.}");
-    pr1->Draw("prof");
-
-
-    TF1* myfit2=new TF1("myfit2","[0]+[1]*(x^2-[2]^2)/(x^2)*(TMath::Erf(x-[2])+1)/2",200.,1450.);
-    myfit2->SetParameter(0,pr2->GetMinimum());
-    myfit2->SetParameter(1,pr2->GetMaximum());
-    myfit2->SetParameter(2,90);
-    myfit2->SetParNames("#mu_{0}","#mu_{max}","P_{thr}");
-    if(sim!=1)
-    {
-	myfit2->SetLineColor(kRed);
-	pr2->SetLineColor(kRed);
-    }
-    else
-    {
-	myfit2->SetLineColor(kBlue);
-	pr2->SetLineColor(kBlue);
-    }
-    pr2->Fit("myfit2","","",200,1450);
-    cout<<"pr2->GetMinimum()="<<pr2->GetMinimum()<<"\t"<<"pr2->GetMaximum()"<<pr2->GetMaximum()<<endl;
-    pr2->SetXTitle("P, MeV/c");
-    pr2->SetYTitle("N_{ph.e.}");
-    pr2->Draw("prof");
-
-    TGraphErrors* gr1=new TGraphErrors(14,p_all,eff,err_p_all,err_eff);
-    gr1->SetMarkerStyle(20);
-    gr1->SetLineWidth(2);
-    if(sim!=1)
-    {
-	gr1->SetMarkerColor(2);
-	gr1->SetLineColor(2);
-    }
-    else
-    {
-	gr1->SetMarkerColor(kBlue);
-	gr1->SetLineColor(kBlue);
-    }
-    gr1->SetTitle("Efficiency&Momentum");
-    gr1->GetXaxis()->SetTitle("P, MeV/c");
-    gr1->GetYaxis()->SetTitle("Efficiency");
-    gr1->Write("Think_Efficiency&Momentum");
-
-    TGraphErrors* gr2=new TGraphErrors(14,p_all,eff1,err_p_all,err_eff1);
-    gr2->SetMarkerStyle(20);
-    gr2->SetLineWidth(2);
-    if(sim!=1)
-    {
-	gr2->SetMarkerColor(2);
-	gr2->SetLineColor(2);
-    }
-    else
-    {
-	gr2->SetMarkerColor(kBlue);
-	gr2->SetLineColor(kBlue);
-    }
-    gr2->SetTitle("Efficiency&Momentum");
-    gr2->GetXaxis()->SetTitle("P, MeV/c");
-    gr2->GetYaxis()->SetTitle("Efficiency");
-    gr2->Write("1layer_Efficiency&Momentum");
-
-    TGraphErrors* gr3=new TGraphErrors(14,p_all,eff2,err_p_all,err_eff2);
-    gr3->SetMarkerStyle(20);
-    gr3->SetLineWidth(2);
-    if(sim!=1)
-    {
-	gr3->SetMarkerColor(2);
-	gr3->SetLineColor(2);
-    }
-    else
-    {
-	gr3->SetMarkerColor(kBlue);
-	gr3->SetLineColor(kBlue);
-    }
-    gr3->SetTitle("Efficiency&Momentum");
-    gr3->GetXaxis()->SetTitle("P, MeV/c");
-    gr3->GetYaxis()->SetTitle("Efficiency");
-    gr3->Write("2layer_Efficiency&Momentum");
-
-    TH1F *h38 = (TH1F*) hmbc->Clone();
-    h38->SetName("h38");
-    Double_t bb=h38->GetEntries();
-    h38->Scale(1/bb);
-    h38->GetXaxis()->SetTitle("m(#pi#pi), MeV/c^{2}");
-
-    if(sim!=1)
-    {
-	h38->SetLineColor(kRed);
-    }
-    else
-    {
-	h38->SetLineColor(kBlue);
-    }
-
     TCanvas *cc1 = new TCanvas();
     gStyle->SetOptTitle(0);
     gStyle->SetOptStat(1111);
-    //gStyle->SetOptStat(0);
     gStyle->SetOptFit(1011);
-    //gROOT->SetStyle("Plain");
     cc1->cd();
 
     TString format1=".eps";
@@ -529,7 +432,7 @@ int main(int argc, char* argv[])
     hmbc_zoom->GetXaxis()->SetTitle("M_{bc} (MeV)");
     hmbc_zoom->GetYaxis()->SetTitle("Events/2 MeV");
     hmbc_zoom->Draw("E1"); cc1->SaveAs(KEDR + nameMbc_zoom + format1); cc1->SaveAs(KEDR + nameMbc_zoom + format2); cc1->SaveAs(KEDR + nameMbc_zoom + format3);
-    hmbckin_zoom->GetXaxis()->SetTitle("M_{bc} (MeV)");
+    hmbckin_zoom->GetXaxis()->SetTitle("M_{bc}kin (MeV)");
     hmbckin_zoom->GetYaxis()->SetTitle("Events/2 MeV");
     hmbckin_zoom->Draw("E1"); cc1->SaveAs(KEDR + nameMbckin_zoom + format1); cc1->SaveAs(KEDR + nameMbckin_zoom + format2); cc1->SaveAs(KEDR + nameMbckin_zoom + format3);
     h2MbcdE->GetXaxis()->SetTitle("M_{bc} (MeV)");
@@ -592,6 +495,7 @@ int main(int argc, char* argv[])
     hrr->Draw(); cc1->SaveAs(KEDR+"rr.png");
     hZip->Draw(); cc1->SaveAs(KEDR+"Zip.png");
     hEbeam->Draw(); cc1->SaveAs(KEDR+"Ebeam.png");
+    hRun->Draw(); cc1->SaveAs(KEDR+"Run.png");
     henergy->Draw(); cc1->SaveAs(KEDR+"emc_energy.png");
     henass->Draw(); cc1->SaveAs(KEDR+"emc_energy_ass.png");
     hmom->Draw(); cc1->SaveAs(KEDR+"momentum.png");

@@ -207,7 +207,8 @@
     //include samples Data/MC
     void chain(){
 	if(sim==0){
-	    for(int i=1; i<=862; i++)   //signal 2016+2017
+	    //for(int i=1; i<=862; i++)   //signal 2016+2017
+	    for(int i=1; i<=50; i++)   //signal 2016+2017
 	    {
 		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/Dplus/data/psi3770_to_D0meson_%d.root",i).Data());
 	    }
@@ -216,10 +217,12 @@
 	    for(int i=1; i<=608; i++)   //signal 2004
 	    {
 		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/Dplus/data2004/psi3770_to_D0meson_%d.root",i).Data());
+		//tt->Add(TString::Format("/spool/users/ovtin/outDmeson/Dplus/dataPcorr2004/psi3770_to_D0meson_%d.root",i).Data());
 	    }
 	}
 	else if (sim==1){
-	    for(int i=1; i<=20; i++)
+	    //for(int i=1; i<=20; i++)
+	    for(int i=1; i<=5; i++)
 	    {
 		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/outsimDplus/Signal/psi3770_to_simDplusmesonSignal_%d.root",i).Data());
 	    }
@@ -239,9 +242,9 @@
 	    tt->Add("/spool/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_continium/psi3770_to_simDplusmeson_ee_to_qq3_4.root");
 	}
 	else if (sim==3){
-	    for(int i=1; i<=20; i++)
+	    for(int i=1; i<=10; i++)
 	    {
-	    		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_eetoDD/psi3770_to_simD0mesonBkg_eetoDD_%d.root",i).Data());
+	    		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_eetoDD/psi3770_to_simDplusmesonBkg_eetoDD_%d.root",i).Data());
 	    }
 	}
     }
@@ -414,40 +417,10 @@
     TH1F* hInvM;
     TH1F* hde;
 
-    TProfile* pr1;
-    TProfile* pr2;
-    TProfile* prthink;
-    TH1F* hzero;
-    TH1F* hzero1;
-    TH1F* hzero2;
-    TH1F* hzero4;
-    TH1F* hzero5;
-
     vector<float> chi2min;
     float mom=0;
 
     float pi=TMath::Pi();
-
-    const int n=15;
-    float eff[n]={0};
-    float err_eff[n]={0};
-    double num_npenotzero[n]={0};
-    double num_npetotal[n]={0};
-    float p_all[n]={0};
-    float err_p_all[n]={0};
-    float num_npezero[n]={0};
-
-    float eff1[n]={0};
-    float err_eff1[n]={0};
-    double num_npenotzero1[n]={0};
-    double num_npetotal1[n]={0};
-    float num_npezero1[n]={0};
-
-    float eff2[n]={0};
-    float err_eff2[n]={0};
-    double num_npenotzero2[n]={0};
-    double num_npetotal2[n]={0};
-    float num_npezero2[n]={0};
 
     float S;
 
@@ -457,27 +430,8 @@
 
     float tof1,dtof1;
 
-    //trheshold for ATC counter in number of photoelectrons
-    float npetrh=0.5;
-    float thicknpetrh=0.5;
-    //counters for first and second layers ATC
-    int ncnt1l1=0, ncnt1l2=80;
-    int ncnt2l1=80, ncnt2l2=160;
-
-    int counter=0;
-
-    int Natc=0;
-    int Nselect=0;
-
-    int kk; int kk1; int kk2; int ii1; int ii2;
-
     int nhitsxy[10], nvec[10];
     float theta[10], phi[10];
-
-    float n00, n01, n02, n03, n04;
-    float n10, n11, n12, n13, n14;
-    int cnt11, cnt12;
-    int cnt21, cnt22;
 
     double deCut1, deCut2;
     double mbcCut1, mbcCut2;

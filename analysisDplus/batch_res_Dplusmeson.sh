@@ -30,15 +30,10 @@
 #$ -m beas
 #$ -M ovtin.ivan@gmail.com
 
-atcrange=1
-hitAer=1
-hitWLS=0
-firstCNT=0
-endCNT=160
-##dataORmc=0
 dataORmc=0
+##dataORmc=4
 
-$HOME/development/Dmeson/analysisDplus/Dplusmeson $atcrange $hitAer $hitWLS $firstCNT $endCNT $dataORmc
+$HOME/development/Dmeson/analysisDplus/Dplusmeson $dataORmc
 
 status=$?
 if [ $status != 0 ]; then
