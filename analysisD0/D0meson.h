@@ -184,10 +184,12 @@
 
     struct data10
     {
+        //MC Bckg - continuum
 	//int  nhitst1[20],nhitst2[20],ncomb,ncls1[20],ncls2[20];
 	//float Mbc[20],Mbckin[20],InvM[20],dE[20],dEkin[20],dP[20],dPkin[20],depmkp[20],deppkm[20],Ebeam,rEv,P1[20],P2[20],Pt1[20],Pt2[20],chi2t1[20],chi2t2[20],e1[20],e2[20],rr1[20],rr2[20],Zip1[20],
 	//    Zip2[20],ecls1[20],ecls2[20],tcls1[20],tcls2[20],pcls1[20],pcls2[20];
-    	int  nhitst1[50],nhitst2[50],ncomb,ncls1[50],ncls2[50];
+        //Mbc Sig, Data
+	int  nhitst1[50],nhitst2[50],ncomb,ncls1[50],ncls2[50];
 	float Mbc[50],Mbckin[50],InvM[50],dE[50],dEkin[50],dP[50],dPkin[50],depmkp[50],deppkm[50],Ebeam,rEv,P1[50],P2[50],Pt1[50],Pt2[50],chi2t1[50],chi2t2[50],e1[50],e2[50],rr1[50],rr2[50],Zip1[50],
 	    Zip2[50],ecls1[50],ecls2[50],tcls1[50],tcls2[50],pcls1[50],pcls2[50];
     };
@@ -210,11 +212,11 @@
     void chain(){
 	if(sim==0){
 
-	    for(int i=1; i<=862; i++)   //signal 2016+2017
+	    //for(int i=1; i<=862; i++)   //signal 2016+2017
+	    for(int i=1; i<=50; i++)   //signal 2016+2017
 	    {
 		//tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/data/psi3770_to_D0meson_%d.root",i).Data());
-		//tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/dataPcorr_v1/psi3770_to_D0meson_%d.root",i).Data());
-		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/dataPcorr/psi3770_to_D0meson_%d.root",i).Data());
+		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/dataPcorr_v4/psi3770_to_D0meson_%d.root",i).Data());
 	    }
 	}
 	else if (sim==4){
@@ -268,7 +270,7 @@
 	tt->SetBranchStatus("t0c0",1);
 	tt->SetBranchStatus("t0c1",1);
 	tt->SetBranchStatus("t0c2",1);
-	tt->SetBranchStatus("t0tof",1);
+	//tt->SetBranchStatus("t0tof",1);
 	tt->SetBranchStatus("t1",1);
 	tt->SetBranchStatus("t1atccr0",1);
 	tt->SetBranchStatus("t1atccr1",1);
@@ -350,7 +352,7 @@
 	tt->SetBranchAddress("t0c0",&t0c0);
 	tt->SetBranchAddress("t0c1",&t0c1);
 	tt->SetBranchAddress("t0c2",&t0c2);
-	tt->SetBranchAddress("t0tof",&t0tof);
+	//tt->SetBranchAddress("t0tof",&t0tof);
 	tt->SetBranchAddress("t1",&t1);
 	tt->SetBranchAddress("t1atccr0",&t1atccr0);
 	tt->SetBranchAddress("t1atccr1",&t1atccr1);
@@ -422,67 +424,19 @@
     TH1F* hInvM;
     TH1F* hde;
 
-    TProfile* pr1;
-    TProfile* pr2;
-    TProfile* prthink;
-    TH1F* hzero;
-    TH1F* hzero1;
-    TH1F* hzero2;
-    TH1F* hzero4;
-    TH1F* hzero5;
-
     vector<float> chi2min;
     float mom=0;
 
     float pi=TMath::Pi();
-
-    const int n=15;
-    float eff[n]={0};
-    float err_eff[n]={0};
-    double num_npenotzero[n]={0};
-    double num_npetotal[n]={0};
-    float p_all[n]={0};
-    float err_p_all[n]={0};
-    float num_npezero[n]={0};
-
-    float eff1[n]={0};
-    float err_eff1[n]={0};
-    double num_npenotzero1[n]={0};
-    double num_npetotal1[n]={0};
-    float num_npezero1[n]={0};
-
-    float eff2[n]={0};
-    float err_eff2[n]={0};
-    double num_npenotzero2[n]={0};
-    double num_npetotal2[n]={0};
-    float num_npezero2[n]={0};
 
     float S;
 
     int npipi=0;
     //Mass Kaon and Pion
     Double_t m1=493.667, m2=139.57;
-    //trheshold for ATC counter in number of photoelectrons
-    float npetrh=0.5;
-    float thicknpetrh=0.5;
-    //counters for first and second layers ATC
-    int ncnt1l1=0, ncnt1l2=80;
-    int ncnt2l1=80, ncnt2l2=160;
-
-    int counter=0;
-
-    int Natc=0;
-    int Nselect=0;
-
-    int kk; int kk1; int kk2; int ii1; int ii2;
 
     int nhitsxy[10], nvec[10];
     float theta[10], phi[10];
-
-    float n00, n01, n02, n03, n04;
-    float n10, n11, n12, n13, n14;
-    int cnt11, cnt12;
-    int cnt21, cnt22;
 
     double deCut1, deCut2;
     double mbcCut1, mbcCut2;

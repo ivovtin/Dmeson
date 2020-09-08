@@ -4,7 +4,7 @@ hitAer=1
 hitWLS=0
 firstCNT=0
 endCNT=160
-dataORmc=0
+dataORmc=4
 
 ./D0meson $atcrange $hitAer $hitWLS $firstCNT $endCNT $dataORmc
 
