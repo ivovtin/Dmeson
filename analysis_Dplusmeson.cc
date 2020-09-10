@@ -75,11 +75,6 @@
 
 using namespace std;
 
-const int Natccr=4;           //number crossing ATC counters on track
-const int Ntraks=12;           //number tracks
-const int Nclcr=4;            //number crossing clusters on track
-const int Nclcrg=4;
-
 static const char* progname;
 
 struct ProgramParameters {
@@ -173,25 +168,16 @@ enum {
         MUCut,
 };
 
-static TTree *eventTree, *trackTree, *emcTowerTree, *lkrStripTree, *lkrStripTrackTree, *ATCTree, *jpsiTree;
-static struct EventBranch bevent;
-static struct VertexBranch bvertex;
-static struct TrackBranch btrack[Ntraks];
-static struct ToFBranch btof[Ntraks];
-static struct MUBranch bmu;
-static struct EMCBranch bemc;
-static struct TowerClusterBranch bcluster[Nclcr][Ntraks];
-static struct TowerClusterBranch bclgamma[Nclcrg];
-static struct StripClusterBranch bstrip;
-static struct StripTrackBranch bstriptrack;
+static TTree *eventTree;
 
-static struct ATCCounterBranch bcnt[Natccr][Ntraks];
-static struct ATCBranch batc;
-
-typedef struct {Int_t nhitst1[50],nhitst2[50],nhitst3[50],ncomb,ncls1[50],ncls2[50],ncls3[50]; Float_t Mbc[50],Mbckin[50],dE[50],dEkin[50],
-    Ebeam,rEv,P1[50],P2[50],P3[50],Pt1[50],Pt2[50],Pt3[50],chi2t1[50],chi2t2[50],chi2t3[50],e1[50],e2[50],e3[50],rr1[50],rr2[50],
-    rr3[50],Zip1[50],Zip2[50],Zip3[50],ecls1[50],ecls2[50],ecls3[50],tcls1[50],tcls2[50],tcls3[50],pcls1[50],pcls2[50],pcls3[50],
-    timet1[50],betat1[50],lengtht1[50],timet2[50],betat2[50],lengtht2[50],timet3[50],betat3[50],lengtht3[50]; } DMESON;
+typedef struct {
+    Int_t vrtntrk,vrtnip,vrtnbeam,nhitst1,nhitst2,nhitst3,nhitsvdt1,nhitsvdt2,nhitsvdt3,nhitsxyt1,nhitszt1,nhitsxyt2,
+	nhitszt2,nhitsxyt3,nhitszt3,nvect1,nvecxyt1,nveczt1,nvect2,nvecxyt2,nveczt2,nvect3,
+	nvecxyt3,nveczt3,ncomb,ncls1,ncls2,ncls3,ncls,nlkr,ncsi,munhits,Run;
+    Float_t Mbc,Mbckin,dE,dEkin,Ebeam,rEv,P1,P2,P3,Pt1,Pt2,Pt3,thetat1,thetat2,thetat3,phit1,phit2,phit3,chi2t1,chi2t2,chi2t3,
+	e1,e2,e3,rr1,rr2,rr3,Zip1,Zip2,Zip3,ecls1,ecls2,ecls3,tcls1,tcls2,tcls3,pcls1,pcls2,pcls3,emcenergy,lkrenergy,csienergy,timet1,betat1,lengtht1,
+        timet2,betat2,lengtht2,timet3,betat3,lengtht3;
+} DMESON;
 
 static DMESON Dmeson;
 
@@ -414,13 +400,13 @@ void refit(int t, double p, double* phi, double* theta) {
 }
 
 void kine_fit(int ip1, int ip2, int ip3, double* mbc, double* de) {
-    dcand_t1 = ip1;
-    dcand_t2 = ip2;
-    dcand_t3 = ip3;
+    dcand_t1 = ip1;   //kaon
+    dcand_t2 = ip2;   //pion
+    dcand_t3 = ip3;   //pion
 
-    double p1i = pcorr(tP(dcand_t2));
-    double p2i = pcorr(tP(dcand_t3));
-    double p3i = pcorr(tP(dcand_t1));
+    double p1i = pcorr(tP(dcand_t2));   //pion
+    double p2i = pcorr(tP(dcand_t3));   //pion
+    double p3i = pcorr(tP(dcand_t1));   //kaon
 
     TMinuit *dMinuit = new TMinuit(2); //initialise Minuit with a maximum of 2 parameters to minimise
     dMinuit->SetFCN(kine_fcn);         //set the function to minimise
@@ -454,13 +440,11 @@ void kine_fit(int ip1, int ip2, int ip3, double* mbc, double* de) {
     else
 	pk = sqrt(ek*ek-mk*mk);
 
-
     if (progpar.verbose) {
 	printf("Kinematic fitter: \n");
 	printf("  Input: p1=%lf, p2=%lf, pk=%lf\n", p1i, p2i, p3i);
 	printf("  Out:   p1=%lf, p2=%lf, pk=%lf\n", pp1, pp2, pk);
     }
-
 
     double theta1 = ktrrec_.TETRAK[dcand_t2]/180.*PI;
     double phi1 = ktrrec_.FITRAK[dcand_t2]/180.*PI;
@@ -523,97 +507,19 @@ int analyse_event()
     float EMinPhot=progpar.min_cluster_energy;
     double  WTotal=2*beam_energy;                                                                 //beam_energy - How determined this energy ?
     if( kedrrun_cb_.Header.RunType == 64 ) { WTotal=2*1888.75; }                                  //for MC
-    ebeam=WTotal/2;
+    ebeam=WTotal/2.;
 
     if (progpar.verbose) cout<<"RunNumber="<<kedrraw_.Header.RunNumber<<"\t"<<"WTotal="<<WTotal<<"\t"<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"eTracksAll="<<eTracksAll<<endl;
 
 
     if (progpar.verbose) cout<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"eTracksAll="<<eTracksAll<<"\t"<<"eTracksBeam="<<eTracksBeam<<"\t"<<"eTracksIP="<<eTracksIP<<endl;
 
-    copy(&bevent);
-    bevent.event=kdcenum_.EvNum;
-
-    unsigned short nhits=mu_next_event();
-
-    copy(&bvertex);
-    copy(&bemc);
-
-    for(int i=0; i<50; i++){
-	Dmeson.Mbc[i]=0;                                            //Invariant mass or beam consraint mass
-	Dmeson.dE[i]=0;
-	Dmeson.P1[i]=0;
-	Dmeson.P2[i]=0;
-	Dmeson.P3[i]=0;
-	Dmeson.Pt1[i]=0;
-	Dmeson.Pt2[i]=0;
-	Dmeson.Pt3[i]=0;
-	Dmeson.chi2t1[i] = 0;
-	Dmeson.chi2t2[i] = 0;
-	Dmeson.chi2t3[i] = 0;
-	Dmeson.nhitst1[i] = 0;
-	Dmeson.nhitst2[i] = 0;
-	Dmeson.nhitst3[i] = 0;
-	Dmeson.e1[i]=0;
-	Dmeson.e2[i]=0;
-	Dmeson.e3[i]=0;
-	Dmeson.rr1[i] = 0;
-	Dmeson.rr2[i] = 0;
-	Dmeson.rr3[i] = 0;
-	Dmeson.Zip1[i] = 0;
-	Dmeson.Zip2[i] = 0;
-	Dmeson.Zip3[i] = 0;
-	Dmeson.ncls1[i] = 0;
-	Dmeson.ncls2[i] = 0;
-	Dmeson.ncls3[i] = 0;
-	Dmeson.ecls1[i] = 0;
-	Dmeson.ecls2[i] = 0;
-	Dmeson.ecls3[i] = 0;
-	Dmeson.tcls1[i] = 0;
-	Dmeson.tcls2[i] = 0;
-	Dmeson.tcls3[i] = 0;
-	Dmeson.pcls1[i] = 0;
-	Dmeson.pcls2[i] = 0;
-	Dmeson.pcls3[i] = 0;
-	Dmeson.Mbckin[i] = 0;
-	Dmeson.dEkin[i] = 0;
-	Dmeson.timet1[i] = 0;
-	Dmeson.betat1[i] = 0;
-	Dmeson.lengtht1[i] = 0;
-	Dmeson.timet2[i] = 0;
-	Dmeson.betat2[i] = 0;
-	Dmeson.lengtht2[i] = 0;
-	Dmeson.timet3[i] = 0;
-	Dmeson.betat3[i] = 0;
-	Dmeson.lengtht3[i] = 0;
-    }
-    Dmeson.ncomb = 0;
+    unsigned short MUnhits=mu_next_event();
 
     int i=0;
 
     for (int t1 = 0; t1 < eTracksAll; t1++)                                  //cycle for first track
     {
-	copy(&btrack[t1],t1);
-	copy(&btof[t1],t1);
-	copy(&bmu,t1,nhits);
-	copy(&batc);
-
-	for(int k=0; k<Natccr;  k++)                                         //cycle for number of crossing ATC counters on track
-	{
-	    //if (progpar.verbose) cout<<"Event="<<kdcenum_.EvNum<<"\t"<<"Track="<<t1<<"\t"<<"i="<<i<<"\t"<<"atc_track.cnt_cross[t][k]="<<atc_track.cnt_cross[t1][k]<<"\t"<<"atc_rec.npe="<<atc_rec.npe[atc_track.cnt_cross[t1][k]-1]<<endl;
-	    copy(&bcnt[k][t1],(atc_track.cnt_cross[t1][k]-1),t1);
-	}
-
-	for(int c=0; c<semc.dc_emc_ncls[t1]; c++)                            //dc_emc_ncls[NDCH_TRK] - number clusters of emc on track
-	{
-	    if (progpar.verbose) cout<<"Event="<<kdcenum_.EvNum<<"\t"<<"Track="<<t1<<"\t"<<"semc.dc_emc_ncls[t]="<<semc.dc_emc_ncls[t1]<<endl;
-	    copy(&bcluster[c][t1],(semc.dc_emc_cls[t1][c]-1));               //dc_emc_cls[NDCH_TRK][NEMC_CLS] - number clusters
-	}
-
-	for(int t=0; t<semc.str_ntracks; t++) {
-	    copy(&bstriptrack,t);
-	}
-
-
 	for (int t2 = 0; t2 < eTracksAll; t2++)
 	{
 	    for (int t3 = 0; t3 < eTracksAll; t3++)
@@ -639,9 +545,9 @@ int analyse_event()
 			if ( fabs(tZ0IP(t1))>20. ) continue;
 			if ( fabs(tZ0IP(t2))>20. ) continue;
 			if ( fabs(tZ0IP(t3))>20. ) continue;
-			if ( rr1>8 ) continue;
-			if ( rr2>8 ) continue;
-			if ( rr3>8 ) continue;
+			if ( rr1>8. ) continue;
+			if ( rr2>8. ) continue;
+			if ( rr3>8. ) continue;
 
 			if( pcorr(tPt(t1))<=progpar.min_momentum || pcorr(tPt(t1))>=progpar.max_momentum )  continue;
 			if( tCh2(t1)>progpar.max_tchi2 )  continue;
@@ -655,12 +561,12 @@ int analyse_event()
 			if( tCh2(t3)>progpar.max_tchi2 )  continue;
 			if( tHits(t3)<progpar.min_Nhits )  continue;
 
-			Dmeson.rr1[i] = rr1;
-			Dmeson.rr2[i] = rr2;
-			Dmeson.rr3[i] = rr3;
-			Dmeson.Zip1[i] = tZ0IP(t1);
-			Dmeson.Zip2[i] = tZ0IP(t2);
-			Dmeson.Zip3[i] = tZ0IP(t3);
+			Dmeson.rr1 = rr1;
+			Dmeson.rr2 = rr2;
+			Dmeson.rr3 = rr3;
+			Dmeson.Zip1 = tZ0IP(t1);
+			Dmeson.Zip2 = tZ0IP(t2);
+			Dmeson.Zip3 = tZ0IP(t3);
 
 			if (progpar.verbose) cout<<"i="<< i<<endl;
 			if (progpar.verbose) cout<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"Ebeam="<<WTotal/2<<"\t"<<"t1="<<t1<<"\t"<<"t2="<<t2<<"\t"<<"t3="<<t3<<"\t"<<"tCharge(t1)="<<tCharge(t1)<<"\t"<<"tCharge(t2)="<<tCharge(t2)<<"\t"<<"tCharge(t3)="<<tCharge(t3)<<endl;
@@ -678,28 +584,82 @@ int analyse_event()
 			pz2 = pcorr(tP(t2))*tVz(t2);
 			pz3 = pcorr(tP(t3))*tVz(t3);
 
-			//Mbc=sqrt(Ebeam^2-(p1+p2)^2)
-			Dmeson.Mbc[i] = (WTotal/2)*(WTotal/2) - pow(px1+px2+px3,2) - pow(py1+py2+py3,2) - pow(pz1+pz2+pz3,2);
-			if (Dmeson.Mbc[i]>0) Dmeson.Mbc[i] = sqrt(Dmeson.Mbc[i]); else Dmeson.Mbc[i] = 0;
+			Dmeson.Mbc = (WTotal/2.)*(WTotal/2.) - pow(px1+px2+px3,2) - pow(py1+py2+py3,2) - pow(pz1+pz2+pz3,2);
+			if (Dmeson.Mbc>0) Dmeson.Mbc = sqrt(Dmeson.Mbc); else Dmeson.Mbc = 0;
 
-			if (progpar.verbose) cout<<"mbc="<<Dmeson.Mbc[i]<<endl;
+			if (progpar.verbose) cout<<"mbc="<<Dmeson.Mbc<<endl;
 
-			Dmeson.dE[i] = sqrt(mk*mk + pcorr(tP(t1))*pcorr(tP(t1))) +
-			    sqrt(mpi*mpi + pcorr(tP(t2))*pcorr(tP(t2))) + sqrt(mpi*mpi + pcorr(tP(t3))*pcorr(tP(t3))) - WTotal/2;
-			if (progpar.verbose) cout<<"de="<<Dmeson.dE[i]<<endl;
+			Dmeson.dE = sqrt(mk*mk + pcorr(tP(t1))*pcorr(tP(t1))) +
+			    sqrt(mpi*mpi + pcorr(tP(t2))*pcorr(tP(t2))) + sqrt(mpi*mpi + pcorr(tP(t3))*pcorr(tP(t3))) - WTotal/2.;
+			if (progpar.verbose) cout<<"de="<<Dmeson.dE<<endl;
 
-			Dmeson.P1[i] = pcorr(tP(t1));
-			Dmeson.P2[i] = pcorr(tP(t2));
-			Dmeson.P3[i] = pcorr(tP(t3));
-			Dmeson.Pt1[i] = pcorr(tPt(t1));
-			Dmeson.Pt2[i] = pcorr(tPt(t2));
-			Dmeson.Pt3[i] = pcorr(tPt(t3));
-			Dmeson.chi2t1[i] = tCh2(t1);
-			Dmeson.chi2t2[i] = tCh2(t2);
-			Dmeson.chi2t3[i] = tCh2(t3);
-			Dmeson.nhitst1[i] = tHits(t1);
-			Dmeson.nhitst2[i] = tHits(t2);
-			Dmeson.nhitst3[i] = tHits(t3);
+			Dmeson.P1 = pcorr(tP(t1));      //kaon
+			Dmeson.P2 = pcorr(tP(t2));      //pion
+			Dmeson.P3 = pcorr(tP(t3));      //pion
+
+			Dmeson.Pt1 = pcorr(tPt(t1));
+			Dmeson.Pt2 = pcorr(tPt(t2));
+			Dmeson.Pt3 = pcorr(tPt(t3));
+
+			Dmeson.vrtntrk = eTracksAll;
+			Dmeson.vrtnip = eTracksIP;
+			Dmeson.vrtnbeam = eTracksBeam;
+
+			Dmeson.thetat1 = tTeta(t1);
+			Dmeson.thetat2 = tTeta(t2);
+			Dmeson.thetat3 = tTeta(t3);
+
+			Dmeson.phit1 = ktrrec_.FITRAK[t1]+(ktrrec_.FITRAK[t1]<0?360:0);;
+			Dmeson.phit2 = ktrrec_.FITRAK[t2]+(ktrrec_.FITRAK[t2]<0?360:0);;
+			Dmeson.phit3 = ktrrec_.FITRAK[t3]+(ktrrec_.FITRAK[t3]<0?360:0);;
+
+			Dmeson.chi2t1 = tCh2(t1);
+			Dmeson.chi2t2 = tCh2(t2);
+			Dmeson.chi2t3 = tCh2(t3);
+
+			Dmeson.nhitst1 = tHits(t1);
+			Dmeson.nhitst2 = tHits(t2);
+			Dmeson.nhitst3 = tHits(t3);
+
+			Dmeson.nhitsvdt1 = tHitsVD(t1);
+			Dmeson.nhitsvdt2 = tHitsVD(t2);
+			Dmeson.nhitsvdt3 = tHitsVD(t3);
+
+			Dmeson.nhitsxyt1 = tHitsXY(t1);
+			Dmeson.nhitszt1 = tHits(t1)-tHitsXY(t1);
+
+			Dmeson.nhitsxyt2 = tHitsXY(t2);
+			Dmeson.nhitszt2 = tHits(t2)-tHitsXY(t2);
+
+			Dmeson.nhitsxyt3 = tHitsXY(t3);
+			Dmeson.nhitszt3 = tHits(t3)-tHitsXY(t3);
+
+			Dmeson.nvect1 = tVectors(t1);
+			Dmeson.nvecxyt1 = tVectorsXY(t1);
+			Dmeson.nveczt1 = tVectorsZ(t1);
+
+			Dmeson.nvect2 = tVectors(t2);
+			Dmeson.nvecxyt2 = tVectorsXY(t2);
+			Dmeson.nveczt2 = tVectorsZ(t2);
+
+			Dmeson.nvect3 = tVectors(t3);
+			Dmeson.nvecxyt3 = tVectorsXY(t3);
+			Dmeson.nveczt3 = tVectorsZ(t3);
+
+			Dmeson.ncls=semc.emc_ncls;
+			Dmeson.nlkr=emcRec->lkrClusters.size();
+			Dmeson.ncsi=emcRec->csiClusters.size();
+			Dmeson.emcenergy=0;
+			Dmeson.lkrenergy=0;
+                        Dmeson.csienergy=0;
+
+			for(int c=0; c<semc.emc_ncls; c++) {
+			    Dmeson.emcenergy+=semc.emc_energy[c];
+			    if( semc.emc_type[c]==1 )
+				Dmeson.lkrenergy+=semc.emc_energy[c];
+			    else if( semc.emc_type[c]==2 )
+				Dmeson.csienergy+=semc.emc_energy[c];
+			}
 
 			float energy_on_track1=0;
 			int cl_tr1=0;
@@ -725,35 +685,42 @@ int analyse_event()
 			    energy_on_track3+=semc.emc_energy[cl_tr3];
 			}
 
-			Dmeson.e1[i] = energy_on_track1;
-			Dmeson.e2[i] = energy_on_track2;
-			Dmeson.e3[i] = energy_on_track3;
-			if (progpar.verbose) cout<<"Dmeson.e1[i]="<<Dmeson.e1[i]<<"\t"<<"Dmeson.e2[i]="<<Dmeson.e2[i]<<"\t"<<"Dmeson.e3[i]="<<Dmeson.e3[i]<<endl;
+			Dmeson.e1 = energy_on_track1;
+			Dmeson.e2 = energy_on_track2;
+			Dmeson.e3 = energy_on_track3;
+			if (progpar.verbose) cout<<"Dmeson.e1="<<Dmeson.e1<<"\t"<<"Dmeson.e2="<<Dmeson.e2<<"\t"<<"Dmeson.e3="<<Dmeson.e3<<endl;
+
+			Dmeson.ecls1=0;
+                        Dmeson.ncls1=0;
+			Dmeson.ecls2=0;
+                        Dmeson.ncls2=0;
+			Dmeson.ecls3=0;
+                        Dmeson.ncls3=0;
 
 			for (int cl=0; cl<semc.emc_ncls; cl++) {
 
 			    if (fabs(semc.emc_theta[cl]-ktrrec_.TETRAK[t1]) < THETA_CL_CUT &&
 				fabs(clust_dist(t1, cl)) < DIST_CL_CUT) {
-				Dmeson.ecls1[i] += semc.emc_energy[cl];
-				Dmeson.tcls1[i] = semc.emc_theta[cl]-ktrrec_.TETRAK[t1];
-				Dmeson.pcls1[i] = clust_dist(t1, cl);
-				Dmeson.ncls1[i]++;
+				Dmeson.ecls1 += semc.emc_energy[cl];
+				Dmeson.tcls1 = semc.emc_theta[cl]-ktrrec_.TETRAK[t1];
+				Dmeson.pcls1 = clust_dist(t1, cl);
+				Dmeson.ncls1++;
 			    }
 
 			    if (fabs(semc.emc_theta[cl]-ktrrec_.TETRAK[t2]) < THETA_CL_CUT &&
 				fabs(clust_dist(t2, cl)) < DIST_CL_CUT) {
-				Dmeson.ecls2[i] += semc.emc_energy[cl];
-				Dmeson.tcls2[i] = semc.emc_theta[cl]-ktrrec_.TETRAK[t2];
-				Dmeson.pcls2[i] = clust_dist(t2, cl);
-				Dmeson.ncls2[i]++;
+				Dmeson.ecls2 += semc.emc_energy[cl];
+				Dmeson.tcls2 = semc.emc_theta[cl]-ktrrec_.TETRAK[t2];
+				Dmeson.pcls2 = clust_dist(t2, cl);
+				Dmeson.ncls2++;
 			    }
 
 			    if (fabs(semc.emc_theta[cl]-ktrrec_.TETRAK[t3]) < THETA_CL_CUT &&
 				fabs(clust_dist(t3, cl)) < DIST_CL_CUT) {
-				Dmeson.ecls3[i] += semc.emc_energy[cl];
-				Dmeson.tcls3[i] = semc.emc_theta[cl]-ktrrec_.TETRAK[t3];
-				Dmeson.pcls3[i] = clust_dist(t3, cl);
-				Dmeson.ncls3[i]++;
+				Dmeson.ecls3 += semc.emc_energy[cl];
+				Dmeson.tcls3 = semc.emc_theta[cl]-ktrrec_.TETRAK[t3];
+				Dmeson.pcls3 = clust_dist(t3, cl);
+				Dmeson.ncls3++;
 			    }
 			}
 
@@ -761,51 +728,40 @@ int analyse_event()
 			if (progpar.Dkine_fit)
 			{
 			    kine_fit(t1, t2, t3, &mbc, &de);
-			    Dmeson.Mbckin[i] = mbc;
-			    Dmeson.dEkin[i] = de;
+			    Dmeson.Mbckin = mbc;
+			    Dmeson.dEkin = de;
 			}
 
-			Dmeson.timet1[i]=kschit_.time_ns[t1];
-			Dmeson.betat1[i]=kscBhit_.Beta[t1][0];         //v/c
-			Dmeson.lengtht1[i]=kscBhit_.len[t1][0];        //длина трека
+			Dmeson.timet1=kschit_.time_ns[t1];
+			Dmeson.betat1=kscBhit_.Beta[t1][0];         //v/c
+			Dmeson.lengtht1=kscBhit_.len[t1][0];        //длина трека
 
-			Dmeson.timet2[i]=kschit_.time_ns[t2];
-			Dmeson.betat2[i]=kscBhit_.Beta[t2][0];         //v/c
-			Dmeson.lengtht2[i]=kscBhit_.len[t2][0];        //длина трека
+			Dmeson.timet2=kschit_.time_ns[t2];
+			Dmeson.betat2=kscBhit_.Beta[t2][0];         //v/c
+			Dmeson.lengtht2=kscBhit_.len[t2][0];        //длина трека
 
-			Dmeson.timet3[i]=kschit_.time_ns[t3];
-			Dmeson.betat3[i]=kscBhit_.Beta[t3][0];         //v/c
-			Dmeson.lengtht3[i]=kscBhit_.len[t3][0];        //длина трека
+			Dmeson.timet3=kschit_.time_ns[t3];
+			Dmeson.betat3=kscBhit_.Beta[t3][0];         //v/c
+			Dmeson.lengtht3=kscBhit_.len[t3][0];        //длина трека
+
+			Dmeson.rEv = kedrraw_.Header.Number;
+                        Dmeson.Run = kedrraw_.Header.RunNumber;
+			Dmeson.Ebeam=WTotal/2.;
+
+                        Dmeson.munhits = MUnhits;
 
 			i++;
+			Dmeson.ncomb = i;
+
+			eventTree->Fill();
 		    }
 		}
 	    }
 	}
     }
-    Dmeson.ncomb = i;
-    Dmeson.rEv = kedrraw_.Header.Number;
-    Dmeson.Ebeam=WTotal/2;
-
-    int nclg=0;
-    for(int cl=0; cl<semc.emc_ncls; cl++)
-    {
-	if(semc.emc_dc_ntrk[cl]==0)                                               //cluster do not connected with track
-	{
-	    copy(&bclgamma[nclg],cl);                                             //ncls=semc.emc_emc_ncls[c];       ntracks=semc.emc_dc_ntrk[c];
-	    nclg++;
-	}
-    }
-
-    for(int c=0; c<semc.str_ncls; c++) {
-	copy(&bstrip,c);
-    }
 
     if(eNumber%1000==0) cout<<"Ev:"<<eNumber<<endl;
     //==================================================================
-
-    eventTree->Fill();
-
 
     if( progpar.process_only ) return 1;
 
@@ -912,46 +868,12 @@ int main(int argc, char* argv[])
 
 	eventTree = new TTree("et","Event tree");
 	eventTree->SetAutoSave(500000000);  // autosave when 0.5 Gbyte written
-	eventTree->Branch("ev",&bevent,eventBranchList);
-        eventTree->Branch("vrt",&bvertex,vertexBranchList);
-	eventTree->Branch("emc",&bemc,emcBranchList);
-	eventTree->Branch("atcev",&batc,atcBranchList);
-
-	for(int i=0; i<Ntraks; i++) {
-	    char branchname[20];
-	    sprintf(branchname,"t%d",i);
-	    TBranch* b1=eventTree->Branch(branchname,&btrack[i],trackBranchList);
-	    for(int ii=0; ii<Natccr; ii++) {
-		char branchname2[20];
-		sprintf(branchname2,"t%datccr%d",i,ii);
-		eventTree->Branch(branchname2,&bcnt[ii][i],atcCounterBranchList);
-	    }
-	    for (int ii=0; ii<Nclcr; ii++)
-	    {
-		char clastername[20];
-		sprintf(clastername,"t%dc%d",i,ii);
-		eventTree->Branch(clastername,&bcluster[ii][i],towerClusterBranchList);
-	    }
-	    char tofname[20];
-	    sprintf(tofname,"t%dtof",i);
-	    eventTree->Branch(tofname,&btof[i],ToFBranchList);
-	}
-
-	for (int ii=0; ii<Nclcrg; ii++)
-	{
-	    char clgammaname[20];
-	    sprintf(clgammaname,"clgamma%d",ii);
-	    eventTree->Branch(clgammaname,&bclgamma[ii],towerClusterBranchList);
-	}
-
-	eventTree->Branch("mu",&bmu,MUBranchList);
-	eventTree->Branch("Dmeson",&Dmeson,"nhitst1[50]/I:nhitst2[50]:nhitst3[50]:ncomb:ncls1[50]:ncls2[50]:ncls3[50]"
-			  ":Mbc[50]/F:Mbckin[50]:dE[50]:dEkin[50]:Ebeam:rEv:P1[50]:P2[50]:P3[50]:Pt1[50]:Pt2[50]:Pt2[50]:chi2t1[50]:chi2t2[50]:chi2t3[50]:e1[50]"
-			  ":e2[50]:e3[50]:rr1[50]:rr2[50]:rr3[50]:Zip1[50]:Zip2[50]:Zip3[50]:ecls1[50]:ecls2[50]:ecls3[50]:tcls1[50]:tcls2[50]:tcls3[50]:pcls1[50]"
-			  ":pcls2[50]:pcls3[50]:timet1[50]:betat1[50]:lengtht1[50]:timet2[50]:betat2[50]:lengtht2[50]:timet3[50]:betat3[50]:lengtht3[50]");
-
-	eventTree->Branch("strcls",&bstrip,stripClusterBranchList);
-	eventTree->Branch("strtrk",&bstriptrack,stripTrackBranchList);
+	eventTree->Branch("Dmeson",&Dmeson,"vrtntrk/I:vrtnip:vrtnbeam:nhitst1:nhitst2:nhitst3:nhitsvdt1:nhitsvdt2:nhitsvdt3:nhitsxyt1:nhitszt1:nhitsxyt2"
+			  ":nhitszt2:nhitsxyt3:nhitszt3:nvect1:nvecxyt1:nveczt1:nvect2:nvecxyt2:nveczt2:nvect3:nvecxyt3"
+			  ":nveczt3:ncomb:ncls1:ncls2:ncls3:ncls:nlkr:ncsi:munhits:Run"
+			  ":Mbc/F:Mbckin:dE:dEkin:Ebeam:rEv:P1:P2:P3:Pt1:Pt2:Pt3:thetat1:thetat2:thetat3:phit1:phit2:phit3:chi2t1:chi2t2:chi2t3:e1"
+			  ":e2:e3:rr1:rr2:rr3:Zip1:Zip2:Zip3:ecls1:ecls2:ecls3:tcls1:tcls2:tcls3:pcls1"
+			  ":pcls2:pcls3:emcenergy:lkrenergy:csienergy:timet1:betat1:lengtht1:timet2:betat2:lengtht2:timet3:betat3:lengtht3");
 
 //----------------- Configure kframework -----------------//
 	//Set kframework signal handling
