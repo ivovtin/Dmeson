@@ -184,10 +184,12 @@
 
     struct data10
     {
-	int nhitst1[50],nhitst2[50],nhitst3[50],ncomb,ncls1[50],ncls2[50],ncls3[50];
-	float Mbc[50],Mbckin[50],dE[50],dEkin[50],Ebeam,rEv,P1[50],P2[50],P3[50],Pt1[50],Pt2[50],Pt3[50],chi2t1[50],chi2t2[50],chi2t3[50],e1[50],e2[50],e3[50],rr1[50],rr2[50],
-	      rr3[50],Zip1[50],Zip2[50],Zip3[50],ecls1[50],ecls2[50],ecls3[50],tcls1[50],tcls2[50],tcls3[50],pcls1[50],pcls2[50],pcls3[50],timet1[50],betat1[50],lengtht1[50],
-	      timet2[50],betat2[50],lengtht2[50],timet3[50],betat3[50],lengtht3[50];
+	int vrtntrk,vrtnip,vrtnbeam,nhitst1,nhitst2,nhitst3,nhitsvdt1,nhitsvdt2,nhitsvdt3,nhitsxyt1,nhitszt1,nhitsxyt2,
+	nhitszt2,nhitsxyt3,nhitszt3,nvect1,nvecxyt1,nveczt1,nvect2,nvecxyt2,nveczt2,nvect3,
+	nvecxyt3,nveczt3,ncomb,ncls1,ncls2,ncls3,ncls,nlkr,ncsi,munhits,Run;
+	float Mbc,Mbckin,dE,dEkin,Ebeam,rEv,P1,P2,P3,Pt1,Pt2,Pt3,thetat1,thetat2,thetat3,phit1,phit2,phit3,chi2t1,chi2t2,chi2t3,
+	    e1,e2,e3,rr1,rr2,rr3,Zip1,Zip2,Zip3,ecls1,ecls2,ecls3,tcls1,tcls2,tcls3,pcls1,pcls2,pcls3,emcenergy,lkrenergy,csienergy,timet1,betat1,lengtht1,
+	timet2,betat2,lengtht2,timet3,betat3,lengtht3;
     };
     data10 Dmeson;
 
@@ -207,8 +209,7 @@
     //include samples Data/MC
     void chain(){
 	if(sim==0){
-	    //for(int i=1; i<=862; i++)   //signal 2016+2017
-	    for(int i=1; i<=50; i++)   //signal 2016+2017
+	    for(int i=1; i<=862; i++)   //signal 2016+2017
 	    {
 		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/Dplus/data/psi3770_to_D0meson_%d.root",i).Data());
 	    }
@@ -251,166 +252,10 @@
 
     void setbranchstatus(){
 	tt->SetBranchStatus("*",0);
-	tt->SetBranchStatus("ev",1);
-	tt->SetBranchStatus("vrt",1);
-	tt->SetBranchStatus("emc",1);
-	tt->SetBranchStatus("atcev",1);
-	tt->SetBranchStatus("t0",1);
-	tt->SetBranchStatus("t0atccr0",1);
-	tt->SetBranchStatus("t0atccr1",1);
-	tt->SetBranchStatus("t0atccr2",1);
-	tt->SetBranchStatus("t0atccr3",1);
-	tt->SetBranchStatus("t0c0",1);
-	tt->SetBranchStatus("t0c1",1);
-	tt->SetBranchStatus("t0c2",1);
-	tt->SetBranchStatus("t0tof",1);
-	tt->SetBranchStatus("t1",1);
-	tt->SetBranchStatus("t1atccr0",1);
-	tt->SetBranchStatus("t1atccr1",1);
-	tt->SetBranchStatus("t1atccr2",1);
-	tt->SetBranchStatus("t1atccr3",1);
-	tt->SetBranchStatus("t1c0",1);
-	tt->SetBranchStatus("t1c1",1);
-	tt->SetBranchStatus("t1c2",1);
-	//tt->SetBranchStatus("t1tof",1);
-	tt->SetBranchStatus("t2",1);
-	tt->SetBranchStatus("t2atccr0",1);
-	tt->SetBranchStatus("t2atccr1",1);
-	tt->SetBranchStatus("t2atccr2",1);
-	tt->SetBranchStatus("t2atccr3",1);
-	tt->SetBranchStatus("t2c0",1);
-	tt->SetBranchStatus("t2c1",1);
-	tt->SetBranchStatus("t2c2",1);
-	//tt->SetBranchStatus("t2tof",1);
-	tt->SetBranchStatus("t3",1);
-	tt->SetBranchStatus("t3atccr0",1);
-	tt->SetBranchStatus("t3atccr1",1);
-	tt->SetBranchStatus("t3atccr2",1);
-	tt->SetBranchStatus("t3atccr3",1);
-	tt->SetBranchStatus("t3c0",1);
-	tt->SetBranchStatus("t3c1",1);
-	tt->SetBranchStatus("t3c2",1);
-	//tt->SetBranchStatus("t3tof",1);
-	tt->SetBranchStatus("t4",1);
-	tt->SetBranchStatus("t4atccr0",1);
-	tt->SetBranchStatus("t4atccr1",1);
-	tt->SetBranchStatus("t4atccr2",1);
-	tt->SetBranchStatus("t4atccr3",1);
-	tt->SetBranchStatus("t4c0",1);
-	tt->SetBranchStatus("t4c1",1);
-	tt->SetBranchStatus("t4c2",1);
-	tt->SetBranchStatus("t5",1);
-	tt->SetBranchStatus("t5atccr0",1);
-	tt->SetBranchStatus("t5atccr1",1);
-	tt->SetBranchStatus("t5atccr2",1);
-	tt->SetBranchStatus("t5atccr3",1);
-	tt->SetBranchStatus("t5c0",1);
-	tt->SetBranchStatus("t5c1",1);
-	tt->SetBranchStatus("t5c2",1);
-	tt->SetBranchStatus("t6",1);
-	tt->SetBranchStatus("t6c0",1);
-	tt->SetBranchStatus("t6c1",1);
-	tt->SetBranchStatus("t6c2",1);
-	tt->SetBranchStatus("t7",1);
-	tt->SetBranchStatus("t7c0",1);
-	tt->SetBranchStatus("t7c1",1);
-	tt->SetBranchStatus("t7c2",1);
-	tt->SetBranchStatus("t8",1);
-	tt->SetBranchStatus("t8c0",1);
-	tt->SetBranchStatus("t8c1",1);
-	tt->SetBranchStatus("t8c2",1);
-	tt->SetBranchStatus("t9",1);
-	tt->SetBranchStatus("t9c0",1);
-	tt->SetBranchStatus("t9c1",1);
-	tt->SetBranchStatus("t9c2",1);
-
-	tt->SetBranchStatus("clgamma0",1);
-	tt->SetBranchStatus("clgamma1",1);
-	tt->SetBranchStatus("clgamma2",1);
-	tt->SetBranchStatus("clgamma3",1);
-	tt->SetBranchStatus("mu",1);
 	tt->SetBranchStatus("Dmeson",1);
     }
 
     void setbranchaddress(){
-	tt->SetBranchAddress("ev",&ev);
-	tt->SetBranchAddress("vrt",&vrt);
-	tt->SetBranchAddress("emc",&emc);
-	tt->SetBranchAddress("atcev",&atcev);
-	tt->SetBranchAddress("t0",&t0);
-	tt->SetBranchAddress("t0atccr0",&t0atccr0);
-	tt->SetBranchAddress("t0atccr1",&t0atccr1);
-	tt->SetBranchAddress("t0atccr2",&t0atccr2);
-	tt->SetBranchAddress("t0atccr3",&t0atccr3);
-	tt->SetBranchAddress("t0c0",&t0c0);
-	tt->SetBranchAddress("t0c1",&t0c1);
-	tt->SetBranchAddress("t0c2",&t0c2);
-	tt->SetBranchAddress("t0tof",&t0tof);
-	tt->SetBranchAddress("t1",&t1);
-	tt->SetBranchAddress("t1atccr0",&t1atccr0);
-	tt->SetBranchAddress("t1atccr1",&t1atccr1);
-	tt->SetBranchAddress("t1atccr2",&t1atccr2);
-	tt->SetBranchAddress("t1atccr3",&t1atccr3);
-	tt->SetBranchAddress("t1c0",&t1c0);
-	tt->SetBranchAddress("t1c1",&t1c1);
-	tt->SetBranchAddress("t1c2",&t1c2);
-	//tt->SetBranchAddress("t1tof",&t1tof);
-	tt->SetBranchAddress("t2",&t2);
-	tt->SetBranchAddress("t2atccr0",&t2atccr0);
-	tt->SetBranchAddress("t2atccr1",&t2atccr1);
-	tt->SetBranchAddress("t2atccr2",&t2atccr2);
-	tt->SetBranchAddress("t2atccr3",&t2atccr3);
-	tt->SetBranchAddress("t2c0",&t2c0);
-	tt->SetBranchAddress("t2c1",&t2c1);
-	tt->SetBranchAddress("t2c2",&t2c2);
-	//tt->SetBranchAddress("t2tof",&t2tof);
-	tt->SetBranchAddress("t3",&t3);
-	tt->SetBranchAddress("t3atccr0",&t3atccr0);
-	tt->SetBranchAddress("t3atccr1",&t3atccr1);
-	tt->SetBranchAddress("t3atccr2",&t3atccr2);
-	tt->SetBranchAddress("t3atccr3",&t3atccr3);
-	tt->SetBranchAddress("t3c0",&t3c0);
-	tt->SetBranchAddress("t3c1",&t3c1);
-	tt->SetBranchAddress("t3c2",&t3c2);
-	tt->SetBranchAddress("t4",&t4);
-	tt->SetBranchAddress("t4atccr0",&t4atccr0);
-	tt->SetBranchAddress("t4atccr1",&t4atccr1);
-	tt->SetBranchAddress("t4atccr2",&t4atccr2);
-	tt->SetBranchAddress("t4atccr3",&t4atccr3);
-	tt->SetBranchAddress("t4c0",&t4c0);
-	tt->SetBranchAddress("t4c1",&t4c1);
-	tt->SetBranchAddress("t4c2",&t4c2);
-	tt->SetBranchAddress("t5",&t5);
-	tt->SetBranchAddress("t5atccr0",&t5atccr0);
-	tt->SetBranchAddress("t5atccr1",&t5atccr1);
-	tt->SetBranchAddress("t5atccr2",&t5atccr2);
-	tt->SetBranchAddress("t5atccr3",&t5atccr3);
-	tt->SetBranchAddress("t5c0",&t5c0);
-	tt->SetBranchAddress("t5c1",&t5c1);
-	tt->SetBranchAddress("t5c2",&t5c2);
-	tt->SetBranchAddress("t6",&t6);
-	tt->SetBranchAddress("t6c0",&t6c0);
-	tt->SetBranchAddress("t6c1",&t6c1);
-	tt->SetBranchAddress("t6c2",&t6c2);
-	tt->SetBranchAddress("t7",&t7);
-	tt->SetBranchAddress("t7c0",&t7c0);
-	tt->SetBranchAddress("t7c1",&t7c1);
-	tt->SetBranchAddress("t7c2",&t7c2);
-	tt->SetBranchAddress("t8",&t8);
-	tt->SetBranchAddress("t8c0",&t8c0);
-	tt->SetBranchAddress("t8c1",&t8c1);
-	tt->SetBranchAddress("t8c2",&t8c2);
-	tt->SetBranchAddress("t9",&t9);
-	tt->SetBranchAddress("t9c0",&t9c0);
-	tt->SetBranchAddress("t9c1",&t9c1);
-	tt->SetBranchAddress("t9c2",&t9c2);
-
-	//tt->SetBranchAddress("t3tof",&t3tof);
-	tt->SetBranchAddress("clgamma0",&clgamma0);
-	tt->SetBranchAddress("clgamma1",&clgamma1);
-	tt->SetBranchAddress("clgamma2",&clgamma2);
-	tt->SetBranchAddress("clgamma3",&clgamma3);
-	tt->SetBranchAddress("mu",&mu);
 	tt->SetBranchAddress("Dmeson",&Dmeson);
     }
 
@@ -429,9 +274,6 @@
     Double_t m1=493.667, m2=139.57;
 
     float tof1,dtof1;
-
-    int nhitsxy[10], nvec[10];
-    float theta[10], phi[10];
 
     double deCut1, deCut2;
     double mbcCut1, mbcCut2;
