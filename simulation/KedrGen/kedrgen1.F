@@ -1,0 +1,1046 @@
+      SUBROUTINE KEDRGEN1(VERTEX,IPRTRK)
+c*****************************************************************
+c
+c   Generation of primary tracks kinematics: generators 201-300
+c
+c   Input:
+c
+c   VERTEX     - Vertex of event
+c   IPRTRK=1/0 - print/no print initial tracks
+c
+c   Changes:
+c
+c   21 Jan 2003. V.A.Tayursky, print initial tracks
+c   08 May 2003. V.A.Tayursky, bhw -> bhw104
+c   28 Nov 2003. V.M.Malyshev, gen 211,  J/psi, psi' -> eta_c+gamma
+c   11 Mar 2005. V.A.Tayursky, +dec.modes for gen 203 
+c   10 Mar 2006. V.A.Tayursky, gen 205: + init.state QED radiation
+c   11 Dec 2006. V.A.Tayursky, gen 212 + ang. distr., + psi(2S) 
+c   12 Dec 2006. V.A.Tayursky, gen 212: corrected error in simul. ang. distr.
+c   07 Feb 2007. V.A.Tayursky, gen 207: changed direction of all particles
+c   08 Feb 2007. V.A.Tayursky, gen 213 (E.M.Baldin, V.A.Tayursky) added
+c   22 May 2007. E.M.Baldin, gen 213, corrected ang. distr. (deleted sin teta) 
+c   09 Jun 2007. V.A.Tayursky, gen 210: added J/psi -> rndmflv 
+c   16 Jun 2007.  V.A.Tayursky, gen 201: e+ and e- changed directions
+c
+c*****************************************************************
+#include "gcflag.inc"  /* ievent,nevent*/
+#include "gconst.inc"  /* pi,twopi,...*/
+#include "lujets.inc"  /*  N,K(4000,5),P(4000,5),V(4000,5)*/
+      COMMON /PKIN/     NTRACK,IPARTICLE(50),EPART(50),       ! for output file
+     &                  PXPART(50),PYPART(50),PZPART(50)
+      COMMON /KEDR_GEN/ KHEP,KGEN,GENPAR(20)        ! parameters for generators
+      COMMON /LUDAT1/   MSTU(200),PARU(200),MSTJ(200),PARJ(200)
+      COMMON /LUDAT2/   kchg(500,3),pmas(500,4),parf(2000),vckm(4,4)
+      COMMON /LUDAT3/   MDCY(500,3),MDME(2000,2),BRAT(2000),KFDP(2000,5)
+      COMMON /BHMOMSET/ p1(4),q1(4),p2(4),q2(4),phot(100,4),nphot  ! for BHWIDE
+      INTEGER NMXHEP
+      PARAMETER (NMXHEP=2000)
+      COMMON /HEPEVT/             ! for PHOTOS
+     $      nevhep,               ! serial number
+     $      nhep,                 ! number of particles
+     $      isthep(nmxhep),       ! status code
+     $      idhep(nmxhep),        ! particle ident KF
+     $      jmohep(2,nmxhep),     ! parent particles
+     $      jdahep(2,nmxhep),     ! childreen particles
+     $      phep(5,nmxhep),       ! four-momentum, mass [GeV]
+     $      vhep(4,nmxhep)        ! vertex [mm]
+      REAL*8  phep,  vhep         ! to be real*4 / *8  depending on host
+c      INTEGER nevhep,nhep,isthep,idhep,jmohep, jdahep
+
+      COMMON /phoqed/
+     $     qedrad(nmxhep)                           ! PHOTOS flag
+c
+      LOGICAL qedrad
+      REAL *8 p1,q1,p2,q2,phot
+      REAL *8 CMSEne,ThMinp,ThMaxp,ThMine,ThMaxe
+      REAL *8 EnMinp,EnMine,Acolli,epsCMS
+      REAL *8 qp(4),qm(4),qg(4)
+      CHARACTER *12 NAME
+      CHARACTER *8  T212(16)    ! text for generator 212
+c
+      DATA T212/'e+e-','mu+mu-','pi+pi-','K+K-','p anti-p','n anti-n',  ! 212
+     &          '    ','      ','      ','    ','e+e-','mu+mu-',
+     &          'pi+pi-','K+K-','p anti-p','n anti-n'/
+c
+      DIMENSION VERTEX(3),PLAB(3),IGENPAR(20)
+c
+      DO I=1,20
+ 	IGENPAR(I)=GENPAR(I)   ! +
+      END DO
+c
+      NLUND=GENPAR(2)          ! for gen.
+c
+c-------------------------------------------------------------------
+c
+c      Determination of process for simulation from data card
+c      =======================================================
+c
+c* KGEN=201-299: Yu.I.Skovpen & V.A.Tayursky & E.M.Baldin
+c
+      if(kgen.eq.201) goto 200 ! e+ e- -> e+ e- (gamma)
+      if(kgen.eq.202) goto 200 ! e+ e- -> mu+ mu- (gamma)
+      if(kgen.eq.203) goto 200 ! e+ e- -> tau+ tau- (gamma)
+      if(kgen.eq.204) goto 200 ! e+ e- -> gamma gamma (gamma)
+      if(kgen.eq.205) goto 205 ! e+ e- -> QQbar
+      if(kgen.eq.206) goto 205 ! e+ e- -> ggg
+      if(kgen.eq.207) goto 207 ! e+ e- -> e+ e- (gamma) [ BHWIDE ]
+      if(kgen.eq.210) goto 210 ! e+ e- -> J/psi
+      if(kgen.eq.211) goto 211 ! e+ e- -> J/psi, psi' -> gamma eta_c
+      if(kgen.eq.212) goto 212 ! e+ e- -> J/psi -> 2 particles +  PHOTOS
+      if(kgen.eq.213) goto 213 ! e+ e- -> J/psi -> e+e- (interference) + PHOTOS
+      if(kgen.eq.281) goto 281 ! e+ e- -> QQ -> one gamma[A
+      if(kgen.eq.282) goto 281 ! e+ e- -> QQ -> one charged pi
+      if(kgen.eq.283) goto 281 ! e+ e- -> QQ -> only gammas
+      if(kgen.eq.284) goto 281 ! e+ e- -> QQ -> only charged pi's
+c
+      PRINT *,' Wrong generator number! See the KEDR WWW page '
+      GOTO 500
+c
+c------------------------------------------------------------------
+c
+c  QED generators of F.Berends (KGEN=201-204) 
+c
+c  201: e+e-(g), 202: mu+mu-(g), 203: tau+tau-(g), 204: gg(g)
+c
+ 200  NTRACK=0             
+c
+      call GSVERT(VERTEX,0,0,0,0,nvert)
+c
+      call QED(qp,qm,qg)
+c
+      IF(KGEN.NE.203) THEN                  !========================
+c
+c  Process is not equal to tau+tau-(gamma)
+c
+        if(kgen.eq.201) itype=3  ! GEANT type of 1-st final particle
+        if(kgen.eq.202) itype=5  
+        if(kgen.eq.204) itype=1
+        plab(1)=qp(1)            
+        plab(2)=qp(2)
+        plab(3)=qp(3)
+c
+        call gskine(plab,itype,nvert,0,0,nt)
+c
+        ntrack=ntrack+1
+        iparticle(ntrack)=itype
+        epart(ntrack)=qp(4)
+        pxpart(ntrack)=qp(1)
+        pypart(ntrack)=qp(2)
+        pzpart(ntrack)=qp(3)
+c
+ 	IF(IPRTRK.EQ.1) THEN
+ 	  PRINT 397,IEVENT,NTRACK,ITYPE,PLAB,VERTEX
+ 	END IF
+c
+        if(kgen.eq.201) itype=2   ! GEANT type of 2-nd final particle
+        if(kgen.eq.202) itype=6
+        if(kgen.eq.204) itype=1
+        plab(1)=qm(1)
+        plab(2)=qm(2)
+        plab(3)=qm(3)
+c
+        call gskine(plab,itype,nvert,0,0,nt)
+c
+        ntrack=ntrack+1
+        iparticle(ntrack)=itype
+        epart(ntrack)=qm(4)
+        pxpart(ntrack)=qm(1)
+        pypart(ntrack)=qm(2)
+        pzpart(ntrack)=qm(3)
+c
+        IF(IPRTRK.EQ.1) PRINT 397,IEVENT,NTRACK,ITYPE,PLAB,VERTEX
+c
+      END IF                                 ! ===========================
+c
+      IF(qg(4).gt.0.d0) then                 ! vvvvvvvvvvvvvvvvvvvvvvvvvvv
+c
+c + radiative photon
+c   
+        itype=1
+        plab(1)=qg(1)
+        plab(2)=qg(2)
+        plab(3)=qg(3)
+c
+        call gskine(plab,itype,nvert,0,0,nt)
+c
+        ntrack=ntrack+1
+        iparticle(ntrack)=itype
+        epart(ntrack)=qg(4)
+        pxpart(ntrack)=qg(1)
+        pypart(ntrack)=qg(2)
+        pzpart(ntrack)=qg(3)
+c
+        IF(IPRTRK.EQ.1) PRINT 397,IEVENT,NTRACK,ITYPE,PLAB,VERTEX
+c
+      END IF                                ! ^^^^^^^^^^^^^^^^^^^^^^^^
+c
+c----------------------------------------------------------------------
+c
+c  KGEN=203: e+e- -> tau+tau-(gamma) (Generator of Berends)
+c
+      IF(KGEN.EQ.203) THEN                  !=========== tau-block
+c
+c  Selection of tau+ decay mode should be at each event
+c          
+        KC=LUCOMP(-15)    ! JetSet   (tau+)
+        IND=MDCY(KC,2)    ! 1-st index of position in table of decay channel
+        NDEC1=IGENPAR(2)  ! # of decay mode of tau+ in run
+c
+        DO I=1,37
+          IDC=IND+I-1     ! all decay channels are included
+          MDME(IDC,1)=1
+        END DO
+c
+        IF(NDEC1.GE.1.AND.NDEC1.LE.37) THEN
+c
+c  Selection of tau+ decay channal, modification /ludat3/
+c
+          DO I=1,37  
+            IDC=IND+I-1
+            IF(I.EQ.NDEC1) THEN
+              MDME(IDC,1)=1
+ 	    ELSE
+              MDME(IDC,1)=0
+ 	    END IF
+c
+          END DO
+c
+ 	END IF            ! end of mode selecton for tau+ decay
+c
+        q=sqrt(qp(1)**2+qp(2)**2+qp(3)**2)
+        t=acos(qp(3)/q)
+        st=sin(t)
+c
+        if(abs(st).lt.1.e-4) then
+c
+          R=RLU(0)
+c
+          phi=6.28318*r
+        else
+          cphi=qp(1)/q/st
+c
+          if(abs(cphi).gt.1.)then
+            write(6,*)' WARNING, gukine_s: cphi=',cphi
+            cphi=1.
+          endif
+c
+          phi=acos(cphi)
+          if(qp(2).lt.0.) phi=6.28318-phi
+        endif
+c
+        etau=qp(4)
+c
+        call lu1ent(-1,-15,etau,t,phi)   ! tau+
+c
+        call luexec                      ! management of tau+ decays
+c
+        IF(N.LE.0) THEN
+          PRINT *,' Error in GUKINE_S: tau+ generation, n <=0'
+          STOP
+        END IF 
+c
+        DO I=1,N
+          ks=k(i,1)
+          kf=k(i,2)
+c
+          IF(ks.eq.1.or.ks.eq.4) THEN
+            itype=kgfromkf(kf)
+c
+            if(itype.ne.0) then
+              plab(1)=p(i,1)
+              plab(2)=p(i,2)
+              plab(3)=p(i,3)
+              ntrack=ntrack+1
+              iparticle(ntrack)=itype
+              epart(ntrack)=p(i,4)
+              pxpart(ntrack)=p(i,1)
+              pypart(ntrack)=p(i,2)
+              pzpart(ntrack)=p(i,3)
+c
+              call gskine(plab,itype,nvert,0,0,nt)
+c      
+              IF(IPRTRK.EQ.1) PRINT 397,IEVENT,NTRACK,ITYPE,PLAB,VERTEX           
+            else
+              write(6,*)'!!!!! warning ----- unknown type of particle'
+c
+              call pstppar(kf,name,pmass,width,chrg,spin,ctau)
+c
+              write(6,*)'ks,kf,name=',ks,kf,' ',name
+            endif
+          END IF
+c
+        END DO
+c
+c  Preparation for tau- generation
+c
+        q=sqrt(qm(1)**2+qm(2)**2+qm(3)**2)
+        t=acos(qm(3)/q)
+        st=sin(t)
+c
+        if(abs(st).lt.1.e-4)then
+c
+          R=RLU(0)
+c
+          phi=6.28318*r
+        else
+          cphi=qm(1)/q/st
+          if(abs(cphi).gt.1.)then
+            write(6,*)' WARNING ','cphi=',cphi
+            cphi=1.
+          endif
+c
+          phi=acos(cphi)
+          if(qm(2).lt.0.)phi=6.28318-phi
+        endif
+c
+c  Selection of tau- decay mode should be at each event
+c          
+        KC=LUCOMP(15)     ! JetSet   (tau-)
+        IND=MDCY(KC,2)    ! 1-st index of position in table of decay channel
+        NDEC2=IGENPAR(3)  ! # of decay mode of tau- in run
+c
+        DO I=1,37
+          IDC=IND+I-1     ! all decay channels are included
+          MDME(IDC,1)=1
+        END DO
+c
+        IF(NDEC2.GE.1.AND.NDEC2.LE.37) THEN
+c
+c  Selection of decay channal, modification /ludat3/
+c
+          DO I=1,37
+            IDC=IND+I-1
+            IF(I.EQ.NDEC2) THEN
+              MDME(IDC,1)=1
+            ELSE
+              MDME(IDC,1)=0
+            END IF
+          END DO
+c
+        END IF                ! end of mode selecton for tau+ decay
+c
+        ETAU=QM(4)
+c
+        call lu1ent(-2,15,etau,t,phi)      ! add tau-    
+c
+        call luexec                        ! management of tau decays
+c
+      END IF                    !========================= end of tau-block
+c
+      IF(KGEN.eq.203) GOTO 299  ! for tau+tau-(g)
+c
+      GOTO 500                  ! for e+e-(g), mu+mu-(g), gg(g)
+c
+c--------------------------------------------------------------------
+c
+c   KGEN=207 - e+ e- -> e+ e- (gamma)      ( Generator BHWIDE 1.0.4 )
+c
+ 207  NTRACK=0
+c
+      call gsvert(VERTEX,0,0,0,0,nvert)
+c
+      CMSEne=2.*GENPAR(1)
+      ThMinp=GENPAR(2)
+      ThMaxp=GENPAR(3)
+      ThMine=GENPAR(4)
+      ThMaxe=GENPAR(5)
+      EnMinp=GENPAR(6)
+      EnMine=GENPAR(7)
+      Acolli=GENPAR(8)
+      epsCMS=GENPAR(9)
+c
+      CALL GEN_BHW104(IEVENT,NEVENT,
+     *  CMSEne,ThMinp,ThMaxp,ThMine,ThMaxe,EnMinp,EnMine,Acolli,epsCMS)
+c
+c  Store BHW particles for output file 
+c
+      itype=2         ! e+
+      plab(1)=-p2(1)
+      plab(2)=-p2(2)
+      plab(3)=-p2(3)
+c
+      call gskine(plab,itype,nvert,0,0,nt)
+c
+      ntrack=ntrack+1
+      iparticle(ntrack)=itype
+      epart(ntrack)=p2(4)
+      pxpart(ntrack)=-p2(1)
+      pypart(ntrack)=-p2(2)
+      pzpart(ntrack)=-p2(3)
+c
+      IF(IPRTRK.EQ.1) PRINT 397,IEVENT,NTRACK,ITYPE,PLAB,VERTEX
+c
+      itype=3         !  e-
+      plab(1)=-q2(1)
+      plab(2)=-q2(2)
+      plab(3)=-q2(3)
+c
+      call gskine(plab,itype,nvert,0,0,nt)
+c
+      ntrack=ntrack+1
+      iparticle(ntrack)=itype
+      epart(ntrack)=q2(4)
+      pxpart(ntrack)=-q2(1)
+      pypart(ntrack)=-q2(2)
+      pzpart(ntrack)=-q2(3)
+c
+      IF(IPRTRK.EQ.1) PRINT 397,IEVENT,NTRACK,ITYPE,PLAB,VERTEX
+c
+      IF(NPHOT.GT.0) THEN
+        itype=1               ! rad.photons
+c
+        do i=1,nphot
+          plab(1)=-phot(i,1)
+          plab(2)=-phot(i,2)
+          plab(3)=-phot(i,3)
+c
+          call gskine(plab,itype,nvert,0,0,nt)
+c
+          ntrack=ntrack+1
+          iparticle(ntrack)=itype
+          epart(ntrack)=phot(i,4)
+          pxpart(ntrack)=-phot(i,1)
+          pypart(ntrack)=-phot(i,2)
+          pzpart(ntrack)=-phot(i,3)
+c
+          IF(IPRTRK.EQ.1) PRINT 397,IEVENT,NTRACK,ITYPE,PLAB,VERTEX
+c
+        end do
+c
+      END IF
+c
+      GOTO 500                        ! end of block of BHWIDE
+c
+c----------------------------------------------------------------------
+c
+c  kgen=205 - e+e- -> QQ         /on base of Jetset 7.4/
+c  kgen=206 - e+e- -> ggg
+c
+ 205  CONTINUE 
+c
+      IF(IEVENT.EQ.1) THEN                                   !  print title
+        IF(KGEN.EQ.205) PRINT 2051,GENPAR(1),NLUND,IGENPAR(3)
+        IF(KGEN.EQ.206) PRINT 2061,GENPAR(1),NLUND
+      END IF
+c
+      NTRACK=0
+c
+      call gsvert(VERTEX,0,0,0,0,nvert)
+c
+      Ecm=2.*genpar(1)                        ! total energy
+c
+      IF(kgen.eq.205) THEN
+        IF(GENPAR(3).GT.0.5) MSTJ(107)=1      ! 1: include Init.state rad.corr          
+c
+        CALL LUEEVT(nlund,ecm)  ! annihilation in continuum
+
+      END IF
+c
+      IF(kgen.eq.206) call LUONIA(nlund,ecm)  ! 
+c
+      GOTO 299
+c
+c-----------------------------------------------------------------------
+c
+c  KGEN=210: e+ e- -> J/psi  /on base of Jetset 7.4/
+c 
+c  GENPAR(1) = 0: all
+c            = 1: rndmflav
+c
+ 210  NTRACK=0
+c
+      CALL GSVERT(VERTEX,0,0,0,0,nvert)
+c
+      KC=lucomp(443)                   ! J/psi
+      Ecm=pmas(kc,1)                   ! mass of J/psi
+c
+      IF(IEVENT.EQ.1) THEN
+         IF(GENPAR(1).LT.0.5) PRINT 2101,ECM    !  print title 
+         IF(GENPAR(1).GT.0.5) PRINT 2102,ECM   
+      END IF
+c
+ 2103 CALL LU1ENT(-1,443,Ecm,0.,0.)
+c
+      CALL LUEXEC
+c
+      IF(GENPAR(1).LT.0.5) GOTO 2104
+c
+      NUND=0                   ! number of undecayed particles
+c
+      DO I=1,N
+        KS=k(i,1)              ! status of particle
+        IF(ks.gt.0.and.ks.lt.5) nund=nund+1
+      END DO
+c
+c   Should not be final states: e+e- or mu+mu-
+c
+      IF(NUND.EQ.2) THEN       ! 2 final particles
+c
+        DO I=1,N
+          ks=k(i,1)            ! status
+          KF=k(i,2)            ! type of particle
+c
+          IF(ks.gt.0.and.ks.lt.5) THEN
+            itype=kgfromkf(kf) ! Geant-type from kf-type of particle
+c
+            if(itype.eq.0) then
+              PRINT *, ' Gen.210: unknown type of particle', k(i,2)
+              STOP
+            end if
+c
+            if(IABS(KF).EQ.11)   GOTO 2103
+            if(IABS(KF).EQ.13)   GOTO 2103
+          END IF
+        END DO
+      END IF
+c
+ 2104 GOTO 299
+c
+c-------------------------------------------------------------------
+c
+c  kgen=211 - e+ e- -> J/psi, psi' -> gamma eta_c 
+c
+ 211  NTRACK=0
+c
+      IF(IEVENT.EQ.1)  PRINT 2111,GENPAR(1)   !  print title 
+c
+      call gsvert(VERTEX,0,0,0,0,nvert)
+c      
+      Ecm_psi=genpar(1)                          ! cms energy
+c
+      call lu2ent(1,22,441,Ecm_psi)              ! 22-photon, 441-eta_c
+c
+ 298  R=RLU(0)  
+c
+      ctet=-1.+2.*r
+      R=RLU(0)
+c
+      if(2.*r.gt.(1.+ctet**2)) goto 298
+c
+      tet=acos(ctet)
+      R=RLU(0)
+      phi=twopi*r
+c
+      call lurobo(tet,phi,0,0,0,)	! rotation
+c
+      call luexec
+c            
+      GOTO 299
+c      
+c-------------------------------------------------------------------
+c
+c      KGEN=281-284
+c
+c  281: e+ e- -> QQ -> one gamma
+c  282: e+ e- -> QQ -> one charged pi
+c  283: e+ e- -> QQ -> only gammas
+c  284: e+ e- -> QQ -> only charged pi's
+c
+ 281  IF(IEVENT.EQ.1) THEN
+        IF(KGEN.EQ.281) PRINT 2811,GENPAR(1)  !  print title
+        IF(KGEN.EQ.282) PRINT 2821,GENPAR(1)
+        IF(KGEN.EQ.283) PRINT 2831,GENPAR(1)
+        IF(KGEN.EQ.284) PRINT 2841,GENPAR(1)
+      END IF
+c
+      NTRACK=0
+c
+      call gsvert(VERTEX,0,0,0,0,nvert)
+c
+      ecm=2.*genpar(1)
+c
+ 295  call lueevt(0,ecm)
+c
+      if(n.gt.0) then           ! number of particles >0
+c
+        do i=1,n
+          itype=0
+          if(k(i,2).eq.22)   itype=1
+          if(k(i,2).eq.211)  itype=8
+          if(k(i,2).eq.-211) itype=9
+c
+          if( (itype.eq.1.and.(kgen.eq.281.or.kgen.eq.283)).or. 
+     *    ((itype.eq.8.or.itype.eq.9).and.
+     *    (kgen.eq.282.or.kgen.eq.284)) )then
+            plab(1)=p(i,1)
+            plab(2)=p(i,2)
+            plab(3)=p(i,3)
+            ntrack=ntrack+1
+            iparticle(ntrack)=itype
+            epart(ntrack)=p(i,4)
+            pxpart(ntrack)=p(i,1)
+            pypart(ntrack)=p(i,2)
+            pzpart(ntrack)=p(i,3)
+c
+            call gskine(plab,itype,nvert,0,0,nt)
+c
+            IF(IPRTRK.EQ.1) PRINT 397,IEVENT,NTRACK,ITYPE,PLAB,VERTEX
+c
+          endif
+c
+          if(ntrack.eq.1.and.(kgen.eq.281.or.kgen.eq.282)) goto 296
+c
+        end do
+c
+      endif
+
+      if(ntrack.eq.0) goto 295
+c
+ 296  CONTINUE
+c
+      GOTO 500
+c
+ 299  CONTINUE
+c
+      IF(N.GT.0) THEN
+c
+        DO I=1,N
+          ks=k(i,1)
+          kf=k(i,2)
+c
+          IF(ks.eq.1.or.ks.eq.4) THEN
+            itype=kgfromkf(kf)
+c
+            if(itype.ne.0) then
+              plab(1)=p(i,1)
+              plab(2)=p(i,2)
+              plab(3)=p(i,3)
+              ntrack=ntrack+1
+              iparticle(ntrack)=itype
+              epart(ntrack)=p(i,4)
+              pxpart(ntrack)=p(i,1)   
+              pypart(ntrack)=p(i,2)
+              pzpart(ntrack)=p(i,3)
+c
+              call gskine(plab,itype,nvert,0,0,nt)
+c
+              IF(IPRTRK.EQ.1) PRINT 397,IEVENT,NTRACK,ITYPE,PLAB,VERTEX
+c
+            else 
+              write(6,*)'!!!!! warning ----- unknown type of particle'
+c
+              call pstppar(kf,name,pmass,width,chrg,spin,ctau)
+c
+              write(6,*)'ks,kf,name=',ks,kf,' ',name
+            endif
+c
+          END IF
+c      
+        END DO
+c
+      END IF
+c
+      GOTO 500   ! RETURN
+c
+c---------------------------------------------------------------------
+c
+ 212  CONTINUE
+c
+c  KGEN=212:  e+ e- -> J/psi / psi(2S) -> 2 particles
+c
+c Dec=1.: J/psi->e+e- (J=1/2)
+c Dec=2.: J/psi->mu+mu- (J=1/2)
+c Dec=3.: J/psi->pi+pi- (J=0)
+c Dec=4.: J/psi->K+K-   (J=0)
+c Dec=5.: J/psi->proton anti-proton (J=1/2)
+c Dec=6.: J/psi->neutron anti-neutron (J=1/2)
+c Dec=11.: psi'->e+e- (J=1/2)
+c Dec=12.: psi'->mu+mu- (J=1/2)
+c Dec=13.: psi'->\pi+\pi- (J=0)
+c Dec=14.: psi'->K+K-   (J=0)
+c Dec=15.: psi'->proton anti-proton (J=1/2)
+c Dec=16.: psi'->neutron anti-neutron (J=1/2)
+c
+      IF(igenpar(1).lt.1.or.igenpar(1).gt.16.or.(igenpar(1).gt.6.and.
+     &   igenpar(1).lt.11)) then
+        write (6,*)' Generator 212: wrong regime=',igenpar(1),
+     +             ', but should be 1-6, 11-16' 
+        stop
+      END IF
+c
+      KF0=443                                 ! J/psi 
+      IF(IGENPAR(1).GT.10) KF0=30443          ! psi(2S)
+      KC=LUCOMP(KF0)                         
+      ECM=PMAS(KC,1)                         ! mass of J/psi or psi(2S)
+c
+      IF(IEVENT.EQ.1) THEN                   ! print title
+        IF(IGENPAR(1).LE.6) THEN 
+          PRINT 2121,IGENPAR(1),T212(IGENPAR(1)),IGENPAR(2),IGENPAR(3),
+     &    ECM  
+        ELSE
+          PRINT 2122,IGENPAR(1),T212(IGENPAR(1)),IGENPAR(2),IGENPAR(3),
+     &    ECM 
+        END IF
+c
+        IF(IGENPAR(2).EQ.1) CALL PHOINI      ! initialization of PHOTOS 
+c
+      END IF      
+c
+      CALL gsvert(VERTEX,0,0,0,0,nvert)
+c
+      NTRACK=0
+c
+ 2120 CONTINUE
+c
+      call lu1ent(-1,KF0,ECM,0.,0.)   ! add J/psi or psi(2S) to event record
+c
+      call luexec                     ! fragmetation and decay chain
+c
+      nund=0	               ! number of undecayed particles
+c
+      DO i=1,n
+        ks=k(i,1)              ! status of particle
+        if(ks.gt.0.and.ks.lt.5) nund=nund+1
+      END DO
+c
+      IF(NUND.NE.2) goto 2120  ! should be 2 stable part. (without f.s.r.c.)
+c
+c  Now only 2 particles in final state 
+c
+      DO I=1,N
+        ks=k(i,1)            ! status
+        KF=k(i,2)            ! type of particle
+c
+        IF(ks.gt.0.and.ks.lt.5) THEN
+          itype=kgfromkf(kf) ! Geant-type from kf-type of particle
+c
+          if(itype.eq.0) then
+            PRINT *, ' Gen.212: unknown type of particle', k(i,2)
+            STOP
+          end if
+c
+          if(igenpar(1).eq.1.and.IABS(KF).NE.11)   GOTO 2120
+          if(igenpar(1).eq.2.and.IABS(KF).NE.13)   GOTO 2120
+          if(igenpar(1).eq.3.and.IABS(KF).NE.211)  GOTO 2120
+          if(igenpar(1).eq.4.and.IABS(KF).NE.321)  GOTO 2120
+          if(igenpar(1).eq.5.and.IABS(KF).NE.2212) GOTO 2120
+          if(igenpar(1).eq.6.and.IABS(KF).NE.2112) GOTO 2120
+          if(igenpar(1).eq.11.and.IABS(KF).NE.11)   GOTO 2120
+          if(igenpar(1).eq.12.and.IABS(KF).NE.13)   GOTO 2120
+          if(igenpar(1).eq.13.and.IABS(KF).NE.211)  GOTO 2120
+          if(igenpar(1).eq.14.and.IABS(KF).NE.321)  GOTO 2120
+          if(igenpar(1).eq.15.and.IABS(KF).NE.2212) GOTO 2120
+          if(igenpar(1).eq.16.and.IABS(KF).NE.2112) GOTO 2120
+        END IF
+c
+      END DO
+
+c========== test print of /LUJETS/  ========================================================
+
+c      print *,' Test print of /LUJETS/:'
+c      print *,' N=',N
+c      print 987,K(1,1),K(1,2),K(1,3),K(1,4),K(1,5)
+c      print 988,K(2,1),K(2,2),K(2,3),K(2,4),K(2,5)      
+c      print 989,K(3,1),K(3,2),K(3,3),K(3,4),K(3,5)
+c987   format(' K(1,1-5)=',5I8)
+c988   format(' K(2,1-5)=',5I8)
+c989   format(' K(3,1-5)=',5I8)
+c      print 887,P(1,1),P(1,2),P(1,3),P(1,4),P(1,5) 
+c      print 888,P(2,1),P(2,2),P(2,3),P(2,4),P(2,5) 
+c      print 889,P(3,1),P(3,2),P(3,3),P(3,4),P(3,5) 
+c887   format(' P(1,1-5)=',5F8.4)
+c888   format(' P(2,1-5)=',5F8.4)
+c889   format(' P(3,1-5)=',5F8.4)
+
+c========================================================================
+c
+      IF(IGENPAR(3).EQ.0) GOTO 2123                 ! isotr. angular distr. 
+c
+c  Simulation of ang. dist.
+c
+      PHI=ATAN2(P(2,2),P(2,1))                      ! angle fi
+      THETA=ATAN(SQRT(P(2,1)**2+P(2,2)**2)/P(2,3))  ! ange theta
+c
+c  Simulation of angular distribution since in jetset7.4 it is isotropic
+c  
+      IF(IGENPAR(1).EQ.3.OR.IGENPAR(1).EQ.4.OR. 
+     &   IGENPAR(1).EQ.13.OR.IGENPAR(1).EQ.14) THEN ! частицы со спином 0:
+                                                    ! ds/do ~ sin(theta)**2
+        if (sin(theta)**2.lt.RLU(0)) goto 2120
+      END IF
+c
+      IF(IGENPAR(1).LT.3.OR.IGENPAR(1).GT.14.OR. 
+     & (IGENPAR(1).GT.4.AND.IGENPAR(1).LT.13)) THEN ! частицы со спином 1/2: 
+                                                    ! ds/do ~ 1+cos(teta)**2 
+         if (1+cos(theta)**2.lt.2.*RLU(0)) goto 2120
+      END IF
+c
+ 2123 CONTINUE 
+c      call LUROBO(theta,phi,0.,0.,0.)
+c
+      IF(IGENPAR(2).EQ.1) THEN  ! вкл. изл. в кон. сост. с пом. PHOTOS
+c
+        CALL LUHEPC(1)          ! Conversion from JETSET to /HEPEVT/ standard   
+c
+        NEVHEP=IEVENT
+c
+        CALL PHODMP             ! Write event record before emission...
+c
+        CALL PHOTOS(1)        ! Generate photon(s)...
+c
+c        PRINT 9050            ! Write event record...
+c        PRINT 9040
+c
+        CALL PHODMP           ! Write event record after emission...
+c
+c        PRINT 9000
+c        PRINT 9010
+c        PRINT 9020
+c        PRINT 9030
+c        PRINT 9020
+c        PRINT 9010
+ 9000 FORMAT(1H1)
+ 9010 FORMAT(1H ,80('*'))
+ 9020 FORMAT(1H ,'*',78X,'*')
+ 9030 FORMAT(1H ,'**** PHOTOS Test Run has successfully ended',32X,
+     &' ****')
+ 9040 FORMAT(1H ,26X,'=== after PHOTOS: ===')
+ 9050 FORMAT(1H0,80('='))
+c
+        CALL LUHEPC(2)        ! Conversion from /HEPEVT/ to JETSET standard
+c
+      END IF
+c
+      DO I=1,N
+        KS=k(i,1)            ! status
+        KF=k(i,2)            ! type of particle
+c
+        IF(KS.gt.0.and.KS.lt.5) THEN
+          ITYPE=kgfromkf(kf) ! Geant-type from kf-type of particle
+          plab(1)=p(i,1)
+          plab(2)=p(i,2)
+          plab(3)=p(i,3)
+          ntrack=ntrack+1
+          iparticle(ntrack)=itype
+          epart(ntrack)=p(i,4)
+          pxpart(ntrack)=p(i,1)
+          pypart(ntrack)=p(i,2)
+          pzpart(ntrack)=p(i,3)
+c
+          call gskine(plab,itype,nvert,0,0,nt)
+c
+          IF(IPRTRK.EQ.1) PRINT 397,IEVENT,NTRACK,ITYPE,PLAB,VERTEX
+        END IF
+c
+      END DO
+c
+      GOTO 500
+c
+c-----------------------------------------------------------------------
+c
+ 213  CONTINUE
+c
+c  KGEN=213: e+ e- -> J/psi -> e+e- (interference) только та часть,
+c            которая имеет угловое распределение
+ 
+c    ds       [1+cos(theta)]^2
+c    --   ~  ----------------
+c    do       [1-cos(theta)] 
+c
+c         + р.п. в конечном состоянии с помощью PHOTOS
+c
+c  GENE 213 Theta_min FSR     - карта задания 
+c
+c  Theta_min - минимальный угол
+c  FSR=1.: учёт излучения 1 или 2-х фотонов в конечном состоянии (PHOTOS)
+
+c  Инициализация параметров генератора
+c
+      Tmin=genpar(1)*PI/180. ! Tmin - theta_min в радианах
+      IFSR=igenpar(2)        ! флаг для включения Final State Radiation
+c
+      IF(Tmin.le.0.or.Tmin.ge.PI) THEN                  ! Проверка Theta_min
+        PRINT *, ' Generator 213:  Theta_min=',Tmin*180/PI,
+     +             ', but should be between 0 and 180 180'
+        STOP
+      END IF
+c
+      KF0=443
+      KC=LUCOMP(KF0)
+      ECM=PMAS(KC,1)                     ! mass of J/psi
+c
+      IF(IEVENT.EQ.1) THEN
+        PRINT 2131,GENPAR(1),IFSR,ECM    ! print title
+c
+        IF(IFSR.EQ.1) CALL PHOINI        ! initialization of PHOTOS
+c
+      END IF      
+c
+      CALL GSVERT(VERTEX,0,0,0,0,NVERT)  ! инициализация вершины
+c
+      Ntrack=0
+c
+ 2130 CONTINUE
+c
+      CALL LU1ENT(-1,KF0,ECM,0.,0.)      ! add J/psi to event record
+c
+      CALL LUEXEC                        ! fragmetation and decay chain
+c
+      NUND=0                             ! number of undecayed particles
+c
+      DO I=1,N
+        ks=k(i,1)                        ! status of particle
+        if(ks.gt.0.and.ks.lt.5) nund=nund+1
+      END DO
+c
+      IF(NUND.NE.2) goto 2130  ! should be 2 stable part. (without f.s.r.c.)
+c
+c  Now only 2 stable particles in final state
+c
+      DO I=1,N
+        ks=k(i,1)            ! status
+        KF=k(i,2)            ! type of particle
+c
+        IF(ks.gt.0.and.ks.lt.5) THEN
+          itype=kgfromkf(kf) ! Geant-type from kf-type of particle
+c
+          if(itype.eq.0) then
+            PRINT *, ' Gen.213: unknown type of particle', k(i,2)
+            STOP
+          end if
+c
+          if(IABS(KF).NE.11) GOTO 2130 ! select only e+-
+        END IF
+c
+      END DO
+c
+c  Моделирование углового распределения for e- (in jetset7.4 it is isotropic)
+c
+      THETA=ATAN(SQRT(P(2,1)**2+P(2,2)**2)/P(2,3)) ! theta(e-): from +Z-direct.  
+      IF(K(2,2).EQ.-11) THETA=ATAN(SQRT(P(3,1)**2+P(3,2)**2)/P(3,3))
+      IF(THETA.LT.0.) THETA=PI+THETA
+      IF(THETA.LT.TMIN) GOTO 2130
+c
+      PROB_MAX=4./(1.-cos(tmin))   !  maximum of distribution over theta
+      Prob=prob_max*RLU(0)
+      Result=(1.+cos(theta))**2/(1.-cos(theta))
+C      Result=sin(theta)*(1.+cos(theta))**2/(1.-cos(theta))
+      IF (Result.lt.Prob) GOTO 2130                 ! to new attempt
+c
+      IF(IFSR.EQ.1) then      ! вкл. изл. в кон. сост. с пом. PHOTOS
+
+        CALL LUHEPC(1)        ! Conversion from JETSET to /HEPEVT/ standard
+
+        NEVHEP=IEVENT
+
+        CALL PHOTOS(1)        ! Generate photon(s)...
+
+        CALL LUHEPC(2)        ! Conversion from /HEPEVT/ to JETSET standard
+c
+      END IF
+c
+      DO I=1,N
+        ks=k(i,1)               ! status
+        kf=k(i,2)               ! type of particle
+c
+        IF(ks.gt.0.and.ks.lt.5) THEN
+          itype=kgfromkf(kf)    ! Geant-type from kf-type of particle
+c
+          if(itype.eq.0) then
+            PRINT *, ' Gen.213: unknown type of particle', k(i,2)
+            goto 2130           ! to new attempt 
+          end if
+c
+          plab(1)=p(i,1)
+          plab(2)=p(i,2)
+          plab(3)=p(i,3)
+          ntrack=ntrack+1
+          iparticle(ntrack)=itype
+          epart(ntrack)=p(i,4)   
+          pxpart(ntrack)=p(i,1)  
+          pypart(ntrack)=p(i,2)  
+          pzpart(ntrack)=p(i,3)  
+c
+          call gskine(plab,itype,nvert,0,0,nt)
+c
+          IF(IPRTRK.EQ.1) PRINT 397,IEVENT,NTRACK,ITYPE,PLAB,VERTEX
+        END IF
+c
+      END DO
+c
+c-----------------------------------------------------------------------
+c
+ 500  CONTINUE
+
+ 397  FORMAT(I5,2I4,3F10.6,3F10.4)
+
+ 2051 FORMAT(/,1x,60(1H*),//,
+     +  ' Generator # 205 (on base of Jetset 7.4): e+e- -> q anti-q',//,
+     +  ' Ebeam =',F8.4,' GeV',/,
+     +  ' Nf =',I2,/,
+     +  ' Initial state radiation =',I2,//,
+     +  1x,60(1H*),/)
+
+ 2061 FORMAT(/,1x,60(1H*),//,
+     +  ' Generator # 206 (on base of Jetset 7.4): e+e- -> ggg',//,
+     +  ' Ebeam =',F8.4,' GeV',/,
+     +  ' N =',I2,//,
+     +  1x,60(1H*),/)
+
+ 2101 FORMAT(/,1x,60(1H*),//,
+     +  ' Generator # 210 (on base of Jetset 7.4): J/psi -> all',//,
+     +  ' Ecms =',F8.4,' GeV',//,
+     +  1x,60(1H*),/)
+ 2102 FORMAT(/,1x,60(1H*),//,
+     + ' Generator # 210 (on base of Jetset 7.4): J/psi -> rndmflav',//,
+     +  ' Ecms =',F8.4,' GeV',//,
+     +  1x,60(1H*),/)
+
+
+ 2111 FORMAT(/,1x,60(1H*),//,
+     +  ' Generator # 211 (on base of Jetset 7.4): J/psi -> eta_c + ',
+     +  ' gamma',//, 
+     +  ' Ecms =',F8.4,' GeV',//,   
+     +  1x,60(1H*),/)
+
+ 2121 FORMAT(/,1x,60(1H*),//,
+     +  ' Generator # 212 (on base of Jetset 7.4)',//,
+     &  ' Dec=',I2,': J/psi -> ',A8,/,
+     &   ' Final state radiation =',I2,/,
+     &   ' Angular distribution =',I2,/,
+     &   ' Ecm=',F8.4,' GeV',//,
+     +  1x,60(1H*),/)
+
+ 2131 FORMAT(/,1x,60(1H*),//,
+     +  ' Generator # 213 (on base of Jetset 7.4)',//,
+     &  ' e+e- -> J/psi -> e+e- (interference)',/,
+     &  ' Minimum angle theta =',F6.2,' Deg',/,
+     &   ' Final state radiation =',I2,/,
+     &   ' Ecm=',F8.4,' GeV',//,
+     +  1x,60(1H*),/)
+
+ 2122 FORMAT(/,1x,60(1H*),//,
+     +  ' Generator # 212 (on base of Jetset 7.4)',//,
+     &  ' Dec=',I2,': psi(2S) -> ',A8,/, 
+     &   ' Final state radiation =',I2,/,
+     &   ' Angular distribution =',I2,/, 
+     &   ' Ecm =',F8.4,' GeV',//,
+     +  1x,60(1H*),/)
+
+ 2811 FORMAT(/,1x,60(1H*),//,
+     +  ' Generator # 281 (on base of Jetset 7.4):',
+     &  ' e+e- -> QQ -> one gamma',//,
+     +  ' Ebeam =',F8.4,' GeV',//,
+     +  1x,60(1H*),/)
+
+ 2821 FORMAT(/,1x,60(1H*),//,
+     +  ' Generator # 282 (on base of Jetset 7.4):',
+     &  ' e+e- -> QQ -> one charged pi',//,
+     +  ' Ebeam =',F8.4,' GeV',//,
+     +  1x,60(1H*),/)
+
+ 2831 FORMAT(/,1x,60(1H*),//,
+     +  ' Generator # 283 (on base of Jetset 7.4):',
+     &  ' e+e- -> QQ -> only gammas',//,
+     +  ' Ebeam =',F8.4,' GeV',//,
+     +  1x,60(1H*),/)
+
+ 2841 FORMAT(/,1x,60(1H*),//,
+     +  ' Generator # 284 (on base of Jetset 7.4):',
+     &  ' e+e- -> QQ -> only charged pions',//,
+     +  ' Ebeam =',F8.4,' GeV',//,
+     +  1x,60(1H*),/)
+c
+      RETURN
+      END

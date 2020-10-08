@@ -1,0 +1,426 @@
+      SUBROUTINE GEN_3PRT(IMOD,TE,ANG)
+c*********************************************************************
+c
+c  SIMULATION OF THREE-PION PRODUCTION IN E+E- ANNIHILATION
+c
+c  INPUT PARAMETERS:  IMOD - PROCESS NUMBER: 
+c                         =1 - SUM OF ROPI,
+c                         =2 - PHASE SPACE,
+c                     TE - TOTAL ENERGY IN GEV,
+c                     ANG - LIMITING POLAR ANGLE IN DEGREES
+c
+c  OUTPUT PARAMETERS: NPRT - NUMBER OF FINAL PARTICLES,
+c                     QQ(I,K) - FOR THE K-TH PARTICLE
+c                     I=1,2,3 - DIRECTION COSINES, I=4 - MOMENTUM,
+c                     ISORT(K) - TYPE OF THE K-TH PARTICLE
+c
+c
+c-- Author :	Simon Eidelman   17/07/92
+c
+c  Corrections:
+c
+c   18.03.1991   RNDM - REAL*4 FUNCTION 
+c   14.07.1992   CORRECTION OF THE MATR. ELEMENT (S.E.)
+c   19.03.2004   Tayursky V.A. GRNDM -> RLU
+c
+c*********************************************************************
+      IMPLICIT REAL*8 (Q-S)
+      COMMON /S1PRT/QQ(5,10),ISORT(10),NPRT,IERPR
+      COMMON/ARI/CC(4),PR(20)
+     *      /PRT/NP,P(4,20)
+     *      /MX/F,FM,INDIC,GG,GWE,IGM
+     *      /ITRUE/ITR
+      DIMENSION PMO(3)
+      REAL*4 RAND,RLU
+      CHARACTER*20 NAPART
+c
+C     QCLIM=DCOS(ANG*3.1416D0/180.D0)
+      ISORT(1)=8
+      ISORT(2)=9
+      ISORT(3)=7
+c
+      DO 99 I=1,3
+c
+        CALL GFPART(ISORT(I),NAPART,ITRTYP,AMAS,CHAR,TLIFE,UB,NB)
+c
+        PR(I)=AMAS
+   99 CONTINUE
+c
+C      PR(1)=.139567
+C      PR(2)=.139567
+C      PR(3)=.134693
+      ETH=PR(1)+PR(2)+PR(3)
+      IF(TE.GT.ETH)GO TO 1
+C  TOTAL ENERGY IS SMALLER THAN REACTION THRESHOLD
+      PRINT 100
+      STOP
+    1 GO TO (2,11),IMOD
+C
+C  SIMULATION OF E+E- -> ROPI -> PI+PI-PI0
+C  (WITH INTERFERENCE OF RO+PI-, RO-PI+, ROPI0)
+C
+    2 IF(TE.LE.0.475)FM=1.5E-7*EXP(83.*(TE-0.475))
+      IF(TE.GT.0.475.AND.TE.LE.0.55)FM=4.E-6*EXP(27.7*(TE-0.55))
+      IF(TE.GT.0.55.AND.TE.LT.0.95)FM=5.E-3*EXP(13.9*(TE-0.95))
+      IF(TE.GE.0.95)FM=0.15*EXP(7.*(TE-1.2))
+      GO TO 20
+C
+C  SIMULATION OF E+E- -> PI+PI-PI0 (PHASE SPACE)
+C
+   11 IF(TE.LT.0.475)FM=4.E-7*EXP(92.*(TE-0.475))
+      IF(TE.GE.0.475.AND.TE.LT.0.6)FM=8.E-6*EXP(36.7*(TE-0.55))
+      IF(TE.GE.0.6.AND.TE.LT.0.9)FM=8.E-4*EXP(14.*(TE-0.8))
+      IF(TE.GE.0.9)FM=0.06*EXP(6.*(TE-1.4))
+C  PHASE SPACE SIMULATION
+   20 ITR=0
+      NP=3
+c
+      DO 21 I=1,3
+        CC(I)=0.
+   21 CONTINUE
+c
+      CC(4)=TE
+      INDIC=1
+c
+   22 CALL SPC
+c
+c  MOMENTUM CALCULATION
+c
+      DO 26 I=1,3
+         PT=P(4,I)**2-PR(I)**2
+         IF(PT-1.E-16)23,24,24
+   23    PT=0.
+         GO TO 25
+   24    PT=SQRT(PT)
+   25    PMO(I)=PT
+   26 CONTINUE
+c
+      PT=0.
+c
+      DO 27 I=1,3
+         PT=PT+P(I,1)*P(I,2)
+   27 CONTINUE
+c
+      PT1=P(1,1)*P(2,2)-P(2,1)*P(1,2)
+      G=F*(PMO(1)*PMO(2))**2*(1.-PT*PT)*(1.-PT1*PT1)
+      GO TO (31,40),IMOD
+C  ROPI
+C  CALCULATION OF BREIT-WIGNER SUM
+   31 PRMS=.7683**2
+      PRWS=.1491*.7683
+      PT=PRWS*PRWS
+      D1=0.
+      D2=0.
+c
+      DO 34 I=1,2
+        J=I+1
+c
+        DO 33 K=J,3
+          PT1=0.
+c
+          DO 32 L=1,3
+            PT1=PT1+P(L,I)*P(L,K)
+ 32       CONTINUE
+c
+          E=PR(I)**2+PR(K)**2+2.*(P(4,I)*P(4,K)-PMO(I)*PMO(K)*PT1)
+          E1=PRMS-E
+          DEN=E1*E1+PT
+          D1=D1+PRWS*E1/DEN
+          D2=D2+PT/DEN
+   33    CONTINUE
+c
+   34 CONTINUE
+c
+      G=G*(D1*D1+D2*D2)
+   40 F=G
+   50 IF(F.GT.FM)ITR=1
+c
+      RAND=RLU(0)
+c      CALL GRNDM(RAND,1)
+c
+      X=DBLE(RAND)
+      IF(F.LT.FM*X)GO TO 22
+      NPRT=3
+c
+      DO 52 I=1,3
+c
+        DO 51 K=1,3
+          QQ(K,I)=P(K,I)
+ 51     CONTINUE
+c
+        QQ(4,I)=PMO(I)
+   52 CONTINUE
+c
+      RETURN
+  100 FORMAT(/5X,'GEN_3PRT: TOTAL ENERGY IS SMALLER THAN ',
+     + 'REACTION THRESHOLD')
+      END
+
+      SUBROUTINE SPC
+C      EXTERNAL BLDATB
+      COMMON/RANDC/KOKO
+     *      /ARI/COMS(4),RM(20)
+     *      /CH/CHECK
+     *      /PRT/NPRT,E(4,20)
+     *      /ITRUE/ITRUE
+     *      /MIND/MIND
+     *      /MX/F,FMAX,INDIC,GG,GWE,IGM
+     *      /AAA/ABA(21,12)
+      REAL RAND(3)
+      DIMENSION COMPO(3),COMP(3),CP(3),EFM(20)
+      SAVE IAITR
+c
+      DATA IAITR/1/
+c
+      IF (IAITR.EQ.0) GOTO 25
+c
+      CALL AITR
+c
+      IAITR=0
+C      PRINT 900
+   25 PI=3.1416
+      COEF=1.
+      ITRUE=0
+      TP1=0.
+c
+      DO 1 I=1,3
+      CP(I)=COMS(I)
+    1 TP1=TP1+CP(I)*CP(I)
+c
+      OM=COMS(4)
+      IF (TP1.GT.0.) GOTO 26
+      EFM(NPRT)=COMS(4)
+      GOTO 27
+   26 TP1=OM*OM-TP1
+C
+      PRINT 80,TP1
+      IF (TP1.LT.0.) STOP
+      EFM(NPRT)=SQRT(TP1)
+   27 CONTINUE
+      RMU=RM(1)
+c
+      DO 2 I=2,NPRT
+    2 RMU=RMU+RM(I)
+c
+      TK=EFM(NPRT)-RMU
+      TP1=TK**((3.*NPRT-5.)/2.)/(2.*EFM(NPRT))
+      COEF=COEF*TP1
+c
+      CALL SPAC1(NPRT,TP1)
+c
+      COEF=COEF*TP1
+    3 I=NPRT-1
+c
+      DO 12 I1=1,I
+      I2=NPRT+1-I1
+      TP1=TK
+      I3=I2-1
+      IF(I2-2)4,4,5
+    4 TK=0.
+      GO TO 6
+    5 CALL SPAC2(I3,PSI)
+      TK=TK*PSI
+    6 RMU=RMU-RM(I2)
+      TP1=TP1-TK
+   80 FORMAT(1X,5H*****,E12.5)
+      IF(TP1-1.E-12)25,70,70
+   70 TP1=SQRT(TP1)
+    7 COEF=COEF/TP1
+      EFM(I3)=RMU+TK
+      TP1=RM(I2)*RM(I2)
+      OMO=(EFM(I2)*EFM(I2)+TP1-EFM(I3)*EFM(I3))/
+     *(2.*EFM(I2))
+      PIMPO=OMO**2-TP1
+      IF(PIMPO-1.E-12)25,71,71
+   71 PIMPO=SQRT(PIMPO)
+      COEF=COEF*PIMPO
+c
+c      CALL GRNDM(RAND,3)
+c
+c      ETA=-1.+2.*RAND(1)
+
+      ETA=-1.+2.*RLU(0)
+c      PHI=2.*PI*RAND(2)
+      PHI=2.*PI*RLU(0)
+      TP2=1.-ETA**2
+      IF(TP2-1.E-12)30,31,31
+   30 TP2=0.
+      GO TO 32
+   31 TP2=SQRT(TP2)
+   32 TP2=TP2*PIMPO
+      COMPO(1)=ETA*PIMPO
+      COMPO(2)=TP2*COS(PHI)
+      COMPO(3)=TP2*SIN(PHI)
+      TP2=0.
+c
+      DO 8 I4=1,3
+    8 TP2=TP2+COMPO(I4)*CP(I4)
+c
+      E(4,I2)=(OM*OMO+TP2)/EFM(I2)
+      GR=(E(4,I2)+OMO)/(OM+EFM(I2))
+c
+      DO 9 I4=1,3
+    9 COMP(I4)=COMPO(I4)+CP(I4)*GR
+c
+      TP2=E(4,I2)**2-TP1
+      IF(TP2-1.E-16)33,34,34
+   33 TP2=0.
+      E(1,I2)=1.
+      E(2,I2)=0.
+      E(3,I2)=0.
+      GO TO 101
+   34 TP2=SQRT(TP2)
+c
+   35 DO 10 I4=1,3
+   10 E(I4,I2)=COMP(I4)/TP2
+c
+  101 OM=OM-E(4,I2)
+c
+      DO 11 I4=1,3
+   11 CP(I4)=CP(I4)-COMP(I4)
+c
+      IF(I2-2)13,13,12
+   12 CONTINUE
+c
+   13 DO 14 I4=1,3
+   14 COMP(I4)=CP(I4)
+c
+      E(4,1)=OM
+      TP3=0.
+c
+      DO 15 I4=1,3
+   15 TP3=TP3+COMP(I4)*COMP(I4)
+c
+      IF(TP3-1.E-16)36,37,37
+   36 TP4=0.
+      E(1,1)=1.
+      E(2,1)=0.
+      E(3,1)=0.
+      GO TO 102
+   37 TP4=SQRT(TP3)
+c
+   38 DO 16 I4=1,3
+   16 E(I4,1)=COMP(I4)/TP4
+c
+  102 CHECK=E(4,1)**2-TP3
+      IF(CHECK-1.E-12)39,40,40
+   39 CHECK=0.
+      GO TO 41
+   40 CHECK=SQRT(CHECK)
+   41 F=COEF
+      GO TO(20,50),INDIC
+   50 IF(F-FMAX)19,19,18
+   18 ITRUE=1
+   19 IF(F-RAND(3)*FMAX)25,20,20
+   20 RETURN
+  900 FORMAT(///5X,'BEPCiq SPC OT 10.02.86'/)
+      END
+
+      SUBROUTINE SPAC1(N,T)
+c
+      PI=3.141593
+      N1=N/2
+      IF(2*N1-N)1,3,1
+   1  N1=3*(N-1)/2
+      T=PI**N1
+      N1=N1-1
+      T1=1.
+c
+      DO 2 I=1,N1
+   2  T1=T1*I
+c
+      T=T/T1
+      RETURN
+   3  T=PI**(3*(N-1)/2.)
+      N1=3*N/2-2
+      T1=SQRT(PI)/2.
+c
+      DO 4 I=2,N1
+   4  T1=T1*(2*I-1)/2.
+c
+      T=T/T1
+      RETURN
+      END
+
+      SUBROUTINE SPAC2(K,Z)
+C      EXTERNAL BLDATB
+      COMMON/AAA/A(21,12)
+     *      /RANDC/KK
+      K1=K-1
+c
+c      CALL GRNDM(R,1)
+      R=RLU(0)
+c
+      DO 2 I=2,21
+      Z=A(I,K1)
+      IF(R-Z)1,2,2
+   1  Z=0.05*(I-1-(R-Z)/(A(I-1,K1)-Z))
+      GO TO 3
+   2  CONTINUE
+c
+   3  RETURN
+      END
+
+      SUBROUTINE AITR
+      IMPLICIT REAL(A)
+      COMMON/AAA/A1(21,4),A2(21,4),A3(21,4)
+      DATA A1      /0.,.186913E-1,.520423E-1,
+     *.940585E-1,.142376,.195499,.252314,.311917
+     *,.373528,.436442,.5,.563554,.626468,.688079
+     *,.747682,.804497,.857619,.905938,.947954
+     *,.981305,1.
+     *,0.,.268258E-3,.210375E-2,.695422E-2,.1613E-1,.307957E-1
+     *,.519596E-1,.804617E-1,.116959
+     *,.161911,.215553,.277872,.34857,.427018
+     *,.512184,.602539,.695894,.789134
+     *,.877559,.959968,1.
+     *,0.,.354182E-5,.783889E-4,.475035E-3,.169255E-2,.450503E-2
+     *,.9965E-2,.193881E-1,.3432E-1,.564848E-1,.
+     *877129E-1,.129845,.184607,.253443,.337293
+     *,.436289,.549304,.673235,.801647,.921944,1.
+     *,0.,.4492E-7,.280633E-5,.311887E-4,.170827E-3
+     *,.634524E-3,.184206E-2,.450829E-2,.973083E-2
+     *,.190673E-1,.345803E-1,.589033E-1,.950987E-1
+     *,.146628,.217046,.309551,.426221,
+     *.56668,.725623,.88717,1./
+      DATA A2      /0.,.556226E-9,
+     *.981845E-7,.199994E-5,.168488E-4,.873383E-4,
+     *.332217E-3,.102551E-2,.270076E-2,.630519E-2,.133734E-1,
+     *.262207E-1,.481215E-1,.83427E-1,.137542,
+     *.216632,.326822,.472449,.652333,.860842,1.,
+     *0.,.677764E-11,.338749E-8,.126201E-6
+     *,.163619E-5,.118362E-4,.592574E-4,.229823E-3
+     *,.738745E-3,.205569E-2,.510025E-2,.115197E-1
+     *,.240471E-1,.469101E-1,.862107E-1,.150103
+     *,.248425,.391059,.583369,.845773,1.
+     *,0.,.815854E-13,.115895E-9,.787255E-8,.157206E-6,.
+     *159909E-5,.104450E-4,.509581E-4,.199952E-3
+     *,.663340E-3,.192568E-2,.501228E-2,.119057E-1
+     *,.261457E-1,.535622E-1,.103221,.187569
+     *,.321868,.519497,.776543,1.
+     *,0.,.972557E-15,.394648E-11,.486825E-9,.149902E-7
+     *,.213948E-6,.183878E-5,.112225E-4,.537020E-4,.212394E-3
+     *,.721538E-3,.216472E-2,.585253E-2,.144732E-1
+     *,.331014E-1,.705609E-1,.140865,.263715,.461011,.739573,1./
+      DATA A3      /0.,.1078E-16,.134085E-12,.298983E-10,.142164E-8
+     *,.285223E-7,.320393E-6,.245292E-5,.143276E-4
+     *,.676032E-4,.268719E-3,.929408E-3,.286059E-2
+     *,.796825E-2,.203397E-1,.
+     *480027E-1,.10533,.215258,.407814,.703176,1.
+     *,0.,0.,.455247E-14,.182607E-11,.134305E-9,.
+     *379496E-8,.555689E-7,.533367E-6,.381992E-5
+     *,.214074E-4,.995667E-4,.397139E-3,.139173E-2,.436738E-2
+     *,.124450E-1,.325267E-1,.784739E-1,.17515
+     *,.360034,.667583,1.
+     *,0.,0.,.154536E-15,.111027E-12,.12654E-10
+     *,.504495E-9,.959987E-8,.115485E-6,.101208E-5
+     *,.675174E-5,.367618E-4,.169066E-3,.674497E-3,.
+     *238486E-2,.75877E-2,.219666E-1,.582862E-1
+     *,.142132,.317089,.632962,1.
+     *,0.,0.,.523048E-17,.672579E-14,.119011E-11
+     *,.670549E-10,.16526E-8,.249178E-7,.267406E-6
+     *,.217044E-5,.135605E-4,.717212E-4,.325876E-3
+     *,.129824E-2,.461227E-2,.147927E-1,.431781E-1
+     *,.11592,.278741,.599435,1./
+      RETURN
+      END
