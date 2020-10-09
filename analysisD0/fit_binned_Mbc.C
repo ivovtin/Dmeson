@@ -9,22 +9,29 @@ using namespace RooFit;
 void fit_binned_Mbc()
 {
     //read prepared root file with variables
-    //int data=2016;
-    int data=2004;
+    int data=2016;
+    //int data=2004;
+    //int data=1;
 
     TFile* file;
 
     TString KEDR;
     if( data==2016 ){
         file = TFile::Open("res_exp_Dmeson_data_0.root");
-        KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_v4/Mbc_fit";
+        KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_v6/Mbc_fit";
     }
     else if (data==2004)
     {
 	file = TFile::Open("res_exp_Dmeson_data2004_4.root");
         KEDR = "/home/ovtin/public_html/outDmeson/D0/data2004Pcorr/Mbc_fit";
     }
+    else if (data==1)
+    {
+	file = TFile::Open("res_sim_Dmeson_sig_1.root");
+        KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Sig/Mbc_fit";
+    }
 
+    //TH1 *Mbc = (TH1F*)file->Get("Mkin_{bc}");                               //take histo
     TH1 *Mbc = (TH1F*)file->Get("M_{bc}");                               //take histo
     Mbc->SetLineColor(kRed);
 
@@ -34,14 +41,13 @@ void fit_binned_Mbc()
     RooDataHist dh("dh", "dh", mes, Import(*Mbc));
 
     // --- Build Gaussian signal PDF ---
-    RooRealVar sigmean("mean", "mean", 1869, 1865, 1878);
-    RooRealVar sigwidth("sigma", "sigma", 3., 0., 8.);
+    RooRealVar sigmean("mean", "mean", 1865, 1860, 1875);
+    RooRealVar sigwidth("sigma", "sigma", 2., 0., 6.);
     RooGaussian gauss("gauss", "gaussian PDF", mes, sigmean, sigwidth);
 
     // --- Build Argus background PDF ---
     RooRealVar argpar("argpar", "argus shape parameter", -20.0, -100., -1.);
-    //RooArgusBG argus("argus", "Argus PDF", mes, RooConst(1887), argpar);    //16-17
-    RooArgusBG argus("argus", "Argus PDF", mes, RooConst(1889), argpar);      //2004
+    RooArgusBG argus("argus", "Argus PDF", mes, RooConst(1890), argpar);
 
     // --- Construct signal+background PDF ---
     RooRealVar nsig("nsig", "#signal events", 200, 0., 100000);
@@ -56,7 +62,7 @@ void fit_binned_Mbc()
     //c->Divide(2);
     //c->cd(1);
 
-    mes.setRange("signal",1860.,1880.);      //signal region
+    mes.setRange("signal",1855.,1875.);      //signal region
     RooAbsReal* fsigregion_sum = sum.createIntegral(mes,NormSet(mes),Range("signal"));
     RooAbsReal* fsigregion_bkg = argus.createIntegral(mes,NormSet(mes),Range("signal"));
 

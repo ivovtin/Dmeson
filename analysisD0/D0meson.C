@@ -2,9 +2,10 @@
 #include "TFile.h"
 #include "TDirectory.h"
 #include "TCanvas.h"
+#include <vector>
+#include <algorithm>    // std::find
 
 #include "D0meson.h"
-#include "cuts.h"
 
 using namespace std;
 string progname;
@@ -33,24 +34,27 @@ int main(int argc, char* argv[])
     TFile *fout=0;
     TString fnameout;
     TString KEDR;
+    TString list_badruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/badruns";
     if( sim==0 ){
 	deCut1=-100; deCut2=100;
-	//deCut1=-80; deCut2=120;
+	//deCut1=-140; deCut2=60;
 	mbcCut1=1855, mbcCut2=1875;
 	fnameout=TString::Format("res_exp_Dmeson_data_%d.root",sim).Data();
         //KEDR = "/home/ovtin/public_html/outDmeson/D0/data/";
-        KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_v4/";
-        //KEDR = "/home/ovtin/public_html/outDmeson/D0/data/datantrack2/";
-        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_v4_datantrack2/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/data_ntrack2/";
+        KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_v6/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_v5_ntrack2/";
+	list_badruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/badruns";
     }
     else if (sim==4)
     {
 	deCut1=-100; deCut2=100;
-	//deCut1=-80; deCut2=120;
+	//deCut1=-140; deCut2=60;
 	mbcCut1=1855, mbcCut2=1875;
 	fnameout=TString::Format("res_exp_Dmeson_data2004_%d.root",sim).Data();
         //KEDR = "/home/ovtin/public_html/outDmeson/D0/data2004/";
-        KEDR = "/home/ovtin/public_html/outDmeson/D0/data2004Pcorr/";
+	KEDR = "/home/ovtin/public_html/outDmeson/D0/data2004Pcorr/";
+        list_badruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/badruns";
     }
     else if (sim==1)
     {
@@ -126,8 +130,8 @@ int main(int argc, char* argv[])
     TH2D *h2MbcdE;
     TH2D *h2MbcdEkin;
     if( sim==4 || sim==1 || sim==5){
-        h2MbcdE=new TH2D("M_{bc}:#Delta E", "M_{bc}:#Delta E", 100,1800,1900,200,-300,300);
-        h2MbcdEkin=new TH2D("M_{bc}:#Delta E", "M_{bc}:#Delta E", 100,1800,1900,200,-300,300);
+        h2MbcdE=new TH2D("M_{bc}:#Delta E", "M_{bc}:#Delta E", 100,1800,1900,100,-300,300);
+        h2MbcdEkin=new TH2D("M_{bc}:#Delta E", "M_{bc}:#Delta E", 100,1800,1900,100,-300,300);
     }
     else{
         h2MbcdE=new TH2D("M_{bc}:#Delta E", "M_{bc}:#Delta E", 200,1700,1900,200,-300,300);
@@ -188,75 +192,48 @@ int main(int argc, char* argv[])
 
     ofstream Result(TString::Format("run_event.dat"),ios_base::out);
 
+    std::vector<int> badruns;
+    string line;
+    int run=0;
+    ifstream in(list_badruns);
+    if (in.is_open())
+    {
+	while (getline(in, line))
+	{
+	    run = atoi(line.c_str());
+	    badruns.push_back(run);
+	}
+    }
+    in.close();
+
     //event loop
     for(int k=0; k<nentr; k++)
     {
 	tt->GetEntry(k);
 
-	//if( ev.run<=24613 || ev.run>=25687 ) continue;    //selected only runs from 24613-25687 range
-	//if( ev.run>=24613 && ev.run<=25687 ) continue;    //selected runs w/o 24613-25687 range
-
-	//list bad runs for 2016-17
-        /*
-	 if (
-	    Dmeson.Run==23209
-	    || Dmeson.Run==23211
-            || Dmeson.Run==23535
-	    || Dmeson.Run==23644
-	    || Dmeson.Run==23699
-	    || Dmeson.Run==23700
-            || Dmeson.Run==23701
-	    || Dmeson.Run==23745
-	    || Dmeson.Run==23758
-	    || Dmeson.Run==23792
-	    || Dmeson.Run==23818
-	    || Dmeson.Run==23879
-	    || Dmeson.Run==23911
-            || Dmeson.Run==23930
-	    || Dmeson.Run==24850
-	    || Dmeson.Run==24852
-	    || Dmeson.Run==24860
-	    || Dmeson.Run==25086
-	    || Dmeson.Run==25172
-	    || Dmeson.Run==25174
-	    || Dmeson.Run==25175
-	    || Dmeson.Run==25217
-	    || Dmeson.Run==25233
-	    || Dmeson.Run==25327
-	    || Dmeson.Run==25331
-	    || Dmeson.Run==25337
-	    || Dmeson.Run==25338
-	    || Dmeson.Run==25357
-	    || Dmeson.Run==25360
-	    || Dmeson.Run==25365
-	    || Dmeson.Run==25368
-	    || Dmeson.Run==25369
-	    || Dmeson.Run==25370
-	    || Dmeson.Run==25598
-	    || Dmeson.Run==25658
-	    || Dmeson.Run==25659
-	    || Dmeson.Run==26070
-	    || Dmeson.Run==26071
-	    || Dmeson.Run==26099
-	    || Dmeson.Run==26246
-	    ) continue;
-	    */
+	if ( *find(badruns.begin(), badruns.end(), Dmeson.Run) ) continue;        //skip bad runs
+	//if ( *std::find(badruns.begin(), badruns.end(), Dmeson.Run) ) { cout<<"bad run="<<Dmeson.Run<<endl;};        //skip bad runs
+        //cout<<"bad run="<<*find(badruns.begin(), badruns.end(), Dmeson.Run)<<endl;
 
 	if( (k %100000)==0 )cout<<k<<endl;
 
 	//Apply cut conditions - determine in cuts.h
-	//if( (sim==1 || sim==5) && vrt.ntrk>4 ) continue;      //for cut D+->K-pi+pi+ in MC D0->K-pi+
+	if( (sim==1 || sim==5) && Dmeson.vrtntrk>4 ) continue;      //for cut D+->K-pi+pi+ in MC D0->K-pi+
+
+	if( Dmeson.vrtntrk==2 &&  Dmeson.theta2t>172 && Dmeson.phi2t>172 ) continue;
 
 	if(
-	   Dmeson.vrtntrk>=ntrk
-	   //&& vrt.theta2t<172 && vrt.phi2t<172
-	   ////&& (theta[0]>46 && theta[1]>46)
-	   ////&& (theta[0]<135 && theta[1]<135)
+	   Dmeson.dE>=min_dE && Dmeson.dE<=max_dE
+           //&& Dmeson.Mbckin>=min_Mbc && Dmeson.Mbckin<=max_Mbc
+           //&& Dmeson.Mbc>=min_Mbc && Dmeson.Mbc<=max_Mbc
+	   && Dmeson.vrtntrk>=ntrk
 	   && Dmeson.Pt1>min_pt && Dmeson.Pt1<max_pt && Dmeson.Pt2>min_pt && Dmeson.Pt2<max_pt
 	   && Dmeson.chi2t1<max_chi2 && Dmeson.chi2t2<max_chi2
 	   && Dmeson.nhitst1>=min_nhits && Dmeson.nhitst2>=min_nhits
 	   && Dmeson.rr1<rrCut && Dmeson.rr2<rrCut && abs(Dmeson.Zip1)<zCut && abs(Dmeson.Zip2)<zCut
-	   && ( Dmeson.ecls1<eclsCut || Dmeson.ecls2<eclsCut )
+	   && Dmeson.ecls1<eclsCut && Dmeson.ecls2<eclsCut
+	   //&& Dmeson.nhitst1<=max_nhits && Dmeson.nhitst2<=max_nhits
+           && Dmeson.munhits<=max_munhits
 	  )
 	{
 	    if ( verbose )
@@ -345,26 +322,41 @@ int main(int argc, char* argv[])
 
 	    hMUnhits->Fill(Dmeson.munhits);
 
-
 	    hmbc->Fill(Dmeson.Mbc);
 	    hdE->Fill(Dmeson.dE);
 
-	    if( Dmeson.dE>deCut1 && Dmeson.dE<deCut2 )
-	    {
-		hmbc_zoom->Fill(Dmeson.Mbc);
-	    }
-	    if( Dmeson.Mbc>mbcCut1 && Dmeson.Mbc<mbcCut2 )
+            //fill dE
+	    if( Dmeson.Mbc>=mbcCut1 && Dmeson.Mbc<=mbcCut2 )
 	    {
 		hdE_zoom->Fill(Dmeson.dE);
 	    }
 
-	    if( Dmeson.dE>deCut1 && Dmeson.dE<deCut2 )
+	    if( Dmeson.Mbckin>=mbcCut1 && Dmeson.Mbckin<=mbcCut2 )
+	    {
+		hdEkin_zoom->Fill(Dmeson.dE);
+	    }
+
+            //fill Mbc
+	    if( Dmeson.dE>=deCut1 && Dmeson.dE<=deCut2 &&  Dmeson.Mbc>=1800 && Dmeson.Mbc<=max_Mbc )
+	    {
+		hmbc_zoom->Fill(Dmeson.Mbc);
+	    }
+
+	    if( Dmeson.dE>=deCut1 && Dmeson.dE<=deCut2  &&  Dmeson.Mbckin>=1800 && Dmeson.Mbckin<=max_Mbc )
 	    {
 		hmbckin_zoom->Fill(Dmeson.Mbckin);
 	    }
-	    if( Dmeson.Mbckin>mbcCut1 && Dmeson.Mbckin<mbcCut2 )
+
+            //--
+	    if( Dmeson.Mbc>=min_Mbc && Dmeson.Mbc<=max_Mbc )
 	    {
-		hdEkin_zoom->Fill(Dmeson.dE);
+		h2MbcdE->Fill(Dmeson.Mbc, Dmeson.dE);
+		h2MbcdP->Fill(Dmeson.dP, Dmeson.Mbc);
+	    }
+	    if( Dmeson.Mbckin>=min_Mbc && Dmeson.Mbckin<=max_Mbc )
+	    {
+		h2MbcdEkin->Fill(Dmeson.Mbckin, Dmeson.dE);
+		h2MbckindP->Fill(Dmeson.dP, Dmeson.Mbckin);
 	    }
 
 	    hepmkp->Fill(Dmeson.epmkp-Dmeson.Ebeam);
@@ -375,12 +367,6 @@ int main(int argc, char* argv[])
 
 	    hdP->Fill(Dmeson.dP);
 
-	    h2MbcdE->Fill(Dmeson.Mbc, Dmeson.dE);
-	    h2MbcdEkin->Fill(Dmeson.Mbckin, Dmeson.dE);
-
-	    h2MbcdP->Fill(Dmeson.dP, Dmeson.Mbc);
-	    h2MbckindP->Fill(Dmeson.dP, Dmeson.Mbckin);
-
 	    forFitMbc=Dmeson.Mbckin;
 	    forFitdE=Dmeson.dE;
 	    forFitdP=Dmeson.dP;
@@ -390,6 +376,7 @@ int main(int argc, char* argv[])
 	}
     }
     Result.close();
+
 
     TCanvas *cc1 = new TCanvas();
     gStyle->SetOptTitle(0);
