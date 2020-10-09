@@ -926,7 +926,8 @@ int main(int argc, char* argv[])
 	kf_register_selection(KF_EMC_SEL,emc_event_rejection);
 	kf_register_selection(KF_MU_SEL,mu_event_rejection);
 
-        kf_MCCalibRunNumber(progpar.MCCalibRunNumber);
+	//kf_MCCalibRunNumber(progpar.MCCalibRunNumber);
+	kf_MCCalibRunNumber(progpar.MCCalibRunNumber,23943,50,1.,1.,1.);
 
 	//Set automatic cosmic run determination
 	kf_cosmic(-1);  //auto
