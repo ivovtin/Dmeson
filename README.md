@@ -12,16 +12,21 @@ analysis_Dplusmeson.C - D+ preprocessing raw events with help reconstruction pac
 Examples for run: <br />
 ```
 ./runAnalysisD0.sh
+
+./runAnalysisDplus.sh
 ```
-Run processing 2000 experimental events and write to file:
+
+Run tasks with D-meson on batch system:
 ```
-analysis_D0meson -n 2000 /space/runs/daq023930.nat.bz2 -o out.root
-/home/ovtin/development/Dmeson/analysis_Dmeson -n 10000 -o /spool/users/ovtin/psi3770_test.root /home/ovtin/development/Dmeson/runsDmeson/runDmeson1
+qsub batch_data_D0meson.sh
+or
+qsub batch_data_Dplusmeson.sh
+
+qstat
+qstat -u ovtin
+qdel 772354
 ```
-Simulation 50 events:
-```
-analysis_D0meson  -v 23110 -n 50 /spool/users/ovtin/sim000018.dat
-```
+
 Run drawing with KDisplay:
 ```
 analysis_D0meson -x -n 2000 /space/runs/daq023930.nat.bz2
@@ -30,19 +35,13 @@ Run KDisplay for view event with reconstruction:
 ```
 bzcat /space/runs/daq021913.nat.bz2 | KDisplay -r -e3197
 ```
-Run tasks with D-meson on batch system:
-```
-qsub batch_data_D0meson.sh
-qstat
-qstat -u ovtin
-qdel 772354
-```
 
-Processing prepared root-files with reconstruction for D-meson:
+For processing prepared root-files with reconstruction for D-mesons got to analysisD0 or analysisDplus directory. <br />
+For run use: <br />
 ```
 ./D0meson 0
 
-. runDmeson.sh
+. runD0meson.sh
 ```
 
 Important plots are here http://kedr.inp.nsk.su/~ovtin/outDmeson/
