@@ -4,27 +4,27 @@ c       Random number generator for RadCor
 	double precision r
 
 c	print *,'FunRand called'
-	
+
 	call rm48(r,1)
 	frand = r
-	
+
 	end
 
       SUBROUTINE KEDRGEN
 c*****************************************************************
 c
 c   Main subroutine for generation of primary tracks kinematics
-c   instead of GUKINE of early version of simulation. 
-c   Now KEDRGEN is called from GUKINE (package KedrSim) 
+c   instead of GUKINE of early version of simulation.
+c   Now KEDRGEN is called from GUKINE (package KedrSim)
 c
 c   Changes:
-c 
+c
 c   April  2002, V.A.Tayursky: from gukine extracted gukine_t, gukine_s
 c   April  2002, V.A.Tayursky: changed call of generator #1
 c   Jan.15 2003, V.A.Tayursky: for KGEN <0 print of initial tracks
-c   Nov.30 2003, V.A.Tayursky: for generator #1 added PST-decays 
-c   Dec.15 2003, V.A.Tayursky: added generator of user #2  
-c   Mar.21 2004, V.A.Tayursky: new RNG start for events generators,  
+c   Nov.30 2003, V.A.Tayursky: for generator #1 added PST-decays
+c   Dec.15 2003, V.A.Tayursky: added generator of user #2
+c   Mar.21 2004, V.A.Tayursky: new RNG start for events generators,
 c                gen.103 in /PSEVT/ added SPINPS(3,100)
 c   Mar.9  2006, V.A.Tayursky: removed /kinpro/,/luns/;
 c                gen 1: added print name of particle
@@ -44,19 +44,19 @@ c*****************************************************************
       COMMON /Beam_sigma/ Sigbeam_flag, Sigma_X, Sigma_Y, Sigma_Z
       INTEGER Sigbeam_flag
       COMMON /MU_PAR/ mu_resolution, mu_efficiency, mu_write, mu_debug
-      REAL    mu_resolution, mu_efficiency 
-      INTEGER mu_debug, mu_write   
+      REAL    mu_resolution, mu_efficiency
+      INTEGER mu_debug, mu_write
       COMMON /FIEL/     FIEL, FIEAN
       COMMON /S1PRT/    QQ(5,10),ISORT(10),NPRT,IERPR ! Eidelman's generators
       COMMON /LUDAT2/   kchg(500,3),pmas(500,4),parf(2000),vckm(4,4)
       COMMON /LUDAT3/   MDCY(500,3),MDME(2000,2),BRAT(2000),KFDP(2000,5)
-      COMMON /VER_EVENT/VER(3),VERTEX(3)      ! center of int. area from data 
-                                               ! real vertex 
+      COMMON /VER_EVENT/VER(3),VERTEX(3)      ! center of int. area from data
+                                               ! real vertex
       COMMON /KEDR_GEN/ KHEP,KGEN,GENPAR(20)  ! parameters for generators
       COMMON /PSPIND/   NPIND,INDP(600)       ! GEANT -> HEP codes
       COMMON /PSDEC/    NDEC,KDEC(3,100),MDEC(1000),BDEC(1000) ! PST decays
       COMMON /PSEVT/    NPS,KPS(4,100),PPS(4,100),SPINPS(3,100)
-      COMMON /EEGCOM/   QPULST(3),QE2TOT,SLUM  ! gen 51 
+      COMMON /EEGCOM/   QPULST(3),QE2TOT,SLUM  ! gen 51
       COMMON /KSI/      KSIFL
       COMMON /GEN_RNG/  IGENRNG,ISKIP          ! flag for RNG for generators
       COMMON /LUDATR/   MRLU(6),RRLU(100)
@@ -96,8 +96,8 @@ c
       SAVE IRLUCALL0
       SAVE IUNIT                         ! for RNG const. for generators
 c
-      DATA  Mpsi3s/3.772/                       ! for gen 60 
-      DATA QPULST/3*0./                         ! for gen. 51 
+      DATA  Mpsi3s/3.7735/                       ! for gen 60
+      DATA QPULST/3*0./                         ! for gen. 51
       DATA NAM2P/' e+ e-    ',' 2 gamma  ',' mu+ mu-  ',' pi+ pi-  ', ! for
      +           ' K+ K-    ',' KL KS    ',' eta gamma',' pi0 gamma'/ ! gen.102
       DATA NAM3PI/' rho pi  ','3pi ph.s.'/
@@ -106,10 +106,10 @@ c
       	KGEN=IKINE
 c
   	DO I=1,10
-          GENPAR(I)=PKINE(I)  
+          GENPAR(I)=PKINE(I)
         END DO
 c
-      ENDIF  
+      ENDIF
 c
       KGEN0=KGEN        ! save initial value
       IPRTRK=0          ! this parameter =1/0 - for prints of initial tracks
@@ -118,9 +118,9 @@ c
         IPRTRK=1
         KGEN=-KGEN0     ! KGEN should be >0 for calls of generators
       END IF
-c	
+c
       DO I=1,20
-        IGENPAR(I)=GENPAR(I)  
+        IGENPAR(I)=GENPAR(I)
       END DO
 c
       NLUND=GENPAR(2)
@@ -129,7 +129,7 @@ c
 c
 c   Simulation the vertex of the event
 c
-      CALL VZERO(VERTEX,3)    ! VERTEX(i)=0. 
+      CALL VZERO(VERTEX,3)    ! VERTEX(i)=0.
 c
       IF (SIGBEAM_FLAG.GT. 0) THEN
 c
@@ -148,30 +148,30 @@ c
 c
 c To make some particles in LUND stable
 c
-      MDCY(LUCOMP(310),1)=0     ! K0s  
+      MDCY(LUCOMP(310),1)=0     ! K0s
       MDCY(LUCOMP(3222),1)=0    ! Sigma+
       MDCY(LUCOMP(3112),1)=0    ! Sigma-
       MDCY(LUCOMP(3122),1)=0    ! Lambda
-      MDCY(LUCOMP(3322),1)=0    ! Xi0   
-      MDCY(LUCOMP(3312),1)=0    ! Xi-   
+      MDCY(LUCOMP(3322),1)=0    ! Xi0
+      MDCY(LUCOMP(3312),1)=0    ! Xi-
       MDCY(LUCOMP(3334),1)=0    ! Omega-
       MDCY(LUCOMP(130),1)=0     ! K0L
 c
 c-------------------------------------------------------------------
 c
-       IF(IEVENT.EQ.1.AND.IGENRNG.EQ.1) THEN          ! data should be read  
+       IF(IEVENT.EQ.1.AND.IGENRNG.EQ.1) THEN          ! data should be read
 c
-         INQUIRE (FILE='kedr_gen0.dat',EXIST=LEXIST)  ! is there this file? 
+         INQUIRE (FILE='kedr_gen0.dat',EXIST=LEXIST)  ! is there this file?
 c
          IF(LEXIST) THEN
 c
-           CALL SEARCH_FREE_UNIT(IUNIT) 
-c  
-           OPEN(UNIT=IUNIT,FILE='kedr_gen0.dat')  
+           CALL SEARCH_FREE_UNIT(IUNIT)
+c
+           OPEN(UNIT=IUNIT,FILE='kedr_gen0.dat')
 c
            READ(IUNIT,FMT=115, ERR=111,IOSTAT=IERR) (MRLU(I1),I1=1,5),
      &                                 (RRLU(I2),I2=1,100)
-           PRINT 117                 
+           PRINT 117
            CLOSE (IUNIT)
 	   IRLUCALL0=MRLU(3)
          ELSE
@@ -182,14 +182,14 @@ c
          END IF
 c
        END IF
- 
+
        IF(IEVENT.EQ.1) THEN
          DO I=1,ISKIP
            DUM=RLU(0)
          ENDDO
        ENDIF
-c             
-       IF(MOD(IEVENT,ITEST).EQ.0) 
+c
+       IF(MOD(IEVENT,ITEST).EQ.0)
      1 PRINT *,'IEVENT=',IEVENT,' NUMBER OF RLU CALLS=',MRLU(3)-IRLUCALL0
 c
 c      Determination of process for simulation from GENE (IKINE) card
@@ -201,7 +201,7 @@ c
       IF (KGEN.EQ.51) GOTO 51 ! e+e- -> e+e- (gamma), Bukin
       IF (KGEN.EQ.52) GOTO 52 ! cosmic muons with energy spectrum (obsolete)
       IF (KGEN.EQ.53) GOTO 53 ! cosmic muons (E.M.Baldin)
-      IF (KGEN.EQ.60) GOTO 60 ! e+e- -> psi''->D+D-,D0 D0~ (A. Shamov)  
+      IF (KGEN.EQ.60) GOTO 60 ! e+e- -> psi''->D+D-,D0 D0~ (A. Shamov)
       IF (KGEN.GE.102.AND.KGEN.LE.103) GOTO 1000 ! Eidelman's cods
 c
 c* KGEN=201-300: generators,  Yu.I.Skovpen and V.A.Tayursky
@@ -238,11 +238,11 @@ c
      + THEN
         print *,' '
         print *,' Error in generator # 1: wrong particle type = ',itype
-        print *,' '   
+        print *,' '
         stop
       END IF
 c
-      IHEP=KFFROMKG(ITYPE)    ! HEP(Lund)-type of particle from GEANT one 
+      IHEP=KFFROMKG(ITYPE)    ! HEP(Lund)-type of particle from GEANT one
 c
       CALL PSTPPAR(IHEP,ANAME,PSTMASS,PSTWIDTH,PSTCHRG,PSTSPIN,PSTCTAU) ! par
 c
@@ -255,7 +255,7 @@ c
       IF(PP.LE.0.) THEN
         print *,' '
         print *,' Error in generator # 1: Momentum should be > 0'
-        print *,' '   
+        print *,' '
        STOP
       END IF
 c
@@ -285,7 +285,7 @@ c  Parameters of decaying particle
 c
       KF=INDP(ITYPE)                  ! KF-code of particle
 c
-      DO J=1,NDEC                     ! are there decays for this particle 
+      DO J=1,NDEC                     ! are there decays for this particle
         JJ=0                          ! in /PSDEC/?
         IF(KF.EQ.KDEC(1,J)) THEN
           JJ=J
@@ -301,7 +301,7 @@ c
 c
       CALL PSTSTORE(KF,0,0,0,PSTO)   ! store initial particle in /PSEVT/
 c
-      CALL PSTDEC(1)                 ! simulation of chain of its decays 
+      CALL PSTDEC(1)                 ! simulation of chain of its decays
 c
       NTRACK=0
 c
@@ -321,23 +321,23 @@ c
         PLAB(1)=PPS(1,I)
         PLAB(2)=PPS(2,I)
         PLAB(3)=PPS(3,I)
-c	                
+c
         CALL GSKINE(PLAB,ITYPE,NVERT,0,0,NT)
 
         NTRACK=NTRACK+1
         IPARTICLE(NTRACK)=ITYPE
-        EPART(NTRACK)=PPS(4,I) 
-        PXPART(NTRACK)=PLAB(1) 
-        PYPART(NTRACK)=PLAB(2) 
+        EPART(NTRACK)=PPS(4,I)
+        PXPART(NTRACK)=PLAB(1)
+        PYPART(NTRACK)=PLAB(2)
         PZPART(NTRACK)=PLAB(3)
-c 
-        IF(IPRTRK.EQ.1) THEN 
+c
+        IF(IPRTRK.EQ.1) THEN
           PRINT 397,IEVENT,NTRACK,ITYPE,PLAB,VERTEX
           KGEN=KGEN0
         END IF
 c
  502  CONTINUE
-c            
+c
       GOTO 2000
 c
  501  CALL GSKINE(PLAB,ITYPE,NVERT,0,0,NT)
@@ -377,11 +377,11 @@ c
      + THEN
         print *,' '
         print *,' Error in generator # 3: wrong particle type = ',itype
-        print *,' '   
+        print *,' '
         stop
       END IF
 c
-      IHEP=KFFROMKG(ITYPE)    ! HEP(Lund)-type of particle from GEANT one 
+      IHEP=KFFROMKG(ITYPE)    ! HEP(Lund)-type of particle from GEANT one
 c
       CALL PSTPPAR(IHEP,ANAME,PSTMASS,PSTWIDTH,PSTCHRG,PSTSPIN,PSTCTAU) ! par
 c
@@ -395,7 +395,7 @@ c
       IF(PPMIN.LE.0.OR.PPMAX.LE.0.OR.PPMIN.gt.PPMAX) THEN
         print *,' '
         print *,' Error in generator # 3: Momentum incorrect '
-        print *,' '   
+        print *,' '
        STOP
       END IF
 c
@@ -428,7 +428,7 @@ c  Parameters of decaying particle
 c
       KF=INDP(ITYPE)                  ! KF-code of particle
 c
-      DO J=1,NDEC                     ! are there decays for this particle 
+      DO J=1,NDEC                     ! are there decays for this particle
         JJ=0                          ! in /PSDEC/?
         IF(KF.EQ.KDEC(1,J)) THEN
           JJ=J
@@ -444,7 +444,7 @@ c
 c
       CALL PSTSTORE(KF,0,0,0,PSTO)   ! store initial particle in /PSEVT/
 c
-      CALL PSTDEC(1)                 ! simulation of chain of its decays 
+      CALL PSTDEC(1)                 ! simulation of chain of its decays
 c
       NTRACK=0
 c
@@ -464,23 +464,23 @@ c
         PLAB(1)=PPS(1,I)
         PLAB(2)=PPS(2,I)
         PLAB(3)=PPS(3,I)
-c	                
+c
         CALL GSKINE(PLAB,ITYPE,NVERT,0,0,NT)
 
         NTRACK=NTRACK+1
         IPARTICLE(NTRACK)=ITYPE
-        EPART(NTRACK)=PPS(4,I) 
-        PXPART(NTRACK)=PLAB(1) 
-        PYPART(NTRACK)=PLAB(2) 
+        EPART(NTRACK)=PPS(4,I)
+        PXPART(NTRACK)=PLAB(1)
+        PYPART(NTRACK)=PLAB(2)
         PZPART(NTRACK)=PLAB(3)
-c 
-        IF(IPRTRK.EQ.1) THEN 
+c
+        IF(IPRTRK.EQ.1) THEN
 c          PRINT 397,IEVENT,NTRACK,ITYPE,PLAB,VERTEX
           KGEN=KGEN0
         END IF
 c
  3502  CONTINUE
-c            
+c
       GOTO 2000
 c
  3501  CALL GSKINE(PLAB,ITYPE,NVERT,0,0,NT)
@@ -555,7 +555,7 @@ c
       PZPART(NTRACK)=PCMPO(3)
 c
       IF(IPRTRK.EQ.1) THEN
-        PRINT 397,IEVENT,NTRACK,2,PCMPO,VERTEX ! print initail track      
+        PRINT 397,IEVENT,NTRACK,2,PCMPO,VERTEX ! print initail track
         KGEN=KGEN0
       END IF
 c
@@ -571,7 +571,7 @@ c
       PZPART(NTRACK)=PCMGA(3)
 c
       IF(IPRTRK.EQ.1) THEN
-        PRINT 397,IEVENT,NTRACK,1,PCMGA,VERTEX ! print initail track      
+        PRINT 397,IEVENT,NTRACK,1,PCMGA,VERTEX ! print initail track
         KGEN=KGEN0
       END IF
 c
@@ -599,7 +599,7 @@ c
       GRX=RLU(0)
 c       CALL GRNDM(GRX,1)
 c
-        PMU=ECOSM1*GRX   
+        PMU=ECOSM1*GRX
       ELSE
 c
  25     GRX=RLU(0)
@@ -616,9 +616,9 @@ c
       VERX=VERTEX(1)
       VERTEX(1)=VERTEX(2)
       VERTEX(2)=VERX
-      PLBX=PLAB(1)  
+      PLBX=PLAB(1)
       PLAB(1)=PLAB(2)
-      PLAB(2)=PLBX   
+      PLAB(2)=PLBX
 c
       CALL GSVERT(VERTEX,0,0,0,0,NVERT)
 c
@@ -637,7 +637,7 @@ c
       IF(IPRTRK.EQ.1) THEN
         PRINT 397,IEVENT,1,5,PLAB,VERTEX ! print initail track
         KGEN=KGEN0
-      END IF 
+      END IF
 c
       GOTO 2000
 c
@@ -648,6 +648,95 @@ c
  53   CALL GEN_COSMICS(IPRTRK)
 c
       KGEN=KGEN0
+      GOTO 2000
+c
+c------------------------------------------------------------------
+c------------------------------------------------------------------
+c
+c  D+ D-, D0 /D0 uniform production
+c
+ 70   CONTINUE
+c
+c  Input parameters:
+c
+c  GENPAR(1)   Wtot   -  average energy of collision (GeV)
+c  GENPAR(2)   SigmaW - sigma of total energy of collision (Gev)
+c
+      if(GENPAR(1).ne.0.) then
+        Wtot=GENPAR(1)
+      else
+        Wtot=Mpsi3s
+      endif
+c
+      if(GENPAR(2).ne.0.) then
+c  Gauss of Wtot
+        dWtot = GENPAR(2)*COS(RLU(0)*TWOPI)*SQRT(-2*ALOG(RLU(0)))
+        Wtot  = Wtot + dWtot          ! Total energy with spread
+      endif
+c
+c      if(RLU(0).lt.0.5) then
+      if(RLU(0).lt.0.0) then
+           kf=411                  ! D+
+      else
+           kf=421                  ! D0
+      endif
+c
+      Wmin=PMAS(LUCOMP(kf),1)+PMAS(LUCOMP(-kf),1)
+      IF(Wtot.lt.Wmin) GOTO 70
+      EACT=WTOT/2                  ! actual beam energy in cms
+c
+      call LU2ENT(1,kf,-kf,Wtot)   ! two D-mesons, 1-st and 2-nd lines
+c
+c      call LULIST(1)
+c
+      phi=PI*2.*RLU(0)
+c
+ 71   X=2.*RLU(0)-1.               ! generate x=cos(theta), 1-x^2
+c
+      if(1-x**2.lt.RLU(0)) goto 71
+      theta=acos(x)
+c
+      call LUROBO(theta,phi,0.,0.,0.)
+c
+c      call LULIST(1)
+c
+      call LUEXEC
+c
+c      CALL LUEDIT(2)    ! to exclude unstable or undetectable partons/particles
+c      call LULIST(1)
+c
+      NTRACK=0
+c
+      DO I=1,N
+        ITYPE=0
+        KS=k(i,1)
+        KODHEP=K(I,2)
+c
+        IF(KS.eq.1.or.KS.eq.4) THEN
+c
+          CALL PstPCode1(KODHEP,ITYPE)     ! KF code -> GEANT code
+c
+  	  if(ITYPE.EQ.0) then
+            write(6,*)' Gen.60: unknown type of particle', k(i,2)
+            STOP
+          end if
+c
+          PLAB(1)=P(I,1)
+          PLAB(2)=P(I,2)
+          PLAB(3)=P(I,3)
+c
+          NTRACK=NTRACK+1
+ 	  IPARTICLE(NTRACK)=ITYPE
+ 	  EPART(NTRACK)=Wtot/2
+ 	  PXPART(NTRACK)=PLAB(1)
+ 	  PYPART(NTRACK)=PLAB(2)
+ 	  PZPART(NTRACK)=PLAB(3)
+c
+        ENDIF
+c
+      END DO
+c
+      KGEN=KGEN0                    ! returns initial value
       GOTO 2000
 c
 c------------------------------------------------------------------
@@ -666,11 +755,13 @@ c              if 6      - RadCor with Fadin-Kuraev model (no vac. polariz.)
 c  GENPAR(4)   Probability of D+D- (the rest is D0D0bar)
 c  GENPAR(5)   Photon emission probability variation
 c
+c	print *,'Initialization modifier generator 60'
+c
       if (IEVENT.eq.1) then
-        IF(IGENPAR(3).EQ.1.or.IGENPAR(3).ge.3) 
-     +		CALL PHOINI      ! initialization of PHOTOS 
+        IF(IGENPAR(3).EQ.1.or.IGENPAR(3).ge.3)
+     +		CALL PHOINI      ! initialization of PHOTOS
         if(IGENPAR(3).ge.2)      ! initialize RadCor
-     +		call rcini(rccs0,rcben,'rccs.dat',rcndt,1000,20,30)
+     +		call rcini(rccs0,rcben,'/home/ovtin/development/Dmeson/simulation/KedrGen/rccs.dat',rcndt,1000,20,30)
         print *,'Photon CS variation=',GENPAR(5)
       endif
 
@@ -681,7 +772,7 @@ c
       endif
 
       dnpp = GENPAR(5)
-      
+
 c      print *,'Photon CS variation=',dnpp
 c
       if(GENPAR(2).ne.0.) then
@@ -690,7 +781,7 @@ c  Gauss of Wtot
       Wtot  = Wtot + dWtot          ! Total energy with spread
       endif
 c
-      if(RLU().lt.GENPAR(4)) then
+      if(RLU(0).lt.GENPAR(4)) then
            kf=411              ! D+
       else
            kf=421              ! D0
@@ -707,53 +798,62 @@ c     Call RadCor to simulate ISR
          elseif (IGENPAR(3).eq.6) then
       	   call RCFTG(frand,0.001,100.,rccs0,rcben,rcndt,Wtot*1000.,
      +              rcfen,rcfth,rcffi,-4,dnpp)
-         else 
+         else
       	   call RCFTG(frand,0.001,100.,rccs0,rcben,rcndt,Wtot*1000.,
      +              rcfen,rcfth,rcffi,1,dnpp)
          endif
          Wtot = Wtot - rcfen/1000.  ! Now only simulate energy loss
 c         print *,'RadCor: photon energy=',rcfen
       endif
-
+c
       Wmin=PMAS(LUCOMP(kf),1)+PMAS(LUCOMP(-kf),1)
       if(Wtot.lt.Wmin) goto 60
+      EACT=WTOT/2                  ! actual beam energy in cms
 c       print *,'Wtot:',Wtot,'  Wmin:',Wmin
-
+c
       call LU2ENT(1,kf,-kf,Wtot)
 c      call LULIST(1)
       phi=PI*2.*RLU(0)
- 61   x=2.*RLU()-1.             ! generate x=cos(theta), 1-x^2
+c
+ 61   x=2.*RLU(0)-1.             ! generate x=cos(theta), 1-x^2
+c
       if(1-x**2.lt.RLU(0)) goto 61
       theta=acos(x)
+c
       call LUROBO(theta,phi,0.,0.,0.)
+c
 c      call LULIST(1)
+c
       call LUEXEC
-
+c
 c-------------------------------------------------------
 c     PHOTOS call (added by A.Poluektov)
 c-------------------------------------------------------
 
       IF(IGENPAR(3).EQ.1.or.IGENPAR(3).ge.3) THEN    ! FSR with PHOTOS
-        CALL LUHEPC(1)        ! Conversion from JETSET to /HEPEVT/ standard   
+        CALL LUHEPC(1)        ! Conversion from JETSET to /HEPEVT/ standard
         NEVHEP=IEVENT
 c        CALL PHODMP           ! Write event record before emission...
         CALL PHOTOS(1)        ! Generate photon(s)...
 c        CALL PHODMP           ! Write event record after emission...
         CALL LUHEPC(2)        ! Conversion from /HEPEVT/ to JETSET standard
       ENDIF
-
+c
 c      CALL LUEDIT(2)    ! to exclude unstable or undetectable partons/particles
 c      call LULIST(1)
-      CALL GSVERT(VERTEX,0,0,0,0,NVERT)
-c
+c      CALL GSVERT(VERTEX,0,0,0,0,NVERT)
+cc
       NTRACK=0
 c
-      DO I=1,N          
+      DO I=1,N
         ITYPE=0
-        ks=k(i,1)
+        KS=k(i,1)
         KODHEP=K(I,2)
-	       if(ks.eq.1.or.ks.eq.4) then
-        CALL PSTPCODE1(KODHEP,ITYPE)  ! KF code -> GEANT code
+c
+	IF(KS.eq.1.or.KS.eq.4) THEN
+c
+        CALL PstPCode1(KODHEP,ITYPE)     !KF code -> GEANT code
+c
   	IF(ITYPE.EQ.0) THEN
           write(6,*)' Gen.60: unknown type of particle', k(i,2)
           STOP
@@ -761,20 +861,23 @@ c
 c
         PLAB(1)=P(I,1)
         PLAB(2)=P(I,2)
-        PLAB(3)=P(I,3)      
-        IF(IPRTRK.EQ.1) PRINT 397,IEVENT,I,ITYPE,PLAB,VERTEX
- 	                                    
-        CALL GSKINE(PLAB,ITYPE,NVERT,0,0,NT)
+        PLAB(3)=P(I,3)
+c        IF(IPRTRK.EQ.1) PRINT 397,IEVENT,I,ITYPE,PLAB,VERTEX
+c
+c        CALL GSKINE(PLAB,ITYPE,NVERT,0,0,NT)
 c
         NTRACK=NTRACK+1
  	IPARTICLE(NTRACK)=ITYPE
- 	EPART(NTRACK)=EN1
+c 	EPART(NTRACK)=EN1
+ 	EPART(NTRACK)=Wtot/2
  	PXPART(NTRACK)=PLAB(1)
  	PYPART(NTRACK)=PLAB(2)
  	PZPART(NTRACK)=PLAB(3)
-c	
+c
 		endif
       END DO
+c
+      KGEN=KGEN0                    ! returns initial value
       GOTO 2000
 c
 c------------------------------------------------------------------
@@ -799,18 +902,18 @@ c
           PRINT 1500
           STOP
         END IF
-c       
+c
         IF(IEVENT.EQ.1) PRINT 1501,NAM2P(IMOD),GENPAR(1),GENPAR(3)
 c
 c  Parameters:
 c
-c       IMOD=1: e+ e- 
-c            2: 2 gamma 
-c            3: mu+ mu- 
-c            4: pi+ pi- 
-c            5: K+ K- 
-c            6: KL KS 
-c            7: eta gamma, 
+c       IMOD=1: e+ e-
+c            2: 2 gamma
+c            3: mu+ mu-
+c            4: pi+ pi-
+c            5: K+ K-
+c            6: KL KS
+c            7: eta gamma,
 c            8: pi0 gamma.
 c       EN  - total energy in GeV,
 c       ANG - minimal polar angle in deg.
@@ -826,16 +929,16 @@ c
 c
 c----------------------------------------------------------------
 c
-      IF (KGEN.EQ.103) THEN                !  e+e- -> 3pi 
+      IF (KGEN.EQ.103) THEN                !  e+e- -> 3pi
 c
-c  Parameters:  IMOD - process number: 
+c  Parameters:  IMOD - process number:
 c                    =1 - sum of ropi,
-c                    =2 - phase space 
+c                    =2 - phase space
 c               EN   - total energy in GeV
 c               ANG  - limiting polar angle in degrees
 c
       IF(IMOD.LT.1.OR.IMOD.GT.2) THEN
-        PRINT 1503 
+        PRINT 1503
         STOP
       END IF
 c
@@ -885,7 +988,7 @@ c
         WRITE(IUNIT,FMT=115, ERR=110,IOSTAT=IERR) (MRLU(I1),I1=1,5),
      &                                 (RRLU(I2),I2=1,100)
 c
-        IF(IABS(KGEN).EQ.102.AND.IMOD.EQ.1) THEN  
+        IF(IABS(KGEN).EQ.102.AND.IMOD.EQ.1) THEN
 c
 c  Cross-section for e+e- -> e+e-
 c
@@ -900,7 +1003,7 @@ c
 c  Cross-section for e+e- -> gamma gamma
 c
           X102=COS(ANG*PI/180.)
-          A102=2.*PI*(2.818E-13)**2*(0.511E-3/EN)**2  
+          A102=2.*PI*(2.818E-13)**2*(0.511E-3/EN)**2
           B102=2.*(0.511E-3/EN)**2
           SECGG102=A102*(ALOG(((1.+X102)+B102)/((1.-X102)+B102))-X102)
           PRINT 1506,SECGG102,NEVENT/SECGG102
@@ -923,7 +1026,7 @@ c
 c
  110    PRINT *, ' error when writing file kedr_gen0.dat, IOSTAT =',IERR
 c
-        STOP 
+        STOP
       END IF
 
  116  CONTINUE
@@ -935,14 +1038,14 @@ c
      +        F6.1,' - Geant type of particle ',A12,/,
      +        1pE10.2,' - particle momentum (GeV/c)',/,
      +        2(1pE10.2),' - interval in theta (deg.)',/,
-     +        2(1pE10.2),' - interval in phi (deg.)',//,1x,60(1H*),/) 
+     +        2(1pE10.2),' - interval in phi (deg.)',//,1x,60(1H*),/)
  108  FORMAT(/,1x,60(1H*),//,
      +  ' Generator # 3: one paricle events simulation',//,
      +        F6.1,' - Geant type of particle ',A12,/,
      +        2(1pE10.2),' - interval in particle momentum (GeV/c)',/,
      +        2(1pE10.2),' - interval in theta (deg.)',/,
-     +        2(1pE10.2),' - interval in phi (deg.)',//,1x,60(1H*),/) 
- 115  FORMAT(5Z8,/,10(10Z8,/)) 
+     +        2(1pE10.2),' - interval in phi (deg.)',//,1x,60(1H*),/)
+ 115  FORMAT(5Z8,/,10(10Z8,/))
  117  FORMAT(/,' KEDRSIM read file kedr_gen0.dat from disk',/)
  118  FORMAT(/,' KEDRSIM wrote file kedr_gen0.dat to disk',/)
  397  FORMAT(I5,2I4,3F10.6,3F10.4)
@@ -953,7 +1056,7 @@ c
      +  ' Generator # 102: two paricles events simulation',//,
      +  ' Process e+e- ->',A9,//,
      +  1pE10.2,' - beam energy (GeV)',/,
-     +  1pE10.2,' - minimal theta (deg.)',//,  
+     +  1pE10.2,' - minimal theta (deg.)',//,
      +  1x,60(1H*),/)
  1502 FORMAT(/,1x,60(1H*),//,
      +  ' Generator # 52: cosmic muons (mu+) simulation',//,
@@ -962,11 +1065,11 @@ c
      +  1x,60(1H*),/)
 
  1503 FORMAT(//,' Error in generator 102: wrong parameter MOD',/)
- 1504 FORMAT(/,1x,60(1H*),//,  
+ 1504 FORMAT(/,1x,60(1H*),//,
      +  ' Generator # 103: 3-pi events simulation',//,
      +  ' Process e+e- ->',A9,//,
      +  1pE10.2,' - beam energy (GeV)',/,
-     +  1pE10.2,' - minimal theta (deg.)',//,  
+     +  1pE10.2,' - minimal theta (deg.)',//,
      +  1x,60(1H*),/)
  1505 FORMAT(/,1x,60(1H-),//,' Results:',//,
      +        ' Cr. section of e+e- sc.= ',1pE10.3,' cm^2'  ,//,

@@ -1,16 +1,12 @@
-  Eventq: negative excitation energy for the residual nucleus!! 33 77
- -0.00364714256 T
-  Eventq: negative excitation energy for the residual nucleus!! 25 52
- -0.00422893325 T
-  Eventq: negative excitation energy for the residual nucleus!! 34 77
- -0.000687071064 T
-  Eventq: negative excitation energy for the residual nucleus!! 33 78
- -0.003814328 T
-  Eventq: negative excitation energy for the residual nucleus!! 31 77
- -0.0125352908 T
-  Ferhav: kp,plabs,elabs,pprox,y,z,pfrmix,y,z 13  2.28301886E-05  0.139567502
-  0.0703857982 -0.137565276 -0.0158037292  0.0375310546 -0.00472380202
-  0.0238617891
-    Lvmass,Am(kp),Eproj: F  0.1395675  0.208823396
-  Eventq: negative excitation energy for the residual nucleus!! 24 49
- -0.000927495537 T
+  Ferhav: kp,plabs,elabs,pprox,y,z,pfrmix,y,z 14  8.71928638E-05  0.139567527
+  0.152766554  0.0381195676  0.01095898  0.0137169656  0.155487613
+  0.0854021951
+    Lvmass,Am(kp),Eproj: F  0.1395675  0.210689126
+  Ferhav: kp,plabs,elabs,pprox,y,z,pfrmix,y,z 13  7.73780566E-05  0.139567521
+ -0.0186865388  0.136231028 -0.0528562344  0.0234206461  0.0650336432
+  0.135305577
+    Lvmass,Am(kp),Eproj: F  0.1395675  0.202930896
+  Ferhav: kp,plabs,elabs,pprox,y,z,pfrmix,y,z 13  6.01258894E-05  0.139567513
+ -0.137677836 -0.0908170038  0.111085255 -0.0630169974 -0.0571534873
+  0.231909608
+    Lvmass,Am(kp),Eproj: F  0.1395675  0.242944306
