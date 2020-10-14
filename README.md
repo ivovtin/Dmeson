@@ -1,4 +1,4 @@
-# Dmeson - package for analysis
+# Dmeson - package for analysis mass D^0 and D^+ mesons
 
 Get the code:  <br />
 ```
@@ -6,7 +6,8 @@ git clone https://github.com/ivovtin/Dmeson
 ```
 Package depends on [KaFramework](https://github.com/ivovtin/KaFramework) <br />
 
-analysis_D0meson.C - The code for D0 preprocessing raw events with help reconstruction package and write structures in the root-file. <br />
+analysis_D0meson.C - D0 preprocessing raw events with help reconstruction package and write structure in the root-file. <br />
+analysis_Dplusmeson.C - D+ preprocessing raw events with help reconstruction package and write structure in the root-file. <br />
 
 Examples for run: <br />
 ```
@@ -39,71 +40,25 @@ qdel 772354
 
 Processing prepared root-files with reconstruction for D-meson:
 ```
-./D0meson 1 1 0 1 0 160 3000 0
+./D0meson 0
 
 . runDmeson.sh
 ```
 
 Important plots are here http://kedr.inp.nsk.su/~ovtin/outDmeson/
 
-
-# Information about D-meson statistic:
-Runs in peak Psi(3770) -> e+e- -> DD^- (D^0D^-0 or D+D-): <br />
-
-D0 meson - 1864,86 MeV <br />
-D+ meson - 1869,57 MeV <br />
-Ds meson - 1968.47 MeV <br />
-
-1) 23206 - 23942 (date: 2016-02-09 - 2016-05-23) <br />
-In selected runs - 130775145 events (207190 e+e- and 21046 MHadr candidates), integral luminosity is 1161.799 nb^-1 (or 1.16 pb^-1).  <br />
-2) 24835 - 26248 (date: 2017-03-05 - 2017-12-24) <br />
-In selected runs - 452752351 events (393776 e+e- and 61279 MHadr candidates), integral luminosity is 2638.276 nb^-1 (or 2.64 pb^-1).  <br />
-
-Summary: 583,527,496 events; 600966 e+e- and 82325 MHadr candidates; integral luminosity - 3.8 pb^-1. <br />
-
-Bkg Runs: <br />
-1) 23939 - 23499 <br />
-In selected runs - 6791860 events (1 e+e- and 510 MHadr candidates), integral luminosity is 0.000 nb^-1   <br />
-2) 24834 - 26245 (2017 year) <br />
-In selected runs - 14182834 events (7 e+e- and 3124 MHadr candidates), integral luminosity is 0.000 nb^-1   <br />
-
-0.9 pb^-1 statistic for 2004-2009 year - expect 100 signal events D0->K-pi+  <br />
-2x900(nb^-1)x3.66 (nb)x0.0388 = 255.61440  -  expected signal events         <br />
-98.4/255.61440=38.5%  - efficiency                                           <br />
-
-
-# Registration D-mesons in channels:<br />
-D0->K-pi+ (D0bar->K+pi-)           <br />
-D+->K-pi+pi+ (D- ->K+pi-pi-)       <br />
-
-Resonant depolarization technique for Beam energy measurement - accuracy is 10-70 keV  <br />
-
-Momentum D-meson from decay Psi(3770) -> DD^- constitute pd ~ 260 MeV/c <br />
-In decay Psi(3770) born 2 D-mesons                                <br />
-
-N=Lint*sigma                                                                 <br />
-
-Lint - integral luminosity (pb-1)                                        <br />
-sigma - cross-section (pb, cm^2)                                                   <br />
-
-sigma(DDbar)=6.57 nb   -> sigma(D0D0bar) + sigma(D+D-)                       <br />
-sigma(D0D0bar)=3.66 nb                                                       <br />
-sigma(D+D-)=2.91 nb                                                          <br />
-
-N=3800 nb^-1 x 3.66 nb = 13908 events Psi(3770)->D0D0bar, (D0->K-pi+)  x3.80%  =>  = 528.5 x2 = 1057      <br />
-
-N=3800x2.91 = 11058 events Psi(3770)->D+D-, ( D+->K-pi+pi+) (D- ->K+pi-pi-) x9.2% =>  = 1017.3 x2 = 2034         <br />
-
-
-The criteria pi/K identidication in ATC:                                                       <br />
-Nph.e. less then ~0.5-1.0 in momentum range for track 400-1300 MeV/c  - Kaon, otherwise Pion, lenght track is >4 cm. <br />
-
-Example from previous analysis: /home/poluektv/kedr/release/dmass2/kp/bin/dmass_kp.cc  <br />
-
 # Simulation
 
-~/3.0.0/bin/ks < mc.cards.ee_to_DD > /dev/null  <br />
-KDisplay < simout/sim000001.dat -r -R19697     <br />
+For run simulation see directory Dmeson/simulation. <br />
+KedrGen - contains modified generator 60 with ISR (RADCOR package) and FSR (PHOTOS package). <br />
+
+Example for run and reconstruction from sim.dat:
+```
+ks < mc.cards.ee_to_DD > /dev/null
+
+KDisplay < simout/sim000001.dat -r -R19697
+```
+
 
 Information about generators is here http://kedr.inp.nsk.su/FOR_MEMBERS/SOFTWARE/SIMULATION/generators.html#60  <br />
 ```
