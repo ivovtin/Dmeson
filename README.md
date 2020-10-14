@@ -36,7 +36,7 @@ Run KDisplay for view event with reconstruction:
 bzcat /space/runs/daq021913.nat.bz2 | KDisplay -r -e3197
 ```
 
-For processing prepared root-files with reconstruction for D-mesons got to analysisD0 or analysisDplus directory. <br />
+For processing prepared root-files with reconstruction for D-mesons go to analysisD0 or analysisDplus directory. <br />
 For run use: <br />
 ```
 ./D0meson 0
@@ -50,6 +50,15 @@ Important plots are here http://kedr.inp.nsk.su/~ovtin/outDmeson/
 
 For run simulation see directory Dmeson/simulation. <br />
 KedrGen - contains modified generator 60 with ISR (RADCOR package) and FSR (PHOTOS package). <br />
+
+In Dmeson/simulation/simD0 - simulation signal from D0 meson and background form ee->DD (in dir BG_eetoDD) <br />
+
+For run:
+```
+qsub batch_mc_D0meson.sh
+
+qsub batch_Analysismc_D0meson.sh
+```
 
 Example for run and reconstruction from sim.dat:
 ```
