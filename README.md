@@ -1,4 +1,4 @@
-# Dmeson - package for analysis mass D^0 and D^+ mesons
+# Dmeson - package for analysis mass _D^0_ and _D^+_ mesons
 
 Get the code:  <br />
 ```
