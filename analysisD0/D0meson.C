@@ -12,7 +12,7 @@ string progname;
 
 int Usage(string status)
 {
-	cout<<"Usage: "<<progname<<"\t"<<"Data (0 - 2016-17, 4 - 2004) or MC (1 - Signal, 2 - BG continium, 3 - BG DD, 5 - Signal 2004)"<<endl;
+	cout<<"Usage: "<<progname<<"\t"<<"Data (0 - 2016-17, 4 - 2004) or MC (1 - Signal, 2 - BG continium, 3 - BG DD)"<<endl;
         exit(0);
 }
 
@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
     if( argc>1 )
     {
 	sim=atoi(argv[1]);
-	if( sim>5 ){ Usage(progname); return 0;}
+	if( sim>4 ){ Usage(progname); return 0;}
 	if( sim<0 ){ Usage(progname); return 0;}
     }
     else
@@ -42,8 +42,8 @@ int main(int argc, char* argv[])
 	fnameout=TString::Format("res_exp_Dmeson_data_%d.root",sim).Data();
         //KEDR = "/home/ovtin/public_html/outDmeson/D0/data/";
         //KEDR = "/home/ovtin/public_html/outDmeson/D0/data_ntrack2/";
-        KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_v6/";
-        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_v5_ntrack2/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_v9/";
+        KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_v9_ntrack2/";
 	list_badruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/badruns";
     }
     else if (sim==4)
@@ -77,13 +77,6 @@ int main(int argc, char* argv[])
 	fnameout=TString::Format("res_sim_Dmeson_BG_eetoDD_%d.root",sim).Data();
         KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_eetodd/";
     }
-    else if (sim==5)
-    {
-	deCut1=-300; deCut2=300;
-	mbcCut1=1800, mbcCut2=1900;
-	fnameout=TString::Format("res_sim_Dmeson_sig2004_%d.root",sim).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Sig2004/";
-    }
     cout<<fnameout<<endl;
     fout = new TFile(fnameout,"RECREATE");
 
@@ -106,7 +99,7 @@ int main(int argc, char* argv[])
     TH1F* hmbc=new TH1F("Mbc","Mbc",100,0.,2000.);
     TH1F* hmbc_zoom;
     TH1F* hmbckin_zoom;
-    if( sim==0 || sim==4 || sim==1 || sim==5 ){
+    if( sim==0 || sim==4 || sim==1){
 	hmbc_zoom=new TH1F("M_{bc}","M_{bc}",50,1800.,1900.);
 	hmbckin_zoom=new TH1F("M_{bc}","M_{bc}",50,1800.,1900.);
     }
@@ -117,8 +110,8 @@ int main(int argc, char* argv[])
     TH1F* hrr=new TH1F("rr","rr",50,0.,3.);
     TH1F* hZip=new TH1F("ZIP","ZIP",100,-50.,50.);
     TH1F* henass=new TH1F("Energy ass","Energy ass",100,0.,4500.);
-    TH1F* hepmkp=new TH1F("epmkp","epmkp",100,-400.,300.);
-    TH1F* heppkm=new TH1F("eppkm","eppkm",100,-400.,300.);
+    TH1F* hepmkp=new TH1F("epmkp","epmkp",100,-400.,400.);
+    TH1F* heppkm=new TH1F("eppkm","eppkm",100,-400.,400.);
     TH1F* hdiffepmkpeppkm=new TH1F("depmkp-deppkm","depmkp-deppkm",100,-100.,100.);
     TH2D *h2depmkpdeppkm=new TH2D("depmkp:deppkm", "depmkp:deppkm", 100,-300,300,100,-300,300);
     TH1F* hdE=new TH1F("#Delta E","#Delta E",200,-2000.,2000.);
@@ -129,7 +122,7 @@ int main(int argc, char* argv[])
     TH2D *h2PpiktodEkpi=new TH2D("Ppik:dekmpip", "Ppik:dekmpip", 200,600,1100,200,-250,250);
     TH2D *h2MbcdE;
     TH2D *h2MbcdEkin;
-    if( sim==4 || sim==1 || sim==5){
+    if( sim==4 || sim==1){
         h2MbcdE=new TH2D("M_{bc}:#Delta E", "M_{bc}:#Delta E", 100,1800,1900,100,-300,300);
         h2MbcdEkin=new TH2D("M_{bc}:#Delta E", "M_{bc}:#Delta E", 100,1800,1900,100,-300,300);
     }
@@ -217,10 +210,7 @@ int main(int argc, char* argv[])
 
 	if( (k %100000)==0 )cout<<k<<endl;
 
-	//Apply cut conditions - determine in cuts.h
-	if( (sim==1 || sim==5) && Dmeson.vrtntrk>4 ) continue;      //for cut D+->K-pi+pi+ in MC D0->K-pi+
-
-	if( Dmeson.vrtntrk==2 &&  Dmeson.theta2t>172 && Dmeson.phi2t>172 ) continue;
+	if( (sim==0 || sim==4) && Dmeson.vrtntrk==2 &&  Dmeson.theta2t>172 && Dmeson.phi2t>172 ) continue;
 
 	if(
 	   Dmeson.dE>=min_dE && Dmeson.dE<=max_dE
@@ -337,12 +327,14 @@ int main(int argc, char* argv[])
 	    }
 
             //fill Mbc
-	    if( Dmeson.dE>=deCut1 && Dmeson.dE<=deCut2 &&  Dmeson.Mbc>=1800 && Dmeson.Mbc<=max_Mbc )
+	    //if( Dmeson.dE>=deCut1 && Dmeson.dE<=deCut2 &&  Dmeson.Mbc>=1800 && Dmeson.Mbc<=max_Mbc )
+	    if( Dmeson.dE>=deCut1 && Dmeson.dE<=deCut2 &&  Dmeson.Mbc>=1700 && Dmeson.Mbc<=max_Mbc )
 	    {
 		hmbc_zoom->Fill(Dmeson.Mbc);
 	    }
 
-	    if( Dmeson.dE>=deCut1 && Dmeson.dE<=deCut2  &&  Dmeson.Mbckin>=1800 && Dmeson.Mbckin<=max_Mbc )
+	    //if( Dmeson.dE>=deCut1 && Dmeson.dE<=deCut2  &&  Dmeson.Mbckin>=1800 && Dmeson.Mbckin<=max_Mbc )
+	    if( Dmeson.dE>=deCut1 && Dmeson.dE<=deCut2  &&  Dmeson.Mbckin>=1700 && Dmeson.Mbckin<=max_Mbc )
 	    {
 		hmbckin_zoom->Fill(Dmeson.Mbckin);
 	    }

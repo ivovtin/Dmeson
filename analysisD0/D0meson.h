@@ -52,7 +52,7 @@
 	    for(int i=1; i<=862; i++)   //signal 2016+2017
 	    {
 		//tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/data/psi3770_to_D0meson_%d.root",i).Data());
-		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/dataPcorr_v6/psi3770_to_D0meson_%d.root",i).Data());
+		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/dataPcorr_v9/psi3770_to_D0meson_%d.root",i).Data());
 	    }
 	}
 	else if (sim==4){
@@ -65,34 +65,19 @@
 	else if (sim==1){
 	    for(int i=1; i<=2; i++)
 	    {
-		//tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/outsimD0/Signal/psi3770_to_simD0mesonSignal_%d.root",i).Data());
-		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/outsimD0/Signal/psi3770_to_simD0mesonSignal_%d_4k.root",i).Data());
+		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/outsimD0/Signal/psi3770_to_simD0mesonSignal_%d.root",i).Data());
 	    }
 	}
 	else if (sim==2){
-	    tt->Add("/spool/users/ovtin/outDmeson/simulation/outsimD0/Bkg_continium/psi3770_to_simD0meson_ee_to_qq1_1.root");
-	    tt->Add("/spool/users/ovtin/outDmeson/simulation/outsimD0/Bkg_continium/psi3770_to_simD0meson_ee_to_qq1_2.root");
-	    tt->Add("/spool/users/ovtin/outDmeson/simulation/outsimD0/Bkg_continium/psi3770_to_simD0meson_ee_to_qq1_3.root");
-	    tt->Add("/spool/users/ovtin/outDmeson/simulation/outsimD0/Bkg_continium/psi3770_to_simD0meson_ee_to_qq1_4.root");
-	    tt->Add("/spool/users/ovtin/outDmeson/simulation/outsimD0/Bkg_continium/psi3770_to_simD0meson_ee_to_qq2_1.root");
-	    tt->Add("/spool/users/ovtin/outDmeson/simulation/outsimD0/Bkg_continium/psi3770_to_simD0meson_ee_to_qq2_2.root");
-	    tt->Add("/spool/users/ovtin/outDmeson/simulation/outsimD0/Bkg_continium/psi3770_to_simD0meson_ee_to_qq2_3.root");
-	    tt->Add("/spool/users/ovtin/outDmeson/simulation/outsimD0/Bkg_continium/psi3770_to_simD0meson_ee_to_qq2_4.root");
-	    tt->Add("/spool/users/ovtin/outDmeson/simulation/outsimD0/Bkg_continium/psi3770_to_simD0meson_ee_to_qq3_1.root");
-	    tt->Add("/spool/users/ovtin/outDmeson/simulation/outsimD0/Bkg_continium/psi3770_to_simD0meson_ee_to_qq3_2.root");
-	    tt->Add("/spool/users/ovtin/outDmeson/simulation/outsimD0/Bkg_continium/psi3770_to_simD0meson_ee_to_qq3_3.root");
-	    tt->Add("/spool/users/ovtin/outDmeson/simulation/outsimD0/Bkg_continium/psi3770_to_simD0meson_ee_to_qq3_4.root");
-	}
-	else if (sim==3){
-	    for(int i=1; i<=20; i++)
+	    for(int i=1; i<=12; i++)
 	    {
-	    		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/outsimD0/Bkg_eetoDD/psi3770_to_simD0mesonBkg_eetoDD_%d.root",i).Data());
+		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/outsimD0/Bkg_continium/psi3770_to_simD0meson_ee_to_qq_%d.root",i).Data());
 	    }
 	}
-	else if (sim==5){
-	    for(int i=1; i<=20; i++)
+	else if (sim==3){
+	    for(int i=1; i<=10; i++)
 	    {
-		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/outsimD0/Signal2004/psi3770_to_simD0mesonSignal_%d.root",i).Data());
+	    		tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/outsimD0/Bkg_eetoDD/psi3770_to_simD0mesonBkg_eetoDD_%d.root",i).Data());
 	    }
 	}
     }
@@ -110,8 +95,8 @@
     //for print DEBUG information
     bool verbose=0;
 
-    int ntrk=3;
-    //int ntrk=2; //for sim
+    //int ntrk=3;
+    int ntrk=2; //for sim
     int nip=0;
     int nbeam=0;
     //int max_munhits=2;
@@ -123,8 +108,8 @@
     float max_Mbc=1900.;
     float min_dE=-300.;
     float max_dE=300.;
-    float eclsCut=1000.;
-    //float eclsCut=1500.;       //sim
+    //float eclsCut=1000.;
+    float eclsCut=5000.;       //sim
 
     //2016-17
     float rrCut=0.75;
