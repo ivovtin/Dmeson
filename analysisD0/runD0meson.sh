@@ -1,5 +1,5 @@
 #!/bin/bash
-dataORmc=0
+dataORmc=1
 
 ./D0meson $dataORmc
 

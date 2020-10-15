@@ -3,7 +3,7 @@
 #include "TDirectory.h"
 #include "TCanvas.h"
 #include <vector>
-#include <algorithm>    // std::find
+#include <algorithm>
 
 #include "D0meson.h"
 
@@ -21,60 +21,96 @@ int main(int argc, char* argv[])
     progname=argv[0];
     if( argc>1 )
     {
-	sim=atoi(argv[1]);
-	if( sim>4 ){ Usage(progname); return 0;}
-	if( sim<0 ){ Usage(progname); return 0;}
+	key=atoi(argv[1]);
+	if( key>4 ){ Usage(progname); return 0;}
+	if( key<0 ){ Usage(progname); return 0;}
     }
     else
     {
 	Usage(progname);
     }
 
-    //determine name output file
+    //for print DEBUG information
+    bool verbose=0;
+
+    //***************preselections*************
+    int ntrk=3;
+    int max_munhits=2;
+    //int max_munhits=4;
+    float min_pt=100.; //MeV
+    float max_pt=2000.; //MeV
+    //float min_Mbc=1700.;
+    float min_Mbc=1800.;        //sim
+    float max_Mbc=1900.;
+    float min_dE=-300.;
+    float max_dE=300.;
+    float eclsCut=1000.;
+    //float eclsCut=5000.;       //sim
+
+    float rrCut,zCut,max_chi2,min_nhits,max_nhits;
+
+    if(key!=4){
+	//2016-17
+	rrCut=0.75;
+	zCut=13.;
+	max_chi2=70.;
+	min_nhits=20.;
+    }
+    else{
+        //2004
+	rrCut=0.5;
+	zCut=12;
+	max_chi2=50;
+	min_nhits=24;
+	max_nhits=50;
+    }
+    //*****************************************
+
+    double deCut1, deCut2;
+    double mbcCut1, mbcCut2;
+
     TFile *fout=0;
     TString fnameout;
     TString KEDR;
+    TString dir_out="results";
+    TString fout_result=dir_out + "/" + "fout_result.dat";
     TString list_badruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/badruns";
-    if( sim==0 ){
+    if( key==0 ){
 	deCut1=-100; deCut2=100;
-	//deCut1=-140; deCut2=60;
 	mbcCut1=1855, mbcCut2=1875;
-	fnameout=TString::Format("res_exp_Dmeson_data_%d.root",sim).Data();
-        //KEDR = "/home/ovtin/public_html/outDmeson/D0/data/";
-        //KEDR = "/home/ovtin/public_html/outDmeson/D0/data_ntrack2/";
-        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_v9/";
-        KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_v9_ntrack2/";
+	fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data_%d.root",key).Data();
+        KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_v9/";
 	list_badruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/badruns";
+	fout_result=dir_out + "/" + "kp_2016-17_pcor.dat";
     }
-    else if (sim==4)
+    else if (key==4)
     {
 	deCut1=-100; deCut2=100;
-	//deCut1=-140; deCut2=60;
 	mbcCut1=1855, mbcCut2=1875;
-	fnameout=TString::Format("res_exp_Dmeson_data2004_%d.root",sim).Data();
-        //KEDR = "/home/ovtin/public_html/outDmeson/D0/data2004/";
+	fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data2004_%d.root",key).Data();
 	KEDR = "/home/ovtin/public_html/outDmeson/D0/data2004Pcorr/";
         list_badruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/badruns";
+	fout_result=dir_out + "/" + "kpp_2004_pcor.dat";
     }
-    else if (sim==1)
+    else if (key==1)
     {
 	deCut1=-300; deCut2=300;
 	mbcCut1=1800, mbcCut2=1900;
-	fnameout=TString::Format("res_sim_Dmeson_sig_%d.root",sim).Data();
+	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_sig_%d.root",key).Data();
         KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Sig/";
     }
-    else if (sim==2)
+    else if (key==2)
     {
 	deCut1=-300; deCut2=300;
 	mbcCut1=1700, mbcCut2=1900;
-	fnameout=TString::Format("res_sim_Dmeson_BG_continium_%d.root",sim).Data();
+	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_BG_continium_%d.root",key).Data();
         KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_continium/";
     }
-    else if (sim==3)
+    else if (key==3)
     {
 	deCut1=-300; deCut2=300;
 	mbcCut1=1700, mbcCut2=1900;
-	fnameout=TString::Format("res_sim_Dmeson_BG_eetoDD_%d.root",sim).Data();
+	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_BG_eetoDD_%d.root",key).Data();
         KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_eetodd/";
     }
     cout<<fnameout<<endl;
@@ -99,7 +135,7 @@ int main(int argc, char* argv[])
     TH1F* hmbc=new TH1F("Mbc","Mbc",100,0.,2000.);
     TH1F* hmbc_zoom;
     TH1F* hmbckin_zoom;
-    if( sim==0 || sim==4 || sim==1){
+    if( key==0 || key==4 || key==1){
 	hmbc_zoom=new TH1F("M_{bc}","M_{bc}",50,1800.,1900.);
 	hmbckin_zoom=new TH1F("M_{bc}","M_{bc}",50,1800.,1900.);
     }
@@ -122,7 +158,7 @@ int main(int argc, char* argv[])
     TH2D *h2PpiktodEkpi=new TH2D("Ppik:dekmpip", "Ppik:dekmpip", 200,600,1100,200,-250,250);
     TH2D *h2MbcdE;
     TH2D *h2MbcdEkin;
-    if( sim==4 || sim==1){
+    if( key==4 || key==1){
         h2MbcdE=new TH2D("M_{bc}:#Delta E", "M_{bc}:#Delta E", 100,1800,1900,100,-300,300);
         h2MbcdEkin=new TH2D("M_{bc}:#Delta E", "M_{bc}:#Delta E", 100,1800,1900,100,-300,300);
     }
@@ -134,7 +170,7 @@ int main(int argc, char* argv[])
     TH2D *h2MbckindP=new TH2D("M_{bc}:#Delta P", "M_{bc}:#Delta P", 200,-500,500,200,1825,1890);
 
     TH1F *hRun;
-    if( sim==0 )
+    if( key==0 )
     {
 	hRun = new TH1F("Run","Run", 100, 23206., 26248.);
     }
@@ -174,16 +210,13 @@ int main(int argc, char* argv[])
 
     TH1F* hMUnhits=new TH1F("munhits","mu.nhits",30,-0.5,29.5);
 
-    hInvM=new TH1F("InvMass","InvMass",1000,0.,4000.);
-
     TTree *forFit = new TTree("forFit","forFit");
     Float_t forFitMbc, forFitdE, forFitdP;
     forFit->Branch("Mbc",&forFitMbc,"Mbc/F");
     forFit->Branch("dE",&forFitdE,"dE/F");
     forFit->Branch("dP",&forFitdP,"dP/F");
 
-
-    ofstream Result(TString::Format("run_event.dat"),ios_base::out);
+    ofstream Result(TString::Format(fout_result),ios_base::out);
 
     std::vector<int> badruns;
     string line;
@@ -210,7 +243,7 @@ int main(int argc, char* argv[])
 
 	if( (k %100000)==0 )cout<<k<<endl;
 
-	if( (sim==0 || sim==4) && Dmeson.vrtntrk==2 &&  Dmeson.theta2t>172 && Dmeson.phi2t>172 ) continue;
+	//if( (key==0 || key==4) && Dmeson.vrtntrk==2 &&  Dmeson.theta2t>172 && Dmeson.phi2t>172 ) continue;
 
 	if(
 	   Dmeson.dE>=min_dE && Dmeson.dE<=max_dE
@@ -235,8 +268,6 @@ int main(int argc, char* argv[])
 		cout<<"Zip1="<<Dmeson.Zip1<<"\t"<<"Zip2="<<Dmeson.Zip2<<"\t"<<endl;
 		cout<<"fabs(fabs(Dmeson.Zip1)-fabs(Dmeson.Zip2))="<<fabs(fabs(Dmeson.Zip1)-fabs(Dmeson.Zip2))<<endl;
 	    }
-
-	    Result<< Dmeson.Run <<"\t"<< Dmeson.rEv << endl;
 
 	    hDncomb->Fill(Dmeson.ncomb);
 
@@ -315,7 +346,16 @@ int main(int argc, char* argv[])
 	    hmbc->Fill(Dmeson.Mbc);
 	    hdE->Fill(Dmeson.dE);
 
-            //fill dE
+	    if( Dmeson.dE>=min_dE && Dmeson.dE<=max_dE  &&  Dmeson.Mbckin>=min_Mbc && Dmeson.Mbckin<=max_Mbc )
+	    {
+		if ( verbose )
+		{
+		    cout<<Dmeson.Mbckin<<"\t"<<Dmeson.dE<<"\t"<<Dmeson.dP<<endl;
+		}
+		Result<< Dmeson.Mbckin <<"\t"<< Dmeson.dE <<"\t"<< Dmeson.dP <<endl;
+	    }
+
+	    //fill dE
 	    if( Dmeson.Mbc>=mbcCut1 && Dmeson.Mbc<=mbcCut2 )
 	    {
 		hdE_zoom->Fill(Dmeson.dE);
@@ -327,14 +367,14 @@ int main(int argc, char* argv[])
 	    }
 
             //fill Mbc
-	    //if( Dmeson.dE>=deCut1 && Dmeson.dE<=deCut2 &&  Dmeson.Mbc>=1800 && Dmeson.Mbc<=max_Mbc )
-	    if( Dmeson.dE>=deCut1 && Dmeson.dE<=deCut2 &&  Dmeson.Mbc>=1700 && Dmeson.Mbc<=max_Mbc )
+	    if( Dmeson.dE>=deCut1 && Dmeson.dE<=deCut2 &&  Dmeson.Mbc>=1800 && Dmeson.Mbc<=max_Mbc )
+	    //if( Dmeson.dE>=deCut1 && Dmeson.dE<=deCut2 &&  Dmeson.Mbc>=1700 && Dmeson.Mbc<=max_Mbc )
 	    {
 		hmbc_zoom->Fill(Dmeson.Mbc);
 	    }
 
-	    //if( Dmeson.dE>=deCut1 && Dmeson.dE<=deCut2  &&  Dmeson.Mbckin>=1800 && Dmeson.Mbckin<=max_Mbc )
-	    if( Dmeson.dE>=deCut1 && Dmeson.dE<=deCut2  &&  Dmeson.Mbckin>=1700 && Dmeson.Mbckin<=max_Mbc )
+	    if( Dmeson.dE>=deCut1 && Dmeson.dE<=deCut2  &&  Dmeson.Mbckin>=1800 && Dmeson.Mbckin<=max_Mbc )
+	    //if( Dmeson.dE>=deCut1 && Dmeson.dE<=deCut2  &&  Dmeson.Mbckin>=1700 && Dmeson.Mbckin<=max_Mbc )
 	    {
 		hmbckin_zoom->Fill(Dmeson.Mbckin);
 	    }
@@ -415,7 +455,7 @@ int main(int argc, char* argv[])
     TLine line4(1700,deCut2,1900,deCut2);
     line4.SetLineColor(kGreen);
     line4.SetLineWidth(3);
-    if( sim==0 || sim==4 ){
+    if( key==0 || key==4 ){
 	line1.Draw("same");
 	line2.Draw("same");
 	line3.Draw("same");
