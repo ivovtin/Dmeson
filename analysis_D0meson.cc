@@ -747,7 +747,6 @@ int analyse_event()
 }
 
 static const char* optstring="ra:d:b:p:h:s:j:t:e:c:l:k:i:u:q:o:v:m:M:S:A:Z:n:w:g:y:f:z:x";
-//static const char* optstring="ra:d:b:p:h:s:j:t:e:c:l:k:i:u:q:o:v:n:w:g:y:f:z:x";
 
 void Usage(int status)
 {
