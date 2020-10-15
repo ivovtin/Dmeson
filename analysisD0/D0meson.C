@@ -90,7 +90,7 @@ int main(int argc, char* argv[])
 	fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data2004_%d.root",key).Data();
 	KEDR = "/home/ovtin/public_html/outDmeson/D0/data2004Pcorr/";
         list_badruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/badruns";
-	fout_result=dir_out + "/" + "kpp_2004_pcor.dat";
+	fout_result=dir_out + "/" + "kp_2004_pcor.dat";
     }
     else if (key==1)
     {
