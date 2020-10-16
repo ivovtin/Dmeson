@@ -339,9 +339,9 @@ void kine_fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *parval, Int_t i
     else
 	pk = sqrt(ek*ek-mk*mk);       //from condition dE=0
 
+    double pki = pcorr(tP(dcand_t1));
     double p1i = pcorr(tP(dcand_t2));
     double p2i = pcorr(tP(dcand_t3));
-    double pki = pcorr(tP(dcand_t1));
 
     double sp1 = sqrt(ktrrec_h_.FitTrack[dcand_t2][fitSigCC]/
 		      pow(ktrrec_h_.FitTrack[dcand_t2][fitC],2)+
@@ -383,10 +383,9 @@ void refit(int t, double p, double* phi, double* theta) {
     ktrk_hits_.RcFixR = r;
     PhiFixR = phi0;
     ThetaFixR = theta0;
-    //ktrk_hits_.FixUserR = 1;  //default is 0
 
     int track = t+1;
-    ktrkhits_(&track);
+    //ktrkhits_(&track);
 
     double phi1 = PhiFixR;
     double theta1 = ThetaFixR;
@@ -409,9 +408,9 @@ void kine_fit(int ip1, int ip2, int ip3, double* mbc, double* de) {
     dcand_t2 = ip2;   //pion
     dcand_t3 = ip3;   //pion
 
-    double p1i = pcorr(tP(dcand_t2));   //pion
-    double p2i = pcorr(tP(dcand_t3));   //pion
-    double p3i = pcorr(tP(dcand_t1));   //kaon
+    double p1i = pcorr(tP(dcand_t1));   //kaon
+    double p2i = pcorr(tP(dcand_t2));   //pion
+    double p3i = pcorr(tP(dcand_t3));   //pion
 
     TMinuit *dMinuit = new TMinuit(2); //initialise Minuit with a maximum of 2 parameters to minimise
     dMinuit->SetFCN(kine_fcn);         //set the function to minimise
@@ -424,8 +423,8 @@ void kine_fit(int ip1, int ip2, int ip3, double* mbc, double* de) {
     //gMinuit->mninit(1,1,1);
     double lowerLimit = 0.0;
     double upperLimit = 0.0;
-    dMinuit->mnparm(0,"p1", p1i, 1., lowerLimit, upperLimit, iflag);    //set the parameters used in the fit
-    dMinuit->mnparm(1,"p2", p2i, 1., lowerLimit, upperLimit, iflag);
+    dMinuit->mnparm(0,"p1", p2i, 1., lowerLimit, upperLimit, iflag);    //set the parameters used in the fit
+    dMinuit->mnparm(1,"p2", p3i, 1., lowerLimit, upperLimit, iflag);
     dMinuit->mnexcm("CALL FCN",arglist,1,iflag);                        //call the user defined function, to calculate the value FCN, and print the result out to the screen.
     dMinuit->mnexcm("MIGRAD",arglist,2,iflag);                          //run the minimisation Using MIGRAD
 
@@ -451,18 +450,22 @@ void kine_fit(int ip1, int ip2, int ip3, double* mbc, double* de) {
 	printf("  Out:   p1=%lf, p2=%lf, pk=%lf\n", pp1, pp2, pk);
     }
 
+    double thetak = ktrrec_.TETRAK[dcand_t1]/180.*PI;
+    double phik = ktrrec_.FITRAK[dcand_t1]/180.*PI;
+
     double theta1 = ktrrec_.TETRAK[dcand_t2]/180.*PI;
     double phi1 = ktrrec_.FITRAK[dcand_t2]/180.*PI;
 
     double theta2 = ktrrec_.TETRAK[dcand_t3]/180.*PI;
     double phi2 = ktrrec_.FITRAK[dcand_t3]/180.*PI;
 
-    double thetak = ktrrec_.TETRAK[dcand_t1]/180.*PI;
-    double phik = ktrrec_.FITRAK[dcand_t1]/180.*PI;
-
+    refit(dcand_t1, pk, &phik, &thetak);
     refit(dcand_t2, pp1, &phi1, &theta1);
     refit(dcand_t3, pp2, &phi2, &theta2);
-    refit(dcand_t1, pk, &phik, &thetak);
+
+    double pxk = pk*sin(thetak)*cos(phik);
+    double pyk = pk*sin(thetak)*sin(phik);
+    double pzk = pk*cos(thetak);
 
     double px1 = pp1*sin(theta1)*cos(phi1);
     double py1 = pp1*sin(theta1)*sin(phi1);
@@ -472,16 +475,12 @@ void kine_fit(int ip1, int ip2, int ip3, double* mbc, double* de) {
     double py2 = pp2*sin(theta2)*sin(phi2);
     double pz2 = pp2*cos(theta2);
 
-    double pxk = pk*sin(thetak)*cos(phik);
-    double pyk = pk*sin(thetak)*sin(phik);
-    double pzk = pk*cos(thetak);
-
     *mbc = ebeam*ebeam - pow(px1+px2+pxk,2) - pow(py1+py2+pyk,2) - pow(pz1+pz2+pzk,2);
     if (*mbc>0) *mbc = sqrt(*mbc); else *mbc = 0;
 
     if (progpar.verbose) printf("pk=%lf, pp1=%lf, pp2=%lf\n", pk, pp1, pp2);
 
-    *de = -ebeam + sqrt(mk*mk+p3i*p3i) + sqrt(mpi*mpi+p1i*p1i) + sqrt(mpi*mpi+p2i*p2i);
+    *de = -ebeam + sqrt(mk*mk+p1i*p1i) + sqrt(mpi*mpi+p2i*p2i) + sqrt(mpi*mpi+p3i*p3i);
 
     if (progpar.verbose) printf("mbc=%lf, de=%lf\n", *mbc, *de);
 }
@@ -554,15 +553,15 @@ int analyse_event()
 			if ( rr2>8. ) continue;
 			if ( rr3>8. ) continue;
 
-			if( pcorr(tPt(t1))<=progpar.min_momentum || pcorr(tPt(t1))>=progpar.max_momentum )  continue;
+			if( tPt(t1)<=progpar.min_momentum || tPt(t1)>=progpar.max_momentum )  continue;
 			if( tCh2(t1)>progpar.max_tchi2 )  continue;
 			if( tHits(t1)<progpar.min_Nhits )  continue;
 
-			if( pcorr(tPt(t2))<=progpar.min_momentum || pcorr(tPt(t2))>=progpar.max_momentum )  continue;
+			if( tPt(t2)<=progpar.min_momentum || tPt(t2)>=progpar.max_momentum )  continue;
 			if( tCh2(t2)>progpar.max_tchi2 )  continue;
 			if( tHits(t2)<progpar.min_Nhits )  continue;
 
-			if( pcorr(tPt(t3))<=progpar.min_momentum || pcorr(tPt(t3))>=progpar.max_momentum )  continue;
+			if( tPt(t3)<=progpar.min_momentum || tPt(t3)>=progpar.max_momentum )  continue;
 			if( tCh2(t3)>progpar.max_tchi2 )  continue;
 			if( tHits(t3)<progpar.min_Nhits )  continue;
 
@@ -594,17 +593,16 @@ int analyse_event()
 
 			if (progpar.verbose) cout<<"mbc="<<Dmeson.Mbc<<endl;
 
-			Dmeson.dE = sqrt(mk*mk + pcorr(tP(t1))*pcorr(tP(t1))) +
-			    sqrt(mpi*mpi + pcorr(tP(t2))*pcorr(tP(t2))) + sqrt(mpi*mpi + pcorr(tP(t3))*pcorr(tP(t3))) - WTotal/2.;
+			Dmeson.dE = sqrt(mk*mk + pcorr(tP(t1))*pcorr(tP(t1))) + sqrt(mpi*mpi + pcorr(tP(t2))*pcorr(tP(t2))) + sqrt(mpi*mpi + pcorr(tP(t3))*pcorr(tP(t3))) - WTotal/2.;
 			if (progpar.verbose) cout<<"de="<<Dmeson.dE<<endl;
 
-			Dmeson.P1 = pcorr(tP(t1));      //kaon
-			Dmeson.P2 = pcorr(tP(t2));      //pion
-			Dmeson.P3 = pcorr(tP(t3));      //pion
+			Dmeson.P1 = tP(t1);      //kaon
+			Dmeson.P2 = tP(t2);      //pion
+			Dmeson.P3 = tP(t3);      //pion
 
-			Dmeson.Pt1 = pcorr(tPt(t1));
-			Dmeson.Pt2 = pcorr(tPt(t2));
-			Dmeson.Pt3 = pcorr(tPt(t3));
+			Dmeson.Pt1 = tPt(t1);
+			Dmeson.Pt2 = tPt(t2);
+			Dmeson.Pt3 = tPt(t3);
 
 			Dmeson.vrtntrk = eTracksAll;
 			Dmeson.vrtnip = eTracksIP;
