@@ -1,0 +1,5 @@
+vec/rea n0,m0,e0 toymc3.dat
+vec/rea n1,m1,e1 toymc3_dpp.dat
+vec/rea n2,m2,e2 toymc3_dpm.dat
+
+sigma dm=m0-(m1/e1**2+m2/e2**2)/(1./e1**2+1./e2**2)
