@@ -8,6 +8,8 @@
   gStyle->SetHistLineWidth(2);
   gStyle->SetHistLineColor(4);
 
+  TString KEDR="/spool/users/ovtin/outDmeson/D0/results/fitsD0/";
+
   TNtuple nt("nt","NTuple","mbc:de:dp");
 
   FILE* file = fopen("dat/kp_dbck.dat","r");
@@ -17,7 +19,7 @@
       nt.Fill(mbc,de,dp);
     }
   }
-  
+
   fclose(file);
 
   TNtuple nt2("nt2","NTuple","mbc:de:dp");
@@ -29,7 +31,7 @@
       nt2.Fill(mbc,de,dp);
     }
   }
-  
+
   fclose(file);
 
   TH1F mbc1("mbc1","",80,1700.,1900.);
@@ -152,5 +154,6 @@
 //  c.cd(9);
 //  nt2->Draw("mbc:de");
 
-  c.Print("dbck.eps");
+  c.Print(KEDR+"dbck.eps");
+  c.Print(KEDR+"dbck.png");
 }

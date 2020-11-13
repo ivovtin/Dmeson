@@ -48,30 +48,30 @@ double dbck_par[DBCK_PARS];
 double dbck_epar[DBCK_PARS];
 
 double sig_par_corr[SIG_PARS] = {
-//  1864.572136, -0.413509, -0.030059, 0.803902, 1.717566, 47.629182, 
-  1864.572136, -0.413509, -0.030059, 1.023902, 2.317566, 47.629182, 
-  1888.750000, 10.217552, 21.278622, 20.641600, 0.199009, 
-  16.911367, 123.621517, -0.162603, 3.978513, 17.952010, 13.816511, 4.875620, 
-  1888.750000, -1.345018, -138.970831, 57.627908, 22.354517, 
-  1881.809090, 20.123182, 3.190639, -26.957989, 51.593411, 
+//  1864.572136, -0.413509, -0.030059, 0.803902, 1.717566, 47.629182,
+  1864.572136, -0.413509, -0.030059, 1.023902, 2.317566, 47.629182,
+  1888.750000, 10.217552, 21.278622, 20.641600, 0.199009,
+  16.911367, 123.621517, -0.162603, 3.978513, 17.952010, 13.816511, 4.875620,
+  1888.750000, -1.345018, -138.970831, 57.627908, 22.354517,
+  1881.809090, 20.123182, 3.190639, -26.957989, 51.593411,
   144.109, 1872.757467
 };
 
 double sig_par_xs[SIG_PARS] = {
-  1864.358135, 3.128730, -0.035154, 0.952214, 2.318660, 47.434301, 
-  1888.750000, 9.351257, 22.389010, 9.368806, 0.190371, 
-  17.228983, 135.805031, -0.088875, 4.704761, 9.017986, 10.148626, 4.582520, 
-  1888.750000, -1.363022, -158.882916, 63.682994, 21.442926, 
-  1906.083059, 34.452337, 5.435646, -15.180071, 53.906745, 
+  1864.358135, 3.128730, -0.035154, 0.952214, 2.318660, 47.434301,
+  1888.750000, 9.351257, 22.389010, 9.368806, 0.190371,
+  17.228983, 135.805031, -0.088875, 4.704761, 9.017986, 10.148626, 4.582520,
+  1888.750000, -1.363022, -158.882916, 63.682994, 21.442926,
+  1906.083059, 34.452337, 5.435646, -15.180071, 53.906745,
   276.070560, 1868.574895
 };
 
 double sig_par_xsgm[SIG_PARS] = {
-  1864.556452, 1.646712, -0.034027, 1.125386, 2.486065, 49.477989, 
-  1888.750000, 6.110003, 21.472286, 3.712464, 0.145991, 
-  18.049578, 172.622018, -0.084118, 1.336431, 38.999130, 4.969049, 4.180077, 
-  1888.750000, -1.690715, -182.401724, 69.533828, 12.471282, 
-  1879.784836, 29.781964, 6.865934, -16.421617, 73.733742, 
+  1864.556452, 1.646712, -0.034027, 1.125386, 2.486065, 49.477989,
+  1888.750000, 6.110003, 21.472286, 3.712464, 0.145991,
+  18.049578, 172.622018, -0.084118, 1.336431, 38.999130, 4.969049, 4.180077,
+  1888.750000, -1.690715, -182.401724, 69.533828, 12.471282,
+  1879.784836, 29.781964, 6.865934, -16.421617, 73.733742,
   187.836093, 1869.914083
 };
 
@@ -125,10 +125,10 @@ double pdf_dbck(double mbc, double de, double dp, double *par) {
   if (fabs(dp)<dp_max) {
     double p_mbc = exp(alpha_mbc*(mbc*mbc-ebeam*ebeam)/ebeam/ebeam);
     double p_de = exp(-alpha_de*de/1000.);
-    
+
 //    double mbc_sigma = mbc_sigma0*exp(-de*mbc_sigma1);
 //    double mbc_sigma = mbc_sigma0-de*mbc_sigma1;
-    
+
     double p_mbc2 = exp(-pow(mbc-mbc_mean,2)/2./mbc_sigma0/mbc_sigma0);
 //    double p_mbc2 = exp((mbc-ebeam)/ebeam*mbc_sigma0);
     double p_mbc3 = exp(-pow(mbc-mbc_mean1-mbc_shift,2)/2./mbc_sigma1/mbc_sigma1);
@@ -144,7 +144,7 @@ double pdf_dbck(double mbc, double de, double dp, double *par) {
 
 double pdf_sig(double mbc, double de, double dp, double *par) {
 //  printf("%f %f\n", par[0], par[1]);
- 
+
   double mbc_mean = par[0];
   double de_mean = par[1];
   double mbcde_corr = par[2];
@@ -163,7 +163,7 @@ double pdf_sig(double mbc, double de, double dp, double *par) {
   double mbc_sigma4 = par[15];
 
   double dbck_par[16];
-  
+
   for (int i=0; i<14; i++) {
     dbck_par[i] = par[i+16];
   }
@@ -171,7 +171,7 @@ double pdf_sig(double mbc, double de, double dp, double *par) {
   dbck_par[15] = dbck_par[9];
 
 //  printf("%f %f\n", mbc, ebeam);
-  
+
   if (mbc > ebeam) return 0;
   if (mbc < min_mbc) return 0;
   if (fabs(de)>max_de) return 0;
@@ -179,7 +179,7 @@ double pdf_sig(double mbc, double de, double dp, double *par) {
   double dp_max = sqrt(ebeam*ebeam - mbc*mbc);
 
 //  printf("%f %f\n", dp, dp_max);
-  
+
   if (fabs(dp)<dp_max) {
 
     double dde = de - de_mean;
@@ -188,18 +188,18 @@ double pdf_sig(double mbc, double de, double dp, double *par) {
 
     double dpsig = fabs(1.+dp*dp*dpcurv/1000./1000.);
 
-    double mbc_sigma_l = sqrt(pow(mbc_sigma0_l,2) + 
-                         pow(fr*mbc_sigma2,2.) + 
+    double mbc_sigma_l = sqrt(pow(mbc_sigma0_l,2) +
+                         pow(fr*mbc_sigma2,2.) +
                          pow(fr*fr*mbc_sigma4,2.));
-    double mbc_sigma_r = sqrt(pow(mbc_sigma0_r,2) + 
-                         pow(fr*mbc_sigma2,2.) + 
+    double mbc_sigma_r = sqrt(pow(mbc_sigma0_r,2) +
+                         pow(fr*mbc_sigma2,2.) +
                          pow(fr*fr*mbc_sigma4,2.));
 
     double desig = exp(-dde*dde/2./de_sigma/de_sigma);
     double mbcsig;
     if (dmbc<0)
       mbcsig = exp(-dmbc*dmbc/2./mbc_sigma_l/mbc_sigma_l)/(mbc_sigma_l+mbc_sigma_r);
-    else 
+    else
       mbcsig = exp(-dmbc*dmbc/2./mbc_sigma_r/mbc_sigma_r)/(mbc_sigma_l+mbc_sigma_r);
 
     dmbc = mbc - mbc_mean - mbcdew_corr*dde - mbcw_shift;
@@ -216,7 +216,7 @@ double pdf_sig(double mbc, double de, double dp, double *par) {
 
 double pdf_sig2(double mbc, double de, double dp, double *par) {
 //  printf("%f %f\n", par[0], par[1]);
- 
+
   double mbc_mean = par[0];
   double de_mean = par[1];
   double mbcde_corr = par[2];
@@ -240,7 +240,7 @@ double pdf_sig2(double mbc, double de, double dp, double *par) {
   double mbcdew2_corr = par[20];
 
   double dbck_par[16];
-  
+
   for (int i=0; i<14; i++) {
     dbck_par[i] = par[i+21];
   }
@@ -248,7 +248,7 @@ double pdf_sig2(double mbc, double de, double dp, double *par) {
   dbck_par[15] = dbck_par[9];
 
 //  printf("%f %f\n", mbc, ebeam);
-  
+
   if (mbc > ebeam) return 0;
   if (mbc < min_mbc) return 0;
   if (fabs(de)>max_de) return 0;
@@ -256,7 +256,7 @@ double pdf_sig2(double mbc, double de, double dp, double *par) {
   double dp_max = sqrt(ebeam*ebeam - mbc*mbc);
 
 //  printf("%f %f\n", dp, dp_max);
-  
+
   if (fabs(dp)<dp_max) {
 
     double dde = de - de_mean;
@@ -265,18 +265,18 @@ double pdf_sig2(double mbc, double de, double dp, double *par) {
 
     double dpsig = fabs(1.+dp*dp*dpcurv/1000./1000.);
 
-    double mbc_sigma_l = sqrt(pow(mbc_sigma0_l,2) + 
-                         pow(fr*mbc_sigma2,2.) + 
+    double mbc_sigma_l = sqrt(pow(mbc_sigma0_l,2) +
+                         pow(fr*mbc_sigma2,2.) +
                          pow(fr*fr*mbc_sigma4,2.));
-    double mbc_sigma_r = sqrt(pow(mbc_sigma0_r,2) + 
-                         pow(fr*mbc_sigma2,2.) + 
+    double mbc_sigma_r = sqrt(pow(mbc_sigma0_r,2) +
+                         pow(fr*mbc_sigma2,2.) +
                          pow(fr*fr*mbc_sigma4,2.));
 
     double desig = exp(-dde*dde/2./de_sigma/de_sigma);
     double mbcsig;
     if (dmbc<0)
       mbcsig = exp(-dmbc*dmbc/2./mbc_sigma_l/mbc_sigma_l)/(mbc_sigma_l+mbc_sigma_r);
-    else 
+    else
       mbcsig = exp(-dmbc*dmbc/2./mbc_sigma_r/mbc_sigma_r)/(mbc_sigma_l+mbc_sigma_r);
 
     dmbc = mbc - mbc_mean - mbcdew_corr*dde - mbcw_shift;
@@ -289,7 +289,7 @@ double pdf_sig2(double mbc, double de, double dp, double *par) {
 
 //    printf("%f %f\n", desig, mbcsig);
 
-    return dpsig*(desig*mbcsig + fabs(mbcw_frac)*desig2*mbcsig2 + 
+    return dpsig*(desig*mbcsig + fabs(mbcw_frac)*desig2*mbcsig2 +
            fabs(mbcw2_frac)*desig3*mbcsig3)
            + fabs(bck)/1e5*pdf_dbck(mbc, de, dp, dbck_par);
   }
@@ -306,13 +306,13 @@ double pdf_exp(double mbc, double de, double dp, double *par) {
 
   sig_par[0] = mbc_mean;
   sig_par[1] = de_mean;
-  
+
   if (dpcut==1 && (fabs(dp)>50)) return 0;
   if (dpcut==2 && (fabs(dp)<50 || fabs(dp)>100)) return 0;
   if (dpcut==3 && (fabs(dp)<100)) return 0;
   if (dpcut==4 && (fabs(dp)<50)) return 0;
 
-  return fabs(sig)*pdf_sig(mbc, de, dp, sig_par) + 
+  return fabs(sig)*pdf_sig(mbc, de, dp, sig_par) +
          fabs(bck)/1e5*pdf_bck(mbc, de, dp, bck_par) +
          fabs(dbck)/1e5*pdf_dbck(mbc, de, dp, dbck_par);
 }
@@ -385,9 +385,9 @@ void init() {
   max_de = 300.;
   num_norm = 4000000;
   no_dp = 0;
-  
+
   dpcut = 0;
-  
+
   gen_seed = 12345;
   norm_seed = 1;
 
@@ -407,28 +407,28 @@ void make_norm() {
     norm[i].de = (2.*rnd.Rndm()-1.)*mid_de;
     norm[i].dp = (2.*rnd.Rndm()-1.)*max_dp;
   }
-  
+
 }
 
-double gen(char* filename, int num, double* par, double maj, 
+double gen(char* filename, int num, double* par, double maj,
      double (*pdf)(double, double, double, double*)) {
   TRandom3 rnd(gen_seed);
-  
+
   double maj1 = maj;
-  
+
   FILE* file = fopen(filename,"w");
-  
+
   for (int i=-1000; i<num; i++) {
     if ((i) % 1000 == 0) printf("Generating event %d\n", i);
-  
+
     for (int j=0; j<100000; j++) {
       double mbc = min_mbc + (max_mbc-min_mbc)*rnd.Rndm();
       double de = (2.*rnd.Rndm()-1.)*max_de;
       double dp = (2.*rnd.Rndm()-1.)*max_dp;
       double f = maj1*rnd.Rndm();
-      
+
       double fp = (*pdf)(mbc, de, no_dp ? 0 : dp, par);
-    
+
       if (fp > maj1) {
         maj1 = 1.5*fp;
         printf("Updated majorant: %f\n", maj1);
@@ -438,16 +438,16 @@ double gen(char* filename, int num, double* par, double maj,
         if (i>=0) fprintf(file,"%f %f %f\n", mbc, de, dp);
         break;
       }
-      
+
       if (j==100000-1) printf("Failed. F=%f, maj=%f\n", fp, maj1);
     }
-    
+
   }
-  
+
   fclose(file);
-  
+
   return maj1;
-  
+
 }
 
 double gen_bck(char* filename, int num, double* par, double maj) {
@@ -468,21 +468,21 @@ double gen_exp(char* filename, int num, double* par, double maj) {
 
 double gen_maj(char* filename, int num, double* par, double maj) {
   TRandom3 rnd(gen_seed);
-  
+
   FILE* file = fopen(filename,"w");
-  
+
   double maj1 = maj;
-  
+
   for (int i=-1000; i<num; i++) {
     if ((i) % 10000 == 0) printf("Generating event %d\n", i);
-  
+
     double mbc = min_mbc + (max_mbc-min_mbc)*rnd.Rndm();
     double de = (2.*rnd.Rndm()-1.)*max_de;
     double dp = (2.*rnd.Rndm()-1.)*max_dp;
     double f = maj*rnd.Rndm();
-      
+
     double fp = pdf_exp(mbc, de, no_dp ? 0 : dp, par);
-    
+
     if (fp > maj1) {
       maj1 = 1.5*fp;
       printf("Updated majorant: %f\n", maj1);
@@ -490,9 +490,9 @@ double gen_maj(char* filename, int num, double* par, double maj) {
 
     if (f < fp && i>0) fprintf(file,"%f %f %f\n", mbc, de, dp);
   }
-  
+
   fclose(file);
-  
+
   return maj1;
 }
 
@@ -500,7 +500,7 @@ void load_sig(char* filename, int skip=0, int max=1000000) {
   FILE* file = fopen(filename,"r");
 
   num_sig = 0;
-  
+
   int i=0;
 
   while (!feof(file)) {
@@ -516,7 +516,7 @@ void load_sig(char* filename, int skip=0, int max=1000000) {
       i++;
     }
   }
-  
+
   fclose(file);
 }
 
@@ -527,7 +527,7 @@ void read_par(char* filename, int npar, double* par, double* epar) {
     return;
   }
   printf("Reading file %s\n", filename);
-  
+
   for (int i=0; i<npar; i++) {
     int dummy;
     fscanf(file, "%d %lf %lf", &dummy, &par[i], &epar[i]);

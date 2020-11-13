@@ -22,9 +22,12 @@
   int dbck_style = 3544;
   int sig_style = 3595;
 
+  TString KEDR="/spool/users/ovtin/outDmeson/D0/results/fitsD0/";
+
   TNtuple exp_nt("exp_nt","NTuple","mbc:de:dp");
-//  FILE* file = fopen("dat/kp_exp_1.030.dat","r");
-  FILE* file = fopen("/home/ovtin/development/Dmeson/analysisD0/kp_2004_pcor.dat","r");
+  //FILE* file = fopen("dat/kp_exp_1.030.dat","r");
+  FILE* file = fopen("dat/kp_exp_1.035_2004.dat","r");
+  //FILE* file = fopen("dat/kp_exp_1.0185_2016-17.dat","r");
   while (!feof(file)) {
     double mbc,de,dp;
     if (fscanf(file,"%lf %lf %lf", &mbc,&de,&dp) == 3) {
@@ -34,7 +37,10 @@
   fclose(file);
 
   TNtuple sig_nt("sig_nt","NTuple","mbc:de:dp");
+  //file = fopen("gen/genold/exp_sig.gen","r");
+  //file = fopen("gen/genold/sig_def.gen","r");
   file = fopen("gen/exp_sig.gen","r");
+  //file = fopen("gen/sig_def.gen","r");
   while (!feof(file)) {
     double mbc,de,dp;
     if (fscanf(file,"%lf %lf %lf", &mbc,&de,&dp) == 3) {
@@ -44,7 +50,10 @@
   fclose(file);
 
   TNtuple bck_nt("bck_nt","NTuple","mbc:de:dp");
+  //file = fopen("gen/genold/exp_bck.gen","r");
+  //file = fopen("gen/genold/bck_uds.gen","r");
   file = fopen("gen/exp_bck.gen","r");
+  //file = fopen("gen/bck_uds.gen","r");
   while (!feof(file)) {
     double mbc,de,dp;
     if (fscanf(file,"%lf %lf %lf", &mbc,&de,&dp) == 3) {
@@ -54,7 +63,10 @@
   fclose(file);
 
   TNtuple dbck_nt("dbck_nt","NTuple","mbc:de:dp");
+  //file = fopen("gen/genold/exp_dbck.gen","r");
+  //file = fopen("gen/genold/dbck_sim.gen","r");
   file = fopen("gen/exp_dbck.gen","r");
+  //file = fopen("gen/dbck_sim.gen","r");
   while (!feof(file)) {
     double mbc,de,dp;
     if (fscanf(file,"%lf %lf %lf", &mbc,&de,&dp) == 3) {
@@ -163,6 +175,8 @@
   sig_mbc->SetFillColor(sig_color);
   sig_mbc->SetFillStyle(sig_style);
 
+  exp_mbc->GetYaxis()->SetRangeUser(0, 40);
+  //exp_mbc->GetYaxis()->SetRangeUser(0, 72);
   exp_mbc.GetXaxis()->SetTitle("M_{bc} (MeV)");
   exp_mbc.GetYaxis()->SetTitle("Events/2 MeV");
   exp_mbc.Draw("elp");
@@ -173,6 +187,7 @@
   TBox b;
   TLatex t;
   double rmax = 40.;
+  //double rmax = 60.;
   b.SetFillColor(sig_color);
   b.SetFillStyle(sig_style);
   b.SetLineColor(1);
@@ -197,8 +212,6 @@
 
   c.Update();
 
-
-
   c.cd(2);
   THStack de_hs("de_hs","");
   de_hs->Add(&bck_de);
@@ -211,6 +224,8 @@
   sig_de->SetFillColor(sig_color);
   sig_de->SetFillStyle(sig_style);
 
+  exp_de->GetYaxis()->SetRangeUser(0, 32);
+  //exp_de->GetYaxis()->SetRangeUser(0, 75);
   exp_de.GetXaxis()->SetTitle("#DeltaE (MeV)");
   exp_de.GetYaxis()->SetTitle("Events/20 MeV");
   exp_de.Draw("elp");
@@ -233,7 +248,8 @@
   sig_dp->SetFillStyle(sig_style);
 //  dp_hs->Draw();
 
-
+  exp_dp->GetYaxis()->SetRangeUser(0, 100);
+  //exp_dp->GetYaxis()->SetRangeUser(0, 300);
   exp_dp.GetXaxis()->SetTitle("#Delta|p| (MeV)");
   exp_dp.GetYaxis()->SetTitle("Events/40 MeV");
   exp_dp.Draw("elp");
@@ -255,6 +271,8 @@
   sig_mbcs1->SetFillColor(sig_color);
   sig_mbcs1->SetFillStyle(sig_style);
 
+  exp_mbcs1->GetYaxis()->SetRangeUser(0, 18);
+  //exp_mbcs1->GetYaxis()->SetRangeUser(0, 37);
   exp_mbcs1.GetXaxis()->SetTitle("M_{bc} (MeV)");
   exp_mbcs1.GetYaxis()->SetTitle("Events/2 MeV");
   exp_mbcs1.Draw("elp");
@@ -276,6 +294,8 @@
   sig_mbcs2->SetFillColor(sig_color);
   sig_mbcs2->SetFillStyle(sig_style);
 
+  exp_mbcs2->GetYaxis()->SetRangeUser(0, 25);
+  //exp_mbcs2->GetYaxis()->SetRangeUser(0, 43);
   exp_mbcs2.GetXaxis()->SetTitle("M_{bc} (MeV)");
   exp_mbcs2.GetYaxis()->SetTitle("Events/2 MeV");
   exp_mbcs2.Draw("elp");
@@ -309,5 +329,9 @@
 
   c.Update();
 
-  c.Print("exp1.eps");
+  c.Print(KEDR+"exp2004_3.eps");
+  c.Print(KEDR+"exp2004_3.png");
+  //c.Print(KEDR+"exp2016-17_2.eps");
+  //c.Print(KEDR+"exp2016-17_2.png");
+
 }

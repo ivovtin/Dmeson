@@ -7,14 +7,15 @@
 //  mid_de = 100.;
 //  mid_mbc = 1700.;
 
-//  load_sig("dat/kp_exp_1.030.dat");
-//  load_sig("dat/kp_exp.dat");
-  load_sig("/home/ovtin/development/Dmeson/analysisD0/kp_2004_pcor.dat");
-//  load_sig("/home/ovtin/development/Dmeson/analysisD0/kp_2016-17_pcor.dat");
-  read_par("par/exp_fit.par", 5, exp_par, exp_epar);
+  //load_sig("dat/kp_exp_1.030.dat");
+  //load_sig("dat/kp_exp.dat");
+  //load_sig("dat/kp_exp_1.035_2004.dat");
+  load_sig("dat/kp_exp_1.0185_2016-17.dat");
+  //read_par("par/exp_fit.par", 5, exp_par, exp_epar);
+  read_par("par/exp_init.par", 5, exp_par, exp_epar);
   read_par("par/bck_uds.par", 4, bck_par, bck_epar);
   read_par("par/dbck_sim.par", 16, dbck_par, dbck_epar);
-  read_par("par/sig_corr.par", 30, sig_par, sig_epar);
+  read_par("par/sig_def.par", 30, sig_par, sig_epar);
 
   double mdsig = sig_par[0];
   double desig = sig_par[1];
@@ -44,17 +45,17 @@
   for(int i=0; i<5; i++) tmp_par[i] = exp_par[i];
   tmp_par[2] = 0.;
   tmp_par[3] = 0.;
-//  gen_maj("gen/exp_sig.gen", 10000000, tmp_par, maj);
+  gen_maj("gen/exp_sig.gen", 10000000, tmp_par, maj);
 
   for(int i=0; i<5; i++) tmp_par[i] = exp_par[i];
   tmp_par[3] = 0.;
   tmp_par[4] = 0.;
-//  gen_maj("gen/exp_bck.gen", 10000000, tmp_par, maj);
+  gen_maj("gen/exp_bck.gen", 10000000, tmp_par, maj);
 
   for(int i=0; i<5; i++) tmp_par[i] = exp_par[i];
   tmp_par[2] = 0.;
   tmp_par[4] = 0.;
-//  gen_maj("gen/exp_dbck.gen", 10000000, tmp_par, maj);
+  gen_maj("gen/exp_dbck.gen", 10000000, tmp_par, maj);
 
   printf("M_D = %f +- %f\n", mdcorr, exp_epar[0]);
 

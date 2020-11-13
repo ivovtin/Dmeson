@@ -40,12 +40,12 @@
   int dbck_style = 3544;
   int sig_style = 3595;
 
-  TString KEDR="/home/ovtin/public_html/outDmeson/D0/data2004Pcorr_fits_2009_style/";
-  //TString KEDR="/home/ovtin/public_html/outDmeson/D0/dataPcorr_v9_fits_2009_style/";
+  TString KEDR="/spool/users/ovtin/outDmeson/D0/results/fitsD0/";
 
   TNtuple exp_nt("exp_nt","NTuple","mbc:de:dp");
-//  FILE* file = fopen("dat/kp_exp_1.030.dat","r");
-  FILE* file = fopen("dat/kp_exp_1.035_2004.dat","r");
+  //FILE* file = fopen("dat/kp_exp_1.030.dat","r");
+  //FILE* file = fopen("dat/kp_exp_1.035_2004.dat","r");
+  FILE* file = fopen("dat/kp_exp_1.0185_2016-17.dat","r");
   while (!feof(file)) {
     double mbc,de,dp;
     if (fscanf(file,"%lf %lf %lf", &mbc,&de,&dp) == 3) {
@@ -162,14 +162,16 @@
   exp_mbc.SetMarkerStyle(20);
   exp_mbc.SetMarkerSize(1.7);
   exp_mbc.Draw("e");
-  exp_mbc->GetYaxis()->SetRangeUser(0, 45);
+  //exp_mbc->GetYaxis()->SetRangeUser(0, 45);
+  exp_mbc->GetYaxis()->SetRangeUser(0, 72);
   mbc_hs->Draw("same");
   exp_mbc.SetLineWidth(4);
   exp_mbc.Draw("esame");
 
   TBox b;
   TLatex t;
-  double rmax = 40.;
+  //double rmax = 50.;
+  double rmax = 70.;
   b.SetFillColor(sig_color);
   b.SetFillStyle(sig_style);
   b.SetLineColor(1);
@@ -194,6 +196,8 @@
 
   c.Update();
 
+  //c.Print(KEDR+"kp_exp_mbc_2004.eps");
+  //c.Print(KEDR+"kp_exp_mbc_2004.png");
   c.Print(KEDR+"kp_exp_mbc.eps");
   c.Print(KEDR+"kp_exp_mbc.png");
 
@@ -222,6 +226,8 @@
 
   c2.Update();
 
+  //c2.Print(KEDR+"kp_exp_de_2004.eps");
+  //c2.Print(KEDR+"kp_exp_de_2004.png");
   c2.Print(KEDR+"kp_exp_de.eps");
   c2.Print(KEDR+"kp_exp_de.png");
 
@@ -252,6 +258,8 @@
 
   c3.Update();
 
+  //c3.Print(KEDR+"kp_exp_mbcde_2004.eps");
+  //c3.Print(KEDR+"kp_exp_mbcde_2004.png");
   c3.Print(KEDR+"kp_exp_mbcde.eps");
   c3.Print(KEDR+"kp_exp_mbcde.png");
 }
