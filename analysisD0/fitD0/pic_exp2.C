@@ -40,12 +40,45 @@
   int dbck_style = 3544;
   int sig_style = 3595;
 
-  TString KEDR="/spool/users/ovtin/outDmeson/D0/results/fitsD0/";
+  TString KEDR = "/spool/users/ovtin/outDmeson/D0/results/fitsD0/";
+
+  int key = 2016;
+
+  TString infile;
+  int mbcmax;
+  double rmax;
+  TString outfile1;
+  TString outfile2;
+  TString outfile3;
+  TString exp_sig;
+  TString exp_bck;
+  TString exp_dbck;
+
+  if( key==2004 ) {
+      infile = "dat/kp_exp_1.029_2004.dat";
+      mbcmax = 45;
+      rmax = 50.;
+      outfile1 = "kp_exp_mbc_2004";
+      outfile2 = "kp_exp_de_2004";
+      outfile3 = "kp_exp_mbcde_2004";
+      exp_sig = "gen/exp_sig_2004.gen";
+      exp_bck = "gen/exp_bck_2004.gen";
+      exp_dbck = "gen/exp_dbck_2004.gen";
+  }
+  else{
+      infile = "dat/kp_exp_1.0185_2016-17.dat";
+      mbcmax = 72;
+      rmax = 70.;
+      outfile1 = "kp_exp_mbc";
+      outfile2 = "kp_exp_de";
+      outfile3 = "kp_exp_mbcde";
+      exp_sig = "gen/exp_sig.gen";
+      exp_bck = "gen/exp_bck.gen";
+      exp_dbck = "gen/exp_dbck.gen";
+  }
 
   TNtuple exp_nt("exp_nt","NTuple","mbc:de:dp");
-  //FILE* file = fopen("dat/kp_exp_1.030.dat","r");
-  //FILE* file = fopen("dat/kp_exp_1.035_2004.dat","r");
-  FILE* file = fopen("dat/kp_exp_1.0185_2016-17.dat","r");
+  FILE* file = fopen(infile,"r");
   while (!feof(file)) {
     double mbc,de,dp;
     if (fscanf(file,"%lf %lf %lf", &mbc,&de,&dp) == 3) {
@@ -55,7 +88,7 @@
   fclose(file);
 
   TNtuple sig_nt("sig_nt","NTuple","mbc:de:dp");
-  file = fopen("gen/exp_sig.gen","r");
+  file = fopen(exp_sig,"r");
   while (!feof(file)) {
     double mbc,de,dp;
     if (fscanf(file,"%lf %lf %lf", &mbc,&de,&dp) == 3) {
@@ -65,7 +98,7 @@
   fclose(file);
 
   TNtuple bck_nt("bck_nt","NTuple","mbc:de:dp");
-  file = fopen("gen/exp_bck.gen","r");
+  file = fopen(exp_bck,"r");
   while (!feof(file)) {
     double mbc,de,dp;
     if (fscanf(file,"%lf %lf %lf", &mbc,&de,&dp) == 3) {
@@ -75,7 +108,7 @@
   fclose(file);
 
   TNtuple dbck_nt("dbck_nt","NTuple","mbc:de:dp");
-  file = fopen("gen/exp_dbck.gen","r");
+  file = fopen(exp_dbck,"r");
   while (!feof(file)) {
     double mbc,de,dp;
     if (fscanf(file,"%lf %lf %lf", &mbc,&de,&dp) == 3) {
@@ -162,8 +195,7 @@
   exp_mbc.SetMarkerStyle(20);
   exp_mbc.SetMarkerSize(1.7);
   exp_mbc.Draw("e");
-  //exp_mbc->GetYaxis()->SetRangeUser(0, 45);
-  exp_mbc->GetYaxis()->SetRangeUser(0, 72);
+  exp_mbc->GetYaxis()->SetRangeUser(0, mbcmax);
   mbc_hs->Draw("same");
   exp_mbc.SetLineWidth(4);
   exp_mbc.Draw("esame");
@@ -171,7 +203,6 @@
   TBox b;
   TLatex t;
   //double rmax = 50.;
-  double rmax = 70.;
   b.SetFillColor(sig_color);
   b.SetFillStyle(sig_style);
   b.SetLineColor(1);
@@ -196,10 +227,8 @@
 
   c.Update();
 
-  //c.Print(KEDR+"kp_exp_mbc_2004.eps");
-  //c.Print(KEDR+"kp_exp_mbc_2004.png");
-  c.Print(KEDR+"kp_exp_mbc.eps");
-  c.Print(KEDR+"kp_exp_mbc.png");
+  c.Print(KEDR + outfile1 + ".eps");
+  c.Print(KEDR + outfile1 + ".png");
 
   TCanvas c2("c2","c2",800,800);
   c2.cd();
@@ -226,10 +255,8 @@
 
   c2.Update();
 
-  //c2.Print(KEDR+"kp_exp_de_2004.eps");
-  //c2.Print(KEDR+"kp_exp_de_2004.png");
-  c2.Print(KEDR+"kp_exp_de.eps");
-  c2.Print(KEDR+"kp_exp_de.png");
+  c2.Print(KEDR + outfile2 + ".eps");
+  c2.Print(KEDR + outfile2 + ".png");
 
   TCanvas c3("c3","c3",800,800);
   c3.cd();
@@ -258,8 +285,6 @@
 
   c3.Update();
 
-  //c3.Print(KEDR+"kp_exp_mbcde_2004.eps");
-  //c3.Print(KEDR+"kp_exp_mbcde_2004.png");
-  c3.Print(KEDR+"kp_exp_mbcde.eps");
-  c3.Print(KEDR+"kp_exp_mbcde.png");
+  c3.Print(KEDR + outfile3 + ".eps");
+  c3.Print(KEDR + outfile3 + ".png");
 }

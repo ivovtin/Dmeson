@@ -7,11 +7,34 @@
 //  mid_de = 100.;
 //  mid_mbc = 1700.;
 
+  TString infile;
+  TString exp_def;
+  TString exp_sig;
+  TString exp_bck;
+  TString exp_dbck;
+  TString exp_fit_par;
+
+  int key = 2004;
+
+  if( key==2004 ) {
+      infile = "dat/kp_exp_1.030_2004.dat";
+      exp_def = "gen/exp_def_2004.gen";
+      exp_sig = "gen/exp_sig_2004.gen";
+      exp_bck = "gen/exp_bck_2004.gen";
+      exp_dbck = "gen/exp_dbck_2004.gen";
+      exp_fit_par = "par/exp_fit_2004.par";
+  }
+  else{
+      infile = "dat/kp_exp_1.0185_2016-17.dat";
+      exp_def = "gen/exp_def.gen";
+      exp_sig = "gen/exp_sig.gen";
+      exp_bck = "gen/exp_bck.gen";
+      exp_dbck = "gen/exp_dbck.gen";
+      exp_fit_par = "par/exp_fit.par";
+  }
+
   //load_sig("dat/kp_exp_1.030.dat");
-  //load_sig("dat/kp_exp.dat");
-  //load_sig("dat/kp_exp_1.035_2004.dat");
-  load_sig("dat/kp_exp_1.0185_2016-17.dat");
-  //read_par("par/exp_fit.par", 5, exp_par, exp_epar);
+  load_sig(infile);
   read_par("par/exp_init.par", 5, exp_par, exp_epar);
   read_par("par/bck_uds.par", 4, bck_par, bck_epar);
   read_par("par/dbck_sim.par", 16, dbck_par, dbck_epar);
@@ -30,10 +53,10 @@
   dpcut=0;
 
   fit_exp();
-  write_par("par/exp_fit.par", 5, exp_par, exp_epar);
+  write_par(exp_fit_par, 5, exp_par, exp_epar);
 //  read_par("par/exp_def.par", 5, exp_par, exp_epar);
 
-  double maj = gen_exp("gen/exp_def.gen", 100000, exp_par, 0.);
+  double maj = gen_exp(exp_def, 100000, exp_par, 0.);
 
   double mdcorr = 1864.6 + (exp_par[0]-mdsig) +
                   0.00*(exp_par[1]-desig);
@@ -45,19 +68,18 @@
   for(int i=0; i<5; i++) tmp_par[i] = exp_par[i];
   tmp_par[2] = 0.;
   tmp_par[3] = 0.;
-  gen_maj("gen/exp_sig.gen", 10000000, tmp_par, maj);
+  gen_maj(exp_sig, 10000000, tmp_par, maj);
 
   for(int i=0; i<5; i++) tmp_par[i] = exp_par[i];
   tmp_par[3] = 0.;
   tmp_par[4] = 0.;
-  gen_maj("gen/exp_bck.gen", 10000000, tmp_par, maj);
+  gen_maj(exp_bck, 10000000, tmp_par, maj);
 
   for(int i=0; i<5; i++) tmp_par[i] = exp_par[i];
   tmp_par[2] = 0.;
   tmp_par[4] = 0.;
-  gen_maj("gen/exp_dbck.gen", 10000000, tmp_par, maj);
+  gen_maj(exp_dbck, 10000000, tmp_par, maj);
 
   printf("M_D = %f +- %f\n", mdcorr, exp_epar[0]);
-
 
 }

@@ -36,16 +36,14 @@ int main(int argc, char* argv[])
     //***************preselections*************
     int ntrk=3;
     int max_munhits=2;
-    //int max_munhits=4;
     float min_pt=100.; //MeV
     float max_pt=2000.; //MeV
-    //float min_Mbc=1700.;
-    float min_Mbc=1800.;        //sim
+    float min_Mbc=1700.;;
+    if(key==1) min_Mbc=1800.;
     float max_Mbc=1900.;
     float min_dE=-300.;
     float max_dE=300.;
     float eclsCut=1000.;
-    //float eclsCut=5000.;       //sim
 
     float rrCut,zCut,max_chi2,min_nhits,max_nhits;
 
@@ -55,14 +53,15 @@ int main(int argc, char* argv[])
 	zCut=13.;
 	max_chi2=70.;
 	min_nhits=20.;
+        max_nhits=100.;
     }
     else{
         //2004
 	rrCut=0.5;
-	zCut=12;
-	max_chi2=50;
-	min_nhits=24;
-	max_nhits=50;
+	zCut=12.;
+	max_chi2=50.;
+	min_nhits=24.;
+	max_nhits=50.;
     }
     //*****************************************
 
@@ -72,46 +71,54 @@ int main(int argc, char* argv[])
     TFile *fout=0;
     TString fnameout;
     TString KEDR;
+    TString fout_result;
     TString dir_out="results";
-    TString fout_result=dir_out + "/" + "fout_result.dat";
     TString list_badruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/badruns";
-    if( key==0 ){
+    if( key==0 ){           //exp 2016-17
+	min_Mbc=1700;
 	deCut1=-100; deCut2=100;
 	mbcCut1=1855, mbcCut2=1875;
 	fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data_%d.root",key).Data();
         KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_v9/";
 	list_badruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/badruns";
-	fout_result=dir_out + "/" + "kp_2016-17_pcor.dat";
+	fout_result=dir_out + "/" + "kp_2016-17.dat";
     }
-    else if (key==4)
+    else if (key==4)        //exp 2004
     {
+        min_Mbc=1700;
 	deCut1=-100; deCut2=100;
 	mbcCut1=1855, mbcCut2=1875;
 	fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data2004_%d.root",key).Data();
 	KEDR = "/home/ovtin/public_html/outDmeson/D0/data2004Pcorr/";
         list_badruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/badruns";
-	fout_result=dir_out + "/" + "kp_2004_pcor.dat";
+	fout_result=dir_out + "/" + "kp_2004.dat";
     }
-    else if (key==1)
+    else if (key==1)        //sig
     {
+        min_Mbc=1800;
 	deCut1=-300; deCut2=300;
 	mbcCut1=1800, mbcCut2=1900;
 	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_sig_%d.root",key).Data();
         KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Sig/";
+	fout_result=dir_out + "/" + "kp_signal_def.dat";
     }
-    else if (key==2)
+    else if (key==2)        //uds
     {
+	min_Mbc=1700;
 	deCut1=-300; deCut2=300;
 	mbcCut1=1700, mbcCut2=1900;
 	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_BG_continium_%d.root",key).Data();
         KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_continium/";
+	fout_result=dir_out + "/" + "kp_uds.dat";
     }
-    else if (key==3)
+    else if (key==3)        //ddBG
     {
+	min_Mbc=1700;
 	deCut1=-300; deCut2=300;
 	mbcCut1=1700, mbcCut2=1900;
 	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_BG_eetoDD_%d.root",key).Data();
         KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_eetodd/";
+	fout_result=dir_out + "/" + "kp_dbck.dat";
     }
     cout<<fnameout<<endl;
     fout = new TFile(fnameout,"RECREATE");
@@ -126,8 +133,8 @@ int main(int argc, char* argv[])
 
     TH1F* hDncomb=new TH1F("Dmseon.ncomb","Dmseon.ncomb",150,-0.5,149.5);
     TH1F* henergy=new TH1F("Energy","Energy EMC",100,0.,4500.);
-    TH1F* hlkrenergy=new TH1F("E_LKr","Energy LKr",1000,0.,4500.);
-    TH1F* hcsienergy=new TH1F("E_CsI","Energy CsI",1000,0.,4500.);
+    TH1F* hlkrenergy=new TH1F("E_LKr","Energy LKr",100,0.,4500.);
+    TH1F* hcsienergy=new TH1F("E_CsI","Energy CsI",100,0.,4500.);
     TH1F* hncls=new TH1F("ncls","emc.ncls",20,-0.5,19.5);
     TH1F* hnlkr=new TH1F("nlkr","emc.nlkr",20,-0.5,19.5);
     TH1F* hncsi=new TH1F("ncsi","emc.ncsi",20,-0.5,19.5);
@@ -156,16 +163,8 @@ int main(int argc, char* argv[])
     TH1F* hdP=new TH1F("#Delta P","#Delta P",200,-1000.,1000.);
     TH1F* hEbeam=new TH1F("Ebeam","Ebeam",100,1880.,1895.);
     TH2D *h2PpiktodEkpi=new TH2D("Ppik:dekmpip", "Ppik:dekmpip", 200,600,1100,200,-250,250);
-    TH2D *h2MbcdE;
-    TH2D *h2MbcdEkin;
-    if( key==4 || key==1){
-        h2MbcdE=new TH2D("M_{bc}:#Delta E", "M_{bc}:#Delta E", 100,1800,1900,100,-300,300);
-        h2MbcdEkin=new TH2D("M_{bc}:#Delta E", "M_{bc}:#Delta E", 100,1800,1900,100,-300,300);
-    }
-    else{
-        h2MbcdE=new TH2D("M_{bc}:#Delta E", "M_{bc}:#Delta E", 200,1700,1900,200,-300,300);
-        h2MbcdEkin=new TH2D("M_{bc}:#Delta E", "M_{bc}:#Delta E", 200,1700,1900,200,-300,300);
-    }
+    TH2D *h2MbcdE=new TH2D("M_{bc}:#Delta E", "M_{bc}:#Delta E", 100,min_Mbc,1900,100,-300,300);
+    TH2D *h2MbcdEkin=new TH2D("M_{bc}:#Delta E", "M_{bc}:#Delta E", 100,min_Mbc,1900,100,-300,300);
     TH2D *h2MbcdP=new TH2D("M_{bc}:#Delta P", "M_{bc}:#Delta P", 200,-500,500,200,1825,1890);
     TH2D *h2MbckindP=new TH2D("M_{bc}:#Delta P", "M_{bc}:#Delta P", 200,-500,500,200,1825,1890);
 
@@ -189,6 +188,8 @@ int main(int argc, char* argv[])
     TH1F* htclst2=new TH1F("tclst2","tclst2",100,-30.,30.);
     TH1F* hpclst2=new TH1F("pclst2","pclst2",100,-20.,20.);
 
+    TH1F* heclst12diff=new TH1F("eclst12diff","eclst2",100,-1500.,1500.);
+
     TH1F* hvrtntrk=new TH1F("vrt.ntrk","vrt.ntrk",15,-0.5,14.5);
     TH1F* hvrtnip=new TH1F("vrt.nip","vrt.nip",12,-0.5,11.5);
     TH1F* hvrtnbeam=new TH1F("vrt.nbeam","vrt.nbeam",12,-0.5,11.5);
@@ -208,7 +209,10 @@ int main(int argc, char* argv[])
     TH1F* htheta=new TH1F("theta","t.theta",185,0.,185.);
     TH1F* hphi=new TH1F("phi","t.phi",180,0.,360.);
 
-    TH1F* hMUnhits=new TH1F("munhits","mu.nhits",30,-0.5,29.5);
+    TH1F* hMUnhits=new TH1F("munhits","mu.nhits",15,-0.5,15.5);
+    TH1F* hMUnhits1=new TH1F("munhits","mu.nhits",15,-0.5,15.5);
+    TH1F* hMUnhits2=new TH1F("munhits","mu.nhits",15,-0.5,15.5);
+    TH1F* hMUnhits3=new TH1F("munhits","mu.nhits",15,-0.5,15.5);
 
     TTree *forFit = new TTree("forFit","forFit");
     Float_t forFitMbc, forFitdE, forFitdP;
@@ -253,10 +257,14 @@ int main(int argc, char* argv[])
 	   && Dmeson.Pt1>min_pt && Dmeson.Pt1<max_pt && Dmeson.Pt2>min_pt && Dmeson.Pt2<max_pt
 	   && Dmeson.chi2t1<max_chi2 && Dmeson.chi2t2<max_chi2
 	   && Dmeson.nhitst1>=min_nhits && Dmeson.nhitst2>=min_nhits
-	   && Dmeson.rr1<rrCut && Dmeson.rr2<rrCut && abs(Dmeson.Zip1)<zCut && abs(Dmeson.Zip2)<zCut
+	   && Dmeson.rr1<rrCut && Dmeson.rr2<rrCut
+	   && abs(Dmeson.Zip1)<zCut && abs(Dmeson.Zip2)<zCut
+	   //&& abs(Dmeson.Zip1-Dmeson.Zip2)<zCut
 	   && Dmeson.ecls1<eclsCut && Dmeson.ecls2<eclsCut
-	   //&& Dmeson.nhitst1<=max_nhits && Dmeson.nhitst2<=max_nhits
-           && Dmeson.munhits<=max_munhits
+           //&& abs(Dmeson.ecls2-Dmeson.ecls1)<500
+	   && Dmeson.nhitst1<=max_nhits && Dmeson.nhitst2<=max_nhits
+           //&& Dmeson.munhits<=max_munhits
+           && (Dmeson.mulayerhits2+Dmeson.mulayerhits3)<=max_munhits
 	  )
 	{
 	    if ( verbose )
@@ -326,6 +334,8 @@ int main(int argc, char* argv[])
 	    htclst2->Fill(Dmeson.tcls2);
 	    hpclst2->Fill(Dmeson.pcls2);
 
+	    heclst12diff->Fill(Dmeson.ecls1-Dmeson.ecls2);
+
 	    hncls->Fill(Dmeson.ncls);
 	    hnlkr->Fill(Dmeson.nlkr);
 	    hncsi->Fill(Dmeson.ncsi);
@@ -342,6 +352,9 @@ int main(int argc, char* argv[])
 	    henass->Fill(Dmeson.e2);
 
 	    hMUnhits->Fill(Dmeson.munhits);
+	    hMUnhits1->Fill(Dmeson.mulayerhits1);
+	    hMUnhits2->Fill(Dmeson.mulayerhits2);
+	    hMUnhits3->Fill(Dmeson.mulayerhits3);
 
 	    hmbc->Fill(Dmeson.Mbc);
 	    hdE->Fill(Dmeson.dE);
@@ -367,14 +380,11 @@ int main(int argc, char* argv[])
 	    }
 
             //fill Mbc
-	    if( Dmeson.dE>=deCut1 && Dmeson.dE<=deCut2 &&  Dmeson.Mbc>=1800 && Dmeson.Mbc<=max_Mbc )
-	    //if( Dmeson.dE>=deCut1 && Dmeson.dE<=deCut2 &&  Dmeson.Mbc>=1700 && Dmeson.Mbc<=max_Mbc )
+	    if( Dmeson.dE>=deCut1 && Dmeson.dE<=deCut2 &&  Dmeson.Mbc>=min_Mbc && Dmeson.Mbc<=max_Mbc )
 	    {
 		hmbc_zoom->Fill(Dmeson.Mbc);
 	    }
-
-	    if( Dmeson.dE>=deCut1 && Dmeson.dE<=deCut2  &&  Dmeson.Mbckin>=1800 && Dmeson.Mbckin<=max_Mbc )
-	    //if( Dmeson.dE>=deCut1 && Dmeson.dE<=deCut2  &&  Dmeson.Mbckin>=1700 && Dmeson.Mbckin<=max_Mbc )
+	    if( Dmeson.dE>=deCut1 && Dmeson.dE<=deCut2  &&  Dmeson.Mbckin>=min_Mbc && Dmeson.Mbckin<=max_Mbc )
 	    {
 		hmbckin_zoom->Fill(Dmeson.Mbckin);
 	    }
@@ -497,6 +507,8 @@ int main(int argc, char* argv[])
     htclst2->Draw(); cc1->SaveAs(KEDR + "tclst2" + format2);
     hpclst2->Draw(); cc1->SaveAs(KEDR + "pclst2" + format2);
 
+    heclst12diff->Draw(); cc1->SaveAs(KEDR + "eclst12diff" + format2);
+
     hrr->Draw(); cc1->SaveAs(KEDR+"rr.png");
     hZip->Draw(); cc1->SaveAs(KEDR+"Zip.png");
     hEbeam->Draw(); cc1->SaveAs(KEDR+"Ebeam.png");
@@ -524,6 +536,9 @@ int main(int argc, char* argv[])
     htheta->Draw(); cc1->SaveAs(KEDR+"theta.png");
     hphi->Draw(); cc1->SaveAs(KEDR+"phi.png");
     hMUnhits->Draw(); cc1->SaveAs(KEDR+"munhits.png");
+    hMUnhits1->Draw(); cc1->SaveAs(KEDR+"munhits1.png");
+    hMUnhits2->Draw(); cc1->SaveAs(KEDR+"munhits2.png");
+    hMUnhits3->Draw(); cc1->SaveAs(KEDR+"munhits3.png");
     hvrtntrk->Draw(); cc1->SaveAs(KEDR+"vrtntrk.png");
     hvrtnip->Draw(); cc1->SaveAs(KEDR+"vrtnip.png");
     hvrtnbeam->Draw(); cc1->SaveAs(KEDR+"vrtnbeam.png");

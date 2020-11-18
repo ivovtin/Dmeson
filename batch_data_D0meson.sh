@@ -32,8 +32,6 @@
 
 #$ -t 1-862
 ##$ -t 1-608
-##$ -t 1-608
-##$ -t 1-1
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]
@@ -42,14 +40,14 @@ myrand=$[1000+$i]
 #Signal
 inruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/runDmeson"$i
 ##outfile="/spool/users/ovtin/outDmeson/D0/data/psi3770_to_D0meson_"$i".root"
-outfile="/spool/users/ovtin/outDmeson/D0/dataPcorr_v10/psi3770_to_D0meson_"$i".root"
+outfile="/spool/users/ovtin/outDmeson/D0/dataPcorr_v11/psi3770_to_D0meson_"$i".root"
 ##inruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/runDmeson"$i
-##outfile="/spool/users/ovtin/outDmeson/D0/data2004/psi3770_to_D0meson_"$i".root"
+##outfile="/spool/users/ovtin/outDmeson/D0/data2004_v3/psi3770_to_D0meson_"$i".root"
 #Bkg
 #inruns="/home/ovtin/development/Dmeson/runsDmeson/runBkgDmeson"$i
 #outfile="/spool/users/ovtin/psi3770_to_BkgD0meson_"$i".root"
-##mintracks=3  ##!!!
-mintracks=2
+mintracks=3  ##!!!
+##mintracks=2
 maxtracks=20
 minbeamtracks=0
 minIPtracks=0
@@ -71,11 +69,14 @@ kinefit=1
 ##pSF=1.030   ##data 2016-17   v6
 ##pSF=1.026   ##data 2016-17   v7
 ##pSF=1.022   ##data 2016-17   v8
-pSF=1.0185   ##data 2016-17   v9   - best
+##pSF=1.0185   ##data 2016-17   v9   - best
 ##pSF=1.0195   ##data 2016-17   v10
+pSF=1.0252   ##data 2016-17   v11
 ##pSF=1.0   ##data 2016-17
 ##=========
-##pSF=1.035   ##data 2004
+##pSF=1.035   ##data 2004 pcor
+##pSF=1.029   ##data 2004  v2, v3
+##pSF=1.030   ##data 2004  v3
 ##pSF=1.0   ##data 2004
 #verbose=1
 

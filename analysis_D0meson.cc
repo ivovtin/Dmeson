@@ -178,7 +178,7 @@ static TTree *eventTree;
 
 typedef struct {
     Int_t vrtntrk,vrtnip,vrtnbeam,nhitst1,nhitst2,nhitsvdt1,nhitsvdt2,nhitsxyt1,nhitszt1,nhitsxyt2,nhitszt2,nvect1,nvecxyt1,nveczt1,nvect2,nvecxyt2,
-	nveczt2,ncomb,ncls1,ncls2,ncls,nlkr,ncsi,munhits,Run;
+	nveczt2,ncomb,ncls1,ncls2,ncls,nlkr,ncsi,munhits,mulayerhits1,mulayerhits2,mulayerhits3,Run;
     Float_t Mbc,Mbckin,InvM,dE,dEkin,dP,dPkin,epmkp,eppkm,Ebeam,rEv,P1,P2,Pt1,Pt2,chi2t1,chi2t2,theta2t,phi2t,thetat1,thetat2,phit1,phit2,e1,
 	e2,d1,d2,rr1,rr2,Zip1,Zip2,ecls1,ecls2,tcls1,tcls2,pcls1,pcls2,emcenergy,lkrenergy,csienergy;
 } DMESON;
@@ -527,7 +527,7 @@ int analyse_event()
 
     if (progpar.verbose) cout<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"eTracksAll="<<eTracksAll<<"\t"<<"eTracksBeam="<<eTracksBeam<<"\t"<<"eTracksIP="<<eTracksIP<<endl;
 
-    unsigned short MUnhits=mu_next_event();
+    //unsigned short MUnhits=mu_next_event();
 
     int i=0;
 
@@ -729,7 +729,20 @@ int analyse_event()
 		Dmeson.rEv = kedrraw_.Header.Number;
 		Dmeson.Run = kedrraw_.Header.RunNumber;
 		Dmeson.Ebeam=WTotal/2;
-		Dmeson.munhits = MUnhits;
+
+		int mu_hits = mu_next_event_good();
+		Dmeson.munhits = mu_hits;
+		int mu_hit;
+		int mu_layer_hits[3] = {0, 0, 0};
+
+		for (mu_hit = 0; mu_hit < mu_hits; mu_hit++) {
+		    int layer = mu_hit_layer(mu_hit);
+		    if (layer >= 1 && layer <= 3) mu_layer_hits[layer-1]++;
+		}
+
+		Dmeson.mulayerhits1 = mu_layer_hits[0];
+		Dmeson.mulayerhits2 = mu_layer_hits[1];
+		Dmeson.mulayerhits3 = mu_layer_hits[2];
 
 		eventTree->Fill();
 	    }
@@ -857,7 +870,7 @@ int main(int argc, char* argv[])
 	eventTree = new TTree("et","Event tree");
 	eventTree->SetAutoSave(500000000);  // autosave when 0.5 Gbyte written
 	eventTree->Branch("Dmeson",&Dmeson,"vrtntrk/I:vrtnip:vrtnbeam:nhitst1:nhitst2:nhitsvdt1:nhitsvdt2:nhitsxyt1:nhitszt1:nhitsxyt2:nhitszt2:nvect1:nvecxyt1:nveczt1:nvect2:nvecxyt2"
-			  ":nveczt2:ncomb:ncls1:ncls2:ncls:nlkr:ncsi:munhits:Run"
+			  ":nveczt2:ncomb:ncls1:ncls2:ncls:nlkr:ncsi:munhits:mulayerhits1:mulayerhits2:mulayerhits3:Run"
 			  ":Mbc/F:Mbckin:InvM:dE:dEkin:dP:dPkin:epmkp:eppkm:Ebeam:rEv:P1:P2:Pt1:Pt2:chi2t1:chi2t2:theta2t:phi2t:thetat1:thetat2:phit1:phit2:e1"
 			  ":e2:d1:d2:rr1:rr2:Zip1:Zip2:ecls1:ecls2:tcls1:tcls2:pcls1:pcls2:emcenergy:lkrenergy:csienergy");
 
