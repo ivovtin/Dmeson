@@ -1,5 +1,6 @@
 #!/bin/bash
-dataORmc=1
+dataORmc=4
+verbose=2
 
-./D0meson $dataORmc
+./D0meson $dataORmc $verbose
 
