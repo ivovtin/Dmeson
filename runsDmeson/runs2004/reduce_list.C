@@ -4,7 +4,8 @@ void reduce_list()
     int i=0;
     int N=1;
 
-    ifstream in("allrunsDmeson2005"); //signal
+    //ifstream in("allrunsDmeson2005"); //signal
+    ifstream in("goodruns.dat"); //signal
     if (in.is_open())
     {
 	while (getline(in, line))

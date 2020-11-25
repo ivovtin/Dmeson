@@ -183,7 +183,7 @@ static TTree *eventTree;
 typedef struct {
     Int_t vrtntrk,vrtnip,vrtnbeam,nhitst1,nhitst2,nhitsvdt1,nhitsvdt2,nhitsxyt1,nhitszt1,nhitsxyt2,nhitszt2,nvect1,nvecxyt1,nveczt1,nvect2,nvecxyt2,
 	nveczt2,ncomb,ncls1,ncls2,ncls,nlkr,ncsi,munhits,mulayerhits1,mulayerhits2,mulayerhits3,Run,numn,numo;
-    Float_t mbc,de,dp,fchi2,epmkp,eppkm,Ebeam,rEv,p1,p2,pt1,pt2,chi2t1,chi2t2,theta2t,phi2t,thetat1,thetat2,phit1,phit2,e1,
+    Float_t mbc,de,dp,fchi2,Ebeam,rEv,p1,p2,pt1,pt2,chi2t1,chi2t2,theta2t,phi2t,thetat1,thetat2,phit1,phit2,e1,
 	e2,d1,d2,rr1,rr2,zip1,zip2,ecls1,ecls2,tcls1,tcls2,pcls1,pcls2,emcenergy,lkrenergy,csienergy,enn,eno,tofc1,ttof1,tofc2,ttof2;
 } DMESON;
 
@@ -321,6 +321,7 @@ int mu_event_rejection()
     return 0;
 }
 
+/*
 double xcorr=0;
 double scorr=0;
 double ran1;
@@ -353,6 +354,13 @@ double pcorr(double p, int type, double ran) {
 
     return fabs(pc);
 }
+*/
+double pcorr(double p) {
+    double pc = p*fabs(progpar.pSF);
+    if (progpar.verbose) cout<<"pc="<<pc<<"\t"<<"p="<<p<<"\t"<<"progpar.pSF="<<progpar.pSF<<endl;
+
+    return fabs(pc);
+}
 
 void kine_fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t iflag)
 {
@@ -363,8 +371,10 @@ void kine_fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t ifla
     double mk = 493.68;
     double mpi = 139.57;
 
-    double p1i = (pcorr(ktrrec_.PTRAK[dcand_t1],1,ran1)+pcorr(ktrrec_.PTRAK[dcand_t1],2,ran1))/2.;
-    double p2i = (pcorr(ktrrec_.PTRAK[dcand_t2],1,ran2)+pcorr(ktrrec_.PTRAK[dcand_t2],2,ran2))/2.;
+    double p1i = pcorr(ktrrec_.PTRAK[dcand_t1]);
+    double p2i = pcorr(ktrrec_.PTRAK[dcand_t2]);
+    //double p1i = (pcorr(ktrrec_.PTRAK[dcand_t1],1,ran1)+pcorr(ktrrec_.PTRAK[dcand_t1],2,ran1))/2.;
+    //double p2i = (pcorr(ktrrec_.PTRAK[dcand_t2],1,ran2)+pcorr(ktrrec_.PTRAK[dcand_t2],2,ran2))/2.;
 
     double sp1 = sqrt(ktrrec_h_.FitTrack[dcand_t1][fitSigCC]/
 		      pow(ktrrec_h_.FitTrack[dcand_t1][fitC],2)+
@@ -401,15 +411,15 @@ void refit(int t, double p, double* phi, double* theta) {
     ThetaFixR = theta0;
     ktrk_hits_.FixUserR = 1;
 
-    //  int track = t+1;
-    //  ktrkhits_(&track);
+    //int track = t+1;
+    //ktrkhits_(&track);
 
     double phi1 = PhiFixR;
     double theta1 = ThetaFixR;
 
-    //  ktrk_hits_.FixUserR = 1;
-    //  ktrk_hits_.RcFixR = r;
-    //  ktrkhits_(&track);
+    //ktrk_hits_.FixUserR = 1;
+    //ktrk_hits_.RcFixR = r;
+    //ktrkhits_(&track);
 
     double phi2 = PhiFixR;
     double theta2 = ThetaFixR;
@@ -445,8 +455,10 @@ void kine_fit(int ip1, int ip2, double* mbc, double* de, double* dp, double* fch
     double pp1, pp2;
     *fchi2 = 0;
 
-    double p1i = (pcorr(ktrrec_.PTRAK[dcand_t1],1,ran1)+pcorr(ktrrec_.PTRAK[dcand_t1],2,ran1))/2.;
-    double p2i = (pcorr(ktrrec_.PTRAK[dcand_t2],1,ran2)+pcorr(ktrrec_.PTRAK[dcand_t2],2,ran2))/2.;
+    double p1i = pcorr(ktrrec_.PTRAK[dcand_t1]);
+    double p2i = pcorr(ktrrec_.PTRAK[dcand_t2]);
+    //double p1i = (pcorr(ktrrec_.PTRAK[dcand_t1],1,ran1)+pcorr(ktrrec_.PTRAK[dcand_t1],2,ran1))/2.;
+    //double p2i = (pcorr(ktrrec_.PTRAK[dcand_t2],1,ran2)+pcorr(ktrrec_.PTRAK[dcand_t2],2,ran2))/2.;
 
     if (enable) {
 
@@ -559,7 +571,7 @@ void kine_fit(int ip1, int ip2, double* mbc, double* de, double* dp, double* fch
 	- pow(py1+py2,2) - pow(pz1+pz2,2);
 
     if (*mbc>0) *mbc = sqrt(*mbc); else *mbc = 0;
-
+    /*
     double p1pi = pcorr(ktrrec_.PTRAK[dcand_t1],1,ran1);
     double p2pi = pcorr(ktrrec_.PTRAK[dcand_t2],1,ran2);
     double p1ki = pcorr(ktrrec_.PTRAK[dcand_t1],2,ran1);
@@ -567,6 +579,9 @@ void kine_fit(int ip1, int ip2, double* mbc, double* de, double* dp, double* fch
 
     *de = (sqrt(mk*mk + p1ki*p1ki) + sqrt(mpi*mpi + p1pi*p1pi) +
 	   sqrt(mk*mk + p2ki*p2ki) + sqrt(mpi*mpi + p2pi*p2pi))/2. - ebeam;
+    */
+    *de = (sqrt(mpi*mpi + p1i*p1i) + sqrt(mk*mk + p2i*p2i) +
+	   sqrt(mpi*mpi + p2i*p2i) + sqrt(mk*mk + p1i*p1i))/2. - ebeam;
 
     *dp = pp1-pp2;
 
@@ -650,12 +665,12 @@ void others(int t1, int t2, int* num, double *en, double *px, double* py, double
 int analyse_event()
 {
     float EMinPhot=progpar.min_cluster_energy;
-    double WTotal=2*beam_energy;                                                                 //beam_energy - How determined this energy ?
+    double WTotal=2.*beam_energy;                                                                 //beam_energy - How determined this energy ?
     if( kedrrun_cb_.Header.RunType == 64 ) {   //for MC
 	WTotal=2*1886.75;
     }
 
-    ebeam=WTotal/2;
+    ebeam=WTotal/2.;
 
     if (progpar.verbose) cout<<"RunNumber="<<kedrraw_.Header.RunNumber<<"\t"<<"WTotal="<<WTotal<<"\t"<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"eTracksAll="<<eTracksAll<<endl;
 
@@ -814,7 +829,7 @@ int analyse_event()
                 Dmeson.eno = eno;
 
 		double mbc, de, dp, fchi2;
-
+                /*
 		float rx1 = 0, ry1 = 0;
 		float rx2 = 0, ry2 = 0;
 
@@ -827,7 +842,7 @@ int analyse_event()
 
 		ran1 = rx1;
 		ran2 = rx2;
-
+                */
 		kine_fit(t1, t2, &mbc, &de, &dp, &fchi2, progpar.Dkine_fit);
 		Dmeson.mbc = mbc;
 		Dmeson.de = de;
@@ -994,7 +1009,7 @@ int main(int argc, char* argv[])
 	eventTree->SetAutoSave(500000000);  // autosave when 0.5 Gbyte written
 	eventTree->Branch("Dmeson",&Dmeson,"vrtntrk/I:vrtnip:vrtnbeam:nhitst1:nhitst2:nhitsvdt1:nhitsvdt2:nhitsxyt1:nhitszt1:nhitsxyt2:nhitszt2:nvect1:nvecxyt1:nveczt1:nvect2:nvecxyt2"
 			  ":nveczt2:ncomb:ncls1:ncls2:ncls:nlkr:ncsi:munhits:mulayerhits1:mulayerhits2:mulayerhits3:Run:numn:numo"
-			  ":mbc/F:de:dp:fchi2:epmkp:eppkm:Ebeam:rEv:p1:p2:pt1:pt2:chi2t1:chi2t2:theta2t:phi2t:thetat1:thetat2:phit1:phit2:e1"
+			  ":mbc/F:de:dp:fchi2:Ebeam:rEv:p1:p2:pt1:pt2:chi2t1:chi2t2:theta2t:phi2t:thetat1:thetat2:phit1:phit2:e1"
 			  ":e2:d1:d2:rr1:rr2:zip1:zip2:ecls1:ecls2:tcls1:tcls2:pcls1:pcls2:emcenergy:lkrenergy:csienergy:enn:eno:tofc1:ttof1:tofc2:ttof2");
 
 //----------------- Configure kframework -----------------//

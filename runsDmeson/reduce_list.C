@@ -4,7 +4,7 @@ void reduce_list()
     int i=0;
     int N=1;
 
-    ifstream in("runs_list_Psi3770_Psi2_signal_20042020.dat"); //signal
+    ifstream in("runs_list_Psi3770_Psi2_2016-17_good.dat"); //signal
     //ifstream in("runs_list_Psi3770_bkg_23939-23499.dat");   //bkg
     if (in.is_open())
     {

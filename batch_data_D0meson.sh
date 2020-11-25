@@ -23,26 +23,28 @@
 #$ -soft
 ##$ -hard
 #$ -l time=24:00:00
+##$ -l time=6:00:00
 #$ -q remote
 ##$ -q extralong
+##$ -q 6h
+##$ -q day
 #
 # -- Send mail at submission and completion of script --
-#$ -m beas
-#$ -M ovtin.ivan@gmail.com
+##$ -m beas
+##$ -M ovtin.ivan@gmail.com
 
-#$ -t 1-862
-##$ -t 1-608
+#$ -t 1-482
+##$ -t 1-862
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]
 
 ##inruns=23219
 #Signal
-inruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/runDmeson"$i
-##outfile="/spool/users/ovtin/outDmeson/D0/data/psi3770_to_D0meson_"$i".root"
-outfile="/spool/users/ovtin/outDmeson/D0/dataPcorr_v11/psi3770_to_D0meson_"$i".root"
-##inruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/runDmeson"$i
-##outfile="/spool/users/ovtin/outDmeson/D0/data2004_v3/psi3770_to_D0meson_"$i".root"
+##inruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/runDmeson"$i
+##outfile="/spool/users/ovtin/outDmeson/D0/dataPcorr_v11/psi3770_to_D0meson_"$i".root"
+inruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/runDmeson"$i
+outfile="/spool/users/ovtin/outDmeson/D0/dataPcorr2004_v4/psi3770_to_D0meson_"$i".root"
 #Bkg
 #inruns="/home/ovtin/development/Dmeson/runsDmeson/runBkgDmeson"$i
 #outfile="/spool/users/ovtin/psi3770_to_BkgD0meson_"$i".root"
@@ -60,8 +62,8 @@ minClusters=0
 maxClusters=50
 minClustersLKr=0
 minClustersCsI=0
-maxtchi2=100
-##maxtchi2=50   ##!!!
+##maxtchi2=100
+maxtchi2=50   ##!!!
 minNhits=0
 kinefit=1
 ##pSF=1.0381   ##data 2016-17 v4
@@ -71,12 +73,12 @@ kinefit=1
 ##pSF=1.022   ##data 2016-17   v8
 ##pSF=1.0185   ##data 2016-17   v9   - best
 ##pSF=1.0195   ##data 2016-17   v10
-pSF=1.0252   ##data 2016-17   v11
+##pSF=1.02522   ##data 2016-17   v11
 ##pSF=1.0   ##data 2016-17
 ##=========
 ##pSF=1.035   ##data 2004 pcor
 ##pSF=1.029   ##data 2004  v2, v3
-##pSF=1.030   ##data 2004  v3
+pSF=1.030   ##data 2004  v3, v4
 ##pSF=1.0   ##data 2004
 #verbose=1
 
