@@ -14,8 +14,8 @@ int main(int argc, char ** argv)
     int id; //table id
     unsigned l=16;//table length
     int32_t * buf;  //array with data
-    int begin_run=23219;
-    int end_run=23225;
+    int begin_run=23181;
+    int end_run=23204;
     //int begin_run=24835;
     //int end_run=24850;
     int v;

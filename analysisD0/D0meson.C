@@ -51,10 +51,10 @@ int main(int argc, char* argv[])
 
     if(key!=4){
 	//2016-17
-	rrCut=0.75;
+	rrCut=0.5;
 	zCut=13.;
-	max_chi2=70.;
-	min_nhits=20.;
+	max_chi2=50.;
+	min_nhits=24.;
         max_nhits=50.;
     }
     else{
@@ -63,7 +63,7 @@ int main(int argc, char* argv[])
 	zCut=13.;
 	max_chi2=50.;
 	min_nhits=24.;
-	max_nhits=50.;
+	max_nhits=48.;
     }
     //*****************************************
 
@@ -160,7 +160,7 @@ int main(int argc, char* argv[])
     TH1F* hdE=new TH1F("#Delta E","#Delta E",200,-1000.,1000.);
     TH1F* hdE_zoom=new TH1F("#Delta E","#Delta E",30,-300.,300.);
     TH1F* hdP=new TH1F("#Delta P","#Delta P",200,-1000.,1000.);
-    TH1F* hfchi2=new TH1F("MChi2","Minuit Chi2",200,0.,10000000.);
+    TH1F* hfchi2=new TH1F("MChi2","Minuit Chi2",200,0.,1000.);
 
     TH2D *h2MbcdE=new TH2D("M_{bc}:#Delta E", "M_{bc}:#Delta E", 100,min_Mbc,1900,100,-300,300);
     TH2D *h2MbcdP=new TH2D("M_{bc}:#Delta P", "M_{bc}:#Delta P", 200,-500,500,200,1825,1890);
@@ -245,7 +245,7 @@ int main(int argc, char* argv[])
     {
 	tt->GetEntry(k);
 
-	if ( *find(badruns.begin(), badruns.end(), Dmeson.Run) ) continue;        //skip bad runs
+	if ( *std::find(badruns.begin(), badruns.end(), Dmeson.Run) ) continue;        //skip bad runs
 	//if ( *std::find(badruns.begin(), badruns.end(), Dmeson.Run) ) { cout<<"bad run="<<Dmeson.Run<<endl;};        //skip bad runs
         //cout<<"bad run="<<*find(badruns.begin(), badruns.end(), Dmeson.Run)<<endl;
 
@@ -271,11 +271,8 @@ int main(int argc, char* argv[])
 	if(
 	   Dmeson.de>=min_dE && Dmeson.de<=max_dE
            && Dmeson.mbc>=min_Mbc && Dmeson.mbc<=max_Mbc
-	   //Dmeson.de>=-100 && Dmeson.de<=100
-           //&& Dmeson.mbc>=1850 && Dmeson.mbc<=1854
 	   && Dmeson.vrtntrk>=ntrk
 	   && Dmeson.pt1>min_pt && Dmeson.pt1<max_pt && Dmeson.pt2>min_pt && Dmeson.pt2<max_pt
-	   //&& Dmeson.pt1>800 && Dmeson.pt1<max_pt && Dmeson.pt2>800 && Dmeson.pt2<max_pt
 	   && Dmeson.chi2t1<max_chi2 && Dmeson.chi2t2<max_chi2
 	   && Dmeson.nhitst1>=min_nhits && Dmeson.nhitst2>=min_nhits
 	   && Dmeson.rr1<rrCut && Dmeson.rr2<rrCut
@@ -285,15 +282,6 @@ int main(int argc, char* argv[])
            && (Dmeson.mulayerhits2+Dmeson.mulayerhits3)<=max_munhits
 	  )
 	{
-	    //if (Dmeson.ttof1>7.) continue;
-            //if (Dmeson.ttof1<-1.) continue;
-            //if (Dmeson.ttof2>7.) continue;
-	    //if (Dmeson.ttof2<-1.) continue;
-
-	    //if (Dmeson.ncls>6) continue;
-
-	    //if (fabs(Dmeson.dp)>300.) continue;
-	    //if ( fabs(Dmeson.thetat1-Dmeson.thetat2)<15. ) continue;
 
 	    if ( verbose==1 )
 	    {

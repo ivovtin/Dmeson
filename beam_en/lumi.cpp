@@ -50,7 +50,8 @@ int main(int argc, char** argv) {
     //int line;
     int i=0;
     //ifstream in("/home/ovtin/development/Dmeson/runsDmeson/runs2004/allrunsDmeson2005"); //signal
-    ifstream in("/home/ovtin/development/Dmeson/runsDmeson/runs_list_Psi3770_Psi2_signal_20042020.dat"); //signal
+    ifstream in("/home/ovtin/development/Dmeson/runsDmeson/runs_list_Psi3770_Psi2_2016-17_good.dat"); //signal
+    //ifstream in("/home/ovtin/development/Dmeson/runsDmeson/runs_list_Psi3770_Psi2_signal_20042020.dat"); //signal
     //ifstream in("/home/ovtin/development/Dmeson/runsDmeson/runs_list_Psi3770_signal_25112019.dat"); //signal
     if (in.is_open())
     {
@@ -60,16 +61,16 @@ int main(int argc, char** argv) {
 	    run = atoi(line.c_str());
 
 	    get_run_lumi(run, &en, &en_err, &lum, &t);
+	    printf("%i %d %f %f %f %d\n",i,run,en,en_err,lum*0.001,t);
 	    //if( lum*0.001<0.50 && run>=4100 && run<=4709 ) {
 	    if( lum*0.001<1.00 && run>=23206 && run<=26248 ) {
-		//printf("%i %d %f %f %f %d\n",i,run,en,en_err,lum*0.001,t);
 		printf("%d\n",run);
                 nbads++;
 	    }
-	    //if( lum<100000 ) slum += lum*0.001;  //nb^-1
+	    if( lum<100000 ) slum += lum*0.001;  //nb^-1
 	    //if( lum<100000 && run>=4100 && run<=4709 ) slum += lum*0.001;  //nb^-1
             //if( lum*0.001<0.50 && run>=4100 && run<=4709 ) slum += lum*0.001;  //nb^-1
-            if( lum*0.001<1.00 && run>=23206 && run<=26248 ) slum += lum*0.001;  //nb^-1
+            //if( lum*0.001<1.00 && run>=23206 && run<=26248 ) slum += lum*0.001;  //nb^-1
 	    //if( lum<100000 && run>=24613 && run<=25687 ) slum += lum*0.001;  //nb^-1
 	}
     }

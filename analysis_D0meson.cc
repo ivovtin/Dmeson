@@ -371,8 +371,8 @@ void kine_fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t ifla
     double mk = 493.68;
     double mpi = 139.57;
 
-    double p1i = pcorr(ktrrec_.PTRAK[dcand_t1]);
-    double p2i = pcorr(ktrrec_.PTRAK[dcand_t2]);
+    double p1i = pcorr(tP(dcand_t1));
+    double p2i = pcorr(tP(dcand_t2));
     //double p1i = (pcorr(ktrrec_.PTRAK[dcand_t1],1,ran1)+pcorr(ktrrec_.PTRAK[dcand_t1],2,ran1))/2.;
     //double p2i = (pcorr(ktrrec_.PTRAK[dcand_t2],1,ran2)+pcorr(ktrrec_.PTRAK[dcand_t2],2,ran2))/2.;
 
@@ -409,17 +409,13 @@ void refit(int t, double p, double* phi, double* theta) {
     ktrk_hits_.RcFixR = r;
     PhiFixR = phi0;
     ThetaFixR = theta0;
-    ktrk_hits_.FixUserR = 1;
+    //ktrk_hits_.FixUserR = 1;      //default is 0
 
     //int track = t+1;
     //ktrkhits_(&track);
 
     double phi1 = PhiFixR;
     double theta1 = ThetaFixR;
-
-    //ktrk_hits_.FixUserR = 1;
-    //ktrk_hits_.RcFixR = r;
-    //ktrkhits_(&track);
 
     double phi2 = PhiFixR;
     double theta2 = ThetaFixR;
@@ -455,8 +451,8 @@ void kine_fit(int ip1, int ip2, double* mbc, double* de, double* dp, double* fch
     double pp1, pp2;
     *fchi2 = 0;
 
-    double p1i = pcorr(ktrrec_.PTRAK[dcand_t1]);
-    double p2i = pcorr(ktrrec_.PTRAK[dcand_t2]);
+    double p1i = pcorr(tP(dcand_t1));
+    double p2i = pcorr(tP(dcand_t2));
     //double p1i = (pcorr(ktrrec_.PTRAK[dcand_t1],1,ran1)+pcorr(ktrrec_.PTRAK[dcand_t1],2,ran1))/2.;
     //double p2i = (pcorr(ktrrec_.PTRAK[dcand_t2],1,ran2)+pcorr(ktrrec_.PTRAK[dcand_t2],2,ran2))/2.;
 
@@ -468,8 +464,7 @@ void kine_fit(int ip1, int ip2, double* mbc, double* de, double* dp, double* fch
 	dMinuit->SetFCN(kine_fcn);         //set the function to minimise
 	dMinuit->SetPrintLevel(progpar.verbose-1); //set print out level for Minuit
 	Double_t arglist[2];
-	arglist[0]=1;
-	arglist[1]=1;
+	arglist[0]=100.;
 	Int_t iflag=0;
 	dMinuit->mnexcm("SET ERR",arglist,2,iflag);    //Interprets command
 	//gMinuit->mninit(1,1,1);
