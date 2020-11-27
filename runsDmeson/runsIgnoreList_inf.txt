@@ -1,0 +1,85 @@
+23209   cosmic
+23211   cosmic
+23228   ATC off
+23911
+23879   ?
+23818   ?
+23758   ?
+23700
+23699
+23644   ?
+23535   ?
+23930   ?
+23792
+23745
+23701
+24850   CSI
+24851   TOF 1el
+24852
+24860
+25086
+25112   DC Sel block
+25113   DC Sel block
+25172   CSI
+25173   TOF 1 conter off
+25174   CSI -noise
+25175   Large backgrounds VEPP
+25205   Large PT
+25217   CSI high rate
+25233   IMR 200keV
+25327   Large backgrounds VEPP
+25331   LKr errors
+25337   1 bunch, time in DC
+25338   not CSI1
+25357   LKR zalip
+25360   LKR A32 17 channel noise
+25365   CSI noise
+25368   ..
+25369   ..
+25370   ..
+25598   CSI PV replace
+25658   CSI noise
+25659   LKr A32
+26070   cosm
+26071   check times
+26099   CSI problem
+26246   errors in DC
+26247   ATC off
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
