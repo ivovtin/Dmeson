@@ -1,0 +1,16 @@
+  Ferhav: kp,plabs,elabs,pprox,y,z,pfrmix,y,z 14  3.55203009E-05  0.139567505
+  0.0945653057  0.00685662074  0.113855126  0.0377954887  0.180806522
+  0.0113910083
+    Lvmass,Am(kp),Eproj: F  0.1395675  0.203547752
+  Ferhav: kp,plabs,elabs,pprox,y,z,pfrmix,y,z 14  2.54707452E-05  0.139567502
+  0.0142147285 -0.177739867 -0.0261297429 -0.172774532 -0.143920659
+ -0.0584775657
+    Lvmass,Am(kp),Eproj: F  0.1395675  0.227937205
+  Eventq: negative excitation energy for the residual nucleus!! 32 77
+ -0.00066232169 T
+  Ferhav: kp,plabs,elabs,pprox,y,z,pfrmix,y,z 13  3.59509321E-05  0.139567505
+ -0.0617008233 -0.0507032528 -0.151167485 -0.0167103193  0.159957479
+ -0.171860147
+    Lvmass,Am(kp),Eproj: F  0.1395675  0.220700039
+  **** Bad normalized cosines from Nucriv!!! 9  0.268069615  0.0660489808
+  0.478724925 -0.185821402

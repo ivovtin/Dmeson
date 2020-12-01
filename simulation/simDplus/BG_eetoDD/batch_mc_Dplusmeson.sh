@@ -24,14 +24,13 @@
 ##$ -m beas
 ##$ -M ovtin.ivan@gmail.com
 
-#$ -t 1-5
+#$ -t 1-10
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]
 
 #start the job
-##$HOME/3.0.0/bin/ks < $HOME/development/Dmeson/simulation/simDplus/mccards/mc.cards.ee_to_DD_"$i" > /dev/null
-$HOME/development/bin/ks < $HOME/development/Dmeson/simulation/simDplus/mccards/mc.cards.ee_to_DD_"$i" > /dev/null
+$HOME/development/bin/ks < $HOME/development/Dmeson/simulation/simDplus/BG_eetoDD/mccards/mc.cards.ee_to_DD_"$i" > /dev/null
 status=$?
 if [ $status != 0 ]; then
   echo "Program exited with status $status"

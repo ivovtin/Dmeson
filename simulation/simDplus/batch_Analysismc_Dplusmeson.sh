@@ -23,30 +23,23 @@
 #$ -soft
 ##$ -hard
 #$ -l time=24:00:00
-#$ -q remote
+##$ -q remote
 ##$ -q extralong
+#$ -q 6h
+##$ -q day
 #
 # -- Send mail at submission and completion of script --
-#$ -m beas
-#$ -M ovtin.ivan@gmail.com
+##$ -m beas
+##$ -M ovtin.ivan@gmail.com
 
-#$ -t 4-4
+#$ -t 1-5
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]
 
-#inruns=23219
-#Nevents=10000
-#outfile="psi3770_to_D0meson_test.root"
-#Bkg
-inruns="/spool/users/ovtin/outDmeson/simulation/uds/simDmeson_eetoqq3_0"$i".dat"
-outfile="/spool/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_continium/psi3770_to_simDplusmeson_ee_to_qq3_"$i"_50k.root"
 #Signal
-##inruns="/spool/users/ovtin/outDmeson/simulation/simDmesonSignal0"$i".dat"
-##inruns="/spool/users/ovtin/outDmeson/simulation/simDmesonSignal"$i".dat"
-##outfile="/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0mesonSignal_kin_"$i".root"
-##inruns="/spool/users/ovtin/outDmeson/simulation/simDmesonBkg_eetoDD"$i".dat"
-##outfile="/spool/users/ovtin/outDmeson/simulation/psi3770_to_simD0mesonBkg_eetoDD_"$i".root"
+inruns="/spool/users/ovtin/outDmeson/simulation/outsimDplus/Signal/simDmeson00000"$i".dat"
+outfile="/spool/users/ovtin/outDmeson/simulation/outsimDplus/Signal/psi3770_to_simDplusmesonSignal_"$i"_5k.root"
 mintracks=3
 maxtracks=12
 minbeamtracks=0
@@ -63,12 +56,13 @@ minClustersCsI=0
 maxtchi2=100
 minNhits=20
 kinefit=1
-#nevbegin=40000
-#nevend=50000
-nevbegin=0
-nevend=0
+nevbegin=4001
+nevend=5000
+##nevbegin=5001
+##nevend=10000
 
-$HOME/development/Dmeson/analysis_Dplusmeson -v 23665 -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile -f $kinefit $inruns -w $nevbegin -g $nevend
+##$HOME/development/Dmeson/analysis_Dplusmeson -v 23897 -m 23897 -M 1 -S 1.0 -A 1.0 -Z 1.0 -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile -f $kinefit $inruns
+$HOME/development/Dmeson/analysis_Dplusmeson -v 23897 -m 23897 -M 1 -S 1.0 -A 1.0 -Z 1.0 -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile -f $kinefit $inruns -w $nevbegin -g $nevend
 
 status=$?
 if [ $status != 0 ]; then
