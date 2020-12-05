@@ -57,10 +57,11 @@ BINDIR := ./
 
 # Дополнительные либы (вставляются после либ)
 LIB_LOCAL= `root-config --libs` -lMinuit -lpq -lcrypt -lbz2 -ldl -lg2c
+##LIB_LOCAL= `root-config --libs` -lMinuit -lcrypt -lbz2 -lg2c
 ##LIB_LOCAL= `root-config --libs` -lMinuit -lcrypt -lpq -lbz2 -lg2c
 
 # Определим, какие программы мы будем собирать
-BINARIES = analysis_D0meson analysis_Dplusmeson
+BINARIES = analysis_D0meson analysis_Dplusmeson analysis_bhabha
 
 # укажем, из каких модулей этого пакета они состоят
 # (эти модули не будут включены в библиотеку)
@@ -72,6 +73,11 @@ VDDCRec KsTrg KdConvert KrObjects KdDCSim FitTools DchGeom ReadNat KDB AppFramew
 
 analysis_Dplusmeson_MODULES := analysis_Dplusmeson
 analysis_Dplusmeson_LIBS := KaFramework KrAtc KDisplay VDDCRec KrVDDCMu KrMu \
+KrdEdxPId KrDCCalibdEdx DchdEdxDataRoot VDDCRec KrToF KsToF KEmcRec LKrTools \
+VDDCRec KsTrg KdConvert KrObjects KdDCSim FitTools DchGeom ReadNat KDB AppFramework KrKRec KrDONLP2
+
+analysis_bhabha_MODULES := analysis_bhabha
+analysis_bhabha_LIBS := KaFramework KrAtc KDisplay VDDCRec KrVDDCMu KrMu \
 KrdEdxPId KrDCCalibdEdx DchdEdxDataRoot VDDCRec KrToF KsToF KEmcRec LKrTools \
 VDDCRec KsTrg KdConvert KrObjects KdDCSim FitTools DchGeom ReadNat KDB AppFramework KrKRec KrDONLP2
 
