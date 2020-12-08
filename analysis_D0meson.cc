@@ -321,40 +321,6 @@ int mu_event_rejection()
     return 0;
 }
 
-/*
-double xcorr=0;
-double scorr=0;
-double ran1;
-double ran2;
-
-double pcorr(double p, int type, double ran) {
-    double ms, dedx, k;
-
-    if (type==1) {
-	ms = 134.7;
-	dedx = 1.74;
-	k = 0;
-    } else if (type == 2) {
-	ms = 228.;
-	dedx = 3.095;
-	k = 0;
-    } else {
-	ms = 0.;
-	dedx = 1.24;
-	k = 0.29286e-2;
-    }
-
-    double gamma = sqrt(ms*ms+p*p)/ms;
-
-    double beta = sqrt(1.-1./gamma/gamma);
-
-    double pc = p+1.*dedx/pow(beta,3) + k*p;
-
-    pc = pc*fabs(progpar.pSF)*(1.+ran*sqrt(scorr*scorr+pow(xcorr*p/1000.,2)));
-
-    return fabs(pc);
-}
-*/
 double pcorr(double p) {
     double pc = p*fabs(progpar.pSF);
     if (progpar.verbose) cout<<"pc="<<pc<<"\t"<<"p="<<p<<"\t"<<"progpar.pSF="<<progpar.pSF<<endl;
@@ -373,8 +339,6 @@ void kine_fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t ifla
 
     double p1i = pcorr(tP(dcand_t1));
     double p2i = pcorr(tP(dcand_t2));
-    //double p1i = (pcorr(ktrrec_.PTRAK[dcand_t1],1,ran1)+pcorr(ktrrec_.PTRAK[dcand_t1],2,ran1))/2.;
-    //double p2i = (pcorr(ktrrec_.PTRAK[dcand_t2],1,ran2)+pcorr(ktrrec_.PTRAK[dcand_t2],2,ran2))/2.;
 
     double sp1 = sqrt(ktrrec_h_.FitTrack[dcand_t1][fitSigCC]/
 		      pow(ktrrec_h_.FitTrack[dcand_t1][fitC],2)+
@@ -453,8 +417,6 @@ void kine_fit(int ip1, int ip2, double* mbc, double* de, double* dp, double* fch
 
     double p1i = pcorr(tP(dcand_t1));
     double p2i = pcorr(tP(dcand_t2));
-    //double p1i = (pcorr(ktrrec_.PTRAK[dcand_t1],1,ran1)+pcorr(ktrrec_.PTRAK[dcand_t1],2,ran1))/2.;
-    //double p2i = (pcorr(ktrrec_.PTRAK[dcand_t2],1,ran2)+pcorr(ktrrec_.PTRAK[dcand_t2],2,ran2))/2.;
 
     if (enable) {
 
@@ -464,7 +426,8 @@ void kine_fit(int ip1, int ip2, double* mbc, double* de, double* dp, double* fch
 	dMinuit->SetFCN(kine_fcn);         //set the function to minimise
 	dMinuit->SetPrintLevel(progpar.verbose-1); //set print out level for Minuit
 	Double_t arglist[2];
-	arglist[0]=100.;
+	//arglist[0]=100.;
+	arglist[0]=1.;
 	Int_t iflag=0;
 	dMinuit->mnexcm("SET ERR",arglist,2,iflag);    //Interprets command
 	//gMinuit->mninit(1,1,1);
@@ -566,15 +529,7 @@ void kine_fit(int ip1, int ip2, double* mbc, double* de, double* dp, double* fch
 	- pow(py1+py2,2) - pow(pz1+pz2,2);
 
     if (*mbc>0) *mbc = sqrt(*mbc); else *mbc = 0;
-    /*
-    double p1pi = pcorr(ktrrec_.PTRAK[dcand_t1],1,ran1);
-    double p2pi = pcorr(ktrrec_.PTRAK[dcand_t2],1,ran2);
-    double p1ki = pcorr(ktrrec_.PTRAK[dcand_t1],2,ran1);
-    double p2ki = pcorr(ktrrec_.PTRAK[dcand_t2],2,ran2);
 
-    *de = (sqrt(mk*mk + p1ki*p1ki) + sqrt(mpi*mpi + p1pi*p1pi) +
-	   sqrt(mk*mk + p2ki*p2ki) + sqrt(mpi*mpi + p2pi*p2pi))/2. - ebeam;
-    */
     *de = (sqrt(mpi*mpi + p1i*p1i) + sqrt(mk*mk + p2i*p2i) +
 	   sqrt(mpi*mpi + p2i*p2i) + sqrt(mk*mk + p1i*p1i))/2. - ebeam;
 
@@ -685,9 +640,6 @@ int analyse_event()
 		double xx2=tX0IP(t2)*tX0IP(t2);
 		double yy2=tY0IP(t2)*tY0IP(t2);
 		double rr2=sqrt(xx2+yy2);
-
-		//if (progpar.verbose) cout<<"rr1="<<rr1<<"\t"<<"fabs(tZ0IP(t1))="<<fabs(tZ0IP(t1))<<endl;
-		//if (progpar.verbose) cout<<"rr2="<<rr2<<"\t"<<"fabs(tZ0IP(t2))="<<fabs(tZ0IP(t2))<<endl;
 
 		if ( fabs(tZ0IP(t1))>30. ) continue;
 		if ( fabs(tZ0IP(t2))>30. ) continue;
@@ -824,20 +776,7 @@ int analyse_event()
                 Dmeson.eno = eno;
 
 		double mbc, de, dp, fchi2;
-                /*
-		float rx1 = 0, ry1 = 0;
-		float rx2 = 0, ry2 = 0;
 
-		if ( kedrrun_cb_.Header.RunType == 64 ) {
-		    // generate randoms with larger gaussians
-		    rndm.Rannor(rx1,ry1);
-		    rndm.Rannor(rx2,ry2);
-		    //printf("rx1=%f, rx2=%f\n", rx, ry);
-		}
-
-		ran1 = rx1;
-		ran2 = rx2;
-                */
 		kine_fit(t1, t2, &mbc, &de, &dp, &fchi2, progpar.Dkine_fit);
 		Dmeson.mbc = mbc;
 		Dmeson.de = de;

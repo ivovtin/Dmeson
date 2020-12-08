@@ -178,9 +178,9 @@ static TTree *eventTree;
 typedef struct {
     Int_t vrtntrk,vrtnip,vrtnbeam,nhitst1,nhitst2,nhitst3,nhitsvdt1,nhitsvdt2,nhitsvdt3,nhitsxyt1,nhitszt1,nhitsxyt2,
 	nhitszt2,nhitsxyt3,nhitszt3,nvect1,nvecxyt1,nveczt1,nvect2,nvecxyt2,nveczt2,nvect3,
-	nvecxyt3,nveczt3,ncomb,ncls1,ncls2,ncls3,ncls,nlkr,ncsi,munhits,Run;
-    Float_t Mbc,Mbckin,dE,dEkin,Ebeam,rEv,P1,P2,P3,Pt1,Pt2,Pt3,thetat1,thetat2,thetat3,phit1,phit2,phit3,chi2t1,chi2t2,chi2t3,
-	e1,e2,e3,rr1,rr2,rr3,Zip1,Zip2,Zip3,ecls1,ecls2,ecls3,tcls1,tcls2,tcls3,pcls1,pcls2,pcls3,emcenergy,lkrenergy,csienergy,timet1,betat1,lengtht1,
+	nvecxyt3,nveczt3,ncomb,ncls1,ncls2,ncls3,ncls,nlkr,ncsi,munhits,mulayerhits1,mulayerhits2,mulayerhits3,Run;
+    Float_t mbc,de,fchi2,Ebeam,rEv,p1,p2,p3,pt1,pt2,pt3,thetat1,thetat2,thetat3,phit1,phit2,phit3,chi2t1,chi2t2,chi2t3,
+	e1,e2,e3,rr1,rr2,rr3,zip1,zip2,zip3,ecls1,ecls2,ecls3,tcls1,tcls2,tcls3,pcls1,pcls2,pcls3,emcenergy,lkrenergy,csienergy,timet1,betat1,lengtht1,
         timet2,betat2,lengtht2,timet3,betat3,lengtht3;
 } DMESON;
 
@@ -322,8 +322,8 @@ int mu_event_rejection()
 }
 
 double pcorr(double p) {
-
-    double pc =p*progpar.pSF;
+    double pc =p*fabs(progpar.pSF);
+    if (progpar.verbose) cout<<"pc="<<pc<<"\t"<<"p="<<p<<"\t"<<"progpar.pSF="<<progpar.pSF<<endl;
 
     return fabs(pc);
 }
@@ -403,7 +403,7 @@ void refit(int t, double p, double* phi, double* theta) {
     *theta = theta1;
 }
 
-void kine_fit(int ip1, int ip2, int ip3, double* mbc, double* de) {
+void kine_fit(int ip1, int ip2, int ip3, double* mbc, double* de, double* fchi2, int enable) {
     dcand_t1 = ip1;   //kaon
     dcand_t2 = ip2;   //pion
     dcand_t3 = ip3;   //pion
@@ -412,37 +412,54 @@ void kine_fit(int ip1, int ip2, int ip3, double* mbc, double* de) {
     double p2i = pcorr(tP(dcand_t2));   //pion
     double p3i = pcorr(tP(dcand_t3));   //pion
 
-    TMinuit *dMinuit = new TMinuit(2); //initialise Minuit with a maximum of 2 parameters to minimise
-    dMinuit->SetFCN(kine_fcn);         //set the function to minimise
-    dMinuit->SetPrintLevel(progpar.verbose-1); //set print out level for Minuit
-    Double_t arglist[2];
-    arglist[0]=1;
-    arglist[1]=1;
-    Int_t iflag=0;
-    dMinuit->mnexcm("SET ERR",arglist,2,iflag);    //Interprets command
-    //gMinuit->mninit(1,1,1);
-    double lowerLimit = 0.0;
-    double upperLimit = 0.0;
-    dMinuit->mnparm(0,"p1", p2i, 1., lowerLimit, upperLimit, iflag);    //set the parameters used in the fit
-    dMinuit->mnparm(1,"p2", p3i, 1., lowerLimit, upperLimit, iflag);
-    dMinuit->mnexcm("CALL FCN",arglist,1,iflag);                        //call the user defined function, to calculate the value FCN, and print the result out to the screen.
-    dMinuit->mnexcm("MIGRAD",arglist,2,iflag);                          //run the minimisation Using MIGRAD
-
     double pp1, pp2;
     double pk;
-    Double_t parval[2],err[2],bnd1[2],bnd2[2];
-    TString para0,para1;
-    int ivar;
+    *fchi2 = 0;
 
-    gMinuit->mnpout(0,para0,parval[0],err[0],bnd1[0],bnd2[0],ivar);
-    pp1 = parval[0];
-    gMinuit->mnpout(1,para1,parval[1],err[1],bnd1[1],bnd2[1],ivar);
-    pp2 = parval[1];
+    if (enable) {
+	TMinuit *dMinuit = new TMinuit(2); //initialise Minuit with a maximum of 2 parameters to minimise
+	dMinuit->SetFCN(kine_fcn);         //set the function to minimise
+	dMinuit->SetPrintLevel(progpar.verbose-1); //set print out level for Minuit
+	Double_t arglist[2];
+	arglist[0]=1000;
+	Int_t iflag=0;
+	dMinuit->mnexcm("SET ERR",arglist,2,iflag);    //Interprets command
+	//gMinuit->mninit(1,1,1);
+	double lowerLimit = 0.0;
+	double upperLimit = 0.0;
+	dMinuit->mnparm(0,"p1", p2i, 1., lowerLimit, upperLimit, iflag);    //set the parameters used in the fit
+	dMinuit->mnparm(1,"p2", p3i, 1., lowerLimit, upperLimit, iflag);
+	dMinuit->mnexcm("CALL FCN",arglist,1,iflag);                        //call the user defined function, to calculate the value FCN, and print the result out to the screen.
+	dMinuit->mnexcm("MIGRAD",arglist,2,iflag);                          //run the minimisation Using MIGRAD
 
-    double ek = ebeam - sqrt(mpi*mpi+pp1*pp1) - sqrt(mpi*mpi+pp2*pp2);
-    if (ek < mk) pk = 0.;
-    else
-	pk = sqrt(ek*ek-mk*mk);
+	Double_t val[2],err[2],bnd1[2],bnd2[2];
+	TString para0,para1;
+	int ivar;
+
+	gMinuit->mnpout(0,para0,val[0],err[0],bnd1[0],bnd2[0],ivar);
+	pp1 = val[0];
+	gMinuit->mnpout(1,para1,val[1],err[1],bnd1[1],bnd2[1],ivar);
+	pp2 = val[1];
+
+	double ek = ebeam - sqrt(mpi*mpi+pp1*pp1) - sqrt(mpi*mpi+pp2*pp2);
+	if (ek < mk) pk = 0.;
+	else
+	    pk = sqrt(ek*ek-mk*mk);
+
+	if (progpar.verbose) printf("  val0=%lf, val1=%lf\n",val[0], val[1]);
+
+	Double_t fmin;
+	Double_t edm,errdef;
+	Int_t nvpar,nparx,icstat;
+	gMinuit->mnstat(fmin,edm,errdef,nvpar,nparx,icstat);
+	*fchi2 = fmin;
+	if (progpar.verbose) printf(" Minimal function value: %8.3lf  \n",fmin);
+
+    } else {
+	pp1 = p2i;
+	pp2 = p3i;
+	pk = p1i;
+    }
 
     if (progpar.verbose) {
 	printf("Kinematic fitter: \n");
@@ -459,10 +476,11 @@ void kine_fit(int ip1, int ip2, int ip3, double* mbc, double* de) {
     double theta2 = ktrrec_.TETRAK[dcand_t3]/180.*PI;
     double phi2 = ktrrec_.FITRAK[dcand_t3]/180.*PI;
 
-    refit(dcand_t1, pk, &phik, &thetak);
-    refit(dcand_t2, pp1, &phi1, &theta1);
-    refit(dcand_t3, pp2, &phi2, &theta2);
-
+    if (enable) {
+	refit(dcand_t1, pk, &phik, &thetak);
+	refit(dcand_t2, pp1, &phi1, &theta1);
+	refit(dcand_t3, pp2, &phi2, &theta2);
+    }
     double pxk = pk*sin(thetak)*cos(phik);
     double pyk = pk*sin(thetak)*sin(phik);
     double pzk = pk*cos(thetak);
@@ -505,7 +523,6 @@ double clust_dist(int t, int cl) {
   return sqrt(cx*cx+cy*cy);
 }
 
-
 int analyse_event()
 {
     float EMinPhot=progpar.min_cluster_energy;
@@ -514,11 +531,7 @@ int analyse_event()
     ebeam=WTotal/2.;
 
     if (progpar.verbose) cout<<"RunNumber="<<kedrraw_.Header.RunNumber<<"\t"<<"WTotal="<<WTotal<<"\t"<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"eTracksAll="<<eTracksAll<<endl;
-
-
     if (progpar.verbose) cout<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"eTracksAll="<<eTracksAll<<"\t"<<"eTracksBeam="<<eTracksBeam<<"\t"<<"eTracksIP="<<eTracksIP<<endl;
-
-    unsigned short MUnhits=mu_next_event();
 
     int i=0;
 
@@ -542,16 +555,16 @@ int analyse_event()
 			double yy3=tY0IP(t3)*tY0IP(t3);
 			double rr3=sqrt(xx3+yy3);
 
-			if (progpar.verbose) cout<<"rr1="<<rr1<<"\t"<<"fabs(tZ0IP(t1))="<<fabs(tZ0IP(t1))<<endl;
-			if (progpar.verbose) cout<<"rr2="<<rr2<<"\t"<<"fabs(tZ0IP(t2))="<<fabs(tZ0IP(t2))<<endl;
-			if (progpar.verbose) cout<<"rr3="<<rr3<<"\t"<<"fabs(tZ0IP(t3))="<<fabs(tZ0IP(t3))<<endl;
-
 			if ( fabs(tZ0IP(t1))>20. ) continue;
 			if ( fabs(tZ0IP(t2))>20. ) continue;
 			if ( fabs(tZ0IP(t3))>20. ) continue;
 			if ( rr1>8. ) continue;
 			if ( rr2>8. ) continue;
 			if ( rr3>8. ) continue;
+
+			if (progpar.verbose) cout<<"rr1="<<rr1<<"\t"<<"fabs(tZ0IP(t1))="<<fabs(tZ0IP(t1))<<endl;
+			if (progpar.verbose) cout<<"rr2="<<rr2<<"\t"<<"fabs(tZ0IP(t2))="<<fabs(tZ0IP(t2))<<endl;
+			if (progpar.verbose) cout<<"rr3="<<rr3<<"\t"<<"fabs(tZ0IP(t3))="<<fabs(tZ0IP(t3))<<endl;
 
 			if( tPt(t1)<=progpar.min_momentum || tPt(t1)>=progpar.max_momentum )  continue;
 			if( tCh2(t1)>progpar.max_tchi2 )  continue;
@@ -568,9 +581,9 @@ int analyse_event()
 			Dmeson.rr1 = rr1;
 			Dmeson.rr2 = rr2;
 			Dmeson.rr3 = rr3;
-			Dmeson.Zip1 = tZ0IP(t1);
-			Dmeson.Zip2 = tZ0IP(t2);
-			Dmeson.Zip3 = tZ0IP(t3);
+			Dmeson.zip1 = tZ0IP(t1);
+			Dmeson.zip2 = tZ0IP(t2);
+			Dmeson.zip3 = tZ0IP(t3);
 
 			if (progpar.verbose) cout<<"i="<< i<<endl;
 			if (progpar.verbose) cout<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"Ebeam="<<WTotal/2<<"\t"<<"t1="<<t1<<"\t"<<"t2="<<t2<<"\t"<<"t3="<<t3<<"\t"<<"tCharge(t1)="<<tCharge(t1)<<"\t"<<"tCharge(t2)="<<tCharge(t2)<<"\t"<<"tCharge(t3)="<<tCharge(t3)<<endl;
@@ -588,21 +601,13 @@ int analyse_event()
 			pz2 = pcorr(tP(t2))*tVz(t2);
 			pz3 = pcorr(tP(t3))*tVz(t3);
 
-			Dmeson.Mbc = (WTotal/2.)*(WTotal/2.) - pow(px1+px2+px3,2) - pow(py1+py2+py3,2) - pow(pz1+pz2+pz3,2);
-			if (Dmeson.Mbc>0) Dmeson.Mbc = sqrt(Dmeson.Mbc); else Dmeson.Mbc = 0;
+			Dmeson.p1 = tP(t1);      //kaon
+			Dmeson.p2 = tP(t2);      //pion
+			Dmeson.p3 = tP(t3);      //pion
 
-			if (progpar.verbose) cout<<"mbc="<<Dmeson.Mbc<<endl;
-
-			Dmeson.dE = sqrt(mk*mk + pcorr(tP(t1))*pcorr(tP(t1))) + sqrt(mpi*mpi + pcorr(tP(t2))*pcorr(tP(t2))) + sqrt(mpi*mpi + pcorr(tP(t3))*pcorr(tP(t3))) - WTotal/2.;
-			if (progpar.verbose) cout<<"de="<<Dmeson.dE<<endl;
-
-			Dmeson.P1 = tP(t1);      //kaon
-			Dmeson.P2 = tP(t2);      //pion
-			Dmeson.P3 = tP(t3);      //pion
-
-			Dmeson.Pt1 = tPt(t1);
-			Dmeson.Pt2 = tPt(t2);
-			Dmeson.Pt3 = tPt(t3);
+			Dmeson.pt1 = tPt(t1);
+			Dmeson.pt2 = tPt(t2);
+			Dmeson.pt3 = tPt(t3);
 
 			Dmeson.vrtntrk = eTracksAll;
 			Dmeson.vrtnip = eTracksIP;
@@ -727,13 +732,12 @@ int analyse_event()
 			    }
 			}
 
-			double mbc, de, dp;
-			if (progpar.Dkine_fit)
-			{
-			    kine_fit(t1, t2, t3, &mbc, &de);
-			    Dmeson.Mbckin = mbc;
-			    Dmeson.dEkin = de;
-			}
+			double mbc, de, fchi2;
+
+			kine_fit(t1, t2, t3, &mbc, &de, &fchi2, progpar.Dkine_fit);
+			Dmeson.mbc = mbc;
+			Dmeson.de = de;
+			Dmeson.fchi2 = fchi2;
 
 			Dmeson.timet1=kschit_.time_ns[t1];
 			Dmeson.betat1=kscBhit_.Beta[t1][0];         //v/c
@@ -752,7 +756,20 @@ int analyse_event()
 			Dmeson.rEv = kedrraw_.Header.Number;
                         Dmeson.Run = kedrraw_.Header.RunNumber;
 			Dmeson.Ebeam=WTotal/2.;
-                        Dmeson.munhits = MUnhits;
+
+			int mu_hits = mu_next_event_good();
+			Dmeson.munhits = mu_hits;
+			int mu_hit;
+			int mu_layer_hits[3] = {0, 0, 0};
+
+			for (mu_hit = 0; mu_hit < mu_hits; mu_hit++) {
+			    int layer = mu_hit_layer(mu_hit);
+			    if (layer >= 1 && layer <= 3) mu_layer_hits[layer-1]++;
+			}
+
+			Dmeson.mulayerhits1 = mu_layer_hits[0];
+			Dmeson.mulayerhits2 = mu_layer_hits[1];
+			Dmeson.mulayerhits3 = mu_layer_hits[2];
 
 			eventTree->Fill();
 		    }
@@ -881,11 +898,10 @@ int main(int argc, char* argv[])
 	eventTree->SetAutoSave(500000000);  // autosave when 0.5 Gbyte written
 	eventTree->Branch("Dmeson",&Dmeson,"vrtntrk/I:vrtnip:vrtnbeam:nhitst1:nhitst2:nhitst3:nhitsvdt1:nhitsvdt2:nhitsvdt3:nhitsxyt1:nhitszt1:nhitsxyt2"
 			  ":nhitszt2:nhitsxyt3:nhitszt3:nvect1:nvecxyt1:nveczt1:nvect2:nvecxyt2:nveczt2:nvect3:nvecxyt3"
-			  ":nveczt3:ncomb:ncls1:ncls2:ncls3:ncls:nlkr:ncsi:munhits:Run"
-			  ":Mbc/F:Mbckin:dE:dEkin:Ebeam:rEv:P1:P2:P3:Pt1:Pt2:Pt3:thetat1:thetat2:thetat3:phit1:phit2:phit3:chi2t1:chi2t2:chi2t3:e1"
+			  ":nveczt3:ncomb:ncls1:ncls2:ncls3:ncls:nlkr:ncsi:munhits:mulayerhits1:mulayerhits2:mulayerhits3:Run"
+			  ":mbc/F:de:fchi2:Ebeam:rEv:P1:P2:P3:Pt1:Pt2:Pt3:thetat1:thetat2:thetat3:phit1:phit2:phit3:chi2t1:chi2t2:chi2t3:e1"
 			  ":e2:e3:rr1:rr2:rr3:Zip1:Zip2:Zip3:ecls1:ecls2:ecls3:tcls1:tcls2:tcls3:pcls1"
 			  ":pcls2:pcls3:emcenergy:lkrenergy:csienergy:timet1:betat1:lengtht1:timet2:betat2:lengtht2:timet3:betat3:lengtht3");
-
 //----------------- Configure kframework -----------------//
 	//Set kframework signal handling
 	kf_install_signal_handler(1);
