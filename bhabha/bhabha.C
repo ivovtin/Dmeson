@@ -8,6 +8,8 @@
 
 #include "bhabha.h"
 
+#define PI 3.14159265358979
+
 using namespace std;
 string progname;
 
@@ -25,7 +27,7 @@ int main(int argc, char* argv[])
     if( argc>1 )
     {
 	key=atoi(argv[1]);
-	verbose=atoi(argv[2]);
+	if(argv[2]!=0) verbose=atoi(argv[2]);
 	if( key>4 ){ Usage(progname); return 0;}
 	if( key<0 ){ Usage(progname); return 0;}
     }
@@ -36,10 +38,10 @@ int main(int argc, char* argv[])
 
     //***************preselections*************
     int ntrk=2;
-    int max_munhits=1;
-    float min_pt=100.; //MeV
-    float max_pt=2000.; //MeV
-    float eclsCut=1000.;
+    int max_munhits=0;
+    float min_p=500.; //MeV
+    float max_p=3000.; //MeV
+    float eclsCut=1200.;
 
     float rrCut,zCut,max_chi2,min_nhits,max_nhits;
 
@@ -48,7 +50,7 @@ int main(int argc, char* argv[])
 	rrCut=0.5;
 	zCut=13.;
 	max_chi2=50.;
-	min_nhits=24.;
+	min_nhits=23.;
         max_nhits=50.;
     }
     else{
@@ -56,7 +58,7 @@ int main(int argc, char* argv[])
 	rrCut=0.5;
 	zCut=13.;
 	max_chi2=50.;
-	min_nhits=24.;
+	min_nhits=23.;
 	max_nhits=48.;
 	//max_nhits=50.;
     }
@@ -66,26 +68,22 @@ int main(int argc, char* argv[])
     TString fnameout;
     TString KEDR;
     TString fout_result;
-    TString dir_out="results";
     TString list_badruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/badruns";
     if( key==0 ){           //exp 2016-17
-	fnameout=dir_out + "/" + TString::Format("exp_bhabha_data_%d.root",key).Data();
+	fnameout=TString::Format("exp_bhabha_data_%d.root",key).Data();
         KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/data/";
 	list_badruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/badruns";
-	fout_result=dir_out + "/" + "bhabha_2016-17.dat";
     }
     else if (key==1)        //exp 2004
     {
-	fnameout=dir_out + "/" + TString::Format("exp_bhabha_data2004_%d.root",key).Data();
+	fnameout=TString::Format("exp_bhabha_data2004_%d.root",key).Data();
 	KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/data2004/";
-        list_badruns="/home/ovtin/development/Dmeson/runsbhabha/runs2004/badruns";
-	fout_result=dir_out + "/" + "bhabha_2004.dat";
+        list_badruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/badruns";
     }
     else if (key==2)        //sig
     {
-	fnameout=dir_out + "/" + TString::Format("sim_bhabha_sig_%d.root",key).Data();
+	fnameout=TString::Format("sim_bhabha_sig_%d.root",key).Data();
         KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/simulation_Sig/";
-	fout_result=dir_out + "/" + "bhabha_sim.dat";
     }
     cout<<fnameout<<endl;
     fout = new TFile(fnameout,"RECREATE");
@@ -128,7 +126,13 @@ int main(int argc, char* argv[])
     TH1F* htnvecxy=new TH1F("tnvecxy","tnvecxy",30,0.,30.);
     TH1F* htnvecz=new TH1F("tnvecz","tnvecz",30,0.,30.);
     TH1F* htheta=new TH1F("theta","t.theta",185,0.,185.);
+    //TH1F* hthetadif=new TH1F("#Delta #theta","#Delta #theta",100,-0.1,0.1);
+    TH1F* hthetadif=new TH1F("htheta","#Delta #theta",100,-10.,10.);
     TH1F* hphi=new TH1F("phi","t.phi",180,0.,360.);
+    //TH1F* hphidif=new TH1F("#Delta #phi","#Delta #phi",100,-0.03,0.03);
+    TH1F* hphidif=new TH1F("hphi","#Delta #phi",100,-5.,5.);
+    TH1F* htheta2t=new TH1F("theta2t","theta2t",185,0.,185.);
+    TH1F* hphi2t=new TH1F("phi2t","phi2t",185,0.,185.);
 
     TH1F* henass=new TH1F("Energy ass","Energy ass",100,0.,4500.);
     TH1F* henergy=new TH1F("Energy","Energy EMC",100,0.,4500.);
@@ -137,7 +141,7 @@ int main(int argc, char* argv[])
     TH1F* hncls=new TH1F("ncls","emc.ncls",20,-0.5,19.5);
     TH1F* hnlkr=new TH1F("nlkr","emc.nlkr",20,-0.5,19.5);
     TH1F* hncsi=new TH1F("ncsi","emc.ncsi",20,-0.5,19.5);
-    TH1F* hep=new TH1F("Etop","E/p",100,-0.5,3.5);
+    TH1F* hep=new TH1F("e/p","e/p",100,-0.5,3.5);
     TH1F* hnclst1=new TH1F("nclst1","nclst1",6,-0.5,5.5);
     TH1F* heclst1=new TH1F("eclst1","eclst1",100,0.,2500.);
     TH1F* htclst1=new TH1F("tclst1","tclst1",100,-30.,30.);
@@ -162,6 +166,8 @@ int main(int argc, char* argv[])
     TH1F* hMUnhits2=new TH1F("munhits","mu.nhits",15,-0.5,15.5);
     TH1F* hMUnhits3=new TH1F("munhits","mu.nhits",15,-0.5,15.5);
 
+    TH1F* hpres=new TH1F("hpres","momres",100,-1.0,1.0);
+
     std::vector<int> badruns;
     string line;
     int run=0;
@@ -177,6 +183,7 @@ int main(int argc, char* argv[])
     in.close();
 
     int runprev=0;
+    float pres,pp,pm,tp,tm,phim,phip;
 
     //event loop
     for(int k=0; k<nentr; k++)
@@ -198,16 +205,44 @@ int main(int argc, char* argv[])
 
 	if(
 	   bhabha.vrtntrk>=ntrk
-	   && bhabha.pt1>min_pt && bhabha.pt1<max_pt && bhabha.pt2>min_pt && bhabha.pt2<max_pt
+	   && bhabha.p1>min_p && bhabha.p1<max_p && bhabha.p2>min_p && bhabha.p2<max_p
 	   && bhabha.chi2t1<max_chi2 && bhabha.chi2t2<max_chi2
 	   && bhabha.nhitst1>=min_nhits && bhabha.nhitst2>=min_nhits
 	   && bhabha.nhitst1<=max_nhits && bhabha.nhitst2<=max_nhits
 	   && bhabha.rr1<rrCut && bhabha.rr2<rrCut
 	   && fabs(bhabha.zip1)<zCut && fabs(bhabha.zip2)<zCut
-	   && bhabha.ecls1<eclsCut && bhabha.ecls2<eclsCut
+	   && bhabha.ecls1>eclsCut && bhabha.ecls2>eclsCut
            && (bhabha.mulayerhits2+bhabha.mulayerhits3)<=max_munhits
+	   && bhabha.munhits<=1
+           && (bhabha.e1/bhabha.p1)>0.5 && (bhabha.e2/bhabha.p2)>0.5
+	   && (bhabha.e1/bhabha.p1)<1.4 && (bhabha.e2/bhabha.p2)<1.4
+	   && (bhabha.thetat1<55 || bhabha.thetat1>125 ) && (bhabha.thetat2<55 || bhabha.thetat2>125)
+           && bhabha.ncls==2
 	  )
 	{
+	    if(bhabha.theta2t<=178) continue;
+	    if(bhabha.phi2t<=178) continue;
+
+	    if(bhabha.charge1==1)
+	    {
+		pp=bhabha.p1;
+		pm=bhabha.p2;
+		tp=bhabha.thetat1/180.*PI;
+		tm=bhabha.thetat2/180.*PI;
+		phip=bhabha.phit1/180.*PI;
+                phim=bhabha.phit2/180.*PI;
+	    }
+	    else
+	    {
+		pp=bhabha.p2;
+		pm=bhabha.p1;
+		tp=bhabha.thetat2/180.*PI;
+		tm=bhabha.thetat1/180.*PI;
+		phip=bhabha.phit2/180.*PI;
+                phim=bhabha.phit1/180.*PI;
+	    }
+
+            if((pp+pm)<2000) continue;
 
 	    if ( verbose==1 )
 	    {
@@ -220,6 +255,13 @@ int main(int argc, char* argv[])
 		cout<<"bhabha.thetat1="<<bhabha.thetat1<<"\t"<<"bhabha.thetat2="<<bhabha.thetat2<<endl;
 		cout<<"fabs(bhabha.thetat1-bhabha.thetat2)="<<fabs(bhabha.thetat1-bhabha.thetat2)<<endl;
 	    }
+
+	    pres = (pm*sin(tm)-pp*sin(tp))/(sqrt(2.)*(pm*sin(tm)+pp*sin(tp))/2.);
+            //if(pres>-0.2 && pres<0.2) continue;
+	    hpres->Fill(pres);
+
+	    hthetadif->Fill((tm+tp-PI)*180./PI);
+	    hphidif->Fill((fabs(phim-phip)-PI)*180./PI);
 
 	    hDncomb->Fill(bhabha.ncomb);
 
@@ -260,6 +302,9 @@ int main(int argc, char* argv[])
 
 	    hphi->Fill(bhabha.phit1);
 	    hphi->Fill(bhabha.phit2);
+
+            htheta2t->Fill(bhabha.theta2t);
+            hphi2t->Fill(bhabha.phi2t);
 
 	    htnvec->Fill(bhabha.nvect1);
 	    htnvec->Fill(bhabha.nvect2);
@@ -308,7 +353,7 @@ int main(int argc, char* argv[])
             htofc1->Fill(bhabha.tofc1);
             httof1->Fill(bhabha.ttof1);
             htofc2->Fill(bhabha.tofc2);
-            httof2->Fill(bhabha.ttof2);
+	    httof2->Fill(bhabha.ttof2);
 
 	}
     }
@@ -364,7 +409,19 @@ int main(int argc, char* argv[])
     htnvecxy->Draw(); cc1->SaveAs(KEDR+"tnvecxy.png");
     htnvecz->Draw(); cc1->SaveAs(KEDR+"tnvecz.png");
     htheta->Draw(); cc1->SaveAs(KEDR+"theta.png");
+    hthetadif->GetXaxis()->SetTitle("#Delta #theta");
+    Double_t sc1=hthetadif->GetEntries();
+    hthetadif->Scale(1/sc1);
+    hthetadif->Fit("gaus","","",-1.8,1.8);
+    hthetadif->Draw(); cc1->SaveAs(KEDR+"thetadif.png"); cc1->SaveAs(KEDR+"thetadif.eps");
     hphi->Draw(); cc1->SaveAs(KEDR+"phi.png");
+    hphidif->GetXaxis()->SetTitle("#Delta #phi");
+    Double_t sc2=hphidif->GetEntries();
+    hphidif->Scale(1/sc2);
+    hphidif->Fit("gaus","","",-0.9,0.9);
+    hphidif->Draw(); cc1->SaveAs(KEDR+"phidif.png"); cc1->SaveAs(KEDR+"phidif.eps");
+    htheta2t->Draw(); cc1->SaveAs(KEDR+"theta2t.png");
+    hphi2t->Draw(); cc1->SaveAs(KEDR+"phi2t.png");
 
     htofc1->Draw(); cc1->SaveAs(KEDR+"htofc1.png");
     httof1->Draw(); cc1->SaveAs(KEDR+"httof1.png");
@@ -379,6 +436,12 @@ int main(int argc, char* argv[])
     hvrtntrk->Draw(); cc1->SaveAs(KEDR+"vrtntrk.png");
     hvrtnip->Draw(); cc1->SaveAs(KEDR+"vrtnip.png");
     hvrtnbeam->Draw(); cc1->SaveAs(KEDR+"vrtnbeam.png");
+
+    hpres->GetXaxis()->SetTitle("#Delta p_{t}/p_{t}");
+    Double_t sc3=hpres->GetEntries();
+    hpres->Scale(1/sc3);
+    hpres->Fit("gaus","","",-0.20,0.20); hpres->Draw();
+    cc1->SaveAs(KEDR+"mom_res.png"); cc1->SaveAs(KEDR+"mom_res.eps");
 
     fout->Write();
     fout->Close();
