@@ -1,6 +1,5 @@
 {
   gROOT.LoadMacro("fit.cpp+");
-  TString type = "tof";
 
   init();
 

@@ -1,9 +1,6 @@
 {
   gROOT.LoadMacro("fit.cpp+");
 
-  TString type = "tof2";
-  //TString type = "moddedx";
-
   init();
 
   num_norm = 2000000;

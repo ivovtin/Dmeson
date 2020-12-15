@@ -373,7 +373,7 @@ void refit(int t, double p, double* phi, double* theta) {
     ktrk_hits_.RcFixR = r;
     PhiFixR = phi0;
     ThetaFixR = theta0;
-    //ktrk_hits_.FixUserR = 1;      //default is 0
+    ktrk_hits_.FixUserR = 1;      //default is 0
 
     //int track = t+1;
     //ktrkhits_(&track);
@@ -426,10 +426,10 @@ void kine_fit(int ip1, int ip2, double* mbc, double* de, double* dp, double* fch
 	dMinuit->SetFCN(kine_fcn);         //set the function to minimise
 	dMinuit->SetPrintLevel(progpar.verbose-1); //set print out level for Minuit
 	Double_t arglist[2];
-	//arglist[0]=100.;
-	arglist[0]=1.;
 	Int_t iflag=0;
-	dMinuit->mnexcm("SET ERR",arglist,2,iflag);    //Interprets command
+	//arglist[0]=100.;
+	arglist[0]=1000.;
+	dMinuit->mnexcm("SET ERR",arglist,1,iflag);    //Interprets command
 	//gMinuit->mninit(1,1,1);
 	double lowerLimit = 0.0;
 	double upperLimit = 0.0;

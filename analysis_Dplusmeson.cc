@@ -13,6 +13,7 @@
 #include "ReadNat/rr_def.h"
 #include "ReadNat/re_def.h"
 #include "ReadNat/ss_def.h"
+#include "ReadNat/read_nat_c.h"
 #include "VDDCRec/ktracks.h"
 #include "VDDCRec/mtofhits.h"
 #include "VDDCRec/ToFTrack.hh"
@@ -50,6 +51,8 @@
 #include "VDDCRec/ktrkhits.h"
 #include "VDDCRec/ktrkfpar.h"
 #include "VDDCRec/kglobparam.h"
+#include "VDDCRec/kdcswitches.h"
+#include "VDDCRec/mctracks.h"
 #include "ReadNat/mcdc_def.h"
 #include "ReadNat/dcrawhitspar.h"
 //#include "KDisplay/kdisplay_event.h"
@@ -68,12 +71,14 @@
 //#include <minuit.h>
 //#include <hbook.h>
 #include "TMinuit.h"
+#include "TRandom3.h"
 
 #define PI 3.14159265358979
 #define THETA_CL_CUT 30.
 #define DIST_CL_CUT 20.
 
 using namespace std;
+TRandom3 rndm;
 
 static const char* progname;
 
@@ -176,7 +181,7 @@ enum {
 static TTree *eventTree;
 
 typedef struct {
-    Int_t vrtntrk,vrtnip,vrtnbeam,nhitst1,nhitst2,nhitst3,nhitsvdt1,nhitsvdt2,nhitsvdt3,nhitsxyt1,nhitszt1,nhitsxyt2,
+    Int_t vrtntrk,vrtnip,vrtnbeam,charge1,charge2,charge3,nhitst1,nhitst2,nhitst3,nhitsvdt1,nhitsvdt2,nhitsvdt3,nhitsxyt1,nhitszt1,nhitsxyt2,
 	nhitszt2,nhitsxyt3,nhitszt3,nvect1,nvecxyt1,nveczt1,nvect2,nvecxyt2,nveczt2,nvect3,
 	nvecxyt3,nveczt3,ncomb,ncls1,ncls2,ncls3,ncls,nlkr,ncsi,munhits,mulayerhits1,mulayerhits2,mulayerhits3,Run;
     Float_t mbc,de,fchi2,Ebeam,rEv,p1,p2,p3,pt1,pt2,pt3,thetat1,thetat2,thetat3,phit1,phit2,phit3,chi2t1,chi2t2,chi2t3,
@@ -319,6 +324,22 @@ int mu_event_rejection()
     //if( mu_next_event()>0 ) return MUCut;           //for delete cosmic events
 
     return 0;
+}
+
+int match_dir(int mc, int rec) {
+  double x1 = mctracks_cb_.Vx[mc];
+  double y1 = mctracks_cb_.Vy[mc];
+  double z1 = mctracks_cb_.Vz[mc];
+
+  double x2 = ktrrec_.VxTRAK[rec];
+  double y2 = ktrrec_.VyTRAK[rec];
+  double z2 = ktrrec_.VzTRAK[rec];
+
+  double prod = x1*x2 + y1*y2 + z1*z2;
+
+//  printf("match: prod=%f, chmc = %d, chrec= %d\n", prod, mctracks_cb_.Ch[mc], ktrrec_.CHTRAK[rec]);
+
+  return (prod>0.95);
 }
 
 double pcorr(double p) {
@@ -527,7 +548,10 @@ int analyse_event()
 {
     float EMinPhot=progpar.min_cluster_energy;
     double  WTotal=2*beam_energy;                                                                 //beam_energy - How determined this energy ?
-    if( kedrrun_cb_.Header.RunType == 64 ) { WTotal=2*1888.75; }                                  //for MC
+    if( kedrrun_cb_.Header.RunType == 64 ) {
+        kmctracks();
+	WTotal=2*1888.75;
+    }                                  //for MC
     ebeam=WTotal/2.;
 
     if (progpar.verbose) cout<<"RunNumber="<<kedrraw_.Header.RunNumber<<"\t"<<"WTotal="<<WTotal<<"\t"<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"eTracksAll="<<eTracksAll<<endl;
@@ -624,6 +648,10 @@ int analyse_event()
 			Dmeson.chi2t1 = tCh2(t1);
 			Dmeson.chi2t2 = tCh2(t2);
 			Dmeson.chi2t3 = tCh2(t3);
+
+			Dmeson.charge1 = ktrrec_.CHTRAK[t1];
+			Dmeson.charge2 = ktrrec_.CHTRAK[t2];
+			Dmeson.charge3 = ktrrec_.CHTRAK[t3];
 
 			Dmeson.nhitst1 = tHits(t1);
 			Dmeson.nhitst2 = tHits(t2);
@@ -739,17 +767,49 @@ int analyse_event()
 			Dmeson.de = de;
 			Dmeson.fchi2 = fchi2;
 
-			Dmeson.timet1=kschit_.time_ns[t1];
+			double tof = 0;
+
+			if ( kedrrun_cb_.Header.RunType == 64 ) {
+			    int tmc;
+			    for (tmc=0; tmc < mctracks_cb_.Ntracks; tmc++) {
+				if (match_dir(tmc, t1) &&
+				    (abs(mctracks_cb_.kf[tmc]) == 211 ||
+				     abs(mctracks_cb_.kf[tmc]) == 321)) {
+				    double p = ktrrec_.PTRAK[t1];
+				    double th = ktrrec_.TETRAK[t1]/180*PI;
+				    double tlen = kscBhit_.len[t1][0];
+				    int id = mctracks_cb_.kf[tmc];
+				    if (abs(id) == 211) tof = sqrt(139.*139. + p*p)/p*tlen/30.;
+				    if (abs(id) == 321) tof = sqrt(494.*494. + p*p)/p*tlen/30.;
+
+				    float r1 = 0, r2 = 0;
+				    rndm.Rannor(r1, r2);    //Return 2 numbers distributed following a gaussian with mean=0 and sigma=1.
+				    if (progpar.verbose) cout<<"r1="<<r1<<"\t"<<"r2="<<r2<<endl;
+				    //RANECU(r2, 1, 1);       //RANECU generates a sequence of uniformly distributed random numbers in the interval (0,1).
+                                    r2 = rndm.Rndm();
+
+				    tof += r1*0.420;
+				    if (progpar.verbose) cout<<"r2="<<r2<<"\t"<<"tof="<<tof<<endl;
+				    if (r2 < 0.15) tof = 0.;
+
+				    if (progpar.verbose) printf("Tr %d, MC %d, id=%d, p=%f, th=%f, l=%f, tof=%f\n",t1, tmc, id, p, th, tlen, tof);
+				}
+			    }
+			}
+
+			Dmeson.timet1 = kedrrun_cb_.Header.RunType != 64 ? kscBhit_.time_B_ns[t1][0] : tof;
 			Dmeson.betat1=kscBhit_.Beta[t1][0];         //v/c
-			Dmeson.lengtht1=kscBhit_.len[t1][0];        //длина трека
+			Dmeson.lengtht1 = kscBhit_.len[t1][0];
 
-			Dmeson.timet2=kschit_.time_ns[t2];
-			Dmeson.betat2=kscBhit_.Beta[t2][0];         //v/c
-			Dmeson.lengtht2=kscBhit_.len[t2][0];        //длина трека
+			Dmeson.timet2 = kscBhit_.time_B_ns[t2][0];
+			Dmeson.betat2 = kscBhit_.Beta[t2][0];         //v/c
+			Dmeson.lengtht2 = kscBhit_.len[t2][0];
 
-			Dmeson.timet3=kschit_.time_ns[t3];
-			Dmeson.betat3=kscBhit_.Beta[t3][0];         //v/c
-			Dmeson.lengtht3=kscBhit_.len[t3][0];        //длина трека
+			Dmeson.timet3 = kscBhit_.time_B_ns[t3][0];
+			Dmeson.betat3 = kscBhit_.Beta[t3][0];         //v/c
+			Dmeson.lengtht3 = kscBhit_.len[t3][0];
+
+                        if (progpar.verbose)  cout<<"timet1="<<Dmeson.timet1<<"\t"<<"timet2="<<Dmeson.timet2<<"\t"<<"timet3="<<Dmeson.timet3<<"\t"<<endl;
 
 			i++;
 			Dmeson.ncomb = i;
@@ -896,7 +956,7 @@ int main(int argc, char* argv[])
 
 	eventTree = new TTree("et","Event tree");
 	eventTree->SetAutoSave(500000000);  // autosave when 0.5 Gbyte written
-	eventTree->Branch("Dmeson",&Dmeson,"vrtntrk/I:vrtnip:vrtnbeam:nhitst1:nhitst2:nhitst3:nhitsvdt1:nhitsvdt2:nhitsvdt3:nhitsxyt1:nhitszt1:nhitsxyt2"
+	eventTree->Branch("Dmeson",&Dmeson,"vrtntrk/I:vrtnip:vrtnbeam:charge1:charge2:charge3:nhitst1:nhitst2:nhitst3:nhitsvdt1:nhitsvdt2:nhitsvdt3:nhitsxyt1:nhitszt1:nhitsxyt2"
 			  ":nhitszt2:nhitsxyt3:nhitszt3:nvect1:nvecxyt1:nveczt1:nvect2:nvecxyt2:nveczt2:nvect3:nvecxyt3"
 			  ":nveczt3:ncomb:ncls1:ncls2:ncls3:ncls:nlkr:ncsi:munhits:mulayerhits1:mulayerhits2:mulayerhits3:Run"
 			  ":mbc/F:de:fchi2:Ebeam:rEv:P1:P2:P3:Pt1:Pt2:Pt3:thetat1:thetat2:thetat3:phit1:phit2:phit3:chi2t1:chi2t2:chi2t3:e1"

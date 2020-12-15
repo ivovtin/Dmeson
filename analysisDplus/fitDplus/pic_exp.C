@@ -31,9 +31,8 @@
   gStyle->SetHistLineWidth(3);
   gStyle->SetHatchesLineWidth(3);
 
-  TString KEDR="/spool/users/ovtin/outDmeson/Dplus/results/fitsDplus/";
-
-  int key = 2016;
+  //TString KEDR="/spool/users/ovtin/outDmeson/Dplus/results/fitsDplus/";
+  TString KEDR="/spool/users/ovtin/outDmeson/Dplus/results/fitsDplus/forTest/";
 
   char *infile;
   int mbcmax;
@@ -44,6 +43,8 @@
   char *exp_sig;
   char *exp_bck;
   char *exp_dbck;
+
+  int key = 2016;
 
   if( key==2004 ) {
       infile = "dat/kpp_2004.dat";
@@ -58,8 +59,8 @@
   }
   else{
       infile = "dat/kpp_2016-17.dat";
-      mbcmax = 140;
-      rmax = 140.;
+      mbcmax = 120;
+      rmax = 120.;
       outfile1 = "kpp_exp_mbc";
       outfile2 = "kpp_exp_de";
       outfile3 = "kpp_exp_mbcde";

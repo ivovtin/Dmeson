@@ -6,7 +6,8 @@
   gStyle->SetCanvasColor(0);
   gStyle->SetFrameFillColor(0);
 
-  TString KEDR="/spool/users/ovtin/outDmeson/Dplus/results/fitsDplus/";
+  //TString KEDR="/spool/users/ovtin/outDmeson/Dplus/results/fitsDplus/";
+  TString KEDR="/spool/users/ovtin/outDmeson/Dplus/results/fitsDplus/forTest/";
 
   TString type = "tof";
 

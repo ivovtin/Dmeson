@@ -1,8 +1,6 @@
 {
   gROOT.LoadMacro("fit.cpp+");
 
-  TString type = "tof";
-
   init();
 
   num_norm = 2000000;

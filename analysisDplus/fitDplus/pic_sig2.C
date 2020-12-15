@@ -9,6 +9,7 @@
   gStyle->SetHistLineColor(4);
 
   TString KEDR="/spool/users/ovtin/outDmeson/Dplus/results/fitsDplus/";
+  //TString KEDR="/spool/users/ovtin/outDmeson/Dplus/results/fitsDplus/forTest/";
 
   TString type = "tof";
 
@@ -17,6 +18,7 @@
   TNtuple nt2("nt2","NTuple","mbc:de:dp");
 
   FILE* file = fopen(TString("dat/kpp_signal_def.dat").Data(),"r");
+  //FILE* file = fopen(TString("dat/old/kpp_signal_def.dat").Data(),"r");
 
   while (!feof(file)) {
     double mbc,de,dp;
