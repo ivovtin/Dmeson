@@ -79,13 +79,13 @@ int main(int argc, char* argv[])
     }
     else if (key==1)        //exp 2004
     {
-	fnameout=TString::Format("exp_bhabha_data2004_%d.root",key).Data();
+	fnameout=TString::Format("exp_kspp_data2004_%d.root",key).Data();
 	KEDR = "/home/ovtin/public_html/outDmeson/Kspp/data2004/";
         list_badruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/badruns";
     }
     else if (key==2)        //sig
     {
-	fnameout=TString::Format("sim_bhabha_sig_%d.root",key).Data();
+	fnameout=TString::Format("sim_kspp_sig_%d.root",key).Data();
         KEDR = "/home/ovtin/public_html/outDmeson/Kspp/simulation_Sig/";
     }
     cout<<fnameout<<endl;
