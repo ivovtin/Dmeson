@@ -52,8 +52,7 @@ void chain(){
 	}
     }
     else if (key==1){
-	//for(int i=1; i<=482; i++)   //signal 2004+2005
-	for(int i=1; i<=13; i++)   //signal 2004+2005
+	for(int i=1; i<=482; i++)   //signal 2004+2005
 	{
 	    tt->Add(TString::Format("/spool/users/ovtin/outDmeson/Kspp/data2004/psi3770_to_Kspp_%d.root",i).Data());
 	}

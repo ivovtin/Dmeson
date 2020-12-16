@@ -19,6 +19,41 @@ int Usage(string status)
         exit(0);
 }
 
+double msf = 1;
+double xcorr = 0;
+double scorr = 0;
+
+double pcorr(double p, int type, double ran)
+{
+    double ms, dedx, k;
+
+    if (type==1) {    //pion
+	ms = 134.7;
+	dedx = 1.74;
+	k = 0.;
+    }
+    else if(type==2)
+    { //kaon
+	ms = 228.;
+	dedx = 3.095;
+	k = 0.;
+    }
+    else{                //electron
+	ms = 0.;
+	dedx = 1.24;
+	k = 0.29286e-2;
+    }
+    double gamma = sqrt(ms*ms+p*p)/ms;
+
+    double beta = sqrt(1.-1./gamma/gamma);
+
+    double pc = p+1.*dedx/pow(beta,3) + k*p;
+
+    pc = pc*fabs(msf)*(1.+ran*sqrt(scorr*scorr+pow(xcorr*p/1000.,2)));
+
+    return fabs(pc);
+}
+
 int main(int argc, char* argv[])
 {
     progname=argv[0];
@@ -37,30 +72,28 @@ int main(int argc, char* argv[])
     }
 
     //***************preselections*************
-    int ntrk=2;
-    int max_munhits=0;
+    int ntrk=3;
     float min_p=100.; //MeV
     float max_p=1600.; //MeV
-    float eclsCut=1500.;
 
     float rCut1,rCut2,rrCut,zCut,max_chi2,min_nhits,max_nhits;
 
     if(key!=1){
 	//2016-17
-	rCut1=0.;
+	rCut1=0.5;
 	rCut2=20.;
-	rrCut=100.;
-	zCut=20.;
+	rrCut=0.0;
+	zCut=13.;
 	max_chi2=50.;
 	min_nhits=24.;
-        max_nhits=1000.;
+	max_nhits=1000.;
     }
     else{
         //2004
-	rCut1=0.;
+	rCut1=0.5;
 	rCut2=20.;
-	rrCut=100.;
-	zCut=20.;
+	rrCut=0.0;
+	zCut=13.;
 	max_chi2=50.;
 	min_nhits=24.;
 	max_nhits=1000.;
@@ -120,6 +153,7 @@ int main(int argc, char* argv[])
     TH1F* hvrtnip=new TH1F("vrt.nip","vrt.nip",12,-0.5,11.5);
     TH1F* hvrtnbeam=new TH1F("vrt.nbeam","vrt.nbeam",12,-0.5,11.5);
     TH1F* hinvM=new TH1F("invM","invM",100,400.,600.);
+    TH1F* hinvMcor=new TH1F("invMcor","invMcor",100,400.,600.);
     TH1F* hmomt=new TH1F("pt","pt",100,0.,3000.);
     TH1F* hmom=new TH1F("p","p",100,0.,3000.);
     TH1F* htchi2=new TH1F("tchi2","tchi2",100,0.,100.);
@@ -214,34 +248,19 @@ int main(int argc, char* argv[])
 	   && ks.chi2t1<max_chi2 && ks.chi2t2<max_chi2
 	   && ks.nhitst1>=min_nhits && ks.nhitst1<=max_nhits
 	   && ks.r>rCut1 && ks.r<rCut2
-	   && ks.rr1<rrCut && ks.rr2<rrCut
+	   && ks.rr1>rrCut && ks.rr2>rrCut
 	   && fabs(ks.zip1)<zCut && fabs(ks.zip2)<zCut
-           && -1.<abs(ks.zip2-ks.zip1)<3.
-	   //&& ks.ecls1>eclsCut && ks.ecls2>eclsCut
-           //&& (ks.mulayerhits2+ks.mulayerhits3)<=max_munhits
-	   //&& ks.munhits<=1
+	   && -1.<abs(ks.zip1-ks.zip2)<3.
 	  )
 	{
-	    if(ks.charge1==1)
-	    {
-		pp=ks.p1;
-		pm=ks.p2;
-		tp=ks.thetat1/180.*PI;
-		tm=ks.thetat2/180.*PI;
-		phip=ks.phit1/180.*PI;
-                phim=ks.phit2/180.*PI;
-	    }
-	    else
-	    {
-		pp=ks.p2;
-		pm=ks.p1;
-		tp=ks.thetat2/180.*PI;
-		tm=ks.thetat1/180.*PI;
-		phip=ks.phit2/180.*PI;
-                phim=ks.phit1/180.*PI;
-	    }
+	    pm=ks.p1;
+	    pp=ks.p2;
+	    tm=ks.thetat1/180.*PI;
+	    tp=ks.thetat2/180.*PI;
+	    phim=ks.phit1/180.*PI;
+	    phip=ks.phit2/180.*PI;
 
-            if ( abs(abs(phip-phim)-3.14159256)<0. ) continue;
+	    if ( fabs((fabs(phip-phim)-PI)*180./PI) < 0.10 ) continue;
 
 	    if ( verbose==1 )
 	    {
@@ -255,10 +274,33 @@ int main(int argc, char* argv[])
 		cout<<"fabs(ks.thetat1-ks.thetat2)="<<fabs(ks.thetat1-ks.thetat2)<<endl;
 	    }
 
-            hinvM->Fill(ks.invM);
+            double pxm, pym, pzm, em, pxp, pyp, pzp, ep, mom, invm;
+
+	    double pmcorr = pcorr(pm*sin(tm),1,0)/sin(tm);
+	    double ppcorr = pcorr(pp*sin(tp),1,0)/sin(tp);
+
+	    pxm = pmcorr*sin(tm)*cos(phim);
+	    pym = pmcorr*sin(tm)*sin(phim);
+	    pzm = pmcorr*cos(tm);
+	    em = sqrt(pow(139.57,2) + pow(pmcorr,2));
+
+	    pxp = ppcorr*sin(tp)*cos(phip);
+	    pyp = ppcorr*sin(tp)*sin(phip);
+	    pzp = ppcorr*cos(tp);
+	    ep = sqrt(pow(139.57,2) + pow(ppcorr,2));
+
+	    mom = sqrt(pow((pxm+pxp),2) + pow((pym+pyp),2) + pow((pzm+pzp),2));
+
+            if ( mom<=0. ) continue;
+
+	    invm = pow((em+ep),2) - pow((pxm+pxp),2) - pow((pym+pyp),2) - pow((pzm+pzp),2);
+	    invm = sqrt(invm);
+
+	    hinvMcor->Fill(invm);
+	    hinvM->Fill(ks.invM);
 
 	    pres = (pm*sin(tm)-pp*sin(tp))/(sqrt(2.)*(pm*sin(tm)+pp*sin(tp))/2.);
-            //if(pres>-0.2 && pres<0.2) continue;
+
 	    hpres->Fill(pres);
 
 	    hthetadif->Fill((tm+tp-PI)*180./PI);
@@ -440,14 +482,51 @@ int main(int argc, char* argv[])
     hvrtnip->Draw(); cc1->SaveAs(KEDR+"vrtnip.png");
     hvrtnbeam->Draw(); cc1->SaveAs(KEDR+"vrtnbeam.png");
 
+    TF1 *func1 = new TF1("fitInvM1","[2]*(1+[1]*(x-500.)+[5]*pow((x-500.),2))*([0]+exp(-pow((x-[4]),2)/2./pow([3],2))/sqrt(2*3.141592)/[3]*(600-400)/100)");
+    /*
+    func1->SetParameter(0,0.05);
+    func1->SetParameter(1,-0.2);
+    func1->SetParameter(2,1000.);
+    func1->SetParameter(3,8.);
+    func1->SetParameter(4,498.);
+    func1->SetParameter(5,0.);
+    */
+    func1->SetParameter(0,1.39401e-01);
+    func1->SetParameter(1,-1.11893e-03);
+    func1->SetParameter(2,3.81878e+03);
+    func1->SetParameter(3,1.32897e+01);
+    func1->SetParameter(4,4.93039e+02);
+    func1->SetParameter(5,-4.25396e-05);
+    hinvM->Fit("fitInvM1","","",400,600);
     hinvM->GetXaxis()->SetTitle("M_{#pi#pi} (MeV/c^2)");
-    hinvM->Draw(); cc1->SaveAs(KEDR + "invM" + format1);
-    hinvM->Draw(); cc1->SaveAs(KEDR + "invM" + format2);
+    hinvM->Draw("E1"); cc1->SaveAs(KEDR + "invM" + format1);
+    hinvM->Draw("E1"); cc1->SaveAs(KEDR + "invM" + format2);
+
+    TF1 *func2 = new TF1("fitInvM2","[2]*(1+[1]*(x-500.)+[5]*pow((x-500.),2))*([0]+exp(-pow((x-[4]),2)/2./pow([3],2))/sqrt(2*3.141592)/[3]*(600-400)/100)");
+    /*
+    func2->SetParameter(0,0.05);
+    func2->SetParameter(1,-0.2);
+    func2->SetParameter(2,1000.);
+    func2->SetParameter(3,8.);
+    func2->SetParameter(4,498.);
+    func2->SetParameter(5,0.);
+    */
+    func2->SetParameter(0,1.39401e-01);
+    func2->SetParameter(1,-1.11893e-03);
+    func2->SetParameter(2,3.81878e+03);
+    func2->SetParameter(3,1.32897e+01);
+    func2->SetParameter(4,4.93039e+02);
+    func2->SetParameter(5,-4.25396e-05);
+    hinvMcor->Fit("fitInvM2","","",400,600);
+    //hinvMcor->GetYaxis()->SetRangeUser(0., 300.);
+    hinvMcor->GetXaxis()->SetTitle("M_{#pi#pi} (MeV/c^2)");
+    hinvMcor->Draw("E1"); cc1->SaveAs(KEDR + "invMcor" + format1);
+    hinvMcor->Draw("E1"); cc1->SaveAs(KEDR + "invMcor" + format2);
 
     hpres->GetXaxis()->SetTitle("#Delta p_{t}/p_{t}");
     Double_t sc3=hpres->GetEntries();
     hpres->Scale(1/sc3);
-    hpres->Fit("gaus","","",-0.20,0.20); hpres->Draw();
+    hpres->Fit("gaus","","",-0.06,0.06); hpres->Draw();
     cc1->SaveAs(KEDR+"mom_res.png"); cc1->SaveAs(KEDR+"mom_res.eps");
 
     fout->Write();
