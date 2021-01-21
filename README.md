@@ -1,74 +1,95 @@
-# Dmeson - package for analysis mass D0 and D+ mesons
+# Dmeson - Пакет для анализа масс D0 и D+ мезонов
 
-Get the code:  <br />
+Для получения кода нужно выполнить команду:  <br />
 ```
 git clone https://github.com/ivovtin/Dmeson
 ```
-Package depends on [KaFramework](https://github.com/ivovtin/KaFramework) <br />
+Данный пакет зависит от пакета [KaFramework](https://github.com/ivovtin/KaFramework) <br />
 
-analysis_D0meson.C - D0 preprocessing raw events with help reconstruction package and write structure in the root-file. <br />
-analysis_Dplusmeson.C - D+ preprocessing raw events with help reconstruction package and write structure in the root-file. <br />
+Списки обрабатываемых заходов сохранены в директории runsDmeson. <br />
+Информацию для заходов по энергии и светимости в БД можно получить с помощью скриптов в директории beam_en. <br />
+В директории demo расположен скрипт для отрисовки известных измеренных значений масс D-мезонов из PDG. <br />
 
-Examples for run: <br />
+analysis_D0meson.C - обработка сырых событий для D0 с помощью пакетов реконструкции детектора КЕДР и запись структур в Root-файл. <br />
+analysis_Dplusmeson.C - тоже самое для D+ мезона. <br />
+analysis_Ks - отбор для Ks->pi+pi- <br />
+analysis_bhabha - обработка BhaBha событий <br />
+BhaBhaSimpleSampleCC - обработка BhaBha событий, простой пример <br />
+
+Примеры запуска на локальном хосте: <br />
 ```
 ./runAnalysisD0.sh
 
 ./runAnalysisDplus.sh
+
+./runAnalysisBhaBha.sh
 ```
 
-Run tasks with D-meson on batch system:
+Запуск задач на batch и просмотр статуса выполнения, удаление:
 ```
 qsub batch_data_D0meson.sh
-or
+или
 qsub batch_data_Dplusmeson.sh
+batch_data_Ks.sh
+batch_data_bhabha.sh
+batch_run_BhaBhaSimpleSampleCC.sh
 
 qstat
 qstat -u ovtin
 qdel 772354
 ```
 
-Run drawing with KDisplay:
+Запуск программы с KDisplay для просмотра событий:
 ```
 analysis_D0meson -x -n 2000 /space/runs/daq023930.nat.bz2
 ```
-Run KDisplay for view event with reconstruction:
+Запуск KDisplay для просмотра событий с реконструкцией:
 ```
 bzcat /space/runs/daq021913.nat.bz2 | KDisplay -r -e3197
 ```
 
-For processing prepared root-files with reconstruction for D-mesons go to analysisD0 or analysisDplus directory. <br />
-For run use: <br />
+Для обработки подготовленных Root-файлов какого-либо процесса нужно перейти в соответсвующие каталоги analysisD0 / analysisDplus / Kspp_analysis / bhabha . <br />
+Пример запуска обработки: <br />
 ```
 ./D0meson 0
 
 . runD0meson.sh
 ```
 
-Important plots are here http://kedr.inp.nsk.su/~ovtin/outDmeson/
+Все выходные картинки сохраняются здесь http://kedr.inp.nsk.su/~ovtin/outDmeson/
 
-# Simulation
+# Моделирование
 
-For run simulation see directory Dmeson/simulation. <br />
-KedrGen - contains modified generator 60 with ISR (RADCOR package) and FSR (PHOTOS package). <br />
+Все скрипты для запуска моделирования расположены в директории simulation. <br />
+KedrGen - содержит модифицированный генератор 60 с ISR (RADCOR пакет) и FSR (PHOTOS пакет). <br />
 
-In Dmeson/simulation/simD0 - simulation signal from D0 meson and background form ee->DD (in dir BG_eetoDD) <br />
+В simulation/simD0 - моделирование сигнала от D0-мезона и фона от ee->DD (в директории BG_eetoDD). То же самое для D+ и BhaBha событий. <br />
 
-For run:
+Для запуска моделирования:
 ```
 qsub batch_mc_D0meson.sh
+```
 
+Для реконструкции полученных файлов моделирования нужно запустить:
+```
 qsub batch_Analysismc_D0meson.sh
 ```
 
-Example for run and reconstruction from sim.dat:
+Пример запуска моделирования и реконструкции событий из файла моделирования sim.dat:
 ```
 ks < mc.cards.ee_to_DD > /dev/null
 
 KDisplay < simout/sim000001.dat -r -R19697
+
+или 
+
+. runsimDmeson.sh
+
+. runsimKDisplay.sh
+
 ```
 
-
-Information about generators is here http://kedr.inp.nsk.su/FOR_MEMBERS/SOFTWARE/SIMULATION/generators.html#60  <br />
+Информацию о генераторах можно найти здесь http://kedr.inp.nsk.su/FOR_MEMBERS/SOFTWARE/SIMULATION/generators.html#60  <br />
 ```
 GENE 60 Wtot SigmaW
 ```
@@ -76,21 +97,8 @@ Wtot - total energy of collision (GeV) <br />
 SigmaW - sigma total energy of collision (GeV) <br />
 pair D+D- and anti-D0D0 born equiprobably <br />
 
-Magnetic field is 6 kGs. <br />
-D0 mass for simulation is 1864.60 MeV. <br />
-Combinatorial background from continuum events (e+e-->qq, q=u,d,s) simulation with 205 generator (Jetset 7.4). <br />
-Bkg from decay e+e-->DD simulation with apply 60 generator for which decay D0->K-pi+ is forbidden in decay table JETSET. <br />
-
-
-
-
-
-
-
-
-
-
-
-
-
+Магнитное поле составляет 6 kGs. <br />
+D0 масса для моделирвоания 1864.60 MeV. <br />
+Комбинаторный фре от событий континиума (e+e-->qq, q=u,d,s) моделируется с генератором 205 (Jetset 7.4). <br />
+Фон от распадов e+e-->DD моделируется с генератором 60 для которого распад D0->K-pi+ является запрещенным в таблице JETSET. <br />
 
