@@ -11,20 +11,6 @@
 #include <math.h>
 #include <cfortran.h>
 
-#include "ReadNat/rr_def.h"
-#include "ReadNat/re_def.h"
-#include "ReadNat/ss_def.h"
-#include "VDDCRec/ktracks.h"
-#include "VDDCRec/mtofhits.h"
-#include "VDDCRec/ToFTrack.hh"
-#include "KrToF/tof_system.h"
-#include "KEmcRec/emc_struct.h"
-#include "KrAtc/atcrec.h"
-#include "KrAtc/atc_to_track.h"
-#include "KrVDDCMu/dcmu.h"
-#include "KrMu/mu_system.h"
-#include "KrMu/mu_event.h"
-
 #include "TTree.h"
 #include "TFolder.h"
 #include "TH1.h"
@@ -32,43 +18,74 @@
 #include "TFile.h"
 #include "TGraphErrors.h"
 #include "TBenchmark.h"
+/*
+#include "ReadNat/kcalls.h"
+#include "ReadNat/rr_def.h"
+#include "ReadNat/re_def.h"
+#include "ReadNat/ss_def.h"
+//#include "ReadNat/mcdc_def.h"
+//#include "ReadNat/dcrawhitspar.h"
+//#include "ReadNat/mccardindex.h"
+//#include "ReadNat/mccard_def.h"
+#include "ReadNat/mc_def.h"
 
-#include "KaFramework/kframework.h"
-#include "KaFramework/eventbr.h"
-#include "KaFramework/vddcbr.h"
-#include "KaFramework/emcbr.h"
-#include "KaFramework/atcbr.h"
-#include "KaFramework/tofbr.h"
-#include "KaFramework/mubr.h"
-#include "KrAtc/AtcHit.hh"
-
-#include "VDDCRec/kdcvd.h"
-#include "VDDCRec/kvd.h"
 #include "VDDCRec/kdcpar.h"
+#include "VDDCRec/kdcvd.h"
 #include "VDDCRec/ktracks.h"
 #include "VDDCRec/khits.h"
+#include "VDDCRec/kdcswitches.h"
+#include "VDDCRec/kglobparam.h"
 #include "VDDCRec/tfit.h"
 #include "VDDCRec/ktrkhits.h"
 #include "VDDCRec/ktrkfpar.h"
-#include "VDDCRec/kglobparam.h"
-#include "ReadNat/mcdc_def.h"
-#include "ReadNat/dcrawhitspar.h"
-//#include "KDisplay/kdisplay_event.h"
+#include "VDDCRec/kdsimruns.h"
+#include "VDDCRec/kvd.h"
+#include "VDDCRec/ktof.h"
+#include "VDDCRec/mtofhits.h"
+#include "VDDCRec/ToFTrack.hh"
+#include "VDDCRec/kevnum.h"
+
 //#include "KrdEdxPId/KrdEdxPId.hh"
-//#include "ReadNat/mc_def.h"
 #include "KEmcRec/emc_system.h"
 #include "KEmcRec/emc_struct.h"
-//#include "ReadNat/mccardindex.h"
-//#include "ReadNat/mccard_def.h"
-//#include "KrMu/mu_system.h"
-#include "KrKRec/KFitOutMultiCPi0Gamma.h"
-#include "KrKRec/RecKFitMultiCPi0Gamma.hh"
+
+#include "KrToF/tof_system.h"
+#include "KsToF/tofsim.h"
+#include "KrAtc/atcrec.h"
+#include "KrAtc/atc_to_track.h"
+#include "KrAtc/AtcHit.hh"
+#include "KrVDDCMu/dcmu.h"
+#include "KrMu/mu_system.h"
+#include "KrMu/mu_event.h"
+#include "KrMu/mu_status.h"
+*/
+#include "ReadNat/kcalls.h"
+#include "ReadNat/rr_def.h"
+#include "ReadNat/re_def.h"
+#include "ReadNat/ss_def.h"
+#include "ReadNat/mc_def.h"
+
+#include "VDDCRec/kdcvd.h"
+#include "VDDCRec/ktracks.h"
+#include "VDDCRec/khits.h"
+#include "VDDCRec/kdcswitches.h"
+#include "KrAtc/atcrec.h"
+#include "KrAtc/atc_to_track.h"
+#include "KrAtc/AtcHit.hh"
+#include "KrToF/tof_system.h"
+#include "KrToF/tofrec.h"
+#include "KDisplay/kdisplay_event.h"
+#include "KEmcRec/emc_system.h"
+#include "KrVDDCMu/dcmu.h"
+#include "KrMu/mu_system.h"
+#include "KrMu/mu_event.h"
+#include "KrMu/mu_status.h"
+#include "KDB/kdb.h"
 
 #include "KcSys/fortran.h"
 
-//#include <minuit.h>
-//#include <kernlib.h>
-//#include <hbook.h>
+#include "KaFramework/kframework.h"
+
 #include "TMinuit.h"
 #include "TRandom3.h"
 
@@ -100,6 +117,7 @@ struct ProgramParameters {
         float max_tchi2;                      //fit quality
         float min_Nhits;                      //number hits on track
 	const char* rootfile;
+	bool simOn;                           //0 - Data, 1 - Simulation
 	int MCCalibRunNumber;                 //19862 - number of run - download from DB calibration for processe MC-file in runs interval
 	int MCCalibRunNumberL;                //for ksimreal(NevRate,NumFirstExpRun,NumLastExpRun);
         int NsimRate;                         //for ksimreal(NevRate,NumFirstExpRun,NumLastExpRun);
@@ -134,7 +152,7 @@ struct ProgramParameters {
 //=======================================================================================================================================
 
 //set selection conditions
-static const struct ProgramParameters def_progpar={false,2,6,1,1,6,100,2000,15,45,2,8,0,0,200,15,"/store/users/ovtin/out.root",23682,23943,50,1.,1.,1.,0,0,0,false,0};
+static const struct ProgramParameters def_progpar={false,2,6,1,1,6,100,2000,15,45,2,8,0,0,200,15,"/store/users/ovtin/out.root",0,23682,23943,50,1.,1.,1.,0,0,0,false,0};
 
 static struct ProgramParameters progpar(def_progpar);
 
@@ -198,7 +216,7 @@ int numn, numo;
 double enn, eno, pxn, pxo, pyn, pyo, pzn, pzo;
 
 //Rejection prior to reconstruction helps to save CPU time
-extern "C" void kemc_energy_(float Ecsi[2],float *Elkr);
+//extern "C" void kemc_energy_(float Ecsi[2],float *Elkr);
 
 int pre_event_rejection()
 {
@@ -399,7 +417,6 @@ int analyse_event()
     if( kedrrun_cb_.Header.RunType == 64 ) {   //for MC
 	WTotal=2*1886.75;
     }
-
     ebeam=WTotal/2.;
 
     if (progpar.verbose) cout<<"RunNumber="<<kedrraw_.Header.RunNumber<<"\t"<<"WTotal="<<WTotal<<"\t"<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"eTracksAll="<<eTracksAll<<endl;
@@ -480,8 +497,8 @@ int analyse_event()
 		    bhabha.thetat1 = tTeta(t1);
 		    bhabha.thetat2 = tTeta(t2);
 
-		    bhabha.phit1 = ktrrec_.FITRAK[t1]+(ktrrec_.FITRAK[t1]<0?360:0);;
-		    bhabha.phit2 = ktrrec_.FITRAK[t2]+(ktrrec_.FITRAK[t2]<0?360:0);;
+		    bhabha.phit1 = ktrrec_.FITRAK[t1]+(ktrrec_.FITRAK[t1]<0?360:0);
+		    bhabha.phit2 = ktrrec_.FITRAK[t2]+(ktrrec_.FITRAK[t2]<0?360:0);
 
 		    bhabha.nhitst1 = tHits(t1);
 		    bhabha.nhitst2 = tHits(t2);
@@ -617,7 +634,7 @@ int analyse_event()
     return 0;
 }
 
-static const char* optstring="ra:d:b:p:h:s:j:t:e:c:l:k:i:u:q:o:v:m:M:S:A:Z:n:w:g:z:x";
+static const char* optstring="ra:d:b:p:h:s:j:t:e:c:l:k:i:u:q:o:D:v:m:M:S:A:Z:n:w:g:z:x";
 
 void Usage(int status)
 {
@@ -643,6 +660,7 @@ void Usage(int status)
 	        <<"  -u max_tchi2   Maximum fit quality on track  (default to "<<def_progpar.max_tchi2<<")\n"
 	        <<"  -q min_Nhits   Nininum number hits on track (default to "<<def_progpar.min_Nhits<<")\n"
 	        <<"  -o RootFile    Output ROOT file name (default to "<<def_progpar.rootfile<<")\n"
+            	<<"  -D simOn       Data or Simulation (default to "<<def_progpar.simOn<<")\n"
             	<<"  -v MCCalibRunNumber    First MCCalibRunNumber (default to "<<def_progpar.MCCalibRunNumber<<")\n"
             	<<"  -m MCCalibRunNumberL   Last MCCalibRunNumberL (default to "<<def_progpar.MCCalibRunNumberL<<")\n"
             	<<"  -M NsimRate    Rate for ksimreal (default to "<<def_progpar.NsimRate<<")\n"
@@ -686,6 +704,7 @@ int main(int argc, char* argv[])
 			case 'u': progpar.max_tchi2=atoi(optarg); break;
 			case 'q': progpar.min_Nhits=atoi(optarg); break;
 		        case 'o': progpar.rootfile=optarg; break;
+                        case 'D': progpar.simOn=atoi(optarg); break;
                         case 'v': progpar.MCCalibRunNumber=atoi(optarg); break;
                         case 'm': progpar.MCCalibRunNumberL=atoi(optarg); break;
                         case 'M': progpar.NsimRate=atoi(optarg); break;
@@ -731,6 +750,8 @@ int main(int argc, char* argv[])
 //----------------- Configure kframework -----------------//
 	//Set kframework signal handling
 	kf_install_signal_handler(1);
+
+        kf_MCCalibRunNumber(progpar.simOn,progpar.MCCalibRunNumber,progpar.MCCalibRunNumberL,progpar.NsimRate,progpar.Scale,progpar.Ascale,progpar.Zscale);
 
 	//Set subsystems to be used
         kf_use(KF_VDDC_SYSTEM|KF_TOF_SYSTEM|KF_ATC_SYSTEM|KF_EMC_SYSTEM|KF_MU_SYSTEM);
@@ -778,9 +799,6 @@ int main(int argc, char* argv[])
         kf_register_selection(KF_ATC_SEL,atc_rejection);
 	kf_register_selection(KF_EMC_SEL,emc_event_rejection);
 	kf_register_selection(KF_MU_SEL,mu_event_rejection);
-
-        //kf_MCCalibRunNumber(progpar.MCCalibRunNumber,progpar.MCCalibRunNumberL,progpar.NsimRate,1.,5.5,2.5);
-        kf_MCCalibRunNumber(progpar.MCCalibRunNumber,progpar.MCCalibRunNumberL,progpar.NsimRate,progpar.Scale,progpar.Ascale,progpar.Zscale);
 
 	//Set automatic cosmic run determination
 	kf_cosmic(-1);  //auto

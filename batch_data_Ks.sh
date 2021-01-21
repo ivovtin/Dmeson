@@ -4,7 +4,7 @@
 #$ -S /bin/bash                            ##specifies the interpreting shell for this job to be the Bash shell.
 # -------------------------------------------
 # --             batch name                --
-#$ -N Dmeson
+#$ -N Kspp
 # -------------------------------------------
 # --     What to redirect to where         --
 # -- working directory --
@@ -24,29 +24,29 @@
 ##$ -hard
 ##$ -l time=24:00:00
 #$ -l time=6:00:00
-##$ -q remote
+#$ -q remote
 ##$ -q extralong
 ##$ -q 6h
-#$ -q day
+##$ -q day
 #
 # -- Send mail at submission and completion of script --
 ##$ -m beas
 ##$ -M ovtin.ivan@gmail.com
 
 ##$ -t 1-482
-#$ -t 63-74
-##$ -t 1-693
+##$ -t 401-482
+#$ -t 1-693
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]
 
 ##inruns=23219
 #Signal
-##inruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/runDmeson"$i
-##outfile="/spool/users/ovtin/outDmeson/Kspp/data/psi3770_to_Kspp_"$i".root"
-inruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/runDmeson"$i
-outfile="/spool/users/ovtin/outDmeson/Kspp/data2004/psi3770_to_Kspp_"$i".root"
-mintracks=2
+inruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/runDmeson"$i
+outfile="/spool/users/ovtin/outDmeson/Kspp/data/psi3770_to_Kspp_"$i".root"
+##inruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/runDmeson"$i
+##outfile="/spool/users/ovtin/outDmeson/Kspp/data2004/psi3770_to_Kspp_"$i".root"
+mintracks=3
 maxtracks=20
 minbeamtracks=0
 minIPtracks=0

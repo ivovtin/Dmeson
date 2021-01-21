@@ -100,6 +100,7 @@ struct ProgramParameters {
         float max_tchi2;                      //fit quality
         float min_Nhits;                      //number hits on track
 	const char* rootfile;
+	bool simOn;                           //0 - Data, 1 - Simulation
 	int MCCalibRunNumber;                 //19862 - number of run - download from DB calibration for processe MC-file in runs interval
 	int MCCalibRunNumberL;                //for ksimreal(NevRate,NumFirstExpRun,NumLastExpRun);
         int NsimRate;                         //for ksimreal(NevRate,NumFirstExpRun,NumLastExpRun);
@@ -136,7 +137,7 @@ struct ProgramParameters {
 //=======================================================================================================================================
 
 //set selection conditions
-static const struct ProgramParameters def_progpar={false,2,6,1,1,6,100,2000,15,45,2,8,0,0,200,15,"/store/users/ovtin/out.root",23682,23943,50,1.,1.,1.,0,0,0,1.0,0,false,0};
+static const struct ProgramParameters def_progpar={false,2,6,1,1,6,100,2000,15,45,2,8,0,0,200,15,"/store/users/ovtin/out.root",0,23682,23943,50,1.,1.,1.,0,0,0,1.0,0,false,0};
 
 static struct ProgramParameters progpar(def_progpar);
 
@@ -183,7 +184,7 @@ static TTree *eventTree;
 typedef struct {
     Int_t vrtntrk,vrtnip,vrtnbeam,nhitst1,nhitst2,nhitsvdt1,nhitsvdt2,nhitsxyt1,nhitszt1,nhitsxyt2,nhitszt2,nvect1,nvecxyt1,nveczt1,nvect2,nvecxyt2,
 	nveczt2,ncomb,ncls1,ncls2,ncls,nlkr,ncsi,munhits,mulayerhits1,mulayerhits2,mulayerhits3,Run,numn,numo;
-    Float_t mbc,de,dp,fchi2,Ebeam,rEv,p1,p2,pt1,pt2,chi2t1,chi2t2,theta2t,phi2t,thetat1,thetat2,phit1,phit2,e1,
+    Float_t mbc,de,dp,prec1,prec2,fchi2,Ebeam,rEv,p1,p2,pt1,pt2,chi2t1,chi2t2,theta2t,phi2t,thetat1,thetat2,phit1,phit2,e1,
 	e2,d1,d2,rr1,rr2,zip1,zip2,ecls1,ecls2,tcls1,tcls2,pcls1,pcls2,emcenergy,lkrenergy,csienergy,enn,eno,tofc1,ttof1,tofc2,ttof2;
 } DMESON;
 
@@ -398,7 +399,7 @@ void refit(int t, double p, double* phi, double* theta) {
     *theta = theta1;
 }
 
-void kine_fit(int ip1, int ip2, double* mbc, double* de, double* dp, double* fchi2, int enable) {
+void kine_fit(int ip1, int ip2, double* mbc, double* de, double* dp, double* prec1, double* prec2, double* fchi2, int enable) {
     dcand_t1 = ip1;
     dcand_t2 = ip2;
 
@@ -534,6 +535,8 @@ void kine_fit(int ip1, int ip2, double* mbc, double* de, double* dp, double* fch
 	   sqrt(mpi*mpi + p2i*p2i) + sqrt(mk*mk + p1i*p1i))/2. - ebeam;
 
     *dp = pp1-pp2;
+    *prec1 = pp1;
+    *prec2 = pp2;
 
     if (progpar.verbose) printf("mbc=%lf, de=%lf\n", *mbc, *de);
 
@@ -775,12 +778,14 @@ int analyse_event()
                 Dmeson.numo = numo;
                 Dmeson.eno = eno;
 
-		double mbc, de, dp, fchi2;
+		double mbc, de, dp, prec1, prec2, fchi2;
 
-		kine_fit(t1, t2, &mbc, &de, &dp, &fchi2, progpar.Dkine_fit);
+		kine_fit(t1, t2, &mbc, &de, &dp, &prec1, &prec2, &fchi2, progpar.Dkine_fit);
 		Dmeson.mbc = mbc;
 		Dmeson.de = de;
 		Dmeson.dp = dp;
+		Dmeson.prec1 = prec1;
+		Dmeson.prec2 = prec2;
 		Dmeson.fchi2 = fchi2;
 
 		i++;
@@ -831,7 +836,7 @@ int analyse_event()
     return 0;
 }
 
-static const char* optstring="ra:d:b:p:h:s:j:t:e:c:l:k:i:u:q:o:v:m:M:S:A:Z:n:w:g:y:f:z:x";
+static const char* optstring="ra:d:b:p:h:s:j:t:e:c:l:k:i:u:q:o:D:v:m:M:S:A:Z:n:w:g:y:f:z:x";
 
 void Usage(int status)
 {
@@ -857,6 +862,7 @@ void Usage(int status)
 	        <<"  -u max_tchi2   Maximum fit quality on track  (default to "<<def_progpar.max_tchi2<<")\n"
 	        <<"  -q min_Nhits   Nininum number hits on track (default to "<<def_progpar.min_Nhits<<")\n"
 	        <<"  -o RootFile    Output ROOT file name (default to "<<def_progpar.rootfile<<")\n"
+            	<<"  -D simOn       Data or Simulation (default to "<<def_progpar.simOn<<")\n"
             	<<"  -v MCCalibRunNumber    First MCCalibRunNumber (default to "<<def_progpar.MCCalibRunNumber<<")\n"
             	<<"  -m MCCalibRunNumberL   Last MCCalibRunNumberL (default to "<<def_progpar.MCCalibRunNumberL<<")\n"
             	<<"  -M NsimRate    Rate for ksimreal (default to "<<def_progpar.NsimRate<<")\n"
@@ -902,6 +908,7 @@ int main(int argc, char* argv[])
 			case 'u': progpar.max_tchi2=atoi(optarg); break;
 			case 'q': progpar.min_Nhits=atoi(optarg); break;
 		        case 'o': progpar.rootfile=optarg; break;
+		        case 'D': progpar.simOn=atoi(optarg); break;
                         case 'v': progpar.MCCalibRunNumber=atoi(optarg); break;
                         case 'm': progpar.MCCalibRunNumberL=atoi(optarg); break;
                         case 'M': progpar.NsimRate=atoi(optarg); break;
@@ -943,12 +950,14 @@ int main(int argc, char* argv[])
 	eventTree->SetAutoSave(500000000);  // autosave when 0.5 Gbyte written
 	eventTree->Branch("Dmeson",&Dmeson,"vrtntrk/I:vrtnip:vrtnbeam:nhitst1:nhitst2:nhitsvdt1:nhitsvdt2:nhitsxyt1:nhitszt1:nhitsxyt2:nhitszt2:nvect1:nvecxyt1:nveczt1:nvect2:nvecxyt2"
 			  ":nveczt2:ncomb:ncls1:ncls2:ncls:nlkr:ncsi:munhits:mulayerhits1:mulayerhits2:mulayerhits3:Run:numn:numo"
-			  ":mbc/F:de:dp:fchi2:Ebeam:rEv:p1:p2:pt1:pt2:chi2t1:chi2t2:theta2t:phi2t:thetat1:thetat2:phit1:phit2:e1"
+			  ":mbc/F:de:dp:prec1:prec2:fchi2:Ebeam:rEv:p1:p2:pt1:pt2:chi2t1:chi2t2:theta2t:phi2t:thetat1:thetat2:phit1:phit2:e1"
 			  ":e2:d1:d2:rr1:rr2:zip1:zip2:ecls1:ecls2:tcls1:tcls2:pcls1:pcls2:emcenergy:lkrenergy:csienergy:enn:eno:tofc1:ttof1:tofc2:ttof2");
 
 //----------------- Configure kframework -----------------//
 	//Set kframework signal handling
 	kf_install_signal_handler(1);
+
+	kf_MCCalibRunNumber(progpar.simOn,progpar.MCCalibRunNumber,progpar.MCCalibRunNumberL,progpar.NsimRate,progpar.Scale,progpar.Ascale,progpar.Zscale);
 
 	//Set subsystems to be used
         kf_use(KF_VDDC_SYSTEM|KF_TOF_SYSTEM|KF_ATC_SYSTEM|KF_EMC_SYSTEM|KF_MU_SYSTEM);
@@ -996,9 +1005,6 @@ int main(int argc, char* argv[])
         kf_register_selection(KF_ATC_SEL,atc_rejection);
 	kf_register_selection(KF_EMC_SEL,emc_event_rejection);
 	kf_register_selection(KF_MU_SEL,mu_event_rejection);
-
-        //kf_MCCalibRunNumber(progpar.MCCalibRunNumber,progpar.MCCalibRunNumberL,progpar.NsimRate,1.,5.5,2.5);
-        kf_MCCalibRunNumber(progpar.MCCalibRunNumber,progpar.MCCalibRunNumberL,progpar.NsimRate,progpar.Scale,progpar.Ascale,progpar.Zscale);
 
 	//Set automatic cosmic run determination
 	kf_cosmic(-1);  //auto

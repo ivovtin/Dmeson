@@ -18,6 +18,7 @@
 # -------------------------------------------
 # --             Enviroment                --
 ##$ -v PATH=$PATH:$HOME/development/lib:/home/ovtin/development/KrKRec,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/ovtin/development/lib,KDBHOST=bison-2
+#$ -v PATH=$PATH:$HOME/release/KdRunFastMon,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/alexbarn/release/lib,KDBHOST=localhost
 # -------------------------------------------
 # --             Queue list                --
 #$ -soft
@@ -43,7 +44,7 @@ myrand=$[1000+$i]
 ##outfile="/spool/users/ovtin/outDmeson/Dplus/dataPcorr_1.0170/psi3770_to_D0meson_"$i".root"
 inruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/runDmeson"$i
 ##outfile="/spool/users/ovtin/outDmeson/Dplus/dataPcorr2004/psi3770_to_D0meson_"$i".root"
-outfile="/spool/users/ovtin/outDmeson/Dplus/dataPcorr2004_1.0280/psi3770_to_D0meson_"$i".root"
+outfile="/spool/users/ovtin/outDmeson/Dplus/dataPcorr2004_1.0250/psi3770_to_D0meson_"$i".root"
 mintracks=3
 maxtracks=25
 minbeamtracks=0
@@ -61,7 +62,13 @@ maxtchi2=1000   #!!!!!!!!
 minNhits=0
 kinefit=1
 ##pSF=1.0270   ##data 2004
-pSF=1.0280   ##data 2004
+##pSF=1.0280   ##data 2004
+#pSF=1.0295   ##data 2004
+##pSF=1.0310   ##data 2004
+##pSF=1.0325   ##data 2004
+##pSF=1.0340   ##data 2004
+##pSF=1.0360   ##data 2004
+pSF=1.0250   ##data 2004
 ##pSF=1.0155   ##data 2016-17
 ##pSF=1.0170   ##data 2016-17
 ##verbose=1

@@ -18,6 +18,7 @@
 # -------------------------------------------
 # --             Enviroment                --
 ##$ -v PATH=$PATH:$HOME/development/lib:/home/ovtin/development/KrKRec,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/ovtin/development/lib,KDBHOST=bison-2
+#$ -v PATH=$PATH:$HOME/release/KdRunFastMon,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/alexbarn/release/lib,KDBHOST=localhost
 # -------------------------------------------
 # --             Queue list                --
 #$ -soft
@@ -33,19 +34,19 @@
 ##$ -m beas
 ##$ -M ovtin.ivan@gmail.com
 
-##$ -t 1-482
+#$ -t 1-482
 ##$ -t 1-693
-#$ -t 156-693
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]
 
 ##inruns=23219
 #Signal
-inruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/runDmeson"$i
-outfile="/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0240/psi3770_to_D0meson_"$i".root"
-##inruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/runDmeson"$i
-##outfile="/spool/users/ovtin/outDmeson/D0/dataPcorr2004_/psi3770_to_D0meson_"$i".root"
+##inruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/runDmeson"$i
+##outfile="/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0185/psi3770_to_D0meson_"$i".root"
+##outfile="/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0173/psi3770_to_D0meson_"$i".root"
+inruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/runDmeson"$i
+outfile="/spool/users/ovtin/outDmeson/D0/dataPcorr2004_1.030/psi3770_to_D0meson_"$i".root"
 #Bkg
 #inruns="/home/ovtin/development/Dmeson/runsDmeson/runBkgDmeson"$i
 #outfile="/spool/users/ovtin/psi3770_to_BkgD0meson_"$i".root"
@@ -55,7 +56,7 @@ maxtracks=20
 minbeamtracks=0
 minIPtracks=0
 maxIPtracks=20
-minPt=100
+minPt=0
 maxPt=2000
 minClusterEnergy=0
 minTotalEnergy=0
@@ -63,14 +64,15 @@ minClusters=0
 maxClusters=50
 minClustersLKr=0
 minClustersCsI=0
-maxtchi2=80
-##maxtchi2=50   ##!!!
+maxtchi2=1000        #!!!
 minNhits=0
 kinefit=1
 ##=========
-pSF=1.0240   ##data 2016-17
+##pSF=1.0240   ##data 2016-17
+##pSF=1.0185   ##data 2016-17
+##pSF=1.0173   ##data 2016-17  - best
 ##=========
-##pSF=1.030   ##data 2004
+pSF=1.030   ##data 2004
 ##=========
 ##pSF=1.0
 #verbose=1

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##inruns=4422 #ev 3653
-inruns=23872
+inruns=23665  #ev 527
 #inruns=4132
 #inruns=4257
 ##inruns=4422
@@ -25,7 +25,7 @@ minClustersCsI=0
 maxtchi2=50
 minNhits=24
 kinefit=1
-pSF=1.0245   ##data 2004
+pSF=1.0185   ##data 2016-17
 ##pSF=1.030   ##data 2004
 verbose=1
 
