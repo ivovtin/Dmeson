@@ -16,7 +16,7 @@ LDFLAGS+=$(shell root-config --libs --glibs) -lGui -lMinuit -lNew -Wl,-rpath -Wl
 
 all: bhabha
 
-%.o: %.cc
+%.o: %.cc 
 	$(CXX) -c $(CPPFLAGS) $^
 
 bhabha: bhabha.o

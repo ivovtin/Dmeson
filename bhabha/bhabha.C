@@ -37,21 +37,38 @@ int main(int argc, char* argv[])
     }
 
     //***************preselections*************
+    float rrCut,zCut,max_chi2,min_nhits,max_nhits;
+
     int ntrk=2;
     int max_munhits=0;
     float min_p=500.; //MeV
     float max_p=3000.; //MeV
-    float eclsCut=1200.;
+    float eclsCut=500.;
+    float epCut1=0.0;
+    float epCut2=10.0;
+    float theta2tCut=174;
+    float phi2tCut=165;
 
-    float rrCut,zCut,max_chi2,min_nhits,max_nhits;
-
-    if(key!=1){
+    if(key==0){
 	//2016-17
 	rrCut=0.5;
 	zCut=13.;
 	max_chi2=50.;
 	min_nhits=23.;
         max_nhits=50.;
+    }
+    if(key==2){
+	//2016-17  - sim
+	rrCut=0.5;
+	zCut=13.;
+	max_chi2=100.;
+	min_nhits=23.;
+	//min_nhits=10.;
+        max_nhits=50.;
+	epCut1=0.0;
+	epCut2=10.0;
+        theta2tCut=178;
+	phi2tCut=178;
     }
     else{
         //2004
@@ -62,6 +79,7 @@ int main(int argc, char* argv[])
 	max_nhits=48.;
 	//max_nhits=50.;
     }
+
     //*****************************************
 
     TFile *fout=0;
@@ -83,7 +101,8 @@ int main(int argc, char* argv[])
     else if (key==2)        //sig
     {
 	fnameout=TString::Format("sim_bhabha_sig_%d.root",key).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/simulation_Sig/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/simulation/";
+	KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/simulation_v2/";
     }
     cout<<fnameout<<endl;
     fout = new TFile(fnameout,"RECREATE");
@@ -96,16 +115,16 @@ int main(int argc, char* argv[])
     setbranchstatus();
     setbranchaddress();
 
-    TH1F* hDncomb=new TH1F("Dmseon.ncomb","Dmseon.ncomb",150,-0.5,149.5);
+    TH1F* hncomb=new TH1F("ncomb","ncomb",150,-0.5,149.5);
 
     TH1F *hRun;
-    if( key==0 )
+    if( key!=1 )
     {
-	hRun = new TH1F("Run","Run", 100, 23206., 26248.);
+	hRun = new TH1F("Run","Run", 1000, 23206., 26248.);
     }
     else
     {
-	hRun = new TH1F("Run","Run", 100, 4100., 4709.);
+	hRun = new TH1F("Run","Run", 500, 4100., 4709.);
     }
 
     TH1F* hEbeam=new TH1F("Ebeam","Ebeam",100,1880.,1895.);
@@ -118,6 +137,7 @@ int main(int argc, char* argv[])
     TH1F* hmomt=new TH1F("pt","pt",100,0.,3000.);
     TH1F* hmom=new TH1F("p","p",100,0.,3000.);
     TH1F* htchi2=new TH1F("tchi2","tchi2",100,0.,100.);
+    TH1F* htchi2norm=new TH1F("tchi2_norm","tchi2_norm",100,0.,100.);
     TH1F* htnhits=new TH1F("tnhits","tnhits",80,0.,80.);
     TH1F* htnhitsvd=new TH1F("tnhitsvd","tnhitsvd",8,-0.5,7.5);
     TH1F* htnhitsxy=new TH1F("tnhitsxy","tnhitsxy",50,0.,50.);
@@ -204,26 +224,86 @@ int main(int argc, char* argv[])
 	tt->GetEntry(k);
 
 	if(
+           /*
+           //1 variant
 	   bhabha.vrtntrk>=ntrk
-	   && bhabha.p1>min_p && bhabha.p1<max_p && bhabha.p2>min_p && bhabha.p2<max_p
-	   && bhabha.chi2t1<max_chi2 && bhabha.chi2t2<max_chi2
-	   && bhabha.nhitst1>=min_nhits && bhabha.nhitst2>=min_nhits
-	   && bhabha.nhitst1<=max_nhits && bhabha.nhitst2<=max_nhits
-	   && bhabha.rr1<rrCut && bhabha.rr2<rrCut
+           && bhabha.p1>min_p && bhabha.p1<max_p && bhabha.p2>min_p && bhabha.p2<max_p
+           && bhabha.nhitst1>=min_nhits && bhabha.nhitst2>=min_nhits
+           && bhabha.rr1<rrCut && bhabha.rr2<rrCut
 	   && fabs(bhabha.zip1)<zCut && fabs(bhabha.zip2)<zCut
 	   && bhabha.ecls1>eclsCut && bhabha.ecls2>eclsCut
-           && (bhabha.mulayerhits2+bhabha.mulayerhits3)<=max_munhits
-	   && bhabha.munhits<=1
-           && (bhabha.e1/bhabha.p1)>0.5 && (bhabha.e2/bhabha.p2)>0.5
-	   && (bhabha.e1/bhabha.p1)<1.4 && (bhabha.e2/bhabha.p2)<1.4
-	   && (bhabha.thetat1<55 || bhabha.thetat1>125 ) && (bhabha.thetat2<55 || bhabha.thetat2>125)
-           && bhabha.ncls==2
-	  )
+ 	   && (bhabha.thetat1>57 && bhabha.thetat1<122 ) && (bhabha.thetat2>57 && bhabha.thetat2<122)
+           && (bhabha.p1 + bhabha.p2)>2000.
+           */
+           //=======================================
+	   //2 variant Harlamova dissertation
+	   ( (bhabha.Run<=23403 ||  bhabha.Run>=23430)
+	     && (bhabha.Run<=23743 || bhabha.Run>=23838)
+	     && (bhabha.Run<=24621 || bhabha.Run>=24647)
+             && (bhabha.Run<=25016 || bhabha.Run>=25044)
+	   ) &&
+	   //bhabha.Run>=23275 && bhabha.Run<=23286 &&   //1 - 10%
+	   //bhabha.Run>=23287 && bhabha.Run<=23317 &&   //2 - 9%
+	   //bhabha.Run>=23318 && bhabha.Run<=23369 &&   //3 - 11%
+	   //bhabha.Run>=23403 && bhabha.Run<=23430 &&   //4 - 22% - bad runs
+	   //bhabha.Run>=23431 && bhabha.Run<=23472 &&   //5 - 11%
+	   //bhabha.Run>=23473 && bhabha.Run<=23522 &&   //6 - 13%
+	   //bhabha.Run>=23523 && bhabha.Run<=23550 &&   //7 - 11%
+	   //bhabha.Run>=23551 && bhabha.Run<=23569 &&   //8 - 11%
+	   //bhabha.Run>=23670 && bhabha.Run<=23681 &&   //9 - 10%
+	   //bhabha.Run>=23682 && bhabha.Run<=23715 &&   //10 - 11%
+	   //bhabha.Run>=23716 && bhabha.Run<=23742 &&   //11 - 12.5%
+	   //bhabha.Run>=23743 && bhabha.Run<=23798 &&   //12 - 16% - bad runs
+	   //bhabha.Run>=23799 && bhabha.Run<=23838 &&   //13 - 19% - bad runs
+	   //bhabha.Run>=23839 && bhabha.Run<=23862 &&   //14 - 11%
+	   //bhabha.Run>=23863 && bhabha.Run<=23885 &&   //15 - 10%
+	   //bhabha.Run>=23886 && bhabha.Run<=23905 &&   //16 - 11%
+	   //bhabha.Run>=23906 && bhabha.Run<=23943 &&   //17 - 11%
+	   //bhabha.Run>=24621 && bhabha.Run<=24647 &&   //18 - 16% - bad runs
+	   //bhabha.Run>=24676 && bhabha.Run<=24712 &&   //19 - 11%
+	   //bhabha.Run>=24790 && bhabha.Run<=24845 &&   //20 - 11%
+	   //bhabha.Run>=24846 && bhabha.Run<=24875 &&   //21 - 11%
+	   //bhabha.Run>=24876 && bhabha.Run<=24916 &&   //22 - 14%
+	   //bhabha.Run>=25016 && bhabha.Run<=25044 &&   //23 - 21% - bad runs
+	   //bhabha.Run>=25045 && bhabha.Run<=25090 &&   //24 - 13%
+	   //bhabha.Run>=25091 && bhabha.Run<=25114 &&   //25 - 11%
+	   //bhabha.Run>=25115 && bhabha.Run<=25157 &&   //26 - 11%
+	   //bhabha.Run>=25158 && bhabha.Run<=25185 &&   //27 - 11%
+	   //bhabha.Run>=25186 && bhabha.Run<=25241 &&   //28 - 11%
+	   //bhabha.Run>=25352 && bhabha.Run<=25395 &&   //29 - 11%
+	   //bhabha.Run>=25396 && bhabha.Run<=25416 &&   //30 - 11%
+	   //bhabha.Run>=25417 && bhabha.Run<=25438 &&   //31 - 11%
+	   //bhabha.Run>=25439 && bhabha.Run<=25508 &&   //32 - 11%
+	   //bhabha.Run>=25559 && bhabha.Run<=25574 &&   //33 - 11%
+	   //bhabha.Run>=25575 && bhabha.Run<=25608 &&   //34 - 11%
+	   //bhabha.Run>=25609 && bhabha.Run<=25640 &&   //35 - 11%
+	   //bhabha.Run>=25641 && bhabha.Run<=25663 &&   //36 - 11%
+	   //bhabha.Run>=25664 && bhabha.Run<=25719 &&   //37 - 11%
+	   //bhabha.Run>=26051 && bhabha.Run<=26079 &&   //38 - 12%
+	   //bhabha.Run>=26080 && bhabha.Run<=26102 &&   //39 - 12%
+	   //bhabha.Run>=26103 && bhabha.Run<=26134 &&   //40 - 11%
+	   bhabha.ncls>=2
+           && (bhabha.thetat1>40 && bhabha.thetat1<140 ) && (bhabha.thetat2>40 && bhabha.thetat2<140)
+           && bhabha.ecls1>700 && bhabha.ecls2>700
+           && bhabha.enn<0.1*bhabha.emcenergy
+           && bhabha.theta2t>=165
+           && bhabha.phi2t>=165
+           && bhabha.rr1<rrCut && bhabha.rr2<rrCut
+           && fabs(bhabha.zip1)<zCut && fabs(bhabha.zip2)<zCut
+           && bhabha.pt1>100 && bhabha.pt2>100
+           && (bhabha.mulayerhits2+bhabha.mulayerhits3)<=1
+           //&& bhabha.chi2t1<max_chi2 && bhabha.chi2t2<max_chi2
+           //=======================================
+	   //&& bhabha.nhitst1<=max_nhits && bhabha.nhitst2<=max_nhits
+	   //bhabha.vrtnip>=1 && bhabha.vrtnip<=3
+	   //&& (bhabha.ecls1+bhabha.ecls2)>2000
+           //&& bhabha.enn<0.2*bhabha.emcenergy
+           //&& (bhabha.mulayerhits2+bhabha.mulayerhits3)<=max_munhits
+	   //&& bhabha.munhits<=1
+	   //&& (bhabha.e1/bhabha.p1)<epCut2 && (bhabha.e2/bhabha.p2)<epCut2
+          )
 	{
-	    if(bhabha.theta2t<=178) continue;
-	    if(bhabha.phi2t<=178) continue;
-
-	    if(bhabha.charge1==1)
+	    if( bhabha.charge1==1 )
 	    {
 		pp=bhabha.p1;
 		pm=bhabha.p2;
@@ -242,8 +322,6 @@ int main(int argc, char* argv[])
                 phim=bhabha.phit1/180.*PI;
 	    }
 
-            if((pp+pm)<2000) continue;
-
 	    if ( verbose==1 )
 	    {
 		cout<<"p1="<<bhabha.p1<<"\t"<<"p2="<<bhabha.p2<<endl;
@@ -257,13 +335,14 @@ int main(int argc, char* argv[])
 	    }
 
 	    pres = (pm*sin(tm)-pp*sin(tp))/(sqrt(2.)*(pm*sin(tm)+pp*sin(tp))/2.);
-            //if(pres>-0.2 && pres<0.2) continue;
 	    hpres->Fill(pres);
 
+            //cout<<tm*180./PI<<"\t"<<tp*180./PI<<"\t"<<tm+tp-PI<<"\t"<<(tm+tp-PI)*180./PI<<endl;
 	    hthetadif->Fill((tm+tp-PI)*180./PI);
-	    hphidif->Fill((fabs(phim-phip)-PI)*180./PI);
+            //hphidif->Fill((fabs(phim-phip)-PI)*180./PI);
+	    hphidif->Fill( TMath::Max(bhabha.phit1,bhabha.phit2)-TMath::Min(bhabha.phit1,bhabha.phit2)-180. );
 
-	    hDncomb->Fill(bhabha.ncomb);
+	    hncomb->Fill(bhabha.ncomb);
 
 	    hEbeam->Fill(bhabha.Ebeam);
 	    hRun->Fill(bhabha.Run);
@@ -368,13 +447,15 @@ int main(int argc, char* argv[])
     TString format2=".png";
     TString format3=".pdf";
 
-    hDncomb->Draw(); cc1->SaveAs(KEDR + "Dncomb" + format2);
+    hncomb->Draw(); cc1->SaveAs(KEDR + "ncomb" + format2);
     hnclst1->Draw(); cc1->SaveAs(KEDR + "nclst1" + format2);
+    heclst1->GetXaxis()->SetTitle("e1 (MeV)");
     heclst1->Draw(); cc1->SaveAs(KEDR + "eclst1" + format2);
     htclst1->Draw(); cc1->SaveAs(KEDR + "tclst1" + format2);
     hpclst1->Draw(); cc1->SaveAs(KEDR + "pclst1" + format2);
 
     hnclst2->Draw(); cc1->SaveAs(KEDR + "nclst2" + format2);
+    heclst2->GetXaxis()->SetTitle("e2 (MeV)");
     heclst2->Draw(); cc1->SaveAs(KEDR + "eclst2" + format2);
     htclst2->Draw(); cc1->SaveAs(KEDR + "tclst2" + format2);
     hpclst2->Draw(); cc1->SaveAs(KEDR + "pclst2" + format2);
@@ -384,23 +465,46 @@ int main(int argc, char* argv[])
     hnumo->Draw(); cc1->SaveAs(KEDR + "hnumo" + format2);
     heno->Draw(); cc1->SaveAs(KEDR + "heno" + format2);
 
+    heclst12diff->GetXaxis()->SetTitle("(e1-e2) (MeV)");
     heclst12diff->Draw(); cc1->SaveAs(KEDR + "eclst12diff" + format2);
 
+    hrr->GetXaxis()->SetTitle("r_{ip}, cm");
     hrr->Draw(); cc1->SaveAs(KEDR+"rr.png");
+
+    hZip->GetXaxis()->SetTitle("Z_{ip}, cm");
     hZip->Draw(); cc1->SaveAs(KEDR+"Zip.png");
+
+    hEbeam->GetXaxis()->SetTitle("E_{beam} (MeV)");
     hEbeam->Draw(); cc1->SaveAs(KEDR+"Ebeam.png");
+
     hRun->Draw(); cc1->SaveAs(KEDR+"Run.png");
+
+    henergy->GetXaxis()->SetTitle("E (MeV)");
     henergy->Draw(); cc1->SaveAs(KEDR+"emc_energy.png");
+    hlkrenergy->GetXaxis()->SetTitle("E (MeV)");
     hlkrenergy->Draw(); cc1->SaveAs(KEDR+"lkrenergy.png");
+    hcsienergy->GetXaxis()->SetTitle("E (MeV)");
     hcsienergy->Draw(); cc1->SaveAs(KEDR+"csienergy.png");
+    henass->GetXaxis()->SetTitle("e (MeV)");
     henass->Draw(); cc1->SaveAs(KEDR+"emc_energy_ass.png");
+
+    hmomt->GetXaxis()->SetTitle("P (MeV/c)");
     hmomt->Draw(); cc1->SaveAs(KEDR+"pt.png");
+
+    hmom->GetXaxis()->SetTitle("P (MeV/c)");
     hmom->Draw(); cc1->SaveAs(KEDR+"p.png");
+
     hncls->Draw(); cc1->SaveAs(KEDR+"ncls.png");
     hnlkr->Draw(); cc1->SaveAs(KEDR+"nlkr.png");
     hncsi->Draw(); cc1->SaveAs(KEDR+"ncsi.png");
     hep->Draw(); cc1->SaveAs(KEDR+"ep.png");
+
     htchi2->Draw(); cc1->SaveAs(KEDR+"tchi2.png");
+    //*htchi2norm = htchi2->Clone();
+    htchi2norm = (TH1F*) htchi2->Clone();
+    Double_t a=htchi2norm->GetEntries();
+    htchi2norm->Scale(1/a);
+    htchi2norm->Draw(); cc1->SaveAs(KEDR+"tchi2_norm.png");
     htnhits->Draw(); cc1->SaveAs(KEDR+"tnhits.png");
     htnhitsvd->Draw(); cc1->SaveAs(KEDR+"tnhitsvd.png");
     htnhitsxy->Draw(); cc1->SaveAs(KEDR+"tnhitsxy.png");
@@ -409,17 +513,46 @@ int main(int argc, char* argv[])
     htnvecxy->Draw(); cc1->SaveAs(KEDR+"tnvecxy.png");
     htnvecz->Draw(); cc1->SaveAs(KEDR+"tnvecz.png");
     htheta->Draw(); cc1->SaveAs(KEDR+"theta.png");
+
     hthetadif->GetXaxis()->SetTitle("#Delta #theta");
     Double_t sc1=hthetadif->GetEntries();
     hthetadif->Scale(1/sc1);
-    hthetadif->Fit("gaus","","",-1.8,1.8);
+    hthetadif->Fit("gaus","","",-1.7,1.7);
+    /*
+    TF1 *func3 = new TF1("fit3","[2]*(exp(-pow((x-[0]),2)/2./pow([1],2))+[4]*exp(-pow((x-[0]),2)/2./pow([3],2)))");
+    func3->SetParameter(0,0.004);
+    func3->SetParameter(1,3.5);
+    func3->SetParameter(2,0.06);
+    func3->SetParameter(3,0.90);
+    func3->SetParameter(4,14.0);
+    */
+    /*//2004
+    func3->SetParameter(0,0.004);
+    func3->SetParameter(1,0.11);
+    func3->SetParameter(2,0.06);
+    func3->SetParameter(3,0.05);
+    func3->SetParameter(4,0.8);
+    */
+    hthetadif->Fit("fit3","","",-10.,10.);
     hthetadif->Draw(); cc1->SaveAs(KEDR+"thetadif.png"); cc1->SaveAs(KEDR+"thetadif.eps");
+
     hphi->Draw(); cc1->SaveAs(KEDR+"phi.png");
+
     hphidif->GetXaxis()->SetTitle("#Delta #phi");
     Double_t sc2=hphidif->GetEntries();
     hphidif->Scale(1/sc2);
-    hphidif->Fit("gaus","","",-0.9,0.9);
+    hphidif->Fit("gaus","","",-0.7,0.7);
+    /*
+    TF1 *func2 = new TF1("fit2","[2]*(exp(-pow((x-[0]),2)/2./pow([1],2))+[4]*exp(-pow((x-[0]),2)/2./pow([3],2)))");
+    func2->SetParameter(0,0.004);
+    func2->SetParameter(1,0.11);
+    func2->SetParameter(2,0.06);
+    func2->SetParameter(3,0.05);
+    func2->SetParameter(4,0.8);
+    hphidif->Fit("fit2","","",-4.,4.);
+    */
     hphidif->Draw(); cc1->SaveAs(KEDR+"phidif.png"); cc1->SaveAs(KEDR+"phidif.eps");
+
     htheta2t->Draw(); cc1->SaveAs(KEDR+"theta2t.png");
     hphi2t->Draw(); cc1->SaveAs(KEDR+"phi2t.png");
 
@@ -440,7 +573,16 @@ int main(int argc, char* argv[])
     hpres->GetXaxis()->SetTitle("#Delta p_{t}/p_{t}");
     Double_t sc3=hpres->GetEntries();
     hpres->Scale(1/sc3);
-    hpres->Fit("gaus","","",-0.20,0.20); hpres->Draw();
+    hpres->Fit("gaus","","",-0.2,0.2); hpres->Draw();
+    /*
+    TF1 *func1 = new TF1("fit1","[2]*(exp(-pow((x-[0]),2)/2./pow([1],2))+[4]*exp(-pow((x-[0]),2)/2./pow([3],2)))");
+    func1->SetParameter(0,0.004);
+    func1->SetParameter(1,0.11);
+    func1->SetParameter(2,0.06);
+    func1->SetParameter(3,0.05);
+    func1->SetParameter(4,0.8);
+    hpres->Fit("fit1","","",-1.,1.);
+    */
     cc1->SaveAs(KEDR+"mom_res.png"); cc1->SaveAs(KEDR+"mom_res.eps");
 
     fout->Write();
