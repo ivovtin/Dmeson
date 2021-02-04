@@ -25,21 +25,21 @@
 #$ -l time=24:00:00
 ##$ -q remote
 ##$ -q extralong
-#$ -q 6h
-##$ -q day
+##$ -q 6h
+#$ -q day
 #
 # -- Send mail at submission and completion of script --
 #$ -m beas
 #$ -M ovtin.ivan@gmail.com
 
 ## MC signal
-##$HOME/development/Dmeson/analysisDplus/fitDplus/batch_sig
+$HOME/development/Dmeson/analysisDplus/fitDplus/batch_sig
 ## uds BG
 ##$HOME/development/Dmeson/analysisDplus/fitDplus/batch_bck
 ## DD BG
 ##$HOME/development/Dmeson/analysisDplus/fitDplus/batch_dbck
 ## exp
-$HOME/development/Dmeson/analysisDplus/fitDplus/batch_exp
+##$HOME/development/Dmeson/analysisDplus/fitDplus/batch_exp
 
 status=$?
 if [ $status != 0 ]; then

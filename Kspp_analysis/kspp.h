@@ -58,9 +58,9 @@ void chain(){
 	}
     }
     else if (key==2){              //MC Signal
-	for(int i=1; i<=11; i++)
+	for(int i=1; i<=221; i++)
 	{
-	    tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/Kspp/psi3770_to_simKspp_%d.root",i).Data());
+	    tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/Kspp/psi3770_to_Kspp_%d.root",i).Data());
 	}
     }
 }

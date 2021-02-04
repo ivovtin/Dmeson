@@ -30,8 +30,8 @@
 #$ -m beas
 #$ -M ovtin.ivan@gmail.com
 
-dataORmc=1
 ##dataORmc=4
+dataORmc=1
 
 $HOME/development/Dmeson/analysisD0/D0meson $dataORmc
 

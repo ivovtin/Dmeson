@@ -1,5 +1,5 @@
 #!/bin/bash
-dataORmc=4
+dataORmc=1
 
 ./Dplusmeson $dataORmc
 

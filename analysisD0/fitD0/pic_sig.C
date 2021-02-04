@@ -7,7 +7,8 @@
   gStyle->SetHistLineWidth(2);
   gStyle->SetHistLineColor(4);
 
-  TString KEDR="/spool/users/ovtin/outDmeson/D0/results/fitsD0/";
+  //TString KEDR="/spool/users/ovtin/outDmeson/D0/results/fitsD0/";
+  TString KEDR="/spool/users/ovtin/outDmeson/D0/results/fitsD0/forTest/";
 
   TNtuple nt("nt","NTuple","mbc:de:dp");
 
@@ -15,11 +16,14 @@
 
   FILE* file = fopen("dat/kp_signal_def.dat","r");
 
+  int i=0;
   while (!feof(file)) {
     double mbc,de,dp;
     if (fscanf(file,"%lf %lf %lf", &mbc,&de,&dp) == 3) {
       nt.Fill(mbc,de,dp);
+      i++;
     }
+    if (i >= 200000) break;                                 //!!!!!!
   }
 
   fclose(file);

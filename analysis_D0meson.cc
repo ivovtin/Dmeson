@@ -324,14 +324,14 @@ int mu_event_rejection()
 
 double pcorr(double p) {
     double pc = p*fabs(progpar.pSF);
-    if (progpar.verbose) cout<<"pc="<<pc<<"\t"<<"p="<<p<<"\t"<<"progpar.pSF="<<progpar.pSF<<endl;
+    if (progpar.verbose==2) cout<<"pc="<<pc<<"\t"<<"p="<<p<<"\t"<<"progpar.pSF="<<progpar.pSF<<endl;
 
     return fabs(pc);
 }
 
 void kine_fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t iflag)
 {
-    if (progpar.verbose) printf("  par0=%lf, par1=%lf\n",par[0], par[1]);
+    if (progpar.verbose==2) printf("  par0=%lf, par1=%lf\n",par[0], par[1]);
 
     double pp1 = par[0];
     double pp2 = par[1];
@@ -357,7 +357,7 @@ void kine_fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t ifla
     double chi2 = pow((pp1-p1i)/sp1,2) + pow((pp2-p2i)/sp2,2) +
 	pow(de/0.1,2);
 
-    if (progpar.verbose) printf("  p1i=%lf, p2i=%lf, p1=%lf, p2=%lf, de=%lf, chi2=%lf\n",p1i, p2i, pp1, pp2, de, chi2);
+    if (progpar.verbose==2) printf("  p1i=%lf, p2i=%lf, p1=%lf, p2=%lf, de=%lf, chi2=%lf\n",p1i, p2i, pp1, pp2, de, chi2);
 
     f = chi2;
 }
@@ -387,7 +387,7 @@ void refit(int t, double p, double* phi, double* theta) {
 
     double p1 = p*sin(theta0)/sin(theta1);
 
-    if (progpar.verbose) {
+    if (progpar.verbose==2) {
 	printf("Track refit: p0=%lg, r0=%lg, p=%lg\n", p0, r0, p);
 	printf("             phi0=%lg, theta0=%lg\n", phi0, theta0);
 	printf("             phi1=%lg, theta1=%lg\n", phi1, theta1);
@@ -448,14 +448,14 @@ void kine_fit(int ip1, int ip2, double* mbc, double* de, double* dp, double* pre
 	gMinuit->mnpout(1,para1,val[1],err[1],bnd1[1],bnd2[1],ivar);
 	pp2 = val[1];
 
-	if (progpar.verbose) printf("  val0=%lf, val1=%lf\n",val[0], val[1]);
+	if (progpar.verbose==2) printf("  val0=%lf, val1=%lf\n",val[0], val[1]);
 
 	Double_t fmin;
 	Double_t edm,errdef;
 	Int_t nvpar,nparx,icstat;
 	gMinuit->mnstat(fmin,edm,errdef,nvpar,nparx,icstat);
 	*fchi2 = fmin;
-	if (progpar.verbose) printf(" Minimal function value: %8.3lf  \n",fmin);
+	if (progpar.verbose==2) printf(" Minimal function value: %8.3lf  \n",fmin);
 
     } else {
 	pp1 = p1i;
@@ -670,6 +670,7 @@ int analyse_event()
 		if (progpar.verbose) cout<<"i="<< i<<endl;
 		if (progpar.verbose) cout<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"Ebeam="<<WTotal/2<<"\t"<<"t1="<<t1<<"\t"<<"t2="<<t2<<"\t"<<"tCharge(t1)="<<tCharge(t1)<<"\t"<<"tCharge(t2)="<<tCharge(t2)<<endl;
 		if (progpar.verbose) cout<<"p(t1)="<<tP(t1)<<"\t"<<"p(t2)="<<tP(t2)<<"\t"<<"tHits(t1)="<<tHits(t1)<<"\t"<<"tHits(t2)="<<tHits(t2)<<"\t"<<"tCh2(t1)="<<tCh2(t1)<<"\t"<<"tCh2(t2)="<<tCh2(t2)<<endl;
+		if (progpar.verbose) cout<<"ktrrec_.PTRAK[t1]="<<ktrrec_.PTRAK[t1]<<"\t"<<"ktrrec_.PTRAK[t2]="<<ktrrec_.PTRAK[t2]<<"\t"<<endl;
 
 		Dmeson.p1 = tP(t1);
 		Dmeson.p2 = tP(t2);
@@ -797,7 +798,7 @@ int analyse_event()
 		int mu_hits = mu_next_event_good();
 		Dmeson.munhits = mu_hits;
 		int mu_hit;
-		int mu_layer_hits[3] = {0, 0, 0};
+		int mu_layer_hits[3] = {0, 0, 0};         //hits in each layer of mu system  - all 3 layer
 
 		for (mu_hit = 0; mu_hit < mu_hits; mu_hit++) {
 		    int layer = mu_hit_layer(mu_hit);

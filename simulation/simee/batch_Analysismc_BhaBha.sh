@@ -17,24 +17,24 @@
 ##$ -e /dev/null
 # -------------------------------------------
 # --             Enviroment                --
-#$ -v PATH=$PATH:$HOME/release/KdRunFastMon,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/alexbarn/release/lib,KDBHOST=bison-2
-##$ -v PATH=$PATH:$HOME/release/KdRunFastMon,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/alexbarn/release/lib,KDBHOST=localhost
+##$ -v PATH=$PATH:$HOME/release/KdRunFastMon,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/alexbarn/release/lib,KDBHOST=bison-2
+#$ -v PATH=$PATH:$HOME/release/KdRunFastMon,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/alexbarn/release/lib,KDBHOST=localhost
 # -------------------------------------------
 # --             Queue list                --
 #$ -soft
 ##$ -hard
 #$ -l time=24:00:00
-##$ -q remote
+#$ -q remote
 ##$ -q extralong
 ##$ -q 6h
-#$ -q hour
+##$ -q hour
 ##$ -q day
 #
 # -- Send mail at submission and completion of script --
 ##$ -m beas
 ##$ -M ovtin.ivan@gmail.com
 
-##$ -t 1-114
+#$ -t 1-124
 ##$ -t 2-4
 ##$ -t 5-9
 ##$ -t 10-11
@@ -71,7 +71,7 @@
 ##$ -t 110-113
 ##$ -t 114-116
 ##$ -t 117-120
-#$ -t 121-124
+##$ -t 121-124
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]

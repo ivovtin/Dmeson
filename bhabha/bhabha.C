@@ -324,7 +324,10 @@ int main(int argc, char* argv[])
 
 	    if ( verbose==1 )
 	    {
+                cout<<"<<<<<<<<<<<<<<<<<<<<  Next event  >>>>>>>>>>>>>>>>>>"<<endl;
+                cout<<"Run="<<bhabha.Run<<"\t"<<"Event="<<bhabha.rEv<<endl;
 		cout<<"p1="<<bhabha.p1<<"\t"<<"p2="<<bhabha.p2<<endl;
+                /*
 		cout<<"e1/p1="<<bhabha.e1/bhabha.p1<<"\t"<<"e2/p2="<<bhabha.e2/bhabha.p2<<endl;
 		cout<<"(e1+e2)="<<bhabha.e1+bhabha.e2<<endl;
 		cout<<"rr1="<<bhabha.rr1<<"\t"<<"rr2="<<bhabha.rr2<<"\t"<<endl;
@@ -332,6 +335,7 @@ int main(int argc, char* argv[])
 		cout<<"fabs(fabs(bhabha.zip1)-fabs(bhabha.zip2))="<<fabs(fabs(bhabha.zip1)-fabs(bhabha.zip2))<<endl;
 		cout<<"bhabha.thetat1="<<bhabha.thetat1<<"\t"<<"bhabha.thetat2="<<bhabha.thetat2<<endl;
 		cout<<"fabs(bhabha.thetat1-bhabha.thetat2)="<<fabs(bhabha.thetat1-bhabha.thetat2)<<endl;
+                */
 	    }
 
 	    pres = (pm*sin(tm)-pp*sin(tp))/(sqrt(2.)*(pm*sin(tm)+pp*sin(tp))/2.);

@@ -4,7 +4,7 @@
 #$ -S /bin/bash                            ##specifies the interpreting shell for this job to be the Bash shell.
 # -------------------------------------------
 # --             batch name                --
-#$ -N Dmeson
+#$ -N fitDmeson
 # -------------------------------------------
 # --     What to redirect to where         --
 # -- working directory --
@@ -24,7 +24,9 @@
 ##$ -hard
 #$ -l time=24:00:00
 ##$ -q remote
-#$ -q extralong
+##$ -q extralong
+##$ -q 6h
+#$ -q day
 #
 # -- Send mail at submission and completion of script --
 #$ -m beas

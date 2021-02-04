@@ -8,7 +8,8 @@
   gStyle->SetHistLineWidth(2);
   gStyle->SetHistLineColor(4);
 
-  TString KEDR="/spool/users/ovtin/outDmeson/D0/results/fitsD0/";
+  //TString KEDR="/spool/users/ovtin/outDmeson/D0/results/fitsD0/";
+  TString KEDR="/spool/users/ovtin/outDmeson/D0/results/fitsD0/forTest/";
 
   TNtuple nt("nt","NTuple","mbc:de:dp");
 

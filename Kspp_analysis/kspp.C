@@ -19,9 +19,12 @@ int Usage(string status)
         exit(0);
 }
 
-double msf = 1;
-double xcorr = 0;
-double scorr = 0;
+//double msf = 1.;        //Sim   
+double msf = 1.030;  //2004
+//double msf = 1.017;    //2016-17
+double xcorr = 0.033;
+//double scorr = 0.023;
+double scorr = 0.010;
 
 double pcorr(double p, int type, double ran)
 {
@@ -47,7 +50,8 @@ double pcorr(double p, int type, double ran)
 
     double beta = sqrt(1.-1./gamma/gamma);
 
-    double pc = p+1.*dedx/pow(beta,3) + k*p;
+    //double pc = p+1.*dedx/pow(beta,3) + k*p;
+    double pc = p;
 
     pc = pc*fabs(msf)*(1.+ran*sqrt(scorr*scorr+pow(xcorr*p/1000.,2)));
 
@@ -81,20 +85,22 @@ int main(int argc, char* argv[])
     if(key!=1){
 	//2016-17
 	rCut1=0.5;
-	rCut2=20.;
+	//rCut2=20.;
+	rCut2=4.0;
 	rrCut=0.0;
 	zCut=13.;
-	max_chi2=50.;
+	max_chi2=1000.;
 	min_nhits=24.;
 	max_nhits=1000.;
     }
     else{
         //2004
 	rCut1=0.5;
-	rCut2=20.;
+	rCut2=4.0;
+	//rCut2=20.;
 	rrCut=0.0;
 	zCut=13.;
-	max_chi2=50.;
+	max_chi2=1000.;
 	min_nhits=24.;
 	max_nhits=1000.;
     }
@@ -119,7 +125,7 @@ int main(int argc, char* argv[])
     else if (key==2)        //sig
     {
 	fnameout=TString::Format("sim_kspp_sig_%d.root",key).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/Kspp/simulation_Sig/";
+        KEDR = "/home/ovtin/public_html/outDmeson/Kspp/simulation/";
     }
     cout<<fnameout<<endl;
     fout = new TFile(fnameout,"RECREATE");
@@ -135,7 +141,7 @@ int main(int argc, char* argv[])
     TH1F* hncomb=new TH1F("ncomb","ncomb",150,-0.5,149.5);
 
     TH1F *hRun;
-    if( key==0 )
+    if( key!=1 )
     {
 	hRun = new TH1F("Run","Run", 100, 23206., 26248.);
     }
@@ -248,7 +254,7 @@ int main(int argc, char* argv[])
 	   && ks.chi2t1<max_chi2 && ks.chi2t2<max_chi2
 	   && ks.nhitst1>=min_nhits && ks.nhitst1<=max_nhits
 	   && ks.r>rCut1 && ks.r<rCut2
-	   && ks.rr1>rrCut && ks.rr2>rrCut
+           && ks.rr1>rrCut && ks.rr2>rrCut
 	   && fabs(ks.zip1)<zCut && fabs(ks.zip2)<zCut
 	   && -1.<abs(ks.zip1-ks.zip2)<3.
 	  )
@@ -278,6 +284,8 @@ int main(int argc, char* argv[])
 
 	    double pmcorr = pcorr(pm*sin(tm),1,0)/sin(tm);
 	    double ppcorr = pcorr(pp*sin(tp),1,0)/sin(tp);
+	    //double pmcorr = pcorr(pm*sin(tm),1,1)/sin(tm);
+	    //double ppcorr = pcorr(pp*sin(tp),1,1)/sin(tp);
 
 	    pxm = pmcorr*sin(tm)*cos(phim);
 	    pym = pmcorr*sin(tm)*sin(phim);
@@ -517,6 +525,7 @@ int main(int argc, char* argv[])
     func2->SetParameter(3,1.32897e+01);
     func2->SetParameter(4,4.93039e+02);
     func2->SetParameter(5,-4.25396e-05);
+
     hinvMcor->Fit("fitInvM2","","",400,600);
     //hinvMcor->GetYaxis()->SetRangeUser(0., 300.);
     hinvMcor->GetXaxis()->SetTitle("M_{#pi#pi} (MeV/c^2)");

@@ -1,10 +1,27 @@
+#include <unistd.h>
+#include <iostream>
+#include <sstream>
+#include <fstream>
+#include <string>
+#include <list>
+#include <algorithm>
+#include <cfortran.h>
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <cstdio>
+#include <cstdlib>
+
 #include "TROOT.h"
 #include "TFile.h"
 #include "TDirectory.h"
 #include "TCanvas.h"
-#include <iostream>
 #include <vector>
-#include <algorithm>
+
+#include <getopt.h>
+#include <math.h>
+#include "KDB/kdb.h"
+#include "KDB/kd_db.h"
 
 #include "D0meson.h"
 
@@ -13,8 +30,37 @@ string progname;
 
 int Usage(string status)
 {
-	cout<<"Usage: "<<progname<<"\t"<<"Data (0 - 2016-17, 4 - 2004) or MC (1 - Signal, 2 - BG continium, 3 - BG DD)  Verbose (0 or 1)"<<endl;
-        exit(0);
+    cout<<"Usage: "<<progname<<"\t"<<"Data (0 - 2016-17, 4 - 2004) or MC (1 - Signal, 2 - BG continium, 3 - BG DD)  Verbose (0 or 1)"<<endl;
+    exit(0);
+}
+
+inline char* timestamp(time_t t)
+{
+    static const char* time_fmt="%b %d %Y %H:%M:%S";
+    static char strtime[50];
+
+    struct tm* brtm=localtime(&t);
+    strftime(strtime,50,time_fmt,brtm);
+
+    return strtime;
+}
+
+void get_run_lumi(int run, double *en, double *en_err, double *lum, int *t) {
+    int array[8];
+    KdDbConn* conn;
+    KDBruninfo runinfo;
+    int id;
+
+    conn = kd_db_open(NULL);
+    id = kd_db_get_id("runenergy",conn);
+    if (kd_db_get_for_run_int(id, run, conn, array, 8)) {
+	*en = array[1]/1e6;
+	*en_err = array[2]/1e6;
+    }
+    if (kd_db_get_run_info(run, 1, conn, &runinfo))
+	*lum = runinfo.intelum;
+    *t = runinfo.livesec;
+    kd_db_close(conn);
 }
 
 int main(int argc, char* argv[])
@@ -36,7 +82,7 @@ int main(int argc, char* argv[])
 
     //***************preselections*************
     int ntrk=3;
-    int max_munhits=1;
+    int max_munhits=2;
     float min_pt=100.; //MeV
     float max_pt=2000.; //MeV
     float min_Mbc=1700.;;
@@ -53,22 +99,27 @@ int main(int argc, char* argv[])
 	//2016-17
 	rrCut=0.5;
 	zCut=13.;
-	max_chi2=50.;
+	max_chi2=1000.;
 	min_nhits=24.;
-        max_nhits=50.;
+        max_nhits=1000.;
     }
     else{
         //2004
 	rrCut=0.5;
 	zCut=13.;
-	max_chi2=50.;
+	max_chi2=1000.;
 	min_nhits=24.;
-	max_nhits=48.;
+	//max_nhits=48.;
+	max_nhits=1000.;
     }
     //*****************************************
 
     double deCut1, deCut2;
     double mbcCut1, mbcCut2;
+
+    time_t runTime_begin;
+    time_t runTime_end;
+    double slum;
 
     TFile *fout=0;
     TString fnameout;
@@ -79,12 +130,20 @@ int main(int argc, char* argv[])
     if( key==0 ){           //exp 2016-17
 	min_Mbc=1700;
 	min_Mbc2=1800;
-	deCut1=-100; deCut2=100;
+	deCut1=-150; deCut2=150;
+	//deCut1=-100; deCut2=100;
 	mbcCut1=1855, mbcCut2=1875;
+	//fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data_401-500_%d.root",key).Data();
 	fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data_%d.root",key).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_v11/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr/";
+        KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorrTest/";
+	//KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorrRuns401-500/";
+	//KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorrEbeamgt1887.4/";
+	gSystem->Exec("mkdir " + KEDR);
+        gSystem->Exec("cp /store/users/ovtin/outDmeson/demo/index.php " + KEDR);
 	list_badruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/badruns";
-	fout_result=dir_out + "/" + "kp_2016-17.dat";
+	fout_result=dir_out + "/" + "kp_exp_1.0173_2016-17.dat";
+	//fout_result=dir_out + "/" + "kp_exp_1.0173_2016-17_SkipBadRuns.dat";
     }
     else if (key==4)        //exp 2004
     {
@@ -104,6 +163,7 @@ int main(int argc, char* argv[])
 	mbcCut1=1800, mbcCut2=1900;
 	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_sig_%d.root",key).Data();
         KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Sig/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Sig_test/";
 	fout_result=dir_out + "/" + "kp_signal_def.dat";
     }
     else if (key==2)        //uds
@@ -138,29 +198,39 @@ int main(int argc, char* argv[])
     TH1F* hDncomb=new TH1F("Dmseon.ncomb","Dmseon.ncomb",150,-0.5,149.5);
 
     TH1F *hRun;
-    if( key==0 )
+    TH1F *hTime;
+    TH1F *hRunSigMbcCut;
+    TH1F *hRunSigdECut;
+    TH2D* hLum;
+    if( key!=4 )
     {
-	hRun = new TH1F("Run","Run", 100, 23206., 26248.);
+	hRun = new TH1F("Run","Run", 3042, 23206., 26248.);
+	hTime = new TH1F("Time","Time", 3042,1454284800,1514592000);
+	hRunSigMbcCut = new TH1F("RunSigMbcCut","RunSigMbcCut", 3042, 23206., 26248.);
+	hRunSigdECut = new TH1F("RunSigdECut","RunSigdECut", 3042, 23206., 26248.);
+        hLum = new TH2D("Luminosity","Luminosity",3042,1454284800,1514592000,20,0,20); 
     }
     else
     {
 	hRun = new TH1F("Run","Run", 100, 4100., 4709.);
+	hTime = new TH1F("Time","Time", 3042,1072915200,1135900800);
+	hRunSigMbcCut = new TH1F("RunSigMbcCut","RunSigMbcCut", 100, 4100., 4709.);
+	hRunSigdECut = new TH1F("RunSigdECut","RunSigdECut", 100, 4100., 4709.);
+        hLum = new TH2D("Luminosity","Luminosity",3042,1072915200,1135900800,20,0,20); 
     }
 
-    TH1F* hEbeam=new TH1F("Ebeam","Ebeam",100,1880.,1895.);
+    TH1F* hEbeam=new TH1F("Ebeam","Ebeam",200,1885.,1889.);
 
-    TH1F* hmbc=new TH1F("Mbc","Mbc",100,0.,2000.);
-    TH1F* hmbc_zoom;
+    TH1F* hmbc;
     if( key==0 || key==4 || key==1){
-	hmbc_zoom=new TH1F("M_{bc}","M_{bc}",50,1800.,1900.);
+	hmbc=new TH1F("M_{bc}","M_{bc}",50,1800.,1900.);
     }
     else{
-	hmbc_zoom=new TH1F("M_{bc}","M_{bc}",50,1700.,1900.);
+	hmbc=new TH1F("M_{bc}","M_{bc}",50,1700.,1900.);
     }
-    TH1F* hdE=new TH1F("#Delta E","#Delta E",200,-1000.,1000.);
-    TH1F* hdE_zoom=new TH1F("#Delta E","#Delta E",30,-300.,300.);
+    TH1F* hdE=new TH1F("#Delta E","#Delta E",30,-300.,300.);
     TH1F* hdP=new TH1F("#Delta P","#Delta P",200,-1000.,1000.);
-    TH1F* hfchi2=new TH1F("MChi2","Minuit Chi2",200,0.,1000.);
+    TH1F* hfchi2=new TH1F("MChi2","Minuit Chi2",100,0.,100.);
 
     TH2D *h2MbcdE=new TH2D("M_{bc}:#Delta E", "M_{bc}:#Delta E", 100,min_Mbc,1900,100,-300,300);
     TH2D *h2MbcdP=new TH2D("M_{bc}:#Delta P", "M_{bc}:#Delta P", 200,-500,500,200,1825,1890);
@@ -172,6 +242,7 @@ int main(int argc, char* argv[])
     TH1F* hvrtnbeam=new TH1F("vrt.nbeam","vrt.nbeam",12,-0.5,11.5);
     TH1F* hmomt=new TH1F("pt","pt",100,0.,3000.);
     TH1F* hmom=new TH1F("p","p",100,0.,3000.);
+    TH1F* hmomrec=new TH1F("prec","prec",100,0.,3000.);
     TH1F* htchi2=new TH1F("tchi2","tchi2",100,0.,100.);
     TH1F* htnhits=new TH1F("tnhits","tnhits",80,0.,80.);
     TH1F* htnhitsvd=new TH1F("tnhitsvd","tnhitsvd",8,-0.5,7.5);
@@ -240,14 +311,15 @@ int main(int argc, char* argv[])
     int runprev=0;
     std::vector<int> goodruns;
 
+    int nev=0;
+
     //event loop
     for(int k=0; k<nentr; k++)
     {
 	tt->GetEntry(k);
 
 	if ( *std::find(badruns.begin(), badruns.end(), Dmeson.Run) ) continue;        //skip bad runs
-	//if ( *std::find(badruns.begin(), badruns.end(), Dmeson.Run) ) { cout<<"bad run="<<Dmeson.Run<<endl;};        //skip bad runs
-        //cout<<"bad run="<<*find(badruns.begin(), badruns.end(), Dmeson.Run)<<endl;
+	//if ( *std::find(badruns.begin(), badruns.end(), Dmeson.Run) ) { cout<<"bad run="<<Dmeson.Run<<endl; continue; };        //skip bad runs
 
 	if( (k %100000)==0 )cout<<k<<endl;
 
@@ -264,6 +336,48 @@ int main(int argc, char* argv[])
 	{
 	    //cout<<"Dmeson.run="<<Dmeson.Run<<endl;
 	    goodruns.push_back(Dmeson.Run);
+
+	    KDBconn* conn = kdb_open();
+
+	    if (!conn) {
+		printf("Can not connect to database\n");
+	    }
+
+	    runTime_begin=kdb_run_get_begin_time(conn, Dmeson.Run);
+	    runTime_end=kdb_run_get_end_time(conn, Dmeson.Run);
+	    cout<<"||||||||||||||||||||||||=======  Next RUN ========|||||||||||||||||||||||||||||||||"<<endl;
+	    cout<<"Begin time of Run"<<Dmeson.Run<<": "<<timestamp(runTime_begin)<<endl;
+	    cout<<"End time of Run"<<Dmeson.Run<<": "<<timestamp(runTime_end)<<endl;
+
+            static const int lum_table_id=2007, lum_table_length=7;
+	    static const int e_table_id=2119, e_table_length=16;
+
+            //static float lum_e=0, lum_p=0;
+	    //int buflum[lum_table_length];
+	    //if( kdb_read_for_run(conn,lum_table_id,Dmeson.Run,buflum,lum_table_length) ) {
+	    //	lum_p=buflum[0]*1E-3;
+	    //	lum_e=buflum[1]*1E-3;
+	    //}
+	    //kdb_setver(conn,0);
+	    //cout<<"Lum_p="<<lum_p<<"\t"<<"Lum_e="<<lum_e<<"\t"<<"slum_p="<<slum_p<<"\t"<<"slum_e="<<slum_e<<endl;
+            //if( lum_p<100 ) slum_p += lum_p; //nb^-1
+            //if( lum_e<100 ) slum_e += lum_e; //nb^-1
+ 
+	    float beam_energy=0;     
+            int bufenergy[e_table_length];
+	    if( kdb_read_for_run(conn,e_table_id,Dmeson.Run,bufenergy,e_table_length) ) {
+		beam_energy=bufenergy[1]*1E-6;
+	    }
+	    kdb_close(conn);
+
+            cout<<"DB beam energy is "<<beam_energy<<endl; 
+              
+	    double en=0, en_err=0, lum=0;
+	    int t;
+            get_run_lumi(Dmeson.Run, &en, &en_err, &lum, &t);
+	    cout<<"Lum="<<lum*0.001<<"\t"<<"slum="<<slum<<endl;
+            if( lum*0.001>0. && lum*0.001<100. ) slum += lum*0.001; //nb^-1
+            hLum->Fill(runTime_begin,lum*0.001);
 	}
 
 	//if( (key==0 || key==4) && Dmeson.vrtntrk==2 &&  Dmeson.theta2t>172 && Dmeson.phi2t>172 ) continue;
@@ -275,16 +389,28 @@ int main(int argc, char* argv[])
 	   && Dmeson.pt1>min_pt && Dmeson.pt1<max_pt && Dmeson.pt2>min_pt && Dmeson.pt2<max_pt
 	   && Dmeson.chi2t1<max_chi2 && Dmeson.chi2t2<max_chi2
 	   && Dmeson.nhitst1>=min_nhits && Dmeson.nhitst2>=min_nhits
+	   && Dmeson.nhitst1<=max_nhits && Dmeson.nhitst2<=max_nhits
 	   && Dmeson.rr1<rrCut && Dmeson.rr2<rrCut
 	   && fabs(Dmeson.zip1)<zCut && fabs(Dmeson.zip2)<zCut
 	   && Dmeson.ecls1<eclsCut && Dmeson.ecls2<eclsCut
-	   && Dmeson.nhitst1<=max_nhits && Dmeson.nhitst2<=max_nhits
-           && (Dmeson.mulayerhits2+Dmeson.mulayerhits3)<=max_munhits
-	  )
+	   && (Dmeson.mulayerhits2+Dmeson.mulayerhits3)<=max_munhits
+	   //&& (Dmeson.mulayerhits1)<=1
+           //&& Dmeson.Ebeam>1887.0  //better
+           //&& Dmeson.Ebeam<=1886.80
+           //&& ( Dmeson.Ebeam>1887.20 && Dmeson.Ebeam<1887.40 )
+           //&& Dmeson.Ebeam>1887.4  //better
+	   //&& (Dmeson.Run<23809 || Dmeson.Run>23838)
+	   //&& (Dmeson.Run>23600 && Dmeson.Run<23800)
+	   //&& (Dmeson.Run>23942 && Dmeson.Run<24835)
+	   && (Dmeson.Run<23495 || Dmeson.Run>23642)
+	   && (Dmeson.Run<24629 || Dmeson.Run>24647)
+	   )
 	{
-
 	    if ( verbose==1 )
 	    {
+                cout<<"<<<<<<<<<<<<<<<<<<<<<<<<<<< Next combination >>>>>>>>>>>>>>>>>>>>>>>>>>>>"<<endl;
+                cout<<"run="<<Dmeson.Run<<"\t"<<"event="<<Dmeson.rEv<<"\t"<<"Ebeam="<<Dmeson.Ebeam<<endl;
+                cout<<"Dmeson.ncomb="<<Dmeson.ncomb<<"\t"<<endl;
 		cout<<"p1="<<Dmeson.p1<<"\t"<<"p2="<<Dmeson.p2<<endl;
 		cout<<"e1/p1="<<Dmeson.e1/Dmeson.p1<<"\t"<<"e2/p2="<<Dmeson.e2/Dmeson.p2<<endl;
 		cout<<"(e1+e2)="<<Dmeson.e1+Dmeson.e2<<endl;
@@ -293,12 +419,17 @@ int main(int argc, char* argv[])
 		cout<<"fabs(fabs(Dmeson.zip1)-fabs(Dmeson.zip2))="<<fabs(fabs(Dmeson.zip1)-fabs(Dmeson.zip2))<<endl;
 		cout<<"Dmeson.thetat1="<<Dmeson.thetat1<<"\t"<<"Dmeson.thetat2="<<Dmeson.thetat2<<endl;
 		cout<<"fabs(Dmeson.thetat1-Dmeson.thetat2)="<<fabs(Dmeson.thetat1-Dmeson.thetat2)<<endl;
-	    }
+	        cout<<"mulayerhits1="<<Dmeson.mulayerhits1<<"\t"<<"mulayerhits2="<<Dmeson.mulayerhits2<<"\t"<<"mulayerhits3="<<Dmeson.mulayerhits3<<endl;
+            }
+
+            nev++;
+	    //if( key==1 && nev>8000 ) continue;
 
 	    hDncomb->Fill(Dmeson.ncomb);
 
 	    hEbeam->Fill(Dmeson.Ebeam);
 	    hRun->Fill(Dmeson.Run);
+	    hTime->Fill(runTime_begin);
 
 	    hrr->Fill(Dmeson.rr1);
 	    hrr->Fill(Dmeson.rr2);
@@ -323,8 +454,12 @@ int main(int argc, char* argv[])
 
 	    hmomt->Fill(Dmeson.pt1);
 	    hmomt->Fill(Dmeson.pt2);
+
 	    hmom->Fill(Dmeson.p1);
 	    hmom->Fill(Dmeson.p2);
+
+	    hmomrec->Fill(Dmeson.prec1);
+	    hmomrec->Fill(Dmeson.prec2);
 
 	    htchi2->Fill(Dmeson.chi2t1);
 	    htchi2->Fill(Dmeson.chi2t2);
@@ -386,9 +521,6 @@ int main(int argc, char* argv[])
 
 	    hfchi2->Fill(Dmeson.fchi2);
 
-	    hmbc->Fill(Dmeson.mbc);
-	    hdE->Fill(Dmeson.de);
-
 	    if( Dmeson.de>=min_dE && Dmeson.de<=max_dE  &&  Dmeson.mbc>=min_Mbc && Dmeson.mbc<=max_Mbc )
 	    {
 		if ( verbose==2 )
@@ -404,13 +536,32 @@ int main(int argc, char* argv[])
 	    //fill dE
 	    if( Dmeson.mbc>=mbcCut1 && Dmeson.mbc<=mbcCut2 )
 	    {
-		hdE_zoom->Fill(Dmeson.de);
+		hdE->Fill(Dmeson.de);
+		hRunSigMbcCut->Fill(Dmeson.Run);
 	    }
 
             //fill Mbc
 	    if( Dmeson.de>=deCut1 && Dmeson.de<=deCut2 &&  Dmeson.mbc>=min_Mbc2 && Dmeson.mbc<=max_Mbc )
 	    {
-		hmbc_zoom->Fill(Dmeson.mbc);
+		hmbc->Fill(Dmeson.mbc);
+		hRunSigdECut->Fill(Dmeson.Run);
+		/*if( Dmeson.mbc>=1800 && Dmeson.mbc<=1850 ){
+		    cout<<"<<<<<<<<<<<<<<<<<<<<<<<<<<< Next combination >>>>>>>>>>>>>>>>>>>>>>>>>>>>"<<endl;
+		    cout<<"run="<<Dmeson.Run<<"\t"<<"event="<<Dmeson.rEv<<endl;
+		    cout<<"Dmeson.ncomb="<<Dmeson.ncomb<<"\t"<<endl;
+		    cout<<"p1="<<Dmeson.p1<<"\t"<<"p2="<<Dmeson.p2<<endl;
+		    cout<<"e1/p1="<<Dmeson.e1/Dmeson.p1<<"\t"<<"e2/p2="<<Dmeson.e2/Dmeson.p2<<endl;
+		    cout<<"(e1+e2)="<<Dmeson.e1+Dmeson.e2<<endl;
+		    cout<<"rr1="<<Dmeson.rr1<<"\t"<<"rr2="<<Dmeson.rr2<<"\t"<<endl;
+		    cout<<"zip1="<<Dmeson.zip1<<"\t"<<"zip2="<<Dmeson.zip2<<"\t"<<endl;
+		    cout<<"fabs(fabs(Dmeson.zip1)-fabs(Dmeson.zip2))="<<fabs(fabs(Dmeson.zip1)-fabs(Dmeson.zip2))<<endl;
+		    cout<<"Dmeson.thetat1="<<Dmeson.thetat1<<"\t"<<"Dmeson.thetat2="<<Dmeson.thetat2<<endl;
+		    cout<<"fabs(Dmeson.thetat1-Dmeson.thetat2)="<<fabs(Dmeson.thetat1-Dmeson.thetat2)<<endl;
+		    cout<<"mulayerhits1="<<Dmeson.mulayerhits1<<"\t"<<"mulayerhits2="<<Dmeson.mulayerhits2<<"\t"<<"mulayerhits3="<<Dmeson.mulayerhits3<<endl;
+		    cout<<"Run="<<Dmeson.Run<<"\t"<<"event="<<Dmeson.rEv<<"\t"<<Dmeson.mbc<<"\t"<<Dmeson.de<<"\t"<<endl;
+                    cout<<"numn="<<Dmeson.numn<<"\t"<<"enn="<<Dmeson.enn<<"\t"<<"numo="<<Dmeson.numo<<"\t"<<"eno="<<Dmeson.eno<<endl;
+		}
+                */
 	    }
 
             //--
@@ -443,6 +594,8 @@ int main(int argc, char* argv[])
     }
     cout<<"NgoodRuns="<<NgoodRuns<<endl;
 
+    printf("Total Integral Luminosity = %f\n", slum);
+
     TCanvas *cc1 = new TCanvas();
     gStyle->SetOptTitle(0);
     gStyle->SetOptStat(1111);
@@ -452,19 +605,16 @@ int main(int argc, char* argv[])
     TString format1=".eps";
     TString format2=".png";
     TString format3=".pdf";
-    TString nameMbc, nameMbc_zoom, nameMbcdE, nameMbcdP, namedE, namedE_zoom, namedP;
-    nameMbc = "Mbc_full";
-    nameMbc_zoom = "Mbc_zoom";
+    TString nameMbc, nameMbcdE, nameMbcdP, namedE, namedP;
+    nameMbc = "Mbc";
     nameMbcdE = "MbcdE";
     nameMbcdP = "MbcdP";
     namedE = "dE";
-    namedE_zoom = "dE_zoom";
     namedP = "dP";
 
-    hmbc->Draw("E1"); cc1->SaveAs(KEDR + nameMbc + format1);  cc1->SaveAs(KEDR + nameMbc + format2);   cc1->SaveAs(KEDR + nameMbc + format3);
-    hmbc_zoom->GetXaxis()->SetTitle("M_{bc} (MeV)");
-    hmbc_zoom->GetYaxis()->SetTitle("Events/2 MeV");
-    hmbc_zoom->Draw("E1"); cc1->SaveAs(KEDR + nameMbc_zoom + format1); cc1->SaveAs(KEDR + nameMbc_zoom + format2); cc1->SaveAs(KEDR + nameMbc_zoom + format3);
+    hmbc->GetXaxis()->SetTitle("M_{bc} (MeV)");
+    hmbc->GetYaxis()->SetTitle("Events/2 MeV");
+    hmbc->Draw("E1"); cc1->SaveAs(KEDR + nameMbc + format1); cc1->SaveAs(KEDR + nameMbc + format2); cc1->SaveAs(KEDR + nameMbc + format3);
 
     h2MbcdE->GetXaxis()->SetTitle("M_{bc} (MeV)");
     h2MbcdE->GetYaxis()->SetTitle("#Delta E (MeV)");
@@ -489,23 +639,26 @@ int main(int argc, char* argv[])
     }
     cc1->SaveAs(KEDR + nameMbcdE + format1); cc1->SaveAs(KEDR + nameMbcdE + format2);  cc1->SaveAs(KEDR + nameMbcdE + format3);
 
-    h2MbcdP->GetXaxis()->SetTitle("#Delta P (MeV)");
+    h2MbcdP->GetXaxis()->SetTitle("#Delta P (MeV/c)");
     h2MbcdP->GetYaxis()->SetTitle("M_{bc} (MeV)");
     h2MbcdP->Draw(); cc1->SaveAs(KEDR + nameMbcdP + format1); cc1->SaveAs(KEDR + nameMbcdP + format2);  cc1->SaveAs(KEDR + nameMbcdP + format3);
+
+    hdE->GetXaxis()->SetTitle("#Delta E (MeV)");
+    hdE->GetYaxis()->SetTitle("Events/20 MeV");
     hdE->Draw("E1"); cc1->SaveAs(KEDR + namedE + format1); cc1->SaveAs(KEDR + namedE + format2); cc1->SaveAs(KEDR + namedE + format3);
-    hdE_zoom->GetXaxis()->SetTitle("#Delta E (MeV)");
-    hdE_zoom->GetYaxis()->SetTitle("Events/20 MeV");
-    hdE_zoom->Draw("E1"); cc1->SaveAs(KEDR + namedE_zoom + format1); cc1->SaveAs(KEDR + namedE_zoom + format2); cc1->SaveAs(KEDR + namedE_zoom + format3);
-    hdP->GetXaxis()->SetTitle("#Delta P (MeV)");
+
+    hdP->GetXaxis()->SetTitle("#Delta P (MeV/c)");
     hdP->Draw(); cc1->SaveAs(KEDR + namedP + format1);  cc1->SaveAs(KEDR + namedP + format2); cc1->SaveAs(KEDR + namedP + format3);
     hDncomb->Draw(); cc1->SaveAs(KEDR + "Dncomb" + format2);
 
     hnclst1->Draw(); cc1->SaveAs(KEDR + "nclst1" + format2);
+    heclst1->GetXaxis()->SetTitle("e1 (MeV)");
     heclst1->Draw(); cc1->SaveAs(KEDR + "eclst1" + format2);
     htclst1->Draw(); cc1->SaveAs(KEDR + "tclst1" + format2);
     hpclst1->Draw(); cc1->SaveAs(KEDR + "pclst1" + format2);
 
     hnclst2->Draw(); cc1->SaveAs(KEDR + "nclst2" + format2);
+    heclst2->GetXaxis()->SetTitle("e2 (MeV)");
     heclst2->Draw(); cc1->SaveAs(KEDR + "eclst2" + format2);
     htclst2->Draw(); cc1->SaveAs(KEDR + "tclst2" + format2);
     hpclst2->Draw(); cc1->SaveAs(KEDR + "pclst2" + format2);
@@ -515,18 +668,53 @@ int main(int argc, char* argv[])
     hnumo->Draw(); cc1->SaveAs(KEDR + "hnumo" + format2);
     heno->Draw(); cc1->SaveAs(KEDR + "heno" + format2);
 
+    heclst12diff->GetXaxis()->SetTitle("(e1-e2) (MeV)");
     heclst12diff->Draw(); cc1->SaveAs(KEDR + "eclst12diff" + format2);
 
+    hrr->GetXaxis()->SetTitle("r_{ip}, cm");
     hrr->Draw(); cc1->SaveAs(KEDR+"rr.png");
+
+    hZip->GetXaxis()->SetTitle("Z_{ip}, cm");
     hZip->Draw(); cc1->SaveAs(KEDR+"Zip.png");
+
+    hEbeam->GetXaxis()->SetTitle("E_{beam} (MeV)");
     hEbeam->Draw(); cc1->SaveAs(KEDR+"Ebeam.png");
+
     hRun->Draw(); cc1->SaveAs(KEDR+"Run.png");
+    hTime->GetXaxis()->SetTimeDisplay(1);
+    hTime->GetXaxis()->SetTimeFormat("%d/%m/%y%F1970-01-01 00:00:00");
+    hTime->Draw(); cc1->SaveAs(KEDR+"Time.png");
+    hRunSigMbcCut->Draw(); cc1->SaveAs(KEDR+"RunSigMbcCut.png");
+    hRunSigdECut->Draw(); cc1->SaveAs(KEDR+"RunSigdECut.png");
+    hLum->SetMarkerStyle(7);
+    hLum->SetMarkerColor(38);
+    hLum->SetMarkerSize(0.5);
+    hLum->SetLineWidth(2);
+    hLum->SetLineColor(1);
+    hLum->GetXaxis()->SetTimeDisplay(1);
+    hLum->GetXaxis()->SetTimeFormat("%d/%m/%y%F1970-01-01 00:00:00");
+    hLum->GetXaxis()->SetTitle("Time(d/m/y)");
+    hLum->GetYaxis()->SetTitle("Integral luminosity, nb^{-1}");
+    hLum->Draw(); cc1->SaveAs(KEDR+"Luminosity.png");
+
+    henergy->GetXaxis()->SetTitle("E (MeV)");
     henergy->Draw(); cc1->SaveAs(KEDR+"emc_energy.png");
+    hlkrenergy->GetXaxis()->SetTitle("E (MeV)");
     hlkrenergy->Draw(); cc1->SaveAs(KEDR+"lkrenergy.png");
+    hcsienergy->GetXaxis()->SetTitle("E (MeV)");
     hcsienergy->Draw(); cc1->SaveAs(KEDR+"csienergy.png");
+    henass->GetXaxis()->SetTitle("e (MeV)");
     henass->Draw(); cc1->SaveAs(KEDR+"emc_energy_ass.png");
+
+    hmomt->GetXaxis()->SetTitle("P (MeV/c)");
     hmomt->Draw(); cc1->SaveAs(KEDR+"pt.png");
+
+    hmom->GetXaxis()->SetTitle("P (MeV/c)");
     hmom->Draw(); cc1->SaveAs(KEDR+"p.png");
+
+    hmomrec->GetXaxis()->SetTitle("P (MeV/c)");
+    hmomrec->Draw(); cc1->SaveAs(KEDR+"prec.png");
+
     hncls->Draw(); cc1->SaveAs(KEDR+"ncls.png");
     hnlkr->Draw(); cc1->SaveAs(KEDR+"nlkr.png");
     hncsi->Draw(); cc1->SaveAs(KEDR+"ncsi.png");

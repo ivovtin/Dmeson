@@ -46,9 +46,11 @@ int key;
 TChain *tt=new TChain("et");
 void chain(){
     if(key==0){
-	for(int i=1; i<=693; i++)   //signal 2016+2017
+	//for(int i=1; i<=693; i++)   //signal 2016+2017
+	for(int i=2; i<=2; i++)   //signal 2016+2017
 	{
-	    tt->Add(TString::Format("/spool/users/ovtin/outDmeson/bhabha/data/psi3770_to_bhabha_%d.root",i).Data());
+	    //tt->Add(TString::Format("/spool/users/ovtin/outDmeson/bhabha/data/psi3770_to_bhabha_%d.root",i).Data());
+	    tt->Add(TString::Format("/spool/users/ovtin/outDmeson/bhabha/data_new/psi3770_to_bhabha_%d.root",i).Data());
 	}
     }
     else if (key==1){

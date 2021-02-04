@@ -828,7 +828,7 @@ int analyse_event()
 			int mu_hits = mu_next_event_good();
 			Dmeson.munhits = mu_hits;
 			int mu_hit;
-			int mu_layer_hits[3] = {0, 0, 0};
+			int mu_layer_hits[3] = {0, 0, 0};    //hits in each layer of mu system  - all 3 layer
 
 			for (mu_hit = 0; mu_hit < mu_hits; mu_hit++) {
 			    int layer = mu_hit_layer(mu_hit);

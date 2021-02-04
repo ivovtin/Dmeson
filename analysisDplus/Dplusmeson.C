@@ -85,6 +85,7 @@ int main(int argc, char* argv[])
 	fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data_%d.root",key).Data();
 	//KEDR = "/home/ovtin/public_html/outDmeson/Dplus/data/";
 	KEDR = "/home/ovtin/public_html/outDmeson/Dplus/dataPcorr/";
+	//KEDR = "/home/ovtin/public_html/outDmeson/Dplus/dataPcorr_test/";
 	list_badruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/badruns";
         fout_result=dir_out + "/" + "kpp_2016-17.dat";
     }
@@ -106,7 +107,6 @@ int main(int argc, char* argv[])
 	deCut1=-200; deCut2=200;
 	mbcCut1=1850, mbcCut2=1890;
 	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_sig_%d.root",key).Data();
-        //KEDR = "/home/ovtin/public_html/outDmeson/Dplus/simulation_Sig_test/";
         KEDR = "/home/ovtin/public_html/outDmeson/Dplus/simulation_Sig/";
         fout_result=dir_out + "/" + "kpp_signal_def.dat";
     }
@@ -144,26 +144,24 @@ int main(int argc, char* argv[])
     TH1F* hnlkr=new TH1F("nlkr","emc.nlkr",20,-0.5,19.5);
     TH1F* hncsi=new TH1F("ncsi","emc.ncsi",20,-0.5,19.5);
     TH1F* hep=new TH1F("E/p","E/p",100,-0.5,3.5);
-    TH1F* hmbc=new TH1F("Mbc","Mbc",100,0.,2000.);
-    TH1F* hmbc_zoom;
+    TH1F* hmbc;
     if( key==0 || key==4 || key==1 ){
-	hmbc_zoom=new TH1F("M_{bc}","M_{bc}",55,min_Mbc2,max_Mbc2);
+	hmbc=new TH1F("M_{bc}","M_{bc}",55,min_Mbc2,max_Mbc2);
     }
     else{
-	hmbc_zoom=new TH1F("M_{bc}","M_{bc}",100,min_Mbc2,max_Mbc2);
+	hmbc=new TH1F("M_{bc}","M_{bc}",100,min_Mbc2,max_Mbc2);
     }
     TH1F* hrr=new TH1F("rr","rr",50,0.,3.);
     TH1F* hZip=new TH1F("ZIP","ZIP",100,-50.,50.);
     TH1F* henass=new TH1F("Energy_ass","Energy ass",100,0.,4500.);
-    TH1F* hdE=new TH1F("#Delta E","#Delta E",200,-2000.,2000.);
-    TH1F* hdE_zoom=new TH1F("#Delta E","#Delta E",30,min_dE,max_dE);
+    TH1F* hdE=new TH1F("#Delta E","#Delta E",30,min_dE,max_dE);
     TH2D *h2MbcdE=new TH2D("M_{bc}:#Delta E", "M_{bc}:#Delta E", 100,min_Mbc,max_Mbc,200,min_dE,max_dE);
 
     TH1F* hEbeam=new TH1F("Ebeam","Ebeam",100,1880.,1895.);
-    TH1F* hfchi2=new TH1F("MChi2","Minuit Chi2",200,0.,1000.);
+    TH1F* hfchi2=new TH1F("MChi2","Minuit Chi2",100,0.,100.);
 
     TH1F *hRun;
-    if( key==0 )
+    if( key!=4 )
     {
 	hRun = new TH1F("Run","Run", 100, 23206., 26248.);
     }
@@ -203,6 +201,7 @@ int main(int argc, char* argv[])
 
     TH1F* hmom=new TH1F("P","P",100,0.,3000.);
     TH1F* hmomt=new TH1F("Pt","Pt",100,0.,3000.);
+    TH1F* hmomrec=new TH1F("P","P",100,0.,3000.);
     TH1F* htchi2=new TH1F("tchi2","tchi2",100,0.,100.);
 
     TH1F* htnhits=new TH1F("tnhits","tnhits",80,0.,80.);
@@ -254,7 +253,8 @@ int main(int argc, char* argv[])
 	if( (k %100000)==0 )cout<<k<<endl;
 
 	if(
-           Dmeson.de>=min_dE && Dmeson.de<=max_dE
+	   Dmeson.vrtntrk>=ntrk
+           && Dmeson.de>=min_dE && Dmeson.de<=max_dE
            && Dmeson.mbc>=min_Mbc && Dmeson.mbc<=max_Mbc
 	   //&& Dmeson.pt1>min_p && Dmeson.pt1<max_p && Dmeson.pt2>min_p && Dmeson.pt2<max_p && Dmeson.pt3>min_p && Dmeson.pt3<max_p
 	   && Dmeson.p1>min_p && Dmeson.p1<max_p && Dmeson.p2>min_p && Dmeson.p2<max_p && Dmeson.p3>min_p && Dmeson.p3<max_p
@@ -264,9 +264,16 @@ int main(int argc, char* argv[])
 	   && Dmeson.rr1<rrCut && Dmeson.rr2<rrCut && Dmeson.rr3<rrCut && abs(Dmeson.zip1)<zCut && abs(Dmeson.zip2)<zCut && abs(Dmeson.zip3)<zCut
            && Dmeson.ecls1<eclsCut && Dmeson.ecls2<eclsCut && Dmeson.ecls3<eclsCut
 	   && (Dmeson.mulayerhits2+Dmeson.mulayerhits3)<=max_munhits
+	   //&& (Dmeson.mulayerhits1)<=0
+           /*
+	   && (Dmeson.Run<=23403 || Dmeson.Run>=23430)
+	   && (Dmeson.Run<=23743 || Dmeson.Run>=23838)
+	   && (Dmeson.Run<=24621 || Dmeson.Run>=24647)
+	   && (Dmeson.Run<=25016 || Dmeson.Run>=25044)
+	   */
 	  )
 	{
-	    //if( key==1 && Dmeson.charge1<1 ) continue;
+	    //if( key==1 && Dmeson.fchi2>5.0 ) continue;
 
 	    //tof = sqrt(494.*494. + p*p)/p*tlen/30.    time=len/v       beta=v/c    v=beta*c   beta=sqrt(1-(mc^2)^2/E^2)  E^2=(mc^2)^2+(pc)^2
 	    tof1=sqrt(494.*494. + Dmeson.p1*Dmeson.p1)/Dmeson.p1*Dmeson.lengtht1/30.;
@@ -275,6 +282,7 @@ int main(int argc, char* argv[])
 	    tofk_corr = Dmeson.timet1;
 
 	    if (tofk_corr==0) continue;
+	    //if (Dmeson.timet1==0 || Dmeson.timet2==0 || Dmeson.timet3==0) continue;
 
 	    if (tofk_corr<1.) tofk_corr = tofk_corr+5.5;
 	    if (tofk_corr<1.) tofk_corr = tofk_corr+5.5;
@@ -287,9 +295,9 @@ int main(int argc, char* argv[])
             if( dtof1<-tofCut ) continue;
 	    if( dtof1>1000. ) continue;
 
-            //if( fabs(Dmeson.thetat1/180.*PI-PI/2.)>0.8 ) continue;
+            if( fabs(Dmeson.thetat1/180.*PI-PI/2.)>0.9 ) continue;
 
-	    if( Dmeson.lengtht1 < 80. && Dmeson.p1>500. ) {
+	    if( Dmeson.lengtht1 < 80. && Dmeson.p1>800. ) {
 		htimeresk->Fill(tofk_corr/Dmeson.lengtht1*72.);
 	    }
 
@@ -318,12 +326,10 @@ int main(int argc, char* argv[])
 
 	    if ( verbose )
 	    {
-		cout<<"p1="<<Dmeson.p1<<"\t"<<"p2="<<Dmeson.p2<<endl;
-		cout<<"e1/p1="<<Dmeson.e1/Dmeson.p1<<"\t"<<"e2/p2="<<Dmeson.e2/Dmeson.p2<<endl;
-		cout<<"(e1+e2)="<<Dmeson.e1+Dmeson.e2<<endl;
-		cout<<"rr1="<<Dmeson.rr1<<"\t"<<"rr2="<<Dmeson.rr2<<"\t"<<endl;
-		cout<<"zip1="<<Dmeson.zip1<<"\t"<<"zip2="<<Dmeson.zip2<<"\t"<<endl;
-		cout<<"fabs(fabs(Dmeson.zip1)-fabs(Dmeson.zip2))="<<fabs(fabs(Dmeson.zip1)-fabs(Dmeson.zip2))<<endl;
+		cout<<"p1="<<Dmeson.p1<<"\t"<<"p2="<<Dmeson.p2<<"\t"<<"p3="<<Dmeson.p3<<endl;
+		cout<<"e1/p1="<<Dmeson.e1/Dmeson.p1<<"\t"<<"e2/p2="<<Dmeson.e2/Dmeson.p2<<"\t"<<"e3/p3="<<Dmeson.e3/Dmeson.p3<<endl;
+		cout<<"rr1="<<Dmeson.rr1<<"\t"<<"rr2="<<Dmeson.rr2<<"\t"<<"rr3="<<Dmeson.rr3<<"\t"<<endl;
+		cout<<"zip1="<<Dmeson.zip1<<"\t"<<"zip2="<<Dmeson.zip2<<"\t"<<"zip3="<<Dmeson.zip3<<"\t"<<endl;
 	    }
 
 	    hEbeam->Fill(Dmeson.Ebeam);
@@ -355,7 +361,11 @@ int main(int argc, char* argv[])
 	    hmomt->Fill(Dmeson.pt1);
 	    hmomt->Fill(Dmeson.pt2);
 	    hmomt->Fill(Dmeson.pt3);
-
+            /*
+	    hmomrec->Fill(Dmeson.prec1);
+	    hmomrec->Fill(Dmeson.prec2);
+	    hmomrec->Fill(Dmeson.prec3);
+            */
 	    htheta->Fill(Dmeson.thetat1);
 	    htheta->Fill(Dmeson.thetat2);
 	    htheta->Fill(Dmeson.thetat3);
@@ -424,8 +434,6 @@ int main(int argc, char* argv[])
 	    hMUnhits3->Fill(Dmeson.mulayerhits3);
 
 	    hfchi2->Fill(Dmeson.fchi2);
-	    hmbc->Fill(Dmeson.mbc);
-	    hdE->Fill(Dmeson.de);
 
 	    if( Dmeson.de>=min_dE && Dmeson.de<=max_dE  &&  Dmeson.mbc>=min_Mbc && Dmeson.mbc<=max_Mbc )
 	    {
@@ -435,13 +443,13 @@ int main(int argc, char* argv[])
             //fill de
 	    if( Dmeson.mbc>=mbcCut1 && Dmeson.mbc<=mbcCut2 )
 	    {
-		hdE_zoom->Fill(Dmeson.de);
+		hdE->Fill(Dmeson.de);
 	    }
 
             //fill mbc
 	    if( Dmeson.de>=deCut1 && Dmeson.de<=deCut2 && Dmeson.mbc>=min_Mbc2 && Dmeson.mbc<=max_Mbc )
 	    {
-		hmbc_zoom->Fill(Dmeson.mbc);
+		hmbc->Fill(Dmeson.mbc);
 	    }
 
             if( Dmeson.mbc>=min_Mbc && Dmeson.mbc<=max_Mbc )
@@ -469,17 +477,15 @@ int main(int argc, char* argv[])
     TString format1=".eps";
     TString format2=".png";
     TString format3=".pdf";
-    TString nameMbc, nameMbc_zoom, nameMbcdE, namedE, namedE_zoom;
-    nameMbc = "Mbc_full";
-    nameMbc_zoom = "Mbc_zoom";
+    TString nameMbc, nameMbcdE, namedE;
+    nameMbc = "Mbc";
     nameMbcdE = "MbcdE";
     namedE = "dE";
-    namedE_zoom = "dE_zoom";
 
-    hmbc->Draw("E1"); cc1->SaveAs(KEDR + nameMbc + format1);  cc1->SaveAs(KEDR + nameMbc + format2);   cc1->SaveAs(KEDR + nameMbc + format3);
-    hmbc_zoom->GetXaxis()->SetTitle("M_{bc} (MeV)");
-    hmbc_zoom->GetYaxis()->SetTitle("Events/2 MeV");
-    hmbc_zoom->Draw("E1"); cc1->SaveAs(KEDR + nameMbc_zoom + format1); cc1->SaveAs(KEDR + nameMbc_zoom + format2); cc1->SaveAs(KEDR + nameMbc_zoom + format3);
+    hmbc->GetXaxis()->SetTitle("M_{bc} (MeV)");
+    hmbc->GetYaxis()->SetTitle("Events/2 MeV");
+    hmbc->Draw("E1"); cc1->SaveAs(KEDR + nameMbc + format1); cc1->SaveAs(KEDR + nameMbc + format2); cc1->SaveAs(KEDR + nameMbc + format3);
+
     h2MbcdE->GetXaxis()->SetTitle("M_{bc} (MeV)");
     h2MbcdE->GetYaxis()->SetTitle("#Delta E (MeV)");
     h2MbcdE->Draw();
@@ -503,18 +509,19 @@ int main(int argc, char* argv[])
     }
     cc1->SaveAs(KEDR + nameMbcdE + format1); cc1->SaveAs(KEDR + nameMbcdE + format2);  cc1->SaveAs(KEDR + nameMbcdE + format3);
 
+    hdE->GetXaxis()->SetTitle("#Delta E (MeV)");
+    hdE->GetYaxis()->SetTitle("Events/20 MeV");
     hdE->Draw("E1"); cc1->SaveAs(KEDR + namedE + format1); cc1->SaveAs(KEDR + namedE + format2); cc1->SaveAs(KEDR + namedE + format3);
-    hdE_zoom->GetXaxis()->SetTitle("#Delta E (MeV)");
-    hdE_zoom->GetYaxis()->SetTitle("Events/20 MeV");
-    hdE_zoom->Draw("E1"); cc1->SaveAs(KEDR + namedE_zoom + format1); cc1->SaveAs(KEDR + namedE_zoom + format2); cc1->SaveAs(KEDR + namedE_zoom + format3);
     hDncomb->Draw(); cc1->SaveAs(KEDR + "Dncomb" + format2);
 
     hnclst1->Draw(); cc1->SaveAs(KEDR + "nclst1" + format2);
+    heclst1->GetXaxis()->SetTitle("e1 (MeV)");
     heclst1->Draw(); cc1->SaveAs(KEDR + "eclst1" + format2);
     htclst1->Draw(); cc1->SaveAs(KEDR + "tclst1" + format2);
     hpclst1->Draw(); cc1->SaveAs(KEDR + "pclst1" + format2);
 
     hnclst2->Draw(); cc1->SaveAs(KEDR + "nclst2" + format2);
+    heclst2->GetXaxis()->SetTitle("e2 (MeV)");
     heclst2->Draw(); cc1->SaveAs(KEDR + "eclst2" + format2);
     htclst2->Draw(); cc1->SaveAs(KEDR + "tclst2" + format2);
     hpclst2->Draw(); cc1->SaveAs(KEDR + "pclst2" + format2);
@@ -533,16 +540,33 @@ int main(int argc, char* argv[])
     htimeresk->Fit("gaus","","",2.,4.);
     htimeresk->Draw(); cc1->SaveAs(KEDR + "timeresk" + format2); cc1->SaveAs(KEDR + "timeresk" + format3);
 
+    hrr->GetXaxis()->SetTitle("r_{ip}, cm");
     hrr->Draw(); cc1->SaveAs(KEDR+"rr.png");
+
+    hZip->GetXaxis()->SetTitle("Z_{ip}, cm");
     hZip->Draw(); cc1->SaveAs(KEDR+"Zip.png");
+
+    hEbeam->GetXaxis()->SetTitle("E_{beam} (MeV)");
     hEbeam->Draw(); cc1->SaveAs(KEDR+"Ebeam.png");
+
     hRun->Draw(); cc1->SaveAs(KEDR+"Run.png");
+
+    henergy->GetXaxis()->SetTitle("E (MeV)");
     henergy->Draw(); cc1->SaveAs(KEDR+"emc_energy.png");
+    hlkrenergy->GetXaxis()->SetTitle("E (MeV)");
     hlkrenergy->Draw(); cc1->SaveAs(KEDR+"lkrenergy.png");
+    hcsienergy->GetXaxis()->SetTitle("E (MeV)");
     hcsienergy->Draw(); cc1->SaveAs(KEDR+"csienergy.png");
+    henass->GetXaxis()->SetTitle("e (MeV)");
     henass->Draw(); cc1->SaveAs(KEDR+"emc_energy_ass.png");
+
+    hmom->GetXaxis()->SetTitle("P (MeV/c)");
     hmom->Draw(); cc1->SaveAs(KEDR+"p.png");
+    hmomt->GetXaxis()->SetTitle("P (MeV/c)");
     hmomt->Draw(); cc1->SaveAs(KEDR+"pt.png");
+    hmomrec->GetXaxis()->SetTitle("P (MeV/c)");
+    hmomrec->Draw(); cc1->SaveAs(KEDR+"prec.png");
+
     hncls->Draw(); cc1->SaveAs(KEDR+"ncls.png");
     hnlkr->Draw(); cc1->SaveAs(KEDR+"nlkr.png");
     hncsi->Draw(); cc1->SaveAs(KEDR+"ncsi.png");

@@ -1,5 +1,4 @@
 {
-
   gROOT->Reset();
   gROOT->DeleteAll();
   gStyle->SetOptStat(0);
@@ -30,48 +29,60 @@
   gStyle->SetTitleSize(0.06,"xyz");
   gStyle->SetTitleOffset(1.1,"xyz");
   gStyle->SetNdivisions(510);
-*/
+  */
 
+  //TFile *fout=0;
+  //fout = new TFile("result_hists.root","RECREATE");
+  /*
   int bck_color = 41;
   int dbck_color = 38;
   int sig_color = 50;
+  */
+  int bck_color = 8;
+  int dbck_color = 9;
+  int sig_color = 2;
 
   int bck_style = 3505;
   int dbck_style = 3544;
   int sig_style = 3595;
 
   TString KEDR = "/spool/users/ovtin/outDmeson/D0/results/fitsD0/";
+  //TString KEDR = "/spool/users/ovtin/outDmeson/D0/results/fitsD0/forTest/";
 
   int key = 2016;
 
-  TString infile;
+  char *infile;
   int mbcmax;
   double rmax;
   TString outfile1;
   TString outfile2;
   TString outfile3;
-  TString exp_sig;
-  TString exp_bck;
-  TString exp_dbck;
+  char *exp_sig;
+  char *exp_bck;
+  char *exp_dbck;
 
   if( key==2004 ) {
-      infile = "dat/kp_exp_1.029_2004.dat";
-      mbcmax = 45;
-      rmax = 50.;
+      infile = "dat/kp_exp_1.030_2004.dat";
+      mbcmax = 35;
+      rmax = 35.;
       outfile1 = "kp_exp_mbc_2004";
       outfile2 = "kp_exp_de_2004";
       outfile3 = "kp_exp_mbcde_2004";
+      outfile4 = "kp_exp_expminusBG_2004";
       exp_sig = "gen/exp_sig_2004.gen";
       exp_bck = "gen/exp_bck_2004.gen";
       exp_dbck = "gen/exp_dbck_2004.gen";
   }
   else{
-      infile = "dat/kp_exp_1.0185_2016-17.dat";
-      mbcmax = 72;
-      rmax = 70.;
+      //infile = "dat/kp_exp_1.0240_2016-17.dat";
+      //infile = "dat/kp_exp_1.0185_2016-17.dat";
+      infile = "dat/kp_exp_1.0173_2016-17.dat";
+      mbcmax = 90;
+      rmax = 90.;
       outfile1 = "kp_exp_mbc";
       outfile2 = "kp_exp_de";
       outfile3 = "kp_exp_mbcde";
+      outfile4 = "kp_exp_expminusBG";
       exp_sig = "gen/exp_sig.gen";
       exp_bck = "gen/exp_bck.gen";
       exp_dbck = "gen/exp_dbck.gen";
@@ -117,14 +128,15 @@
   }
   fclose(file);
 
-  TH1F exp_dp("exp_dp","DP (MeV)",30,-300.,300.);
-  TH1F sig_dp("sig_dp","DP (MeV)",30,-300.,300.);
-  TH1F bck_dp("bck_dp","DP (MeV)",30,-300.,300.);
-  TH1F dbck_dp("dbck_dp","DP (MeV)",30,-300.,300.);
-  exp_nt->Project("exp_dp","de");
-  sig_nt->Project("sig_dp","de");
-  bck_nt->Project("bck_dp","de");
-  dbck_nt->Project("dbck_dp","de");
+  TH1F exp_dp("exp_dp","DP (MeV)",30,-600.,600.);
+  TH1F sig_dp("sig_dp","DP (MeV)",30,-600.,600.);
+  TH1F bck_dp("bck_dp","DP (MeV)",30,-600.,600.);
+  TH1F dbck_dp("dbck_dp","DP (MeV)",30,-600.,600.);
+
+  exp_nt->Project("exp_dp","dp");
+  sig_nt->Project("sig_dp","dp");
+  bck_nt->Project("bck_dp","dp");
+  dbck_nt->Project("dbck_dp","dp");
   double scale = exp_dp->GetSumOfWeights()/
     (sig_dp->GetSumOfWeights()+bck_dp->GetSumOfWeights()+dbck_dp->GetSumOfWeights());
   sig_dp->Scale(scale);
@@ -138,10 +150,16 @@
   TH1F sig_mbc("sig_mbc","Mbc (MeV)",55,1790.,1900.);
   TH1F bck_mbc("bck_mbc","Mbc (MeV)",55,1790.,1900.);
   TH1F dbck_mbc("dbck_mbc","Mbc (MeV)",55,1790.,1900.);
+  /* 
   exp_nt->Project("exp_mbc","mbc","abs(de)<100");
   sig_nt->Project("sig_mbc","mbc","abs(de)<100");
   bck_nt->Project("bck_mbc","mbc","abs(de)<100");
   dbck_nt->Project("dbck_mbc","mbc","abs(de)<100");
+  */
+  exp_nt->Project("exp_mbc","mbc","abs(de)<150");
+  sig_nt->Project("sig_mbc","mbc","abs(de)<150");
+  bck_nt->Project("bck_mbc","mbc","abs(de)<150");
+  dbck_nt->Project("dbck_mbc","mbc","abs(de)<150");
   sig_mbc->Scale(scale);
   bck_mbc->Scale(scale);
   dbck_mbc->Scale(scale);
@@ -165,9 +183,14 @@
   TH1F sig_mbcde("sig_mbcde","",30,-300.,300);
   TH1F bck_mbcde("bck_mbcde","DE (MeV)",30,-300.,300);
   TH1F dbck_mbcde("dbck_mbcde","DE (MeV)",30,-300.,300);
+  /*
   sig_nt->Project("sig_mbcde","de","abs(mbc-1865)<10&&abs(de)<100");
   bck_nt->Project("bck_mbcde","de","abs(mbc-1865)<10&&abs(de)<100");
   dbck_nt->Project("dbck_mbcde","de","abs(mbc-1865)<10&&abs(de)<100");
+  */
+  sig_nt->Project("sig_mbcde","de","abs(mbc-1865)<10&&abs(de)<150");
+  bck_nt->Project("bck_mbcde","de","abs(mbc-1865)<10&&abs(de)<150");
+  dbck_nt->Project("dbck_mbcde","de","abs(mbc-1865)<10&&abs(de)<150");
   bck_mbcde->Scale(scale);
   dbck_mbcde->Scale(scale);
 
@@ -278,13 +301,23 @@
   TLine l;
   l.SetLineColor(sig_color);
   l.SetLineWidth(3);
+  /*
   l.DrawLine(1855., -300., 1855., 300);
   l.DrawLine(1875., -300., 1875., 300);
   l.DrawLine(1700., -100., 1900., -100);
   l.DrawLine(1700.,  100., 1900.,  100);
+  */
+  l.DrawLine(1850., -300., 1850., 300);
+  l.DrawLine(1880., -300., 1880., 300);
+  l.DrawLine(1700., -150., 1900., -150);
+  l.DrawLine(1700.,  150., 1900.,  150);
 
   c3.Update();
 
   c3.Print(KEDR + outfile3 + ".eps");
   c3.Print(KEDR + outfile3 + ".png");
+
+  //fout->Write();
+  //fout->Close();
+
 }

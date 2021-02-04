@@ -8,8 +8,8 @@
   gStyle->SetHistLineWidth(2);
   gStyle->SetHistLineColor(4);
 
-  TString KEDR="/spool/users/ovtin/outDmeson/Dplus/results/fitsDplus/";
-  //TString KEDR="/spool/users/ovtin/outDmeson/Dplus/results/fitsDplus/forTest/";
+  //TString KEDR="/spool/users/ovtin/outDmeson/Dplus/results/fitsDplus/";
+  TString KEDR="/spool/users/ovtin/outDmeson/Dplus/results/fitsDplus/forTest/";
 
   TString type = "tof";
 

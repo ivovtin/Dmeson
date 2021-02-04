@@ -12,19 +12,20 @@
 #$ -j y
 # -------------------------------------------
 # --             Enviroment                --
-#$ -v PATH=$PATH:$HOME/release/KdRunFastMon,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/alexbarn/release/lib,KDBHOST=bison-2
+##$ -v PATH=$PATH:$HOME/release/KdRunFastMon,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/alexbarn/release/lib,KDBHOST=bison-2
+#$ -v PATH=$PATH:$HOME/release/KdRunFastMon,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/alexbarn/release/lib,KDBHOST=localhost
 # -------------------------------------------
 # --             Queue list                --
 #$ -soft
 #$ -l time=24:00:00
-##$ -q remote
+#$ -q remote
 ##$ -q extralong
-#$ -q 6h
+##$ -q 6h
 ##$ -q day
 ##$ -m beas
 ##$ -M ovtin.ivan@gmail.com
 
-#$ -t 1-10
+#$ -t 1-12
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]
