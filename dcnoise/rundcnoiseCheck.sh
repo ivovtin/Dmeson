@@ -42,10 +42,10 @@ myrand=$[1000+$i]
 filename='/home/ovtin/development/Dmeson/runsDmeson/runs_list_Psi3770_Psi2_2016-17_good.dat'
 echo Start
 while read run; do
-    if [ $run -ge 23216 ]; then
-      echo "Stop"
-      break
-    fi
+    #if [ $run -ge 23216 ]; then
+    #  echo "Stop"
+    #  break
+    #fi
     echo $run
     $HOME/development/Dmeson/dcnoise/dcnoise.sh $run > "/spool/users/ovtin/dcnoises/out"$run".dat"
 done < $filename
