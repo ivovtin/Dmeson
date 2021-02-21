@@ -17,24 +17,25 @@
 ##$ -e /dev/null
 # -------------------------------------------
 # --             Enviroment                --
-##$ -v PATH=$PATH:$HOME/release/KdRunFastMon,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/alexbarn/release/lib,KDBHOST=bison-2
-#$ -v PATH=$PATH:$HOME/release/KdRunFastMon,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/alexbarn/release/lib,KDBHOST=localhost
+#$ -v PATH=$PATH:$HOME/release/KdRunFastMon,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/alexbarn/release/lib,KDBHOST=bison-2
+##$ -v PATH=$PATH:$HOME/release/KdRunFastMon,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/alexbarn/release/lib,KDBHOST=localhost
 # -------------------------------------------
 # --             Queue list                --
 #$ -soft
 ##$ -hard
 #$ -l time=24:00:00
-#$ -q remote
+##$ -q remote
 ##$ -q extralong
 ##$ -q 6h
-##$ -q hour
+#$ -q hour
 ##$ -q day
 #
 # -- Send mail at submission and completion of script --
 ##$ -m beas
 ##$ -M ovtin.ivan@gmail.com
 
-#$ -t 1-124
+##$ -t 1-124
+#$ -t 1-11
 ##$ -t 2-4
 ##$ -t 5-9
 ##$ -t 10-11
@@ -98,8 +99,7 @@ minNhits=0
 
 
 ########################################################################################################
-inruns="/spool/users/ovtin/outDmeson/simulation/BhaBha/simee0000013.dat"
-##inruns="/spool/users/ovtin/outDmeson/simulation/BhaBha/simDmeson000021.dat"
+inruns="/spool/users/ovtin/outDmeson/simulation/BhaBha/simee000001.dat"
 #
 if [ $i == 1 ]; then
 ##NumFirstExpRun=23207
@@ -176,7 +176,7 @@ fi
 
 ########################################################################################################
 if [ $i -ge 10 ]; then
-inruns="/spool/users/ovtin/outDmeson/simulation/BhaBha/simee0000014.dat"
+inruns="/spool/users/ovtin/outDmeson/simulation/BhaBha/simee000002.dat"
 fi
 
 #
@@ -246,7 +246,7 @@ fi
 
 #######################################################################################################
 if [ $i -ge 18 ]; then
-inruns="/spool/users/ovtin/outDmeson/simulation/BhaBha/simee0000015.dat"
+inruns="/spool/users/ovtin/outDmeson/simulation/BhaBha/simee000003.dat"
 fi
 
 if [ $i == 18 ]; then
@@ -307,7 +307,7 @@ fi
 
 #######################################################################################################
 if [ $i -ge 25 ]; then
-inruns="/spool/users/ovtin/outDmeson/simulation/BhaBha/simee0000016.dat"
+inruns="/spool/users/ovtin/outDmeson/simulation/BhaBha/simee000004.dat"
 fi
 
 if [ $i == 25 ]; then
@@ -392,7 +392,7 @@ fi
 
 #######################################################################################################
 if [ $i -ge 35 ]; then
-inruns="/spool/users/ovtin/outDmeson/simulation/BhaBha/simee0000017.dat"
+inruns="/spool/users/ovtin/outDmeson/simulation/BhaBha/simee000005.dat"
 fi
 
 if [ $i == 35 ]; then
@@ -480,7 +480,7 @@ fi
 
 #######################################################################################################
 if [ $i -ge 45 ]; then
-inruns="/spool/users/ovtin/outDmeson/simulation/BhaBha/simee0000018.dat"
+inruns="/spool/users/ovtin/outDmeson/simulation/BhaBha/simee000006.dat"
 fi
 
 if [ $i == 45 ]; then
@@ -566,7 +566,7 @@ fi
 
 #######################################################################################################
 if [ $i -ge 55 ]; then
-inruns="/spool/users/ovtin/outDmeson/simulation/BhaBha/simee0000019.dat"
+inruns="/spool/users/ovtin/outDmeson/simulation/BhaBha/simee000007.dat"
 fi
 
 if [ $i == 55 ]; then
@@ -653,7 +653,7 @@ fi
 
 #######################################################################################################
 if [ $i -ge 65 ]; then
-inruns="/spool/users/ovtin/outDmeson/simulation/BhaBha/simee0000020.dat"
+inruns="/spool/users/ovtin/outDmeson/simulation/BhaBha/simee000008.dat"
 fi
 
 if [ $i == 65 ]; then
@@ -1078,7 +1078,7 @@ fi
 
 #######################################################################################################
 if [ $i -ge 114 ]; then
-inruns="/spool/users/ovtin/outDmeson/simulation/BhaBha/simee000008.dat"
+inruns="/spool/users/ovtin/outDmeson/simulation/BhaBha/simee0000013.dat"
 fi
 
 if [ $i == 114 ]; then
@@ -1163,7 +1163,7 @@ fi
 
 #######################################################################################################
 if [ $i -ge 124 ]; then
-inruns="/spool/users/ovtin/outDmeson/simulation/BhaBha/simee000007.dat"
+inruns="/spool/users/ovtin/outDmeson/simulation/BhaBha/simee0000014.dat"
 fi
 
 if [ $i == 124 ]; then
@@ -1193,9 +1193,6 @@ nevend=15000
 fi
 
 #######################################################################################################
-
-####
-##$HOME/development/Dmeson/analysis_bhabha -D $simOn -v $NumFirstExpRun -m $NumLastExpRun -M $NevRate -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile $inruns -w $nevbegin -g $nevend > /dev/null
 $HOME/development/Dmeson/analysis_bhabha -D $simOn -v $NumFirstExpRun -m $NumLastExpRun -M $NevRate -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile $inruns -w $nevbegin -g $nevend
 
 

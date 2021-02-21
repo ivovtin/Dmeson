@@ -61,20 +61,23 @@
       exp_dbck = "gen/exp_dbck_2004.gen";
   }
   else{
-      //infile = "dat/kp_exp_1.0240_2016-17.dat";
-      //infile = "dat/kp_exp_1.0185_2016-17.dat";
-      infile = "dat/kp_exp_1.0173_2016-17.dat";
-      //infile = "dat/kp_exp_1.0173_2016-17_SkipBadRuns.dat";
-      mbcmax = 78;
-      mbcmax2 = 40;
-      mbcmax3 = 45;
-      demax = 60;
-      dpmax = 225;
+      //infile = "dat/kp_exp_1.0173_2016-17.dat";
+      infile = "dat/kp_exp_1.0173_2016-17_woDCnoise.dat";
+      mbcmax = 105;
+      mbcmax2 = 60;
+      mbcmax3 = 60;
+      demax = 68;
+      dpmax = 250;
       rmax = 70.;
-      outfile1 = "exp2016-17";
+ /*     outfile1 = "exp2016-17";
       exp_sig = "gen/exp_sig.gen";
       exp_bck = "gen/exp_bck.gen";
       exp_dbck = "gen/exp_dbck.gen";
+ */ 
+      outfile1 = "exp2016-17_woDCnoise";
+      exp_sig = "gen/exp_sig_woDCnoise.gen";
+      exp_bck = "gen/exp_bck_woDCnoise.gen";
+      exp_dbck = "gen/exp_dbck_woDCnoise.gen";
   }
 
   TNtuple exp_nt("exp_nt","NTuple","mbc:de:dp");
@@ -147,16 +150,17 @@
   TH1F sig_mbc("sig_mbc","Mbc (MeV)",55,1790.,1900.);
   TH1F bck_mbc("bck_mbc","Mbc (MeV)",55,1790.,1900.);
   TH1F dbck_mbc("dbck_mbc","Mbc (MeV)",55,1790.,1900.);
+  /*
   exp_nt->Project("exp_mbc","mbc","abs(de)<100");
   sig_nt->Project("sig_mbc","mbc","abs(de)<100");
   bck_nt->Project("bck_mbc","mbc","abs(de)<100");
   dbck_nt->Project("dbck_mbc","mbc","abs(de)<100");
-  /*
-  exp_nt->Project("exp_mbc","mbc","abs(de)<140");
-  sig_nt->Project("sig_mbc","mbc","abs(de)<140");
-  bck_nt->Project("bck_mbc","mbc","abs(de)<140");
-  dbck_nt->Project("dbck_mbc","mbc","abs(de)<140");
   */
+  exp_nt->Project("exp_mbc","mbc","abs(de)<150");
+  sig_nt->Project("sig_mbc","mbc","abs(de)<150");
+  bck_nt->Project("bck_mbc","mbc","abs(de)<150");
+  dbck_nt->Project("dbck_mbc","mbc","abs(de)<150");
+  
   sig_mbc->Scale(scale);
   bck_mbc->Scale(scale);
   dbck_mbc->Scale(scale);
@@ -165,16 +169,17 @@
   TH1F sig_mbcs1("sig_mbcs1","Mbc (MeV)",55,1790.,1900.);
   TH1F bck_mbcs1("bck_mbcs1","Mbc (MeV)",55,1790.,1900.);
   TH1F dbck_mbcs1("dbck_mbcs1","Mbc (MeV)",55,1790.,1900.);
+  /*
   exp_nt->Project("exp_mbcs1","mbc","abs(de)<100&&abs(dp)<100");
   sig_nt->Project("sig_mbcs1","mbc","abs(de)<100&&abs(dp)<100");
   bck_nt->Project("bck_mbcs1","mbc","abs(de)<100&&abs(dp)<100");
   dbck_nt->Project("dbck_mbcs1","mbc","abs(de)<100&&abs(dp)<100");
-  /*
-  exp_nt->Project("exp_mbcs1","mbc","abs(de)<100&&abs(dp)<140");
-  sig_nt->Project("sig_mbcs1","mbc","abs(de)<100&&abs(dp)<140");
-  bck_nt->Project("bck_mbcs1","mbc","abs(de)<100&&abs(dp)<140");
-  dbck_nt->Project("dbck_mbcs1","mbc","abs(de)<100&&abs(dp)<140");
   */
+  exp_nt->Project("exp_mbcs1","mbc","abs(de)<150&&abs(dp)<100");
+  sig_nt->Project("sig_mbcs1","mbc","abs(de)<150&&abs(dp)<100");
+  bck_nt->Project("bck_mbcs1","mbc","abs(de)<150&&abs(dp)<100");
+  dbck_nt->Project("dbck_mbcs1","mbc","abs(de)<150&&abs(dp)<100");
+  
   sig_mbcs1->Scale(scale);
   bck_mbcs1->Scale(scale);
   dbck_mbcs1->Scale(scale);
@@ -183,16 +188,17 @@
   TH1F sig_mbcs2("sig_mbcs2","Mbc (MeV)",55,1790.,1900.);
   TH1F bck_mbcs2("bck_mbcs2","Mbc (MeV)",55,1790.,1900.);
   TH1F dbck_mbcs2("dbck_mbcs2","Mbc (MeV)",55,1790.,1900.);
+  /*
   exp_nt->Project("exp_mbcs2","mbc","abs(de)<100&&abs(dp)>100");
   sig_nt->Project("sig_mbcs2","mbc","abs(de)<100&&abs(dp)>100");
   bck_nt->Project("bck_mbcs2","mbc","abs(de)<100&&abs(dp)>100");
   dbck_nt->Project("dbck_mbcs2","mbc","abs(de)<100&&abs(dp)>100");
-  /*
-  exp_nt->Project("exp_mbcs2","mbc","abs(de)<100&&abs(dp)>140");
-  sig_nt->Project("sig_mbcs2","mbc","abs(de)<100&&abs(dp)>140");
-  bck_nt->Project("bck_mbcs2","mbc","abs(de)<100&&abs(dp)>140");
-  dbck_nt->Project("dbck_mbcs2","mbc","abs(de)<100&&abs(dp)>140");
   */
+  exp_nt->Project("exp_mbcs2","mbc","abs(de)<150&&abs(dp)>100");
+  sig_nt->Project("sig_mbcs2","mbc","abs(de)<150&&abs(dp)>100");
+  bck_nt->Project("bck_mbcs2","mbc","abs(de)<150&&abs(dp)>100");
+  dbck_nt->Project("dbck_mbcs2","mbc","abs(de)<150&&abs(dp)>100");
+  
   sig_mbcs2->Scale(scale);
   bck_mbcs2->Scale(scale);
   dbck_mbcs2->Scale(scale);

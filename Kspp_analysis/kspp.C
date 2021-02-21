@@ -19,9 +19,12 @@ int Usage(string status)
         exit(0);
 }
 
-//double msf = 1.;        //Sim   
+//double msf = 1.;        //Sim
 double msf = 1.030;  //2004
 //double msf = 1.017;    //2016-17
+//======
+//double msf = 1.040;  //2004
+//double msf = 1.037;    //2016-17
 double xcorr = 0.033;
 //double scorr = 0.023;
 double scorr = 0.010;
@@ -114,6 +117,12 @@ int main(int argc, char* argv[])
     if( key==0 ){           //exp 2016-17
 	fnameout=TString::Format("exp_kspp_data_%d.root",key).Data();
         KEDR = "/home/ovtin/public_html/outDmeson/Kspp/data/";
+        //fnameout=TString::Format("exp_kspp_data_withDCnoise_%d.root",key).Data();
+        //KEDR = "/home/ovtin/public_html/outDmeson/Kspp/data_withDCnoise/";
+	//fnameout=TString::Format("exp_kspp_data_woDCnoise_%d.root",key).Data();
+        //KEDR = "/home/ovtin/public_html/outDmeson/Kspp/data_woDCnoise/";
+	//fnameout=TString::Format("exp_kspp_data_Run1-171_%d.root",key).Data();
+        //KEDR = "/home/ovtin/public_html/outDmeson/Kspp/dataRun1-171/";
 	list_badruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/badruns";
     }
     else if (key==1)        //exp 2004
@@ -257,6 +266,100 @@ int main(int argc, char* argv[])
            && ks.rr1>rrCut && ks.rr2>rrCut
 	   && fabs(ks.zip1)<zCut && fabs(ks.zip2)<zCut
 	   && -1.<abs(ks.zip1-ks.zip2)<3.
+           /*
+           && (ks.Run!=23307 && ks.Run!=23313 && ks.Run!=23342 && ks.Run!=23353 && ks.Run!=23423
+               && ks.Run!=23429 && ks.Run!=23466 && ks.Run!=23467 && ks.Run!=23470 && ks.Run!=23562
+               && ks.Run!=23564 && ks.Run!=23626 && ks.Run!=23632 && ks.Run!=23635 && ks.Run!=23636
+               && ks.Run!=23642 && ks.Run!=23643 && ks.Run!=23656 && ks.Run!=23658 && ks.Run!=23663
+               && ks.Run!=23665 && ks.Run!=23666 && ks.Run!=23667 && ks.Run!=23668 && ks.Run!=23669
+               && ks.Run!=23674 && ks.Run!=23675 && ks.Run!=23677 && ks.Run!=23678 && ks.Run!=23679
+               && ks.Run!=23688 && ks.Run!=23689 && ks.Run!=23691 && ks.Run!=23693 && ks.Run!=23694
+               && ks.Run!=23695 && ks.Run!=23696 && ks.Run!=23702 && ks.Run!=23703 && ks.Run!=23704
+               && ks.Run!=23706 && ks.Run!=23707 && ks.Run!=23708 && ks.Run!=23709 && ks.Run!=23710
+               && ks.Run!=23712 && ks.Run!=23713 && ks.Run!=23714 && ks.Run!=23721 && ks.Run!=23722
+               && ks.Run!=23723 && ks.Run!=23724 && ks.Run!=23725 && ks.Run!=23727 && ks.Run!=23746
+               && ks.Run!=23747 && ks.Run!=23748 && ks.Run!=23749 && ks.Run!=23755 && ks.Run!=23756
+               && ks.Run!=23757 && ks.Run!=23759 && ks.Run!=23809 && ks.Run!=23811 && ks.Run!=23812
+               && ks.Run!=23813 && ks.Run!=23814 && ks.Run!=23815 && ks.Run!=23817 && ks.Run!=23819
+               && ks.Run!=23820 && ks.Run!=23822 && ks.Run!=23823 && ks.Run!=23824 && ks.Run!=23825
+               && ks.Run!=23826 && ks.Run!=23828 && ks.Run!=23829 && ks.Run!=23830 && ks.Run!=23831
+               && ks.Run!=23833 && ks.Run!=23834 && ks.Run!=23835 && ks.Run!=23836 && ks.Run!=23838
+               && ks.Run!=23858 && ks.Run!=23859 && ks.Run!=23860 && ks.Run!=23861 && ks.Run!=23867
+               && ks.Run!=23868 && ks.Run!=23869 && ks.Run!=23872 && ks.Run!=23876 && ks.Run!=23877
+               && ks.Run!=23881 && ks.Run!=23882 && ks.Run!=23893 && ks.Run!=23895 && ks.Run!=23898
+               && ks.Run!=23900 && ks.Run!=23904 && ks.Run!=23917 && ks.Run!=23937 && ks.Run!=23940
+               && ks.Run!=24814 && ks.Run!=24819 && ks.Run!=24821 && ks.Run!=24822 && ks.Run!=24831
+               && ks.Run!=24844 && ks.Run!=24845 && ks.Run!=24851 && ks.Run!=24859 && ks.Run!=24866
+               && ks.Run!=24867 && ks.Run!=24870 && ks.Run!=24876 && ks.Run!=24893 && ks.Run!=24904
+               && ks.Run!=24915 && ks.Run!=24916 && ks.Run!=25064 && ks.Run!=25074 && ks.Run!=25079
+               && ks.Run!=25105 && ks.Run!=25158 && ks.Run!=25159 && ks.Run!=25173 && ks.Run!=25176
+               && ks.Run!=25177 && ks.Run!=25179 && ks.Run!=25182 && ks.Run!=25183 && ks.Run!=25184
+               && ks.Run!=25198 && ks.Run!=25200 && ks.Run!=25209 && ks.Run!=25210 && ks.Run!=25211
+               && ks.Run!=25212 && ks.Run!=25214 && ks.Run!=25219 && ks.Run!=25222 && ks.Run!=25223
+               && ks.Run!=25225 && ks.Run!=25226 && ks.Run!=25227 && ks.Run!=25228 && ks.Run!=25230
+               && ks.Run!=25236 && ks.Run!=25347 && ks.Run!=25349 && ks.Run!=25351 && ks.Run!=25358
+               && ks.Run!=25359 && ks.Run!=25371 && ks.Run!=25403 && ks.Run!=25404 && ks.Run!=25405
+               && ks.Run!=25407 && ks.Run!=25409 && ks.Run!=25410 && ks.Run!=25411 && ks.Run!=25413
+               && ks.Run!=25414 && ks.Run!=25415 && ks.Run!=25421 && ks.Run!=25423 && ks.Run!=25425
+               && ks.Run!=25433 && ks.Run!=25435 && ks.Run!=25444 && ks.Run!=25514 && ks.Run!=25515
+               && ks.Run!=25519 && ks.Run!=25520 && ks.Run!=25523 && ks.Run!=25524 && ks.Run!=25569
+               && ks.Run!=25599 && ks.Run!=25605 && ks.Run!=25622 && ks.Run!=25628 && ks.Run!=25637
+               && ks.Run!=25684 && ks.Run!=26058 && ks.Run!=26059 && ks.Run!=26062 && ks.Run!=26063
+               && ks.Run!=26064 && ks.Run!=26065 && ks.Run!=26072 && ks.Run!=26073 && ks.Run!=26074
+               && ks.Run!=26075 && ks.Run!=26077 && ks.Run!=26078 && ks.Run!=26079 && ks.Run!=26091
+               && ks.Run!=26093 && ks.Run!=26094 && ks.Run!=26095 && ks.Run!=26096 && ks.Run!=26098
+               && ks.Run!=26100 && ks.Run!=26101 && ks.Run!=26126 && ks.Run!=26127 && ks.Run!=26128
+               && ks.Run!=26129 && ks.Run!=26131 && ks.Run!=26132 && ks.Run!=26133 && ks.Run!=26134
+               && ks.Run!=26147 && ks.Run!=26148 && ks.Run!=26150 && ks.Run!=26151
+              )   //noise <8%
+              */
+              /*
+             && (ks.Run==23307 || ks.Run==23313 || ks.Run==23342 || ks.Run==23353 || ks.Run==23423
+               || ks.Run==23429 || ks.Run==23466 || ks.Run==23467 || ks.Run==23470 || ks.Run==23562
+               || ks.Run==23564 || ks.Run==23626 || ks.Run==23632 || ks.Run==23635 || ks.Run==23636
+               || ks.Run==23642 || ks.Run==23643 || ks.Run==23656 || ks.Run==23658 || ks.Run==23663
+               || ks.Run==23665 || ks.Run==23666 || ks.Run==23667 || ks.Run==23668 || ks.Run==23669
+               || ks.Run==23674 || ks.Run==23675 || ks.Run==23677 || ks.Run==23678 || ks.Run==23679
+               || ks.Run==23688 || ks.Run==23689 || ks.Run==23691 || ks.Run==23693 || ks.Run==23694
+               || ks.Run==23695 || ks.Run==23696 || ks.Run==23702 || ks.Run==23703 || ks.Run==23704
+               || ks.Run==23706 || ks.Run==23707 || ks.Run==23708 || ks.Run==23709 || ks.Run==23710
+               || ks.Run==23712 || ks.Run==23713 || ks.Run==23714 || ks.Run==23721 || ks.Run==23722
+               || ks.Run==23723 || ks.Run==23724 || ks.Run==23725 || ks.Run==23727 || ks.Run==23746
+               || ks.Run==23747 || ks.Run==23748 || ks.Run==23749 || ks.Run==23755 || ks.Run==23756
+               || ks.Run==23757 || ks.Run==23759 || ks.Run==23809 || ks.Run==23811 || ks.Run==23812
+               || ks.Run==23813 || ks.Run==23814 || ks.Run==23815 || ks.Run==23817 || ks.Run==23819
+               || ks.Run==23820 || ks.Run==23822 || ks.Run==23823 || ks.Run==23824 || ks.Run==23825
+               || ks.Run==23826 || ks.Run==23828 || ks.Run==23829 || ks.Run==23830 || ks.Run==23831
+               || ks.Run==23833 || ks.Run==23834 || ks.Run==23835 || ks.Run==23836 || ks.Run==23838
+               || ks.Run==23858 || ks.Run==23859 || ks.Run==23860 || ks.Run==23861 || ks.Run==23867
+               || ks.Run==23868 || ks.Run==23869 || ks.Run==23872 || ks.Run==23876 || ks.Run==23877
+               || ks.Run==23881 || ks.Run==23882 || ks.Run==23893 || ks.Run==23895 || ks.Run==23898
+               || ks.Run==23900 || ks.Run==23904 || ks.Run==23917 || ks.Run==23937 || ks.Run==23940
+               || ks.Run==24814 || ks.Run==24819 || ks.Run==24821 || ks.Run==24822 || ks.Run==24831
+               || ks.Run==24844 || ks.Run==24845 || ks.Run==24851 || ks.Run==24859 || ks.Run==24866
+               || ks.Run==24867 || ks.Run==24870 || ks.Run==24876 || ks.Run==24893 || ks.Run==24904
+               || ks.Run==24915 || ks.Run==24916 || ks.Run==25064 || ks.Run==25074 || ks.Run==25079
+               || ks.Run==25105 || ks.Run==25158 || ks.Run==25159 || ks.Run==25173 || ks.Run==25176
+               || ks.Run==25177 || ks.Run==25179 || ks.Run==25182 || ks.Run==25183 || ks.Run==25184
+               || ks.Run==25198 || ks.Run==25200 || ks.Run==25209 || ks.Run==25210 || ks.Run==25211
+               || ks.Run==25212 || ks.Run==25214 || ks.Run==25219 || ks.Run==25222 || ks.Run==25223
+               || ks.Run==25225 || ks.Run==25226 || ks.Run==25227 || ks.Run==25228 || ks.Run==25230
+               || ks.Run==25236 || ks.Run==25347 || ks.Run==25349 || ks.Run==25351 || ks.Run==25358
+               || ks.Run==25359 || ks.Run==25371 || ks.Run==25403 || ks.Run==25404 || ks.Run==25405
+               || ks.Run==25407 || ks.Run==25409 || ks.Run==25410 || ks.Run==25411 || ks.Run==25413
+               || ks.Run==25414 || ks.Run==25415 || ks.Run==25421 || ks.Run==25423 || ks.Run==25425
+               || ks.Run==25433 || ks.Run==25435 || ks.Run==25444 || ks.Run==25514 || ks.Run==25515
+               || ks.Run==25519 || ks.Run==25520 || ks.Run==25523 || ks.Run==25524 || ks.Run==25569
+               || ks.Run==25599 || ks.Run==25605 || ks.Run==25622 || ks.Run==25628 || ks.Run==25637
+               || ks.Run==25684 || ks.Run==26058 || ks.Run==26059 || ks.Run==26062 || ks.Run==26063
+               || ks.Run==26064 || ks.Run==26065 || ks.Run==26072 || ks.Run==26073 || ks.Run==26074
+               || ks.Run==26075 || ks.Run==26077 || ks.Run==26078 || ks.Run==26079 || ks.Run==26091
+               || ks.Run==26093 || ks.Run==26094 || ks.Run==26095 || ks.Run==26096 || ks.Run==26098
+               || ks.Run==26100 || ks.Run==26101 || ks.Run==26126 || ks.Run==26127 || ks.Run==26128
+               || ks.Run==26129 || ks.Run==26131 || ks.Run==26132 || ks.Run==26133 || ks.Run==26134
+               || ks.Run==26147 || ks.Run==26148 || ks.Run==26150 || ks.Run==26151
+               )   //noise >=8%
+               */
 	  )
 	{
 	    pm=ks.p1;
@@ -270,6 +373,8 @@ int main(int argc, char* argv[])
 
 	    if ( verbose==1 )
 	    {
+                cout<<"===================  Next event  ====================================="<<endl;
+                cout<<"ks.run="<<ks.Run<<"\t"<<"Event="<<ks.rEv<<endl;
 		cout<<"p1="<<ks.p1<<"\t"<<"p2="<<ks.p2<<endl;
 		cout<<"e1/p1="<<ks.e1/ks.p1<<"\t"<<"e2/p2="<<ks.e2/ks.p2<<endl;
 		cout<<"(e1+e2)="<<ks.e1+ks.e2<<endl;

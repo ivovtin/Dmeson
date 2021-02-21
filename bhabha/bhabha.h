@@ -46,10 +46,10 @@ int key;
 TChain *tt=new TChain("et");
 void chain(){
     if(key==0){
+	//tt->Add("/spool/users/ovtin/bhabha_out_23551-23569.root");
 	//for(int i=1; i<=693; i++)   //signal 2016+2017
-	for(int i=2; i<=2; i++)   //signal 2016+2017
+	for(int i=167; i<=175; i++)   //signal 2016+2017
 	{
-	    //tt->Add(TString::Format("/spool/users/ovtin/outDmeson/bhabha/data/psi3770_to_bhabha_%d.root",i).Data());
 	    tt->Add(TString::Format("/spool/users/ovtin/outDmeson/bhabha/data_new/psi3770_to_bhabha_%d.root",i).Data());
 	}
     }
@@ -60,7 +60,11 @@ void chain(){
 	}
     }
     else if (key==2){              //MC Signal
-	tt->Add("/spool/users/ovtin/outDmeson/simulation/BhaBha/merge_all_simBhaBha.root");
+	tt->Add("/spool/users/ovtin/bhabha_out_sim.root");
+	//for(int i=1; i<=124; i++)
+	//{
+	//    tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/BhaBha/psi3770_to_simBhaBha_%d.root",i).Data());
+	//}
 	//for(int i=121; i<=124; i++)
 	//{
 	    //tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/BhaBha/woCorScales/psi3770_to_simBhaBha_%d.root",i).Data());

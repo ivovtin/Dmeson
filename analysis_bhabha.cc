@@ -279,7 +279,7 @@ int emc_event_rejection()
 	{
 	    cl_tr=semc.dc_emc_cls[t][c]-1;                           //dc_emc_cls[NDCH_TRK][NEMC_CLS]-1 - number of clusters on track
 	    energy_on_track+=semc.emc_energy[cl_tr];
-            if(progpar.verbose) cout<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"t="<<t<<"\t"<<"cl_tr="<<cl_tr<<"\t"<<"energy_on_track="<<energy_on_track<<endl;
+            //if(progpar.verbose) cout<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"t="<<t<<"\t"<<"cl_tr="<<cl_tr<<"\t"<<"energy_on_track="<<energy_on_track<<endl;
 	}
 	if( energy_on_track<progpar.min_cluster_energy )             //if energy cluster large setup minimal energy
 	{
@@ -419,9 +419,9 @@ int analyse_event()
     }
     ebeam=WTotal/2.;
 
-    if (progpar.verbose) cout<<"RunNumber="<<kedrraw_.Header.RunNumber<<"\t"<<"WTotal="<<WTotal<<"\t"<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"eTracksAll="<<eTracksAll<<endl;
+    //if (progpar.verbose) cout<<"RunNumber="<<kedrraw_.Header.RunNumber<<"\t"<<"WTotal="<<WTotal<<"\t"<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"eTracksAll="<<eTracksAll<<endl;
 
-    if (progpar.verbose) cout<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"eTracksAll="<<eTracksAll<<"\t"<<"eTracksBeam="<<eTracksBeam<<"\t"<<"eTracksIP="<<eTracksIP<<endl;
+    //if (progpar.verbose) cout<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"eTracksAll="<<eTracksAll<<"\t"<<"eTracksBeam="<<eTracksBeam<<"\t"<<"eTracksIP="<<eTracksIP<<endl;
 
     int i=0;
 
@@ -470,9 +470,13 @@ int analyse_event()
 		    bhabha.y0t2 = ktrrec_.Y0TRAK[t2];
 		    bhabha.z0t2 = ktrrec_.Z0TRAK[t2];
 
-		    if (progpar.verbose) cout<<"i="<< i<<endl;
-		    if (progpar.verbose) cout<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"Ebeam="<<WTotal/2<<"\t"<<"t1="<<t1<<"\t"<<"t2="<<t2<<"\t"<<"tCharge(t1)="<<tCharge(t1)<<"\t"<<"tCharge(t2)="<<tCharge(t2)<<endl;
-		    if (progpar.verbose) cout<<"p(t1)="<<tP(t1)<<"\t"<<"p(t2)="<<tP(t2)<<"\t"<<"tHits(t1)="<<tHits(t1)<<"\t"<<"tHits(t2)="<<tHits(t2)<<"\t"<<"tCh2(t1)="<<tCh2(t1)<<"\t"<<"tCh2(t2)="<<tCh2(t2)<<endl;
+		    //if (progpar.verbose) cout<<"i="<< i<<endl;
+		    //if (progpar.verbose) cout<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"Ebeam="<<WTotal/2<<"\t"<<"t1="<<t1<<"\t"<<"t2="<<t2<<"\t"<<"tCharge(t1)="<<tCharge(t1)<<"\t"<<"tCharge(t2)="<<tCharge(t2)<<endl;
+		    //if (progpar.verbose) cout<<"p(t1)="<<tP(t1)<<"\t"<<"p(t2)="<<tP(t2)<<"\t"<<"tHits(t1)="<<tHits(t1)<<"\t"<<"tHits(t2)="<<tHits(t2)<<"\t"<<"tCh2(t1)="<<tCh2(t1)<<"\t"<<"tCh2(t2)="<<tCh2(t2)<<endl;
+                    //if (progpar.verbose) cout<<"ktrrec_.PTRAK[t1]="<<ktrrec_.PTRAK[t1]<<"\t"<<"ktrrec_.PTRAK[t2]="<<ktrrec_.PTRAK[t2]<<"\t"<<endl;
+
+		    if (progpar.verbose) cout<<"RunNumber="<<kedrraw_.Header.RunNumber<<"\t""Raw event="<<kedrraw_.Header.Number<<"\t"<<"p(t1)="<<tP(t1)<<"\t"<<"p(t2)="<<tP(t2)<<"\t"<<"tHits(t1)="<<tHits(t1)<<"\t"<<"tHits(t2)="<<tHits(t2)<<"\t"<<"tCh2(t1)="<<tCh2(t1)<<"\t"<<"tCh2(t2)="<<tCh2(t2)<<endl;
+                    if (progpar.verbose) cout<<"Phit1="<<ktrrec_.FITRAK[t1]+(ktrrec_.FITRAK[t1]<0?360:0)<<"\t"<<"Phit2="<<ktrrec_.FITRAK[t2]+(ktrrec_.FITRAK[t2]<0?360:0)<<"\t"<<"tTeta(t1)="<<tTeta(t1)<<"\t"<<"tTeta(t2)="<<tTeta(t2)<<endl;
 
 		    bhabha.p1 = tP(t1);
 		    bhabha.p2 = tP(t2);
@@ -551,7 +555,7 @@ int analyse_event()
 		    }
 		    bhabha.e1 = energy_on_track1;
 		    bhabha.e2 = energy_on_track2;
-		    if (progpar.verbose) cout<<"bhabha.e1="<<bhabha.e1<<"\t"<<"bhabha.e2="<<bhabha.e2<<endl;
+		    //if (progpar.verbose) cout<<"bhabha.e1="<<bhabha.e1<<"\t"<<"bhabha.e2="<<bhabha.e2<<endl;
 
 		    bhabha.ecls1=0.;
 		    bhabha.ncls1=0;
@@ -808,7 +812,7 @@ int main(int argc, char* argv[])
 
 	//Register an analysis routine
 	kf_register_analysis(analyse_event);
-        if(progpar.verbose) cout<<"analyse_event="<<analyse_event<<endl;
+        //if(progpar.verbose) cout<<"analyse_event="<<analyse_event<<endl;
 
 	//Do not reconstruct, read reconstruction records from file
 	kf_reco_from_file(progpar.read_reco);
@@ -821,7 +825,7 @@ int main(int argc, char* argv[])
 	benchmark->Start("test");
 
 	//Call analysis job
-	if (progpar.verbose) cout<<"NEvents="<<progpar.NEvents<<"\t"<<"argv[optind]="<<argv[optind]<<"\t"<<"&argv[optind]="<<&argv[optind]<<"\t"<<"argc-optind="<<argc-optind<<endl;               //argv[optind]:/space/runs/daq021949.nat.bz2
+	//if (progpar.verbose) cout<<"NEvents="<<progpar.NEvents<<"\t"<<"argv[optind]="<<argv[optind]<<"\t"<<"&argv[optind]="<<&argv[optind]<<"\t"<<"argc-optind="<<argc-optind<<endl;               //argv[optind]:/space/runs/daq021949.nat.bz2
 	kf_process(argc-optind,&argv[optind],progpar.NEvents);             //установка ограничения на число обрабатываемых событий
 
 	benchmark->Show("test");

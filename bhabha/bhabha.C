@@ -53,18 +53,18 @@ int main(int argc, char* argv[])
 	//2016-17
 	rrCut=0.5;
 	zCut=13.;
-	max_chi2=50.;
+	max_chi2=1000.;
 	min_nhits=23.;
-        max_nhits=50.;
+        max_nhits=100.;
     }
     if(key==2){
 	//2016-17  - sim
 	rrCut=0.5;
 	zCut=13.;
-	max_chi2=100.;
+	max_chi2=1000.;
 	min_nhits=23.;
 	//min_nhits=10.;
-        max_nhits=50.;
+        max_nhits=100.;
 	epCut1=0.0;
 	epCut2=10.0;
         theta2tCut=178;
@@ -74,9 +74,9 @@ int main(int argc, char* argv[])
         //2004
 	rrCut=0.5;
 	zCut=13.;
-	max_chi2=50.;
+	max_chi2=1000.;
 	min_nhits=23.;
-	max_nhits=48.;
+	max_nhits=100.;
 	//max_nhits=50.;
     }
 
@@ -89,7 +89,8 @@ int main(int argc, char* argv[])
     TString list_badruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/badruns";
     if( key==0 ){           //exp 2016-17
 	fnameout=TString::Format("exp_bhabha_data_%d.root",key).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/data/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/data/";
+        KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/data_test/";
 	list_badruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/badruns";
     }
     else if (key==1)        //exp 2004
@@ -101,8 +102,7 @@ int main(int argc, char* argv[])
     else if (key==2)        //sig
     {
 	fnameout=TString::Format("sim_bhabha_sig_%d.root",key).Data();
-        //KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/simulation/";
-	KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/simulation_v2/";
+        KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/simulation/";
     }
     cout<<fnameout<<endl;
     fout = new TFile(fnameout,"RECREATE");
@@ -218,7 +218,6 @@ int main(int argc, char* argv[])
 	{
 	    tt->GetEntry(k-1);
 	    runprev=bhabha.Run;
-	    //cout<<"bhabha.run="<<bhabha.Run<<endl;
 	}
 
 	tt->GetEntry(k);
@@ -228,7 +227,7 @@ int main(int argc, char* argv[])
            //1 variant
 	   bhabha.vrtntrk>=ntrk
            && bhabha.p1>min_p && bhabha.p1<max_p && bhabha.p2>min_p && bhabha.p2<max_p
-           && bhabha.nhitst1>=min_nhits && bhabha.nhitst2>=min_nhits
+           && bhabha.nhitst1>min_nhits && bhabha.nhitst2>min_nhits
            && bhabha.rr1<rrCut && bhabha.rr2<rrCut
 	   && fabs(bhabha.zip1)<zCut && fabs(bhabha.zip2)<zCut
 	   && bhabha.ecls1>eclsCut && bhabha.ecls2>eclsCut
@@ -237,22 +236,17 @@ int main(int argc, char* argv[])
            */
            //=======================================
 	   //2 variant Harlamova dissertation
-	   ( (bhabha.Run<=23403 ||  bhabha.Run>=23430)
-	     && (bhabha.Run<=23743 || bhabha.Run>=23838)
-	     && (bhabha.Run<=24621 || bhabha.Run>=24647)
-             && (bhabha.Run<=25016 || bhabha.Run>=25044)
-	   ) &&
-	   //bhabha.Run>=23275 && bhabha.Run<=23286 &&   //1 - 10%
-	   //bhabha.Run>=23287 && bhabha.Run<=23317 &&   //2 - 9%
-	   //bhabha.Run>=23318 && bhabha.Run<=23369 &&   //3 - 11%
+	   //bhabha.Run>=23275 && bhabha.Run<=23286 &&   //1 - 10.8%
+	   //bhabha.Run>=23287 && bhabha.Run<=23317 &&   //2 - 9.8%
+	   //bhabha.Run>=23318 && bhabha.Run<=23369 &&   //3 - 11.12%
 	   //bhabha.Run>=23403 && bhabha.Run<=23430 &&   //4 - 22% - bad runs
-	   //bhabha.Run>=23431 && bhabha.Run<=23472 &&   //5 - 11%
-	   //bhabha.Run>=23473 && bhabha.Run<=23522 &&   //6 - 13%
-	   //bhabha.Run>=23523 && bhabha.Run<=23550 &&   //7 - 11%
-	   //bhabha.Run>=23551 && bhabha.Run<=23569 &&   //8 - 11%
-	   //bhabha.Run>=23670 && bhabha.Run<=23681 &&   //9 - 10%
+	   //bhabha.Run>=23431 && bhabha.Run<=23472 &&   //5 - 12.05%
+	   //bhabha.Run>=23473 && bhabha.Run<=23522 &&   //6 - 13.1% - bad runs
+	   //bhabha.Run>=23523 && bhabha.Run<=23550 &&   //7 - 12.42%
+	   //bhabha.Run>=23551 && bhabha.Run<=23569 &&   //8 - 11.35%
+	   //bhabha.Run>=23670 && bhabha.Run<=23681 &&   //9 - 10.48%
 	   //bhabha.Run>=23682 && bhabha.Run<=23715 &&   //10 - 11%
-	   //bhabha.Run>=23716 && bhabha.Run<=23742 &&   //11 - 12.5%
+	   //bhabha.Run>=23716 && bhabha.Run<=23742 &&   //11 - 12.5% - bad runs
 	   //bhabha.Run>=23743 && bhabha.Run<=23798 &&   //12 - 16% - bad runs
 	   //bhabha.Run>=23799 && bhabha.Run<=23838 &&   //13 - 19% - bad runs
 	   //bhabha.Run>=23839 && bhabha.Run<=23862 &&   //14 - 11%
@@ -263,9 +257,9 @@ int main(int argc, char* argv[])
 	   //bhabha.Run>=24676 && bhabha.Run<=24712 &&   //19 - 11%
 	   //bhabha.Run>=24790 && bhabha.Run<=24845 &&   //20 - 11%
 	   //bhabha.Run>=24846 && bhabha.Run<=24875 &&   //21 - 11%
-	   //bhabha.Run>=24876 && bhabha.Run<=24916 &&   //22 - 14%
+	   //bhabha.Run>=24876 && bhabha.Run<=24916 &&   //22 - 14% - bad runs
 	   //bhabha.Run>=25016 && bhabha.Run<=25044 &&   //23 - 21% - bad runs
-	   //bhabha.Run>=25045 && bhabha.Run<=25090 &&   //24 - 13%
+	   //bhabha.Run>=25045 && bhabha.Run<=25090 &&   //24 - 13% - bad runs
 	   //bhabha.Run>=25091 && bhabha.Run<=25114 &&   //25 - 11%
 	   //bhabha.Run>=25115 && bhabha.Run<=25157 &&   //26 - 11%
 	   //bhabha.Run>=25158 && bhabha.Run<=25185 &&   //27 - 11%
@@ -279,8 +273,8 @@ int main(int argc, char* argv[])
 	   //bhabha.Run>=25609 && bhabha.Run<=25640 &&   //35 - 11%
 	   //bhabha.Run>=25641 && bhabha.Run<=25663 &&   //36 - 11%
 	   //bhabha.Run>=25664 && bhabha.Run<=25719 &&   //37 - 11%
-	   //bhabha.Run>=26051 && bhabha.Run<=26079 &&   //38 - 12%
-	   //bhabha.Run>=26080 && bhabha.Run<=26102 &&   //39 - 12%
+	   //bhabha.Run>=26051 && bhabha.Run<=26079 &&   //38 - 12% - bad runs
+	   //bhabha.Run>=26080 && bhabha.Run<=26102 &&   //39 - 12% - bad runs
 	   //bhabha.Run>=26103 && bhabha.Run<=26134 &&   //40 - 11%
 	   bhabha.ncls>=2
            && (bhabha.thetat1>40 && bhabha.thetat1<140 ) && (bhabha.thetat2>40 && bhabha.thetat2<140)
@@ -292,13 +286,13 @@ int main(int argc, char* argv[])
            && fabs(bhabha.zip1)<zCut && fabs(bhabha.zip2)<zCut
            && bhabha.pt1>100 && bhabha.pt2>100
            && (bhabha.mulayerhits2+bhabha.mulayerhits3)<=1
-           //&& bhabha.chi2t1<max_chi2 && bhabha.chi2t2<max_chi2
+           && bhabha.vrtnip>=2
+           && (bhabha.mulayerhits2+bhabha.mulayerhits3)<=max_munhits
            //=======================================
 	   //&& bhabha.nhitst1<=max_nhits && bhabha.nhitst2<=max_nhits
 	   //bhabha.vrtnip>=1 && bhabha.vrtnip<=3
 	   //&& (bhabha.ecls1+bhabha.ecls2)>2000
            //&& bhabha.enn<0.2*bhabha.emcenergy
-           //&& (bhabha.mulayerhits2+bhabha.mulayerhits3)<=max_munhits
 	   //&& bhabha.munhits<=1
 	   //&& (bhabha.e1/bhabha.p1)<epCut2 && (bhabha.e2/bhabha.p2)<epCut2
           )
@@ -521,7 +515,7 @@ int main(int argc, char* argv[])
     hthetadif->GetXaxis()->SetTitle("#Delta #theta");
     Double_t sc1=hthetadif->GetEntries();
     hthetadif->Scale(1/sc1);
-    hthetadif->Fit("gaus","","",-1.7,1.7);
+    hthetadif->Fit("gaus","","",-1.0,1.0);
     /*
     TF1 *func3 = new TF1("fit3","[2]*(exp(-pow((x-[0]),2)/2./pow([1],2))+[4]*exp(-pow((x-[0]),2)/2./pow([3],2)))");
     func3->SetParameter(0,0.004);
@@ -537,7 +531,8 @@ int main(int argc, char* argv[])
     func3->SetParameter(3,0.05);
     func3->SetParameter(4,0.8);
     */
-    hthetadif->Fit("fit3","","",-10.,10.);
+    //hthetadif->Fit("fit3","","",-10.,10.);
+
     hthetadif->Draw(); cc1->SaveAs(KEDR+"thetadif.png"); cc1->SaveAs(KEDR+"thetadif.eps");
 
     hphi->Draw(); cc1->SaveAs(KEDR+"phi.png");
@@ -577,7 +572,7 @@ int main(int argc, char* argv[])
     hpres->GetXaxis()->SetTitle("#Delta p_{t}/p_{t}");
     Double_t sc3=hpres->GetEntries();
     hpres->Scale(1/sc3);
-    hpres->Fit("gaus","","",-0.2,0.2); hpres->Draw();
+    hpres->Fit("gaus","","",-0.20,0.20);
     /*
     TF1 *func1 = new TF1("fit1","[2]*(exp(-pow((x-[0]),2)/2./pow([1],2))+[4]*exp(-pow((x-[0]),2)/2./pow([3],2)))");
     func1->SetParameter(0,0.004);
@@ -587,6 +582,7 @@ int main(int argc, char* argv[])
     func1->SetParameter(4,0.8);
     hpres->Fit("fit1","","",-1.,1.);
     */
+    hpres->Draw();
     cc1->SaveAs(KEDR+"mom_res.png"); cc1->SaveAs(KEDR+"mom_res.eps");
 
     fout->Write();

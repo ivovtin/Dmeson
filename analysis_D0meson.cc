@@ -42,6 +42,7 @@
 #include "KaFramework/mubr.h"
 #include "KrAtc/AtcHit.hh"
 
+#include "VDDCRec/kdcswitches.h"
 #include "VDDCRec/kdcvd.h"
 #include "VDDCRec/kvd.h"
 #include "VDDCRec/kdcpar.h"
@@ -182,7 +183,7 @@ enum {
 static TTree *eventTree;
 
 typedef struct {
-    Int_t vrtntrk,vrtnip,vrtnbeam,nhitst1,nhitst2,nhitsvdt1,nhitsvdt2,nhitsxyt1,nhitszt1,nhitsxyt2,nhitszt2,nvect1,nvecxyt1,nveczt1,nvect2,nvecxyt2,
+    Int_t vrtntrk,vrtnip,vrtnbeam,nhitsdc,nhitst1,nhitst2,nhitsvd,nhitsvdt1,nhitsvdt2,nhitsxyt1,nhitszt1,nhitsxyt2,nhitszt2,nvect1,nvecxyt1,nveczt1,nvect2,nvecxyt2,
 	nveczt2,ncomb,ncls1,ncls2,ncls,nlkr,ncsi,munhits,mulayerhits1,mulayerhits2,mulayerhits3,Run,numn,numo;
     Float_t mbc,de,dp,prec1,prec2,fchi2,Ebeam,rEv,p1,p2,pt1,pt2,chi2t1,chi2t2,theta2t,phi2t,thetat1,thetat2,phit1,phit2,e1,
 	e2,d1,d2,rr1,rr2,zip1,zip2,ecls1,ecls2,tcls1,tcls2,pcls1,pcls2,emcenergy,lkrenergy,csienergy,enn,eno,tofc1,ttof1,tofc2,ttof2;
@@ -694,6 +695,9 @@ int analyse_event()
 		Dmeson.phit1 = ktrrec_.FITRAK[t1]+(ktrrec_.FITRAK[t1]<0?360:0);;
 		Dmeson.phit2 = ktrrec_.FITRAK[t2]+(ktrrec_.FITRAK[t2]<0?360:0);;
 
+		Dmeson.nhitsvd=kvdrec_.NHITVD;
+		Dmeson.nhitsdc=kdcrec_.NHIT;
+
 		Dmeson.nhitst1 = tHits(t1);
 		Dmeson.nhitst2 = tHits(t2);
 
@@ -949,7 +953,7 @@ int main(int argc, char* argv[])
 
 	eventTree = new TTree("et","Event tree");
 	eventTree->SetAutoSave(500000000);  // autosave when 0.5 Gbyte written
-	eventTree->Branch("Dmeson",&Dmeson,"vrtntrk/I:vrtnip:vrtnbeam:nhitst1:nhitst2:nhitsvdt1:nhitsvdt2:nhitsxyt1:nhitszt1:nhitsxyt2:nhitszt2:nvect1:nvecxyt1:nveczt1:nvect2:nvecxyt2"
+	eventTree->Branch("Dmeson",&Dmeson,"vrtntrk/I:vrtnip:vrtnbeam:nhitsdc:nhitst1:nhitst2:nhitsvd:nhitsvdt1:nhitsvdt2:nhitsxyt1:nhitszt1:nhitsxyt2:nhitszt2:nvect1:nvecxyt1:nveczt1:nvect2:nvecxyt2"
 			  ":nveczt2:ncomb:ncls1:ncls2:ncls:nlkr:ncsi:munhits:mulayerhits1:mulayerhits2:mulayerhits3:Run:numn:numo"
 			  ":mbc/F:de:dp:prec1:prec2:fchi2:Ebeam:rEv:p1:p2:pt1:pt2:chi2t1:chi2t2:theta2t:phi2t:thetat1:thetat2:phit1:phit2:e1"
 			  ":e2:d1:d2:rr1:rr2:zip1:zip2:ecls1:ecls2:tcls1:tcls2:pcls1:pcls2:emcenergy:lkrenergy:csienergy:enn:eno:tofc1:ttof1:tofc2:ttof2");
@@ -958,7 +962,10 @@ int main(int argc, char* argv[])
 	//Set kframework signal handling
 	kf_install_signal_handler(1);
 
-	kf_MCCalibRunNumber(progpar.simOn,progpar.MCCalibRunNumber,progpar.MCCalibRunNumberL,progpar.NsimRate,progpar.Scale,progpar.Ascale,progpar.Zscale);
+        kdcswitches_.kNoiseReject=3;   //Cut for DC noise  (0 - not cut, 1 - standart, 2 - soft, 3 - hard)
+        kdcswitches_.KemcAllowed=-1;  //off use strips for track reconstruction
+	
+        kf_MCCalibRunNumber(progpar.simOn,progpar.MCCalibRunNumber,progpar.MCCalibRunNumberL,progpar.NsimRate,progpar.Scale,progpar.Ascale,progpar.Zscale);
 
 	//Set subsystems to be used
         kf_use(KF_VDDC_SYSTEM|KF_TOF_SYSTEM|KF_ATC_SYSTEM|KF_EMC_SYSTEM|KF_MU_SYSTEM);

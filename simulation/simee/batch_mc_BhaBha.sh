@@ -4,7 +4,7 @@
 #$ -S /bin/bash
 # -------------------------------------------
 # --             batch name                --
-#$ -N DmesonMC
+#$ -N eeSim
 # -------------------------------------------
 # --     What to redirect to where         --
 #$ -cwd
@@ -22,10 +22,12 @@
 ##$ -q extralong
 ##$ -q 6h
 ##$ -q day
-##$ -m beas
-##$ -M ovtin.ivan@gmail.com
+#$ -m beas
+#$ -M ovtin.ivan@gmail.com
 
-#$ -t 1-20
+##$ -t 1-20
+##$ -t 14-17
+#$ -t 7-7
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]

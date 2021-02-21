@@ -35,10 +35,17 @@
 
 
   load_sig(infile);
+  /*
   read_par("par/exp_tof2.par", 5, exp_par, exp_epar);
   read_par("par/bck.par", 5, bck_par, bck_epar);
   read_par("par/dbck.par", 14, dbck_par, dbck_epar);
   read_par("par/sig_def.par", 30, sig_par, sig_epar);
+  */
+  //read_par("par/old/exp_tof2.par", 5, exp_par, exp_epar);
+  read_par("par/old/exp_tof.par", 5, exp_par, exp_epar);
+  read_par("par/old/bck.par", 5, bck_par, bck_epar);
+  read_par("par/old/dbck.par", 14, dbck_par, dbck_epar);
+  read_par("par/old/sig_def.par", 30, sig_par, sig_epar);
 
   double mdsig = sig_par[0];
   double desig = sig_par[1];

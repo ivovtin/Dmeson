@@ -43,15 +43,14 @@ myrand=$[1000+$i]
 ##inruns=23219
 #Signal
 inruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/runDmeson"$i
-##outfile="/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0185/psi3770_to_D0meson_"$i".root"
-outfile="/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0173_new/psi3770_to_D0meson_"$i".root"
+##outfile="/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0173/psi3770_to_D0meson_"$i".root"
+outfile="/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0173_kNoiseReject3_KemcAllowed-1/psi3770_to_D0meson_"$i".root"
 ##inruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/runDmeson"$i
 ##outfile="/spool/users/ovtin/outDmeson/D0/dataPcorr2004_1.030/psi3770_to_D0meson_"$i".root"
 #Bkg
 #inruns="/home/ovtin/development/Dmeson/runsDmeson/runBkgDmeson"$i
 #outfile="/spool/users/ovtin/psi3770_to_BkgD0meson_"$i".root"
-mintracks=3  ##!!!
-##mintracks=2
+mintracks=3  
 maxtracks=20
 minbeamtracks=0
 minIPtracks=0
@@ -64,7 +63,7 @@ minClusters=0
 maxClusters=50
 minClustersLKr=0
 minClustersCsI=0
-maxtchi2=1000        #!!!
+maxtchi2=10000        #!!!
 minNhits=0
 kinefit=1
 ##=========

@@ -32,6 +32,7 @@
 #include "TVirtualFitter.h"
 #include <algorithm>
 #include <assert.h>
+#include <TSystem.h>
 
 struct data10
 {

@@ -83,9 +83,15 @@ int main(int argc, char* argv[])
 	deCut1=-70; deCut2=70;
 	mbcCut1=1860, mbcCut2=1880;
 	fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data_%d.root",key).Data();
+	//fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data_withDCnoise_%d.root",key).Data();
+	//fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data_woDCnoise_%d.root",key).Data();
 	//KEDR = "/home/ovtin/public_html/outDmeson/Dplus/data/";
 	KEDR = "/home/ovtin/public_html/outDmeson/Dplus/dataPcorr/";
+	//KEDR = "/home/ovtin/public_html/outDmeson/Dplus/dataPcorr_withDCnoise/";
+	//KEDR = "/home/ovtin/public_html/outDmeson/Dplus/dataPcorr_woDCnoise/";
 	//KEDR = "/home/ovtin/public_html/outDmeson/Dplus/dataPcorr_test/";
+	gSystem->Exec("mkdir " + KEDR);
+        gSystem->Exec("cp /store/users/ovtin/outDmeson/demo/index.php " + KEDR);
 	list_badruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/badruns";
         fout_result=dir_out + "/" + "kpp_2016-17.dat";
     }
@@ -157,7 +163,7 @@ int main(int argc, char* argv[])
     TH1F* hdE=new TH1F("#Delta E","#Delta E",30,min_dE,max_dE);
     TH2D *h2MbcdE=new TH2D("M_{bc}:#Delta E", "M_{bc}:#Delta E", 100,min_Mbc,max_Mbc,200,min_dE,max_dE);
 
-    TH1F* hEbeam=new TH1F("Ebeam","Ebeam",100,1880.,1895.);
+    TH1F* hEbeam=new TH1F("Ebeam","Ebeam",200,1885.,1889.);
     TH1F* hfchi2=new TH1F("MChi2","Minuit Chi2",100,0.,100.);
 
     TH1F *hRun;
@@ -271,6 +277,100 @@ int main(int argc, char* argv[])
 	   && (Dmeson.Run<=24621 || Dmeson.Run>=24647)
 	   && (Dmeson.Run<=25016 || Dmeson.Run>=25044)
 	   */
+           /*
+           && (Dmeson.Run!=23307 && Dmeson.Run!=23313 && Dmeson.Run!=23342 && Dmeson.Run!=23353 && Dmeson.Run!=23423
+               && Dmeson.Run!=23429 && Dmeson.Run!=23466 && Dmeson.Run!=23467 && Dmeson.Run!=23470 && Dmeson.Run!=23562
+               && Dmeson.Run!=23564 && Dmeson.Run!=23626 && Dmeson.Run!=23632 && Dmeson.Run!=23635 && Dmeson.Run!=23636
+               && Dmeson.Run!=23642 && Dmeson.Run!=23643 && Dmeson.Run!=23656 && Dmeson.Run!=23658 && Dmeson.Run!=23663
+               && Dmeson.Run!=23665 && Dmeson.Run!=23666 && Dmeson.Run!=23667 && Dmeson.Run!=23668 && Dmeson.Run!=23669
+               && Dmeson.Run!=23674 && Dmeson.Run!=23675 && Dmeson.Run!=23677 && Dmeson.Run!=23678 && Dmeson.Run!=23679
+               && Dmeson.Run!=23688 && Dmeson.Run!=23689 && Dmeson.Run!=23691 && Dmeson.Run!=23693 && Dmeson.Run!=23694
+               && Dmeson.Run!=23695 && Dmeson.Run!=23696 && Dmeson.Run!=23702 && Dmeson.Run!=23703 && Dmeson.Run!=23704
+               && Dmeson.Run!=23706 && Dmeson.Run!=23707 && Dmeson.Run!=23708 && Dmeson.Run!=23709 && Dmeson.Run!=23710
+               && Dmeson.Run!=23712 && Dmeson.Run!=23713 && Dmeson.Run!=23714 && Dmeson.Run!=23721 && Dmeson.Run!=23722
+               && Dmeson.Run!=23723 && Dmeson.Run!=23724 && Dmeson.Run!=23725 && Dmeson.Run!=23727 && Dmeson.Run!=23746
+               && Dmeson.Run!=23747 && Dmeson.Run!=23748 && Dmeson.Run!=23749 && Dmeson.Run!=23755 && Dmeson.Run!=23756
+               && Dmeson.Run!=23757 && Dmeson.Run!=23759 && Dmeson.Run!=23809 && Dmeson.Run!=23811 && Dmeson.Run!=23812
+               && Dmeson.Run!=23813 && Dmeson.Run!=23814 && Dmeson.Run!=23815 && Dmeson.Run!=23817 && Dmeson.Run!=23819
+               && Dmeson.Run!=23820 && Dmeson.Run!=23822 && Dmeson.Run!=23823 && Dmeson.Run!=23824 && Dmeson.Run!=23825
+               && Dmeson.Run!=23826 && Dmeson.Run!=23828 && Dmeson.Run!=23829 && Dmeson.Run!=23830 && Dmeson.Run!=23831
+               && Dmeson.Run!=23833 && Dmeson.Run!=23834 && Dmeson.Run!=23835 && Dmeson.Run!=23836 && Dmeson.Run!=23838
+               && Dmeson.Run!=23858 && Dmeson.Run!=23859 && Dmeson.Run!=23860 && Dmeson.Run!=23861 && Dmeson.Run!=23867
+               && Dmeson.Run!=23868 && Dmeson.Run!=23869 && Dmeson.Run!=23872 && Dmeson.Run!=23876 && Dmeson.Run!=23877
+               && Dmeson.Run!=23881 && Dmeson.Run!=23882 && Dmeson.Run!=23893 && Dmeson.Run!=23895 && Dmeson.Run!=23898
+               && Dmeson.Run!=23900 && Dmeson.Run!=23904 && Dmeson.Run!=23917 && Dmeson.Run!=23937 && Dmeson.Run!=23940
+               && Dmeson.Run!=24814 && Dmeson.Run!=24819 && Dmeson.Run!=24821 && Dmeson.Run!=24822 && Dmeson.Run!=24831
+               && Dmeson.Run!=24844 && Dmeson.Run!=24845 && Dmeson.Run!=24851 && Dmeson.Run!=24859 && Dmeson.Run!=24866
+               && Dmeson.Run!=24867 && Dmeson.Run!=24870 && Dmeson.Run!=24876 && Dmeson.Run!=24893 && Dmeson.Run!=24904
+               && Dmeson.Run!=24915 && Dmeson.Run!=24916 && Dmeson.Run!=25064 && Dmeson.Run!=25074 && Dmeson.Run!=25079
+               && Dmeson.Run!=25105 && Dmeson.Run!=25158 && Dmeson.Run!=25159 && Dmeson.Run!=25173 && Dmeson.Run!=25176
+               && Dmeson.Run!=25177 && Dmeson.Run!=25179 && Dmeson.Run!=25182 && Dmeson.Run!=25183 && Dmeson.Run!=25184
+               && Dmeson.Run!=25198 && Dmeson.Run!=25200 && Dmeson.Run!=25209 && Dmeson.Run!=25210 && Dmeson.Run!=25211
+               && Dmeson.Run!=25212 && Dmeson.Run!=25214 && Dmeson.Run!=25219 && Dmeson.Run!=25222 && Dmeson.Run!=25223
+               && Dmeson.Run!=25225 && Dmeson.Run!=25226 && Dmeson.Run!=25227 && Dmeson.Run!=25228 && Dmeson.Run!=25230
+               && Dmeson.Run!=25236 && Dmeson.Run!=25347 && Dmeson.Run!=25349 && Dmeson.Run!=25351 && Dmeson.Run!=25358
+               && Dmeson.Run!=25359 && Dmeson.Run!=25371 && Dmeson.Run!=25403 && Dmeson.Run!=25404 && Dmeson.Run!=25405
+               && Dmeson.Run!=25407 && Dmeson.Run!=25409 && Dmeson.Run!=25410 && Dmeson.Run!=25411 && Dmeson.Run!=25413
+               && Dmeson.Run!=25414 && Dmeson.Run!=25415 && Dmeson.Run!=25421 && Dmeson.Run!=25423 && Dmeson.Run!=25425
+               && Dmeson.Run!=25433 && Dmeson.Run!=25435 && Dmeson.Run!=25444 && Dmeson.Run!=25514 && Dmeson.Run!=25515
+               && Dmeson.Run!=25519 && Dmeson.Run!=25520 && Dmeson.Run!=25523 && Dmeson.Run!=25524 && Dmeson.Run!=25569
+               && Dmeson.Run!=25599 && Dmeson.Run!=25605 && Dmeson.Run!=25622 && Dmeson.Run!=25628 && Dmeson.Run!=25637
+               && Dmeson.Run!=25684 && Dmeson.Run!=26058 && Dmeson.Run!=26059 && Dmeson.Run!=26062 && Dmeson.Run!=26063
+               && Dmeson.Run!=26064 && Dmeson.Run!=26065 && Dmeson.Run!=26072 && Dmeson.Run!=26073 && Dmeson.Run!=26074
+               && Dmeson.Run!=26075 && Dmeson.Run!=26077 && Dmeson.Run!=26078 && Dmeson.Run!=26079 && Dmeson.Run!=26091
+               && Dmeson.Run!=26093 && Dmeson.Run!=26094 && Dmeson.Run!=26095 && Dmeson.Run!=26096 && Dmeson.Run!=26098
+               && Dmeson.Run!=26100 && Dmeson.Run!=26101 && Dmeson.Run!=26126 && Dmeson.Run!=26127 && Dmeson.Run!=26128
+               && Dmeson.Run!=26129 && Dmeson.Run!=26131 && Dmeson.Run!=26132 && Dmeson.Run!=26133 && Dmeson.Run!=26134
+               && Dmeson.Run!=26147 && Dmeson.Run!=26148 && Dmeson.Run!=26150 && Dmeson.Run!=26151
+              )   //noise <8%
+              */
+              /* 
+              && (Dmeson.Run==23307 || Dmeson.Run==23313 || Dmeson.Run==23342 || Dmeson.Run==23353 || Dmeson.Run==23423
+               || Dmeson.Run==23429 || Dmeson.Run==23466 || Dmeson.Run==23467 || Dmeson.Run==23470 || Dmeson.Run==23562
+               || Dmeson.Run==23564 || Dmeson.Run==23626 || Dmeson.Run==23632 || Dmeson.Run==23635 || Dmeson.Run==23636
+               || Dmeson.Run==23642 || Dmeson.Run==23643 || Dmeson.Run==23656 || Dmeson.Run==23658 || Dmeson.Run==23663
+               || Dmeson.Run==23665 || Dmeson.Run==23666 || Dmeson.Run==23667 || Dmeson.Run==23668 || Dmeson.Run==23669
+               || Dmeson.Run==23674 || Dmeson.Run==23675 || Dmeson.Run==23677 || Dmeson.Run==23678 || Dmeson.Run==23679
+               || Dmeson.Run==23688 || Dmeson.Run==23689 || Dmeson.Run==23691 || Dmeson.Run==23693 || Dmeson.Run==23694
+               || Dmeson.Run==23695 || Dmeson.Run==23696 || Dmeson.Run==23702 || Dmeson.Run==23703 || Dmeson.Run==23704
+               || Dmeson.Run==23706 || Dmeson.Run==23707 || Dmeson.Run==23708 || Dmeson.Run==23709 || Dmeson.Run==23710
+               || Dmeson.Run==23712 || Dmeson.Run==23713 || Dmeson.Run==23714 || Dmeson.Run==23721 || Dmeson.Run==23722
+               || Dmeson.Run==23723 || Dmeson.Run==23724 || Dmeson.Run==23725 || Dmeson.Run==23727 || Dmeson.Run==23746
+               || Dmeson.Run==23747 || Dmeson.Run==23748 || Dmeson.Run==23749 || Dmeson.Run==23755 || Dmeson.Run==23756
+               || Dmeson.Run==23757 || Dmeson.Run==23759 || Dmeson.Run==23809 || Dmeson.Run==23811 || Dmeson.Run==23812
+               || Dmeson.Run==23813 || Dmeson.Run==23814 || Dmeson.Run==23815 || Dmeson.Run==23817 || Dmeson.Run==23819
+               || Dmeson.Run==23820 || Dmeson.Run==23822 || Dmeson.Run==23823 || Dmeson.Run==23824 || Dmeson.Run==23825
+               || Dmeson.Run==23826 || Dmeson.Run==23828 || Dmeson.Run==23829 || Dmeson.Run==23830 || Dmeson.Run==23831
+               || Dmeson.Run==23833 || Dmeson.Run==23834 || Dmeson.Run==23835 || Dmeson.Run==23836 || Dmeson.Run==23838
+               || Dmeson.Run==23858 || Dmeson.Run==23859 || Dmeson.Run==23860 || Dmeson.Run==23861 || Dmeson.Run==23867
+               || Dmeson.Run==23868 || Dmeson.Run==23869 || Dmeson.Run==23872 || Dmeson.Run==23876 || Dmeson.Run==23877
+               || Dmeson.Run==23881 || Dmeson.Run==23882 || Dmeson.Run==23893 || Dmeson.Run==23895 || Dmeson.Run==23898
+               || Dmeson.Run==23900 || Dmeson.Run==23904 || Dmeson.Run==23917 || Dmeson.Run==23937 || Dmeson.Run==23940
+               || Dmeson.Run==24814 || Dmeson.Run==24819 || Dmeson.Run==24821 || Dmeson.Run==24822 || Dmeson.Run==24831
+               || Dmeson.Run==24844 || Dmeson.Run==24845 || Dmeson.Run==24851 || Dmeson.Run==24859 || Dmeson.Run==24866
+               || Dmeson.Run==24867 || Dmeson.Run==24870 || Dmeson.Run==24876 || Dmeson.Run==24893 || Dmeson.Run==24904
+               || Dmeson.Run==24915 || Dmeson.Run==24916 || Dmeson.Run==25064 || Dmeson.Run==25074 || Dmeson.Run==25079
+               || Dmeson.Run==25105 || Dmeson.Run==25158 || Dmeson.Run==25159 || Dmeson.Run==25173 || Dmeson.Run==25176
+               || Dmeson.Run==25177 || Dmeson.Run==25179 || Dmeson.Run==25182 || Dmeson.Run==25183 || Dmeson.Run==25184
+               || Dmeson.Run==25198 || Dmeson.Run==25200 || Dmeson.Run==25209 || Dmeson.Run==25210 || Dmeson.Run==25211
+               || Dmeson.Run==25212 || Dmeson.Run==25214 || Dmeson.Run==25219 || Dmeson.Run==25222 || Dmeson.Run==25223
+               || Dmeson.Run==25225 || Dmeson.Run==25226 || Dmeson.Run==25227 || Dmeson.Run==25228 || Dmeson.Run==25230
+               || Dmeson.Run==25236 || Dmeson.Run==25347 || Dmeson.Run==25349 || Dmeson.Run==25351 || Dmeson.Run==25358
+               || Dmeson.Run==25359 || Dmeson.Run==25371 || Dmeson.Run==25403 || Dmeson.Run==25404 || Dmeson.Run==25405
+               || Dmeson.Run==25407 || Dmeson.Run==25409 || Dmeson.Run==25410 || Dmeson.Run==25411 || Dmeson.Run==25413
+               || Dmeson.Run==25414 || Dmeson.Run==25415 || Dmeson.Run==25421 || Dmeson.Run==25423 || Dmeson.Run==25425
+               || Dmeson.Run==25433 || Dmeson.Run==25435 || Dmeson.Run==25444 || Dmeson.Run==25514 || Dmeson.Run==25515
+               || Dmeson.Run==25519 || Dmeson.Run==25520 || Dmeson.Run==25523 || Dmeson.Run==25524 || Dmeson.Run==25569
+               || Dmeson.Run==25599 || Dmeson.Run==25605 || Dmeson.Run==25622 || Dmeson.Run==25628 || Dmeson.Run==25637
+               || Dmeson.Run==25684 || Dmeson.Run==26058 || Dmeson.Run==26059 || Dmeson.Run==26062 || Dmeson.Run==26063
+               || Dmeson.Run==26064 || Dmeson.Run==26065 || Dmeson.Run==26072 || Dmeson.Run==26073 || Dmeson.Run==26074
+               || Dmeson.Run==26075 || Dmeson.Run==26077 || Dmeson.Run==26078 || Dmeson.Run==26079 || Dmeson.Run==26091
+               || Dmeson.Run==26093 || Dmeson.Run==26094 || Dmeson.Run==26095 || Dmeson.Run==26096 || Dmeson.Run==26098
+               || Dmeson.Run==26100 || Dmeson.Run==26101 || Dmeson.Run==26126 || Dmeson.Run==26127 || Dmeson.Run==26128
+               || Dmeson.Run==26129 || Dmeson.Run==26131 || Dmeson.Run==26132 || Dmeson.Run==26133 || Dmeson.Run==26134
+               || Dmeson.Run==26147 || Dmeson.Run==26148 || Dmeson.Run==26150 || Dmeson.Run==26151
+               )   //noise >=8%
+               */         
 	  )
 	{
 	    //if( key==1 && Dmeson.fchi2>5.0 ) continue;

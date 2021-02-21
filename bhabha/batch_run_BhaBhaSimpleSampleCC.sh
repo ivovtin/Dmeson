@@ -30,15 +30,29 @@
 ##$ -q day
 #
 # -- Send mail at submission and completion of script --
-##$ -m beas
-##$ -M ovtin.ivan@gmail.com
+#$ -m beas
+#$ -M ovtin.ivan@gmail.com
 
-#$ -t 1-1
+##$ -t 1-1
+#$ -t 1-19
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]
 
-$HOME/development/Dmeson/BhaBhaSimpleSampleCC -R23272 -N500000 -sim1
+##$HOME/development/Dmeson/BhaBhaSimpleSampleCC -RF23551 -RL23569 -Nsw50 -N30000 -sim1
+##$HOME/development/Dmeson/BhaBhaSimpleSampleCC -RF23551 -RL23569 -N1000000 -sim0
+
+COUNTER=0
+
+for RUN in `seq 23551 23569`
+do
+  echo "RUN="$RUN
+  let COUNTER++
+  if [ $COUNTER == $i ]; then
+     $HOME/development/Dmeson/BhaBhaSimpleSampleCC -RF$RUN -RL$RUN -N1000000 -sim0
+     continue
+  fi
+done
 
 status=$?
 if [ $status != 0 ]; then

@@ -47,6 +47,7 @@ TChain *tt=new TChain("et");
 void chain(){
     if(key==0){
 	for(int i=1; i<=693; i++)   //signal 2016+2017
+	//for(int i=1; i<=171; i++)   //signal 2016+2017
 	{
 	    tt->Add(TString::Format("/spool/users/ovtin/outDmeson/Kspp/data/psi3770_to_Kspp_%d.root",i).Data());
 	}

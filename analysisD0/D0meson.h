@@ -42,10 +42,17 @@ struct data10
     float mbc,de,dp,fchi2,Ebeam,rEv,p1,p2,pt1,pt2,chi2t1,chi2t2,theta2t,phi2t,thetat1,thetat2,phit1,phit2,e1,
 	e2,d1,d2,rr1,rr2,zip1,zip2,ecls1,ecls2,tcls1,tcls2,pcls1,pcls2,emcenergy,lkrenergy,csienergy,enn,eno,tofc1,ttof1,tofc2,ttof2;
 	*/
+    /*    
     int vrtntrk,vrtnip,vrtnbeam,nhitst1,nhitst2,nhitsvdt1,nhitsvdt2,nhitsxyt1,nhitszt1,nhitsxyt2,nhitszt2,nvect1,nvecxyt1,nveczt1,nvect2,nvecxyt2,
 	nveczt2,ncomb,ncls1,ncls2,ncls,nlkr,ncsi,munhits,mulayerhits1,mulayerhits2,mulayerhits3,Run,numn,numo;
     float mbc,de,dp,prec1,prec2,fchi2,Ebeam,rEv,p1,p2,pt1,pt2,chi2t1,chi2t2,theta2t,phi2t,thetat1,thetat2,phit1,phit2,e1,
 	e2,d1,d2,rr1,rr2,zip1,zip2,ecls1,ecls2,tcls1,tcls2,pcls1,pcls2,emcenergy,lkrenergy,csienergy,enn,eno,tofc1,ttof1,tofc2,ttof2;
+    */
+    int vrtntrk,vrtnip,vrtnbeam,nhitsdc,nhitst1,nhitst2,nhitsvd,nhitsvdt1,nhitsvdt2,nhitsxyt1,nhitszt1,nhitsxyt2,nhitszt2,nvect1,nvecxyt1,nveczt1,nvect2,nvecxyt2,
+	nveczt2,ncomb,ncls1,ncls2,ncls,nlkr,ncsi,munhits,mulayerhits1,mulayerhits2,mulayerhits3,Run,numn,numo;
+    float mbc,de,dp,prec1,prec2,fchi2,Ebeam,rEv,p1,p2,pt1,pt2,chi2t1,chi2t2,theta2t,phi2t,thetat1,thetat2,phit1,phit2,e1,
+	e2,d1,d2,rr1,rr2,zip1,zip2,ecls1,ecls2,tcls1,tcls2,pcls1,pcls2,emcenergy,lkrenergy,csienergy,enn,eno,tofc1,ttof1,tofc2,ttof2;
+    
 };
 data10 Dmeson;
 
@@ -54,12 +61,11 @@ TChain *tt=new TChain("et");
 void chain(){
     if(key==0){
 	for(int i=1; i<=693; i++)   //signal 2016+2017
-	//for(int i=401; i<=500; i++)   //signal 2016+2017
 	{
 	    //tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0240/psi3770_to_D0meson_%d.root",i).Data());
 	    //tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0185/psi3770_to_D0meson_%d.root",i).Data());
 	    //tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0173/psi3770_to_D0meson_%d.root",i).Data());
-	    tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0173_new/psi3770_to_D0meson_%d.root",i).Data());
+	    tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0173_kNoiseReject3/psi3770_to_D0meson_%d.root",i).Data());
 	    //tt->Add("/home/ovtin/development/Dmeson/analysisD0/psi3770_to_D0meson_test_v2.root");
 	}
     }

@@ -33,13 +33,13 @@
 #$ -M ovtin.ivan@gmail.com
 
 ## MC signal
-$HOME/development/Dmeson/analysisDplus/fitDplus/batch_sig
+##$HOME/development/Dmeson/analysisDplus/fitDplus/batch_sig
 ## uds BG
 ##$HOME/development/Dmeson/analysisDplus/fitDplus/batch_bck
 ## DD BG
 ##$HOME/development/Dmeson/analysisDplus/fitDplus/batch_dbck
 ## exp
-##$HOME/development/Dmeson/analysisDplus/fitDplus/batch_exp
+$HOME/development/Dmeson/analysisDplus/fitDplus/batch_exp
 
 status=$?
 if [ $status != 0 ]; then
