@@ -290,7 +290,7 @@ int main(int argc,char *argv[]) {
 	if(sim) rootfile="/spool/users/ovtin/bhabha_out_sim.root";
 	else rootfile=TString::Format("/spool/users/ovtin/bhabha_out_%d.root",run).Data();
 	cout<<"root output file is "<<rootfile<<endl;
-        Int_t NumCurrentSim=0; 
+        Int_t NumCurrentSim=0;
 
 	//----------------- Initialize ROOT file and trees -----------------//
 	TFile *fout=0;
@@ -304,14 +304,19 @@ int main(int argc,char *argv[]) {
 			  ":Ebeam/F:rEv:p1:p2:pt1:pt2:chi2t1:chi2t2:theta2t:phi2t:thetat1:thetat2:phit1:phit2:e1"
 			  ":e2:d1:d2:rr1:rr2:zip1:zip2:x0t1:y0t1:z0t1:x0t2:y0t2:z0t2:ecls1:ecls2:tcls1:tcls2:pcls1:pcls2:emcenergy:lkrenergy:csienergy:enn:eno:tofc1:ttof1:tofc2:ttof2");
 
+	//kdcswitches_.KtofAllowed=-2;
 	//semc_cards.EMC_MASTER=0;
 	//kdcswitches_.kCosmInSigRuns = 0;
 	//kdcswitches_.kIPalternative = 1;
 	//kdcswitches_.KemcAllowed = -1;
-	//kdcswitches_.KtofAllowed=-2;
         //kdcswitches_.KmuAllowed=1;
+ 
+	kdcswitches_.kXTKey=1;
+        kdcswitches_.KcExp=0;       
+ 
+        cout<<"kdcswitches_.kXTKey="<<kdcswitches_.kXTKey<<"\t"<<"kdcswitches_.KcExp="<<kdcswitches_.KcExp<<endl;
 
-	if(sim) 
+	if(sim)
         {
              //tof_initAlternative(bad_listtof1);
              tof_sim();
@@ -327,9 +332,9 @@ int main(int argc,char *argv[]) {
 	    kdcswitches_.KsimSystErr = 1; //or 2
 	    //kdcsimxt();
 	    //kdcsimsigma();
-	    //kdcsimsysterr();               //simulation system. errors of calibration	    
+	    //kdcsimsysterr();               //simulation system. errors of calibration
 	    //kdcnosimxt();                    //x(t) is not simulated
-	    kdcsimsigma();                   //call simulation experimental resolution
+	    //kdcsimsigma();                   //call simulation experimental resolution
 	    //ksimreal(50,23272,23282);
 	    //ksimreal(1,23566,23566);
 	    ksimreal(Nsw,run1,run2);
@@ -381,7 +386,7 @@ int main(int argc,char *argv[]) {
             if(mu_get_db_status(NSimRun))  cout<<"Mu status error"<<endl;
             if(mu_get_db_clbr_for_run(NSimRun)<0)  cout<<"Mu calib error"<<endl;
             NumCurrentSim=NSimRun;
-        } 
+        }
 
         eNumber=0;
 
@@ -421,6 +426,7 @@ int main(int argc,char *argv[]) {
 			{
 			    //cout<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"\t"<<"t1="<<t1<<"\t"<<"t2="<<t2<<"\t"<<"tCharge(t1)="<<tCharge(t1)<<"\t"<<"tCharge(t2)="<<tCharge(t2)<<endl;
 			    //cout<<"p(t1)="<<tP(t1)<<"\t"<<"p(t2)="<<tP(t2)<<"\t"<<"tHits(t1)="<<tHits(t1)<<"\t"<<"tHits(t2)="<<tHits(t2)<<"\t"<<"tCh2(t1)="<<tCh2(t1)<<"\t"<<"tCh2(t2)="<<tCh2(t2)<<endl;
+			    //cout<<"Phit1="<<ktrrec_.FITRAK[t1]+(ktrrec_.FITRAK[t1]<0?360:0)<<"\t"<<"Phit2="<<ktrrec_.FITRAK[t2]+(ktrrec_.FITRAK[t2]<0?360:0)<<"\t"<<"tTeta(t1)="<<tTeta(t1)<<"\t"<<"tTeta(t2)="<<tTeta(t2)<<endl;
 
 			    double xx1=tX0IP(t1)*tX0IP(t1);
 			    double yy1=tY0IP(t1)*tY0IP(t1);

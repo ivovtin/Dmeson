@@ -16,10 +16,12 @@ void pic_dif_data_sim()
     hpres1->SetLineColor(kBlue);
     hpres1->SetName("data");
     hpres1->SetTitle("");
+    hpres1->SetMaximum(0.065);
     hpres1->GetYaxis()->SetTitle("Number of events");
     hpres1->GetYaxis()->SetTitleOffset(1.5);
     hpres1->GetListOfFunctions()->ls();
     TF1 *fun1 = hpres1->GetFunction("gaus");
+    //TF1 *fun1 = hpres1->GetFunction("fit1");
     hpres1->GetListOfFunctions()->Remove(fun1);
     hpres1->Draw("");
     TH1F *hpres2 = (TH1F*)inSim->Get("hpres");
@@ -30,6 +32,7 @@ void pic_dif_data_sim()
     hpres2->GetYaxis()->SetTitleOffset(1.5);
     hpres2->GetListOfFunctions()->ls();
     TF1 *fun2 = hpres2->GetFunction("gaus");
+    //TF1 *fun2 = hpres2->GetFunction("fit1");
     hpres2->GetListOfFunctions()->Remove(fun2);
     /*
     TPaveStats *st2 = (TPaveStats*)hpres2->FindObject("stats");
@@ -68,11 +71,13 @@ void pic_dif_data_sim()
     TH1F *hphi1 = (TH1F*)inData->Get("hphi");
     hphi1->SetLineColor(kBlue);
     hphi1->SetName("data");
+    hphi1->SetMaximum(0.11);
     hphi1->SetTitle("");
     hphi1->GetYaxis()->SetTitle("Number of events");
     hphi1->GetYaxis()->SetTitleOffset(1.5);
     hphi1->GetListOfFunctions()->ls();
     TF1 *fun3 = hphi1->GetFunction("gaus");
+    //TF1 *fun3 = hphi1->GetFunction("fit2");
     hphi1->GetListOfFunctions()->Remove(fun3);
     hphi1->Draw("");
 
@@ -84,6 +89,7 @@ void pic_dif_data_sim()
     hphi2->GetYaxis()->SetTitleOffset(1.5);
     hphi2->GetListOfFunctions()->ls();
     TF1 *fun4 = hphi2->GetFunction("gaus");
+    //TF1 *fun4 = hphi2->GetFunction("fit2");
     hphi2->GetListOfFunctions()->Remove(fun4);
     hphi2->Draw("sames");
     TPaveStats *st3 = (TPaveStats*)hphi1->FindObject("stats");
@@ -104,13 +110,14 @@ void pic_dif_data_sim()
     TH1F *htheta1 = (TH1F*)inData->Get("htheta");
     htheta1->SetLineColor(kBlue);
     htheta1->SetMinimum(0.);
-    htheta1->SetMaximum(0.075);
+    htheta1->SetMaximum(0.135);
     htheta1->SetName("data");
     htheta1->SetTitle("");
     htheta1->GetYaxis()->SetTitle("Number of events");
     htheta1->GetYaxis()->SetTitleOffset(1.5);
     htheta1->GetListOfFunctions()->ls();
     TF1 *fun5 = htheta1->GetFunction("gaus");
+    //TF1 *fun5 = htheta1->GetFunction("fit3");
     htheta1->GetListOfFunctions()->Remove(fun5);
     htheta1->Draw("");
 
@@ -122,6 +129,7 @@ void pic_dif_data_sim()
     htheta2->GetYaxis()->SetTitleOffset(1.5);
     htheta2->GetListOfFunctions()->ls();
     TF1 *fun6 = htheta2->GetFunction("gaus");
+    //TF1 *fun6 = htheta2->GetFunction("fit3");
     htheta2->GetListOfFunctions()->Remove(fun6);
     htheta2->Draw("sames");
     TPaveStats *st5 = (TPaveStats*)htheta1->FindObject("stats");
@@ -139,7 +147,7 @@ void pic_dif_data_sim()
     gPad->Modified();
 
     c.Update();
-    c.Print(dir_out + "compare_data_sim_2016-17.png");
-    c.Print(dir_out + "compare_data_sim_2016-17.eps");
+    c.Print(dir_out + "compare_data_sim_2016-17_23551-23569.png");
+    c.Print(dir_out + "compare_data_sim_2016-17_23551-23569.eps");
     c.Print("compare_data_sim_2016-17.root");
 }
