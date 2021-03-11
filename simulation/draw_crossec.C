@@ -47,23 +47,44 @@ void draw_crossec()
     cout << "Integral = " << gr->Integral() << endl;
     */
 
-    
-    FILE *f = fopen("crosssection_BESIII_2017_eetoD0D0.dat","r");
+
+    //FILE *f = fopen("crosssection_BESIII_2017_eetoD0D0.dat","r");
+    FILE *f = fopen("crosssection_BESIII_2017_eetoD+D-.dat","r");
     Int_t i=0;
     float n[34];
     float e[34],cross[34],cross2[34];
     while (!feof(f)){
 	fscanf(f,"%f %f %f\n",&n[i],&e[i],&cross[i]);
-	//cout<<"i="<<i<<"\t"<<"e="<<e[i]<<"\t"<<"cross="<<cross[i]<<endl;
-	cross2[i]=cross[i]/98.4194;
-        cout<<"\t"<<i<<"\t"<<e[i]<<"\t"<<cross2[i]<<"\t"<<endl;
+	cout<<"i="<<i<<"\t"<<"e="<<e[i]<<"\t"<<"cross="<<cross[i]<<endl;
+	//cross2[i]=cross[i]/98.4194;
+        cross2[i]=cross[i]/87.6202;
+        //cout<<"\t"<<i<<"\t"<<e[i]<<"\t"<<cross2[i]<<"\t"<<endl;
         //printf ("%.6f\n", cross2[i]);
         i++;
     }
-    TGraph *gr = new TGraph(i,e,cross);
+    //TGraph *gr = new TGraph(i,e,cross);
+    TGraph *gr = new TGraph(i,e,cross2);
     gr->SetMarkerStyle(21);
-    //gr->Draw("alp");
+    gr->Draw("alp");
     cout<<gr->Integral()<<endl;
+
+    Int_t ii=0;
+    float e_spline[101],cross_spline[101];
+    Double_t ev,x;
+    for ( Double_t k = 3734.0; k <= 3864.0; k+=1.3) {
+      x = (Double_t)k;
+      ev = gr->Eval(x);           //Interpolate points in this graph at x using a TSpline.
+      printf("        %d  %g     %g\n", ii+1, k, ev);
+      e_spline[ii]=k;
+      cross_spline[ii]=ev;
+      ii++;
+    }
+
+    TGraph *gr2 = new TGraph(ii,e_spline,cross_spline);
+    gr2->SetMarkerStyle(22);
+    gr2->SetLineColor(kRed);
+    gr2->Draw("same, alp");
+
 }
 
 
