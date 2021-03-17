@@ -184,10 +184,14 @@ static TTree *eventTree;
 
 typedef struct {
     Int_t vrtntrk,vrtnip,vrtnbeam,nhitsdc,nhitst1,nhitst2,nhitsvd,nhitsvdt1,nhitsvdt2,nhitsxyt1,nhitszt1,nhitsxyt2,nhitszt2,nvect1,nvecxyt1,nveczt1,nvect2,nvecxyt2,
-	nveczt2,ncomb,ncls1,ncls2,ncls,nlkr,ncsi,munhits,mulayerhits1,mulayerhits2,mulayerhits3,Run,numn,numo,natccrosst1,atcCNTt1[16],natccrosst2,atcCNTt2[16];
+    nveczt2,ncomb,ncls1,ncls2,ncls,nlkr,ncsi,munhits,mulayerhits1,mulayerhits2,mulayerhits3,Run,numn,numo,natccrosst1,atcCNTt1[16],natccrosst2,atcCNTt2[16],
+    aerogel_REGIONt1[16],aerogel_REGION0t1[16],aerogel_REGION5t1[16],aerogel_REGION20t1[16],single_aerogel_REGIONt1[16],single_aerogel_REGION0t1[16],
+    single_aerogel_REGION5t1[16],single_aerogel_REGION20t1[16],aerogel_REGIONt2[16],aerogel_REGION0t2[16],aerogel_REGION5t2[16],aerogel_REGION20t2[16],single_aerogel_REGIONt2[16],
+    single_aerogel_REGION0t2[16],single_aerogel_REGION5t2[16],single_aerogel_REGION20t2[16],wlshitt1[16],nearwlst1[16],wlshitt2[16],nearwlst2[16];
     Float_t mbc,de,dp,prec1,prec2,fchi2,Ebeam,rEv,p1,p2,pt1,pt2,chi2t1,chi2t2,theta2t,phi2t,thetat1,thetat2,phit1,phit2,e1,
 	e2,d1,d2,rr1,rr2,zip1,zip2,ecls1,ecls2,tcls1,tcls2,pcls1,pcls2,emcenergy,lkrenergy,csienergy,enn,eno,tofc1,ttof1,tofc2,ttof2,atcNpet1[16],atcTotalNpet1,
-        atcNpet2[16],atcTotalNpet2;
+    atcNpet2[16],atcTotalNpet2,tlent1[16],tlent2[16];
+
 } DMESON;
 
 static DMESON Dmeson;
@@ -840,7 +844,22 @@ int analyse_event()
 		{
                     Dmeson.atcCNTt1[i]=atctrackinfo.cnt[i];
                     cnt=atctrackinfo.cnt[i];
-                    Dmeson.atcNpet1[i]=atctrackinfo.npe[cnt];
+		    Dmeson.atcNpet1[i]=atctrackinfo.npe[cnt];
+
+		    Dmeson.tlent1[i]=atctrackinfo.tlen[cnt];
+		    Dmeson.wlshitt1[i]=atctrackinfo.wlshit[cnt];
+		    Dmeson.nearwlst1[i]=atctrackinfo.nearwls[cnt];
+
+		    Dmeson.aerogel_REGIONt1[i]=atctrackinfo.aerogel_REGION[cnt];
+		    Dmeson.aerogel_REGION0t1[i]=atctrackinfo.aerogel_REGION0[cnt];
+		    Dmeson.aerogel_REGION5t1[i]=atctrackinfo.aerogel_REGION5[cnt];
+		    Dmeson.aerogel_REGION20t1[i]=atctrackinfo.aerogel_REGION20[cnt];
+
+                    Dmeson.single_aerogel_REGIONt1[i]=atctrackinfo.single_aerogel_REGION[cnt];
+                    Dmeson.single_aerogel_REGION0t1[i]=atctrackinfo.single_aerogel_REGION0[cnt];
+                    Dmeson.single_aerogel_REGION5t1[i]=atctrackinfo.single_aerogel_REGION5[cnt];
+                    Dmeson.single_aerogel_REGION20t1[i]=atctrackinfo.single_aerogel_REGION20[cnt];
+
 		    if (progpar.verbose) cout<<"atc cnt="<<Dmeson.atcCNTt1[i]<<"\t"<<"npe="<<Dmeson.atcNpet1[i]<<endl;
                     totalNpe1 += atctrackinfo.npe[cnt];
 		}
@@ -856,6 +875,21 @@ int analyse_event()
 		    Dmeson.atcCNTt2[i]=atctrackinfo.cnt[i];
                     cnt=atctrackinfo.cnt[i];
 		    Dmeson.atcNpet2[i]=atctrackinfo.npe[cnt];
+
+		    Dmeson.tlent2[i]=atctrackinfo.tlen[cnt];
+		    Dmeson.wlshitt2[i]=atctrackinfo.wlshit[cnt];
+		    Dmeson.nearwlst2[i]=atctrackinfo.nearwls[cnt];
+
+		    Dmeson.aerogel_REGIONt2[i]=atctrackinfo.aerogel_REGION[cnt];
+		    Dmeson.aerogel_REGION0t2[i]=atctrackinfo.aerogel_REGION0[cnt];
+		    Dmeson.aerogel_REGION5t2[i]=atctrackinfo.aerogel_REGION5[cnt];
+		    Dmeson.aerogel_REGION20t2[i]=atctrackinfo.aerogel_REGION20[cnt];
+
+                    Dmeson.single_aerogel_REGIONt2[i]=atctrackinfo.single_aerogel_REGION[cnt];
+                    Dmeson.single_aerogel_REGION0t2[i]=atctrackinfo.single_aerogel_REGION0[cnt];
+                    Dmeson.single_aerogel_REGION5t2[i]=atctrackinfo.single_aerogel_REGION5[cnt];
+                    Dmeson.single_aerogel_REGION20t2[i]=atctrackinfo.single_aerogel_REGION20[cnt];
+
 		    if (progpar.verbose) cout<<"atc cnt="<<Dmeson.atcCNTt2[i]<<"\t"<<"npe="<<Dmeson.atcNpet2[i]<<endl;
                     totalNpe2 += atctrackinfo.npe[cnt];
 		}
@@ -989,9 +1023,13 @@ int main(int argc, char* argv[])
 	eventTree->SetAutoSave(500000000);  // autosave when 0.5 Gbyte written
 	eventTree->Branch("Dmeson",&Dmeson,"vrtntrk/I:vrtnip:vrtnbeam:nhitsdc:nhitst1:nhitst2:nhitsvd:nhitsvdt1:nhitsvdt2:nhitsxyt1:nhitszt1:nhitsxyt2:nhitszt2:nvect1:nvecxyt1:nveczt1:nvect2:nvecxyt2"
 			  ":nveczt2:ncomb:ncls1:ncls2:ncls:nlkr:ncsi:munhits:mulayerhits1:mulayerhits2:mulayerhits3:Run:numn:numo:natccrosst1:atcCNTt1[16]:natccrosst2:atcCNTt2[16]"
+			  ":aerogel_REGIONt1[16]:aerogel_REGION0t1[16]:aerogel_REGION5t1[16]:aerogel_REGION20t1[16]:single_aerogel_REGIONt1[16]"
+			  ":single_aerogel_REGION0t1[16]:single_aerogel_REGION5t1[16]:single_aerogel_REGION20t1[16]:aerogel_REGIONt2[16]:aerogel_REGION0t2[16]:aerogel_REGION5t2[16]"
+			  ":aerogel_REGION20t2[16]:single_aerogel_REGIONt2[16]:single_aerogel_REGION0t2[16]:single_aerogel_REGION5t2[16]:single_aerogel_REGION20t2[16]"
+                          ":wlshitt1[16]:nearwlst1[16]:wlshitt2[16]:nearwlst2[16]"
 			  ":mbc/F:de:dp:prec1:prec2:fchi2:Ebeam:rEv:p1:p2:pt1:pt2:chi2t1:chi2t2:theta2t:phi2t:thetat1:thetat2:phit1:phit2:e1"
 			  ":e2:d1:d2:rr1:rr2:zip1:zip2:ecls1:ecls2:tcls1:tcls2:pcls1:pcls2:emcenergy:lkrenergy:csienergy:enn:eno:tofc1:ttof1:tofc2:ttof2:atcNpet1[16]:atcTotalNpet1"
-			  ":atcNpet1[16],atcTotalNpet2");
+			  ":atcNpet1[16]:atcTotalNpet2:tlent1[16]:tlent2[16]");
 
 //----------------- Configure kframework -----------------//
 	//Set kframework signal handling
