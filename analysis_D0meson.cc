@@ -184,9 +184,10 @@ static TTree *eventTree;
 
 typedef struct {
     Int_t vrtntrk,vrtnip,vrtnbeam,nhitsdc,nhitst1,nhitst2,nhitsvd,nhitsvdt1,nhitsvdt2,nhitsxyt1,nhitszt1,nhitsxyt2,nhitszt2,nvect1,nvecxyt1,nveczt1,nvect2,nvecxyt2,
-	nveczt2,ncomb,ncls1,ncls2,ncls,nlkr,ncsi,munhits,mulayerhits1,mulayerhits2,mulayerhits3,Run,numn,numo;
+	nveczt2,ncomb,ncls1,ncls2,ncls,nlkr,ncsi,munhits,mulayerhits1,mulayerhits2,mulayerhits3,Run,numn,numo,natccrosst1,atcCNTt1[16],natccrosst2,atcCNTt2[16];
     Float_t mbc,de,dp,prec1,prec2,fchi2,Ebeam,rEv,p1,p2,pt1,pt2,chi2t1,chi2t2,theta2t,phi2t,thetat1,thetat2,phit1,phit2,e1,
-	e2,d1,d2,rr1,rr2,zip1,zip2,ecls1,ecls2,tcls1,tcls2,pcls1,pcls2,emcenergy,lkrenergy,csienergy,enn,eno,tofc1,ttof1,tofc2,ttof2;
+	e2,d1,d2,rr1,rr2,zip1,zip2,ecls1,ecls2,tcls1,tcls2,pcls1,pcls2,emcenergy,lkrenergy,csienergy,enn,eno,tofc1,ttof1,tofc2,ttof2,atcNpet1[16],atcTotalNpet1,
+        atcNpet2[16],atcTotalNpet2;
 } DMESON;
 
 static DMESON Dmeson;
@@ -435,10 +436,8 @@ void kine_fit(int ip1, int ip2, double* mbc, double* de, double* dp, double* pre
 	//gMinuit->mninit(1,1,1);
 	double lowerLimit = 0.0;
 	double upperLimit = 0.0;
-	//dMinuit->mnparm(0,"p1", p1i, 0.5, lowerLimit, upperLimit, iflag);    //set the parameters used in the fit
-	//dMinuit->mnparm(1,"p2", p2i, 0.5, lowerLimit, upperLimit, iflag);
-	dMinuit->mnparm(0,"p1", 0.0, 0.5, lowerLimit, upperLimit, iflag);    //set the parameters used in the fit
-	dMinuit->mnparm(1,"p2", 0.0, 0.5, lowerLimit, upperLimit, iflag);
+	dMinuit->mnparm(0,"p1", p1i, 0.5, lowerLimit, upperLimit, iflag);    //set the parameters used in the fit
+	dMinuit->mnparm(1,"p2", p2i, 0.5, lowerLimit, upperLimit, iflag);
 	//dMinuit->mnexcm("CALL FCN",arglist,1,iflag);                        //call the user defined function, to calculate the value FCN, and print the result out to the screen.
 	arglist[0] = 5000;  //maximum number of function calls after which the calculation will be stopped even if it has not yet converged.
 	arglist[1] = 1.;   //The optional argument [tolerance] specifies required tolerance on the function value at the minimum. The default tolerance is 0.1, and the minimization will stop when the estimated vertical distance to the minimum (EDM) is less than 0.001*[tolerance]*UP (see [SET ERRordef]).
@@ -832,6 +831,37 @@ int analyse_event()
 		    Dmeson.ttof2 = kscBhit_.time_B_ns[t1][0];
 		}
 
+		atc_to_track(t1);
+                if (progpar.verbose) cout<<"t1="<<t1<<"\t"<<"atctrackinfo.ncnt="<<atctrackinfo.ncnt<<endl;
+		float totalNpe1=0;
+                int cnt;
+		Dmeson.natccrosst1=atctrackinfo.ncnt;
+		for(int i=0; i<atctrackinfo.ncnt; i++)
+		{
+                    Dmeson.atcCNTt1[i]=atctrackinfo.cnt[i];
+                    cnt=atctrackinfo.cnt[i];
+                    Dmeson.atcNpet1[i]=atctrackinfo.npe[cnt];
+		    if (progpar.verbose) cout<<"atc cnt="<<Dmeson.atcCNTt1[i]<<"\t"<<"npe="<<Dmeson.atcNpet1[i]<<endl;
+                    totalNpe1 += atctrackinfo.npe[cnt];
+		}
+		if (progpar.verbose) cout<<"t1="<<t1<<"\t"<<"Total ATC Npe="<<totalNpe1<<endl;
+		Dmeson.atcTotalNpet1=totalNpe1;
+
+		atc_to_track(t2);
+                float totalNpe2=0;
+		Dmeson.natccrosst2=atctrackinfo.ncnt;
+                if (progpar.verbose) cout<<"t2="<<t2<<"\t"<<"atctrackinfo.ncnt="<<atctrackinfo.ncnt<<endl;
+		for(int i=0; i<atctrackinfo.ncnt; i++)
+		{
+		    Dmeson.atcCNTt2[i]=atctrackinfo.cnt[i];
+                    cnt=atctrackinfo.cnt[i];
+		    Dmeson.atcNpet2[i]=atctrackinfo.npe[cnt];
+		    if (progpar.verbose) cout<<"atc cnt="<<Dmeson.atcCNTt2[i]<<"\t"<<"npe="<<Dmeson.atcNpet2[i]<<endl;
+                    totalNpe2 += atctrackinfo.npe[cnt];
+		}
+		if (progpar.verbose) cout<<"t2="<<t2<<"\t"<<"Total ATC Npe="<<totalNpe2<<endl;
+		Dmeson.atcTotalNpet2=totalNpe2;
+
 		eventTree->Fill();
 	    }
 	}
@@ -958,9 +988,10 @@ int main(int argc, char* argv[])
 	eventTree = new TTree("et","Event tree");
 	eventTree->SetAutoSave(500000000);  // autosave when 0.5 Gbyte written
 	eventTree->Branch("Dmeson",&Dmeson,"vrtntrk/I:vrtnip:vrtnbeam:nhitsdc:nhitst1:nhitst2:nhitsvd:nhitsvdt1:nhitsvdt2:nhitsxyt1:nhitszt1:nhitsxyt2:nhitszt2:nvect1:nvecxyt1:nveczt1:nvect2:nvecxyt2"
-			  ":nveczt2:ncomb:ncls1:ncls2:ncls:nlkr:ncsi:munhits:mulayerhits1:mulayerhits2:mulayerhits3:Run:numn:numo"
+			  ":nveczt2:ncomb:ncls1:ncls2:ncls:nlkr:ncsi:munhits:mulayerhits1:mulayerhits2:mulayerhits3:Run:numn:numo:natccrosst1:atcCNTt1[16]:natccrosst2:atcCNTt2[16]"
 			  ":mbc/F:de:dp:prec1:prec2:fchi2:Ebeam:rEv:p1:p2:pt1:pt2:chi2t1:chi2t2:theta2t:phi2t:thetat1:thetat2:phit1:phit2:e1"
-			  ":e2:d1:d2:rr1:rr2:zip1:zip2:ecls1:ecls2:tcls1:tcls2:pcls1:pcls2:emcenergy:lkrenergy:csienergy:enn:eno:tofc1:ttof1:tofc2:ttof2");
+			  ":e2:d1:d2:rr1:rr2:zip1:zip2:ecls1:ecls2:tcls1:tcls2:pcls1:pcls2:emcenergy:lkrenergy:csienergy:enn:eno:tofc1:ttof1:tofc2:ttof2:atcNpet1[16]:atcTotalNpet1"
+			  ":atcNpet1[16],atcTotalNpet2");
 
 //----------------- Configure kframework -----------------//
 	//Set kframework signal handling
