@@ -113,7 +113,7 @@ struct ProgramParameters {
 	int NEvend;
         float pSF;                            //momentum correction
 	int Dkine_fit;                       //perfome kinematic fit
-        bool verbose;                         //print debug information
+        int verbose;                         //print debug information
 	bool process_only;                    //process one event only
 };
 //=======================================================================================================================================
@@ -325,14 +325,14 @@ int mu_event_rejection()
 
 double pcorr(double p) {
     double pc = p*fabs(progpar.pSF);
-    if (progpar.verbose==2) cout<<"pc="<<pc<<"\t"<<"p="<<p<<"\t"<<"progpar.pSF="<<progpar.pSF<<endl;
+    if (progpar.verbose==3) cout<<"pc="<<pc<<"\t"<<"p="<<p<<"\t"<<"progpar.pSF="<<progpar.pSF<<endl;
 
     return fabs(pc);
 }
 
 void kine_fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t iflag)
 {
-    if (progpar.verbose==2) printf("  par0=%lf, par1=%lf\n",par[0], par[1]);
+    if (progpar.verbose==3) printf("  par0=%lf, par1=%lf\n",par[0], par[1]);
 
     double pp1 = par[0];
     double pp2 = par[1];
@@ -353,12 +353,12 @@ void kine_fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t ifla
 		      pow(tan(ktrrec_.TETRAK[dcand_t2]/180.*PI),2))*p2i;
 
     double de = (sqrt(mk*mk + pp1*pp1) + sqrt(mpi*mpi+pp1*pp1) +
-		 sqrt(mk*mk + pp2*pp2) + sqrt(mpi*mpi+pp2*pp2))/2. - ebeam;
+    		 sqrt(mk*mk + pp2*pp2) + sqrt(mpi*mpi+pp2*pp2))/2. - ebeam;
 
-    double chi2 = pow((pp1-p1i)/sp1,2) + pow((pp2-p2i)/sp2,2) +
-	pow(de/0.1,2);
+    //double chi2 = pow((pp1-p1i)/sp1,2) + pow((pp2-p2i)/sp2,2) + pow(de/0.1,2);
+    double chi2 = pow((pp1-p1i)/sp1,2) + pow((pp2-p2i)/sp2,2) + pow(de,2);
 
-    if (progpar.verbose==2) printf("  p1i=%lf, p2i=%lf, p1=%lf, p2=%lf, de=%lf, chi2=%lf\n",p1i, p2i, pp1, pp2, de, chi2);
+    if (progpar.verbose==2) printf("  p1i=%lf, p2i=%lf, p1=%lf, p2=%lf, de=%lf, sp1=%lf, sp2=%lf, chi2=%lf\n",p1i, p2i, pp1, pp2, de, sp1, sp2, chi2);
 
     f = chi2;
 }
@@ -429,15 +429,19 @@ void kine_fit(int ip1, int ip2, double* mbc, double* de, double* dp, double* pre
 	dMinuit->SetPrintLevel(progpar.verbose-1); //set print out level for Minuit
 	Double_t arglist[2];
 	Int_t iflag=0;
-	//arglist[0]=100.;
-	arglist[0]=1000.;
+	arglist[0]=1;  //for chisquared fits
+	//arglist[0]=0.5;  //for negative log likelihood
 	dMinuit->mnexcm("SET ERR",arglist,1,iflag);    //Interprets command
 	//gMinuit->mninit(1,1,1);
 	double lowerLimit = 0.0;
 	double upperLimit = 0.0;
-	dMinuit->mnparm(0,"p1", p1i, 1., lowerLimit, upperLimit, iflag);    //set the parameters used in the fit
-	dMinuit->mnparm(1,"p2", p2i, 1., lowerLimit, upperLimit, iflag);
-	dMinuit->mnexcm("CALL FCN",arglist,1,iflag);                        //call the user defined function, to calculate the value FCN, and print the result out to the screen.
+	//dMinuit->mnparm(0,"p1", p1i, 0.5, lowerLimit, upperLimit, iflag);    //set the parameters used in the fit
+	//dMinuit->mnparm(1,"p2", p2i, 0.5, lowerLimit, upperLimit, iflag);
+	dMinuit->mnparm(0,"p1", 0.0, 0.5, lowerLimit, upperLimit, iflag);    //set the parameters used in the fit
+	dMinuit->mnparm(1,"p2", 0.0, 0.5, lowerLimit, upperLimit, iflag);
+	//dMinuit->mnexcm("CALL FCN",arglist,1,iflag);                        //call the user defined function, to calculate the value FCN, and print the result out to the screen.
+	arglist[0] = 5000;  //maximum number of function calls after which the calculation will be stopped even if it has not yet converged.
+	arglist[1] = 1.;   //The optional argument [tolerance] specifies required tolerance on the function value at the minimum. The default tolerance is 0.1, and the minimization will stop when the estimated vertical distance to the minimum (EDM) is less than 0.001*[tolerance]*UP (see [SET ERRordef]).
 	dMinuit->mnexcm("MIGRAD",arglist,2,iflag);                          //run the minimisation Using MIGRAD
 
 	Double_t val[2],err[2],bnd1[2],bnd2[2];
@@ -962,9 +966,12 @@ int main(int argc, char* argv[])
 	//Set kframework signal handling
 	kf_install_signal_handler(1);
 
-        kdcswitches_.kNoiseReject=3;   //Cut for DC noise  (0 - not cut, 1 - standart, 2 - soft, 3 - hard)
-        kdcswitches_.KemcAllowed=-1;  //off use strips for track reconstruction
-	
+        kdcswitches_.kNoiseReject=3;      //Cut for DC noise  (0 - not cut, 1 - standart, 2 - soft, 3 - hard)
+	//kdcswitches_.KemcAllowed=-1;      //off use strips for track reconstruction
+	//kdcswitches_.KtofAllowed=0;       //use of TOF for track search
+	//kdcswitches_.kIPalternative = 1;  //alternative track candidate with IP (on)
+	kdcswitches_.kCosmInSigRuns = 0;  //search for cosmic in signal runs (on)
+
         kf_MCCalibRunNumber(progpar.simOn,progpar.MCCalibRunNumber,progpar.MCCalibRunNumberL,progpar.NsimRate,progpar.Scale,progpar.Ascale,progpar.Zscale);
 
 	//Set subsystems to be used
