@@ -72,8 +72,7 @@ void draw_crossec()
     float e_spline[101],cross_spline[101];
     Double_t ev,x;
     for ( Double_t k = 3734.0; k <= 3864.0; k+=1.3) {
-      x = (Double_t)k;
-      ev = gr->Eval(x);           //Interpolate points in this graph at x using a TSpline.
+      ev = gr->Eval(k);           //Interpolate points in this graph at x using a TSpline.
       printf("        %d  %g     %g\n", ii+1, k, ev);
       e_spline[ii]=k;
       cross_spline[ii]=ev;
