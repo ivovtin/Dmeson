@@ -2,36 +2,39 @@
 
 ##inruns=4422 #ev 3653
 ##inruns=23665  #ev 527
-inruns=23443  #ev 527
-nevbegin=8000
+##inruns=23443
+##inruns=23341
+inruns=23300
+nevbegin=16000
+##nevbegin=3890
 nevend=20000
 #inruns=4132
 #inruns=4257
 ##inruns=4422
 ##inruns="/spool/users/ovtin/outDmeson/simulation/D0_Signal/simDmesonSignal08.dat"
-Nevents=50000
+Nevents=100000
 outfile="psi3770_to_D0meson_test.root"
 #mintracks=2
 mintracks=3
 maxtracks=20
 minbeamtracks=0
 minIPtracks=0
-maxIPtracks=10
-minPt=100
+maxIPtracks=20
+minPt=0
 maxPt=2000
 minClusterEnergy=0
 minTotalEnergy=0
 minClusters=0
-maxClusters=30
+maxClusters=50
 minClustersLKr=0
 minClustersCsI=0
-maxtchi2=1000
-minNhits=23
+maxtchi2=10000
+minNhits=0
 kinefit=1
 #pSF=1.0185   ##data 2016-17
 pSF=1.0173   ##data 2016-17
 ##pSF=1.030   ##data 2004
-verbose=1
+verbose=2
 
 ##echo $pSF
 

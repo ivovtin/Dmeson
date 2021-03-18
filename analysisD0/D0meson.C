@@ -86,10 +86,11 @@ int main(int argc, char* argv[])
     //***************preselections*************
     int ntrk=3;
     int max_munhits=2;
+    //int max_munhits=0;
     float min_pt=100.; //MeV
     float max_pt=2000.; //MeV
-    float min_Mbc=1700.;;
-    float min_Mbc2=1700.;;
+    float min_Mbc=1700.;
+    float min_Mbc2=1700.;
     if(key==1) min_Mbc=1800.;
     float max_Mbc=1900.;
     float min_dE=-300.;
@@ -137,22 +138,49 @@ int main(int argc, char* argv[])
 	//deCut1=-150; deCut2=150;
 	deCut1=-100; deCut2=100;
 	mbcCut1=1855, mbcCut2=1875;
-	//fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data_withDCnoise_%d.root",key).Data();
-	fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data_woDCnoise_%d.root",key).Data();
+	//fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data_withDCnoise_KemcAllowedOff_%d.root",key).Data();
+	//fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data_woDCnoise_KemcAllowedOff_%d.root",key).Data();
 	//fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data_kNoiseReject3_%d.root",key).Data();
 	//fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data_%d.root",key).Data();
+	fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data_test_%d.root",key).Data();
         //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr/";
-        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorrTest/";
-        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorrRuns23211-23567/";
-        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorrEcor_1815.000-1818.000/";
-	//KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorrRuns_withDCnoise/";
-	KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorrRuns_woDCnoise/";
-	//KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_kNoiseReject3/";
-	//KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorrEbeamgt1887.4/";
-	gSystem->Exec("mkdir " + KEDR);
-        gSystem->Exec("cp /store/users/ovtin/outDmeson/demo/index.php " + KEDR);
-	list_badruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/badruns";
-	fout_result=dir_out + "/" + "kp_exp_1.0173_2016-17.dat";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_merge/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_KemcAllowedOn_kNoiseReject3_kXTKey0_KcExp0/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_withDCnoise_KemcAllowedOn_kNoiseReject3_kXTKey0_KcExp0/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_woDCnoise_KemcAllowedOn_kNoiseReject3_kXTKey0_KcExp0/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_KemcAllowedOff_kNoiseReject3_kXTKey0_KcExp0/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_withDCnoise_KemcAllowedOff_kNoiseReject3_kXTKey0_KcExp0/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_woDCnoise_KemcAllowedOff_kNoiseReject3_kXTKey0_KcExp0/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_KemcAllowedOn_kNoiseReject3_MUcut/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_KemcAllowedOff_kNoiseReject3_KtofAllowed0_kIPalternative1_dEinFit0.01_MUcut/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_KemcAllowedOff_kNoiseReject3_KtofAllowed0_kIPalternative1_dEinFit0.01/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_KemcAllowedOff_kNoiseReject3_kIPalternative1_dEinFit0.01/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_KemcAllowedOff_kNoiseReject3_dEinFit0.01/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_KemcAllowedOff_kNoiseReject3_dEinFit1/";
+        KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_KemcAllowedOn_kNoiseReject3_ATC/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_KemcAllowedOn_kNoiseReject3_dEinFit1_KinFitchanged/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_KemcAllowedOff_kNoiseReject3/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_KemcAllowedOn_kNoiseReject3_woDCBadStatusRuns/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_KemcAllowedOn_kNoiseReject3_RunsLT23886/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_withDCnoise_KemcAllowedOn_kNoiseReject3_woDCBadStatusRuns/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_woDCnoise_KemcAllowedOn_wokNoiseReject3/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_KemcAllowedOff/";
+	//list_badruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/badruns";
+	//fout_result=dir_out + "/" + "kp_exp_1.0173_2016-17_woDCnoise_KemcAllowedOff.dat";
+	//fout_result=dir_out + "/" + "kp_exp_1.0173_2016-17_withDCnoise_KemcAllowedOff.dat";
+	//fout_result=dir_out + "/" + "kp_exp_1.0173_2016-17_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0.dat";
+	//fout_result=dir_out + "/" + "kp_exp_1.0173_2016-17_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_woDCBadStatusRuns.dat";
+	//fout_result=dir_out + "/" + "kp_exp_1.0173_2016-17_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_RunsLT23886.dat";
+	//fout_result=dir_out + "/" + "kp_exp_1.0173_2016-17_withDCnoise_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_woDCBadStatusRuns.dat";
+	//fout_result=dir_out + "/" + "kp_exp_1.0173_2016-17_withDCnoise_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0.dat";
+	//fout_result=dir_out + "/" + "kp_exp_1.0173_2016-17_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0.dat";
+	//fout_result=dir_out + "/" + "kp_exp_1.0173_2016-17_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_KtofAllowed0_kIPalternative1_dEinFit0.01_MUcut.dat";
+	//fout_result=dir_out + "/" + "kp_exp_1.0173_2016-17_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_KtofAllowed0_kIPalternative1_dEinFit0.01.dat";
+	//fout_result=dir_out + "/" + "kp_exp_1.0173_2016-17_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_kIPalternative1_dEinFit0.01.dat";
+	//fout_result=dir_out + "/" + "kp_exp_1.0173_2016-17_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_dEinFit0.01.dat";
+	//fout_result=dir_out + "/" + "kp_exp_1.0173_2016-17_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_dEinFit1.dat";
+	//fout_result=dir_out + "/" + "kp_exp_1.0173_2016-17_KemcAllowedOn_kNoiseReject3_dEinFit1_KinFitchanged.dat";
+	fout_result=dir_out + "/" + "kp_exp_1.0173_2016-17_KemcAllowedOn_kNoiseReject3_ATC.dat";
     }
     else if (key==4)        //exp 2004
     {
@@ -171,9 +199,13 @@ int main(int argc, char* argv[])
 	deCut1=-300; deCut2=300;
 	mbcCut1=1800, mbcCut2=1900;
 	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_sig_%d.root",key).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Sig/";
-        //KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Sig_test/";
-	fout_result=dir_out + "/" + "kp_signal_def.dat";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Sig/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Sig_withDCnoise_KemcAllowedOff/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Sig_woDCnoise_KemcAllowedOff/";
+        KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Sig_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Sig_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0/";
+	//fout_result=dir_out + "/" + "kp_signal_def.dat";
+	fout_result=dir_out + "/" + "kp_signal_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0.dat";
     }
     else if (key==2)        //uds
     {
@@ -181,8 +213,11 @@ int main(int argc, char* argv[])
 	deCut1=-300; deCut2=300;
 	mbcCut1=1700, mbcCut2=1900;
 	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_BG_continium_%d.root",key).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_continium/";
-	fout_result=dir_out + "/" + "kp_uds.dat";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_continium/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_continium_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/";
+        KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_continium_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0/";
+	//fout_result=dir_out + "/" + "kp_uds.dat";
+	fout_result=dir_out + "/" + "kp_uds_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0.dat";
     }
     else if (key==3)        //ddBG
     {
@@ -190,9 +225,16 @@ int main(int argc, char* argv[])
 	deCut1=-300; deCut2=300;
 	mbcCut1=1700, mbcCut2=1900;
 	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_BG_eetoDD_%d.root",key).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_eetodd/";
-	fout_result=dir_out + "/" + "kp_dbck.dat";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_eetodd/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_eetodd_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/";
+        KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_eetodd_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0/";
+	//fout_result=dir_out + "/" + "kp_dbck.dat";
+	fout_result=dir_out + "/" + "kp_dbck_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0.dat";
     }
+
+    gSystem->Exec("mkdir " + KEDR);
+    gSystem->Exec("cp /store/users/ovtin/outDmeson/demo/index.php " + KEDR);
+
     cout<<fnameout<<endl;
     fout = new TFile(fnameout,"RECREATE");
 
@@ -375,183 +417,7 @@ int main(int argc, char* argv[])
 	tt->GetEntry(k);
 
 	if( runprev!=Dmeson.Run
-           
-	   && (Dmeson.Run!=23307 && Dmeson.Run!=23313 && Dmeson.Run!=23342 && Dmeson.Run!=23353 && Dmeson.Run!=23423
-	       && Dmeson.Run!=23429 && Dmeson.Run!=23466 && Dmeson.Run!=23467 && Dmeson.Run!=23470 && Dmeson.Run!=23562
-               && Dmeson.Run!=23564 && Dmeson.Run!=23626 && Dmeson.Run!=23632 && Dmeson.Run!=23635 && Dmeson.Run!=23636
-	       && Dmeson.Run!=23642 && Dmeson.Run!=23643 && Dmeson.Run!=23656 && Dmeson.Run!=23658 && Dmeson.Run!=23663
-	       && Dmeson.Run!=23665 && Dmeson.Run!=23666 && Dmeson.Run!=23667 && Dmeson.Run!=23668 && Dmeson.Run!=23669
-	       && Dmeson.Run!=23674 && Dmeson.Run!=23675 && Dmeson.Run!=23677 && Dmeson.Run!=23678 && Dmeson.Run!=23679
-               && Dmeson.Run!=23688 && Dmeson.Run!=23689 && Dmeson.Run!=23691 && Dmeson.Run!=23693 && Dmeson.Run!=23694
-               && Dmeson.Run!=23695 && Dmeson.Run!=23696 && Dmeson.Run!=23702 && Dmeson.Run!=23703 && Dmeson.Run!=23704
-               && Dmeson.Run!=23706 && Dmeson.Run!=23707 && Dmeson.Run!=23708 && Dmeson.Run!=23709 && Dmeson.Run!=23710
-               && Dmeson.Run!=23712 && Dmeson.Run!=23713 && Dmeson.Run!=23714 && Dmeson.Run!=23721 && Dmeson.Run!=23722
-               && Dmeson.Run!=23723 && Dmeson.Run!=23724 && Dmeson.Run!=23725 && Dmeson.Run!=23727 && Dmeson.Run!=23746
-               && Dmeson.Run!=23747 && Dmeson.Run!=23748 && Dmeson.Run!=23749 && Dmeson.Run!=23755 && Dmeson.Run!=23756
-               && Dmeson.Run!=23757 && Dmeson.Run!=23759 && Dmeson.Run!=23809 && Dmeson.Run!=23811 && Dmeson.Run!=23812
-               && Dmeson.Run!=23813 && Dmeson.Run!=23814 && Dmeson.Run!=23815 && Dmeson.Run!=23817 && Dmeson.Run!=23819
-               && Dmeson.Run!=23820 && Dmeson.Run!=23822 && Dmeson.Run!=23823 && Dmeson.Run!=23824 && Dmeson.Run!=23825
-               && Dmeson.Run!=23826 && Dmeson.Run!=23828 && Dmeson.Run!=23829 && Dmeson.Run!=23830 && Dmeson.Run!=23831
-               && Dmeson.Run!=23833 && Dmeson.Run!=23834 && Dmeson.Run!=23835 && Dmeson.Run!=23836 && Dmeson.Run!=23838
-               && Dmeson.Run!=23858 && Dmeson.Run!=23859 && Dmeson.Run!=23860 && Dmeson.Run!=23861 && Dmeson.Run!=23867
-               && Dmeson.Run!=23868 && Dmeson.Run!=23869 && Dmeson.Run!=23872 && Dmeson.Run!=23876 && Dmeson.Run!=23877
-               && Dmeson.Run!=23881 && Dmeson.Run!=23882 && Dmeson.Run!=23893 && Dmeson.Run!=23895 && Dmeson.Run!=23898
-               && Dmeson.Run!=23900 && Dmeson.Run!=23904 && Dmeson.Run!=23917 && Dmeson.Run!=23937 && Dmeson.Run!=23940
-               && Dmeson.Run!=24814 && Dmeson.Run!=24819 && Dmeson.Run!=24821 && Dmeson.Run!=24822 && Dmeson.Run!=24831
-               && Dmeson.Run!=24844 && Dmeson.Run!=24845 && Dmeson.Run!=24851 && Dmeson.Run!=24859 && Dmeson.Run!=24866
-               && Dmeson.Run!=24867 && Dmeson.Run!=24870 && Dmeson.Run!=24876 && Dmeson.Run!=24893 && Dmeson.Run!=24904
-               && Dmeson.Run!=24915 && Dmeson.Run!=24916 && Dmeson.Run!=25064 && Dmeson.Run!=25074 && Dmeson.Run!=25079
-               && Dmeson.Run!=25105 && Dmeson.Run!=25158 && Dmeson.Run!=25159 && Dmeson.Run!=25173 && Dmeson.Run!=25176
-               && Dmeson.Run!=25177 && Dmeson.Run!=25179 && Dmeson.Run!=25182 && Dmeson.Run!=25183 && Dmeson.Run!=25184
-               && Dmeson.Run!=25198 && Dmeson.Run!=25200 && Dmeson.Run!=25209 && Dmeson.Run!=25210 && Dmeson.Run!=25211
-               && Dmeson.Run!=25212 && Dmeson.Run!=25214 && Dmeson.Run!=25219 && Dmeson.Run!=25222 && Dmeson.Run!=25223
-               && Dmeson.Run!=25225 && Dmeson.Run!=25226 && Dmeson.Run!=25227 && Dmeson.Run!=25228 && Dmeson.Run!=25230
-               && Dmeson.Run!=25236 && Dmeson.Run!=25347 && Dmeson.Run!=25349 && Dmeson.Run!=25351 && Dmeson.Run!=25358
-               && Dmeson.Run!=25359 && Dmeson.Run!=25371 && Dmeson.Run!=25403 && Dmeson.Run!=25404 && Dmeson.Run!=25405
-               && Dmeson.Run!=25407 && Dmeson.Run!=25409 && Dmeson.Run!=25410 && Dmeson.Run!=25411 && Dmeson.Run!=25413
-               && Dmeson.Run!=25414 && Dmeson.Run!=25415 && Dmeson.Run!=25421 && Dmeson.Run!=25423 && Dmeson.Run!=25425
-               && Dmeson.Run!=25433 && Dmeson.Run!=25435 && Dmeson.Run!=25444 && Dmeson.Run!=25514 && Dmeson.Run!=25515
-               && Dmeson.Run!=25519 && Dmeson.Run!=25520 && Dmeson.Run!=25523 && Dmeson.Run!=25524 && Dmeson.Run!=25569
-               && Dmeson.Run!=25599 && Dmeson.Run!=25605 && Dmeson.Run!=25622 && Dmeson.Run!=25628 && Dmeson.Run!=25637
-               && Dmeson.Run!=25684 && Dmeson.Run!=26058 && Dmeson.Run!=26059 && Dmeson.Run!=26062 && Dmeson.Run!=26063
-               && Dmeson.Run!=26064 && Dmeson.Run!=26065 && Dmeson.Run!=26072 && Dmeson.Run!=26073 && Dmeson.Run!=26074
-               && Dmeson.Run!=26075 && Dmeson.Run!=26077 && Dmeson.Run!=26078 && Dmeson.Run!=26079 && Dmeson.Run!=26091
-               && Dmeson.Run!=26093 && Dmeson.Run!=26094 && Dmeson.Run!=26095 && Dmeson.Run!=26096 && Dmeson.Run!=26098
-               && Dmeson.Run!=26100 && Dmeson.Run!=26101 && Dmeson.Run!=26126 && Dmeson.Run!=26127 && Dmeson.Run!=26128
-               && Dmeson.Run!=26129 && Dmeson.Run!=26131 && Dmeson.Run!=26132 && Dmeson.Run!=26133 && Dmeson.Run!=26134
-               && Dmeson.Run!=26147 && Dmeson.Run!=26148 && Dmeson.Run!=26150 && Dmeson.Run!=26151
-	      )   //noise <8%
-             
            /*
-	   && (Dmeson.Run==23307 || Dmeson.Run==23313 || Dmeson.Run==23342 || Dmeson.Run==23353 || Dmeson.Run==23423
-	       || Dmeson.Run==23429 || Dmeson.Run==23466 || Dmeson.Run==23467 || Dmeson.Run==23470 || Dmeson.Run==23562
-               || Dmeson.Run==23564 || Dmeson.Run==23626 || Dmeson.Run==23632 || Dmeson.Run==23635 || Dmeson.Run==23636
-	       || Dmeson.Run==23642 || Dmeson.Run==23643 || Dmeson.Run==23656 || Dmeson.Run==23658 || Dmeson.Run==23663
-	       || Dmeson.Run==23665 || Dmeson.Run==23666 || Dmeson.Run==23667 || Dmeson.Run==23668 || Dmeson.Run==23669
-	       || Dmeson.Run==23674 || Dmeson.Run==23675 || Dmeson.Run==23677 || Dmeson.Run==23678 || Dmeson.Run==23679
-               || Dmeson.Run==23688 || Dmeson.Run==23689 || Dmeson.Run==23691 || Dmeson.Run==23693 || Dmeson.Run==23694
-               || Dmeson.Run==23695 || Dmeson.Run==23696 || Dmeson.Run==23702 || Dmeson.Run==23703 || Dmeson.Run==23704
-               || Dmeson.Run==23706 || Dmeson.Run==23707 || Dmeson.Run==23708 || Dmeson.Run==23709 || Dmeson.Run==23710
-               || Dmeson.Run==23712 || Dmeson.Run==23713 || Dmeson.Run==23714 || Dmeson.Run==23721 || Dmeson.Run==23722
-               || Dmeson.Run==23723 || Dmeson.Run==23724 || Dmeson.Run==23725 || Dmeson.Run==23727 || Dmeson.Run==23746
-               || Dmeson.Run==23747 || Dmeson.Run==23748 || Dmeson.Run==23749 || Dmeson.Run==23755 || Dmeson.Run==23756
-               || Dmeson.Run==23757 || Dmeson.Run==23759 || Dmeson.Run==23809 || Dmeson.Run==23811 || Dmeson.Run==23812
-               || Dmeson.Run==23813 || Dmeson.Run==23814 || Dmeson.Run==23815 || Dmeson.Run==23817 || Dmeson.Run==23819
-               || Dmeson.Run==23820 || Dmeson.Run==23822 || Dmeson.Run==23823 || Dmeson.Run==23824 || Dmeson.Run==23825
-               || Dmeson.Run==23826 || Dmeson.Run==23828 || Dmeson.Run==23829 || Dmeson.Run==23830 || Dmeson.Run==23831
-               || Dmeson.Run==23833 || Dmeson.Run==23834 || Dmeson.Run==23835 || Dmeson.Run==23836 || Dmeson.Run==23838
-               || Dmeson.Run==23858 || Dmeson.Run==23859 || Dmeson.Run==23860 || Dmeson.Run==23861 || Dmeson.Run==23867
-               || Dmeson.Run==23868 || Dmeson.Run==23869 || Dmeson.Run==23872 || Dmeson.Run==23876 || Dmeson.Run==23877
-               || Dmeson.Run==23881 || Dmeson.Run==23882 || Dmeson.Run==23893 || Dmeson.Run==23895 || Dmeson.Run==23898
-               || Dmeson.Run==23900 || Dmeson.Run==23904 || Dmeson.Run==23917 || Dmeson.Run==23937 || Dmeson.Run==23940
-               || Dmeson.Run==24814 || Dmeson.Run==24819 || Dmeson.Run==24821 || Dmeson.Run==24822 || Dmeson.Run==24831
-               || Dmeson.Run==24844 || Dmeson.Run==24845 || Dmeson.Run==24851 || Dmeson.Run==24859 || Dmeson.Run==24866
-               || Dmeson.Run==24867 || Dmeson.Run==24870 || Dmeson.Run==24876 || Dmeson.Run==24893 || Dmeson.Run==24904
-               || Dmeson.Run==24915 || Dmeson.Run==24916 || Dmeson.Run==25064 || Dmeson.Run==25074 || Dmeson.Run==25079
-               || Dmeson.Run==25105 || Dmeson.Run==25158 || Dmeson.Run==25159 || Dmeson.Run==25173 || Dmeson.Run==25176
-               || Dmeson.Run==25177 || Dmeson.Run==25179 || Dmeson.Run==25182 || Dmeson.Run==25183 || Dmeson.Run==25184
-               || Dmeson.Run==25198 || Dmeson.Run==25200 || Dmeson.Run==25209 || Dmeson.Run==25210 || Dmeson.Run==25211
-               || Dmeson.Run==25212 || Dmeson.Run==25214 || Dmeson.Run==25219 || Dmeson.Run==25222 || Dmeson.Run==25223
-               || Dmeson.Run==25225 || Dmeson.Run==25226 || Dmeson.Run==25227 || Dmeson.Run==25228 || Dmeson.Run==25230
-               || Dmeson.Run==25236 || Dmeson.Run==25347 || Dmeson.Run==25349 || Dmeson.Run==25351 || Dmeson.Run==25358
-               || Dmeson.Run==25359 || Dmeson.Run==25371 || Dmeson.Run==25403 || Dmeson.Run==25404 || Dmeson.Run==25405
-               || Dmeson.Run==25407 || Dmeson.Run==25409 || Dmeson.Run==25410 || Dmeson.Run==25411 || Dmeson.Run==25413
-               || Dmeson.Run==25414 || Dmeson.Run==25415 || Dmeson.Run==25421 || Dmeson.Run==25423 || Dmeson.Run==25425
-               || Dmeson.Run==25433 || Dmeson.Run==25435 || Dmeson.Run==25444 || Dmeson.Run==25514 || Dmeson.Run==25515
-               || Dmeson.Run==25519 || Dmeson.Run==25520 || Dmeson.Run==25523 || Dmeson.Run==25524 || Dmeson.Run==25569
-               || Dmeson.Run==25599 || Dmeson.Run==25605 || Dmeson.Run==25622 || Dmeson.Run==25628 || Dmeson.Run==25637
-               || Dmeson.Run==25684 || Dmeson.Run==26058 || Dmeson.Run==26059 || Dmeson.Run==26062 || Dmeson.Run==26063
-               || Dmeson.Run==26064 || Dmeson.Run==26065 || Dmeson.Run==26072 || Dmeson.Run==26073 || Dmeson.Run==26074
-               || Dmeson.Run==26075 || Dmeson.Run==26077 || Dmeson.Run==26078 || Dmeson.Run==26079 || Dmeson.Run==26091
-               || Dmeson.Run==26093 || Dmeson.Run==26094 || Dmeson.Run==26095 || Dmeson.Run==26096 || Dmeson.Run==26098
-               || Dmeson.Run==26100 || Dmeson.Run==26101 || Dmeson.Run==26126 || Dmeson.Run==26127 || Dmeson.Run==26128
-               || Dmeson.Run==26129 || Dmeson.Run==26131 || Dmeson.Run==26132 || Dmeson.Run==26133 || Dmeson.Run==26134
-               || Dmeson.Run==26147 || Dmeson.Run==26148 || Dmeson.Run==26150 || Dmeson.Run==26151
-	       )   //noise >=8%
-            */
-	  )
-	{
-	    //cout<<"Dmeson.run="<<Dmeson.Run<<endl;
-	    goodruns.push_back(Dmeson.Run);
-             
-	    KDBconn* conn = kdb_open();
-
-	    if (!conn) {
-		printf("Can not connect to database\n");
-	    }
-
-	    runTime_begin=kdb_run_get_begin_time(conn, Dmeson.Run);
-	    runTime_end=kdb_run_get_end_time(conn, Dmeson.Run);
-	    if(verbose==1)
-	    {
-		cout<<"||||||||||||||||||||||||=======  Next RUN ========|||||||||||||||||||||||||||||||||"<<endl;
-		cout<<"Begin time of Run"<<Dmeson.Run<<": "<<timestamp(runTime_begin)<<endl;
-		cout<<"End time of Run"<<Dmeson.Run<<": "<<timestamp(runTime_end)<<endl;
-	    }
-            //static const int lum_table_id=2007, lum_table_length=24;
-	    static const int e_table_id=2119, e_table_length=16;
-
-            //static float lum_e=0, lum_p=0;
-	    //int buflum[32];
-	    //if( kdb_read_for_run(conn,lum_table_id,Dmeson.Run,buflum,lum_table_length) ) {
-	    //	lum_p=buflum[0]*1E-3;
-	    //	lum_e=buflum[1]*1E-3;
-	    //}
-	    //kdb_setver(conn,0);
-	    //cout<<"Lum_p="<<lum_p<<"\t"<<"Lum_e="<<lum_e<<"\t"<<"slum_p="<<slum_p<<"\t"<<"slum_e="<<slum_e<<endl;
-            //if( lum_p<100 ) slum_p += lum_p; //nb^-1
-            //if( lum_e<100 ) slum_e += lum_e; //nb^-1
-
-	    float beam_energy=0;
-            int bufenergy[e_table_length];
-	    if( kdb_read_for_run(conn,e_table_id,Dmeson.Run,bufenergy,e_table_length) ) {
-		beam_energy=bufenergy[1]*1E-6;
-	    }
-	    kdb_close(conn);
-
-            hDBEn->Fill(beam_energy);
-            if(verbose==1) cout<<"DB beam energy is "<<beam_energy<<endl;
-
-	    double en=0, en_err=0, lum=0;
-	    int t;
-            get_run_lumi(Dmeson.Run, &en, &en_err, &lum, &t);
-	    if(verbose==1) cout<<"Lum="<<lum*0.001<<"\t"<<"slum="<<slum<<endl;
-            if( lum*0.001>0. && lum*0.001<100. ) slum += lum*0.001; //nb^-1
-            hLum->Fill(runTime_begin,lum*0.001);
-          
-	}
-
-	//if( (key==0 || key==4) && Dmeson.vrtntrk==2 &&  Dmeson.theta2t>172 && Dmeson.phi2t>172 ) continue;
-
-	if(
-	   Dmeson.de>=min_dE && Dmeson.de<=max_dE
-           && Dmeson.mbc>=min_Mbc && Dmeson.mbc<=max_Mbc
-	   && Dmeson.vrtntrk>=ntrk
-	   && Dmeson.pt1>min_pt && Dmeson.pt1<max_pt && Dmeson.pt2>min_pt && Dmeson.pt2<max_pt
-	   && Dmeson.chi2t1<max_chi2 && Dmeson.chi2t2<max_chi2
-	   && Dmeson.nhitst1>=min_nhits && Dmeson.nhitst2>=min_nhits
-	   && Dmeson.nhitst1<=max_nhits && Dmeson.nhitst2<=max_nhits
-	   && Dmeson.rr1<rrCut && Dmeson.rr2<rrCut
-	   && fabs(Dmeson.zip1)<zCut && fabs(Dmeson.zip2)<zCut
-	   && Dmeson.ecls1<eclsCut && Dmeson.ecls2<eclsCut
-	   && (Dmeson.mulayerhits2+Dmeson.mulayerhits3)<=max_munhits
-	   //&& (Dmeson.mulayerhits1)<=1
-           //&& Dmeson.Ebeam>1887.0  //better
-           //&& Dmeson.Ebeam<=1886.80
-           //&& ( Dmeson.Ebeam>1887.20 && Dmeson.Ebeam<1887.40 )
-           //&& Dmeson.Ebeam>1887.4  //better
-	   //&& (Dmeson.Run<23809 || Dmeson.Run>23838)
-	   //&& (Dmeson.Run>23600 && Dmeson.Run<23800)
-	   //&& (Dmeson.Run>23942 && Dmeson.Run<24835)
-	   //&& (Dmeson.Run<23495 || Dmeson.Run>23642)
-	   //&& (Dmeson.Run<24629 || Dmeson.Run>24647)
-	   //&& (Dmeson.Run>=23495 && Dmeson.Run<=23642)
-	   //&& (Dmeson.Run>=24629 && Dmeson.Run<=24647)
-	   //&& (Dmeson.Run>=23743 && Dmeson.Run<=23905)
-	   //&& (Dmeson.Run>=23556 && Dmeson.Run<=23567)
-	   //&& (Dmeson.Run>=23211 && Dmeson.Run<=23567)   //>1822.0
-	   //&& (Dmeson.Run>=23211 && Dmeson.Run<=23567)   //>1822.0
-           
 	   && (Dmeson.Run!=23307 && Dmeson.Run!=23313 && Dmeson.Run!=23342 && Dmeson.Run!=23353 && Dmeson.Run!=23423
 	       && Dmeson.Run!=23429 && Dmeson.Run!=23466 && Dmeson.Run!=23467 && Dmeson.Run!=23470 && Dmeson.Run!=23562
                && Dmeson.Run!=23564 && Dmeson.Run!=23626 && Dmeson.Run!=23632 && Dmeson.Run!=23635 && Dmeson.Run!=23636
@@ -597,7 +463,7 @@ int main(int argc, char* argv[])
                && Dmeson.Run!=26129 && Dmeson.Run!=26131 && Dmeson.Run!=26132 && Dmeson.Run!=26133 && Dmeson.Run!=26134
                && Dmeson.Run!=26147 && Dmeson.Run!=26148 && Dmeson.Run!=26150 && Dmeson.Run!=26151
 	      )   //noise <8%
-            
+           */
            /*
 	   && (Dmeson.Run==23307 || Dmeson.Run==23313 || Dmeson.Run==23342 || Dmeson.Run==23353 || Dmeson.Run==23423
 	       || Dmeson.Run==23429 || Dmeson.Run==23466 || Dmeson.Run==23467 || Dmeson.Run==23470 || Dmeson.Run==23562
@@ -645,6 +511,189 @@ int main(int argc, char* argv[])
                || Dmeson.Run==26147 || Dmeson.Run==26148 || Dmeson.Run==26150 || Dmeson.Run==26151
 	       )   //noise >=8%
               */
+	  )
+	{
+	    //cout<<"Dmeson.run="<<Dmeson.Run<<endl;
+	    goodruns.push_back(Dmeson.Run);
+
+	    KDBconn* conn = kdb_open();
+
+	    if (!conn) {
+		printf("Can not connect to database\n");
+	    }
+
+	    runTime_begin=kdb_run_get_begin_time(conn, Dmeson.Run);
+	    runTime_end=kdb_run_get_end_time(conn, Dmeson.Run);
+	    if(verbose==1)
+	    {
+		cout<<"||||||||||||||||||||||||=======  Next RUN ========|||||||||||||||||||||||||||||||||"<<endl;
+		cout<<"Begin time of Run"<<Dmeson.Run<<": "<<timestamp(runTime_begin)<<endl;
+		cout<<"End time of Run"<<Dmeson.Run<<": "<<timestamp(runTime_end)<<endl;
+	    }
+            //static const int lum_table_id=2007, lum_table_length=24;
+	    static const int e_table_id=2119, e_table_length=16;
+
+            //static float lum_e=0, lum_p=0;
+	    //int buflum[32];
+	    //if( kdb_read_for_run(conn,lum_table_id,Dmeson.Run,buflum,lum_table_length) ) {
+	    //	lum_p=buflum[0]*1E-3;
+	    //	lum_e=buflum[1]*1E-3;
+	    //}
+	    //kdb_setver(conn,0);
+	    //cout<<"Lum_p="<<lum_p<<"\t"<<"Lum_e="<<lum_e<<"\t"<<"slum_p="<<slum_p<<"\t"<<"slum_e="<<slum_e<<endl;
+            //if( lum_p<100 ) slum_p += lum_p; //nb^-1
+            //if( lum_e<100 ) slum_e += lum_e; //nb^-1
+
+	    float beam_energy=0;
+            int bufenergy[e_table_length];
+	    if( kdb_read_for_run(conn,e_table_id,Dmeson.Run,bufenergy,e_table_length) ) {
+		beam_energy=bufenergy[1]*1E-6;
+	    }
+	    kdb_close(conn);
+
+            hDBEn->Fill(beam_energy);
+            if(verbose==1) cout<<"DB beam energy is "<<beam_energy<<endl;
+
+	    double en=0, en_err=0, lum=0;
+	    int t;
+            get_run_lumi(Dmeson.Run, &en, &en_err, &lum, &t);
+	    if(verbose==1) cout<<"Lum="<<lum*0.001<<"\t"<<"slum="<<slum<<endl;
+            if( lum*0.001>0. && lum*0.001<100. ) slum += lum*0.001; //nb^-1
+            hLum->Fill(runTime_begin,lum*0.001);
+
+	}
+
+	//if( (key==0 || key==4) && Dmeson.vrtntrk==2 &&  Dmeson.theta2t>172 && Dmeson.phi2t>172 ) continue;
+
+	if(
+	   Dmeson.de>=min_dE && Dmeson.de<=max_dE
+           && Dmeson.mbc>=min_Mbc && Dmeson.mbc<=max_Mbc
+	   && Dmeson.vrtntrk>=ntrk
+	   && Dmeson.pt1>min_pt && Dmeson.pt1<max_pt && Dmeson.pt2>min_pt && Dmeson.pt2<max_pt
+	   && Dmeson.chi2t1<max_chi2 && Dmeson.chi2t2<max_chi2
+	   && Dmeson.nhitst1>=min_nhits && Dmeson.nhitst2>=min_nhits
+	   && Dmeson.nhitst1<=max_nhits && Dmeson.nhitst2<=max_nhits
+	   && Dmeson.rr1<rrCut && Dmeson.rr2<rrCut
+	   && fabs(Dmeson.zip1)<zCut && fabs(Dmeson.zip2)<zCut
+	   && Dmeson.ecls1<eclsCut && Dmeson.ecls2<eclsCut
+	   && (Dmeson.mulayerhits2+Dmeson.mulayerhits3)<=max_munhits
+           /*
+	   && (Dmeson.Run<23478 || Dmeson.Run>23524)  //7 layer DC with problems
+           && (Dmeson.Run<23746 || Dmeson.Run>23808)  //7+6 layer DC with problems
+           */
+	   //&& (Dmeson.Run<23435 || Dmeson.Run>23808)
+	   //&& (Dmeson.Run<23858 || Dmeson.Run>23866)
+	   //&& (Dmeson.Run<23886)
+	   //&& (Dmeson.mulayerhits1)<=1
+           //&& Dmeson.Ebeam>1887.0  //better
+           //&& Dmeson.Ebeam<=1886.80
+           //&& ( Dmeson.Ebeam>1887.20 && Dmeson.Ebeam<1887.40 )
+           //&& Dmeson.Ebeam>1887.4  //better
+	   //&& (Dmeson.Run<23809 || Dmeson.Run>23838)
+	   //&& (Dmeson.Run>23600 && Dmeson.Run<23800)
+	   //&& (Dmeson.Run>23942 && Dmeson.Run<24835)
+	   //&& (Dmeson.Run<23495 || Dmeson.Run>23642)
+	   //&& (Dmeson.Run<24629 || Dmeson.Run>24647)
+	   //&& (Dmeson.Run>=23495 && Dmeson.Run<=23642)
+	   //&& (Dmeson.Run>=24629 && Dmeson.Run<=24647)
+	   //&& (Dmeson.Run>=23743 && Dmeson.Run<=23905)
+	   //&& (Dmeson.Run>=23556 && Dmeson.Run<=23567)
+	   //&& (Dmeson.Run>=23211 && Dmeson.Run<=23567)   //>1822.0
+	   //&& (Dmeson.Run>=23211 && Dmeson.Run<=23567)   //>1822.0
+           /*
+	   && (Dmeson.Run!=23307 && Dmeson.Run!=23313 && Dmeson.Run!=23342 && Dmeson.Run!=23353 && Dmeson.Run!=23423
+	       && Dmeson.Run!=23429 && Dmeson.Run!=23466 && Dmeson.Run!=23467 && Dmeson.Run!=23470 && Dmeson.Run!=23562
+               && Dmeson.Run!=23564 && Dmeson.Run!=23626 && Dmeson.Run!=23632 && Dmeson.Run!=23635 && Dmeson.Run!=23636
+	       && Dmeson.Run!=23642 && Dmeson.Run!=23643 && Dmeson.Run!=23656 && Dmeson.Run!=23658 && Dmeson.Run!=23663
+	       && Dmeson.Run!=23665 && Dmeson.Run!=23666 && Dmeson.Run!=23667 && Dmeson.Run!=23668 && Dmeson.Run!=23669
+	       && Dmeson.Run!=23674 && Dmeson.Run!=23675 && Dmeson.Run!=23677 && Dmeson.Run!=23678 && Dmeson.Run!=23679
+               && Dmeson.Run!=23688 && Dmeson.Run!=23689 && Dmeson.Run!=23691 && Dmeson.Run!=23693 && Dmeson.Run!=23694
+               && Dmeson.Run!=23695 && Dmeson.Run!=23696 && Dmeson.Run!=23702 && Dmeson.Run!=23703 && Dmeson.Run!=23704
+               && Dmeson.Run!=23706 && Dmeson.Run!=23707 && Dmeson.Run!=23708 && Dmeson.Run!=23709 && Dmeson.Run!=23710
+               && Dmeson.Run!=23712 && Dmeson.Run!=23713 && Dmeson.Run!=23714 && Dmeson.Run!=23721 && Dmeson.Run!=23722
+               && Dmeson.Run!=23723 && Dmeson.Run!=23724 && Dmeson.Run!=23725 && Dmeson.Run!=23727 && Dmeson.Run!=23746
+               && Dmeson.Run!=23747 && Dmeson.Run!=23748 && Dmeson.Run!=23749 && Dmeson.Run!=23755 && Dmeson.Run!=23756
+               && Dmeson.Run!=23757 && Dmeson.Run!=23759 && Dmeson.Run!=23809 && Dmeson.Run!=23811 && Dmeson.Run!=23812
+               && Dmeson.Run!=23813 && Dmeson.Run!=23814 && Dmeson.Run!=23815 && Dmeson.Run!=23817 && Dmeson.Run!=23819
+               && Dmeson.Run!=23820 && Dmeson.Run!=23822 && Dmeson.Run!=23823 && Dmeson.Run!=23824 && Dmeson.Run!=23825
+               && Dmeson.Run!=23826 && Dmeson.Run!=23828 && Dmeson.Run!=23829 && Dmeson.Run!=23830 && Dmeson.Run!=23831
+               && Dmeson.Run!=23833 && Dmeson.Run!=23834 && Dmeson.Run!=23835 && Dmeson.Run!=23836 && Dmeson.Run!=23838
+               && Dmeson.Run!=23858 && Dmeson.Run!=23859 && Dmeson.Run!=23860 && Dmeson.Run!=23861 && Dmeson.Run!=23867
+               && Dmeson.Run!=23868 && Dmeson.Run!=23869 && Dmeson.Run!=23872 && Dmeson.Run!=23876 && Dmeson.Run!=23877
+               && Dmeson.Run!=23881 && Dmeson.Run!=23882 && Dmeson.Run!=23893 && Dmeson.Run!=23895 && Dmeson.Run!=23898
+               && Dmeson.Run!=23900 && Dmeson.Run!=23904 && Dmeson.Run!=23917 && Dmeson.Run!=23937 && Dmeson.Run!=23940
+               && Dmeson.Run!=24814 && Dmeson.Run!=24819 && Dmeson.Run!=24821 && Dmeson.Run!=24822 && Dmeson.Run!=24831
+               && Dmeson.Run!=24844 && Dmeson.Run!=24845 && Dmeson.Run!=24851 && Dmeson.Run!=24859 && Dmeson.Run!=24866
+               && Dmeson.Run!=24867 && Dmeson.Run!=24870 && Dmeson.Run!=24876 && Dmeson.Run!=24893 && Dmeson.Run!=24904
+               && Dmeson.Run!=24915 && Dmeson.Run!=24916 && Dmeson.Run!=25064 && Dmeson.Run!=25074 && Dmeson.Run!=25079
+               && Dmeson.Run!=25105 && Dmeson.Run!=25158 && Dmeson.Run!=25159 && Dmeson.Run!=25173 && Dmeson.Run!=25176
+               && Dmeson.Run!=25177 && Dmeson.Run!=25179 && Dmeson.Run!=25182 && Dmeson.Run!=25183 && Dmeson.Run!=25184
+               && Dmeson.Run!=25198 && Dmeson.Run!=25200 && Dmeson.Run!=25209 && Dmeson.Run!=25210 && Dmeson.Run!=25211
+               && Dmeson.Run!=25212 && Dmeson.Run!=25214 && Dmeson.Run!=25219 && Dmeson.Run!=25222 && Dmeson.Run!=25223
+               && Dmeson.Run!=25225 && Dmeson.Run!=25226 && Dmeson.Run!=25227 && Dmeson.Run!=25228 && Dmeson.Run!=25230
+               && Dmeson.Run!=25236 && Dmeson.Run!=25347 && Dmeson.Run!=25349 && Dmeson.Run!=25351 && Dmeson.Run!=25358
+               && Dmeson.Run!=25359 && Dmeson.Run!=25371 && Dmeson.Run!=25403 && Dmeson.Run!=25404 && Dmeson.Run!=25405
+               && Dmeson.Run!=25407 && Dmeson.Run!=25409 && Dmeson.Run!=25410 && Dmeson.Run!=25411 && Dmeson.Run!=25413
+               && Dmeson.Run!=25414 && Dmeson.Run!=25415 && Dmeson.Run!=25421 && Dmeson.Run!=25423 && Dmeson.Run!=25425
+               && Dmeson.Run!=25433 && Dmeson.Run!=25435 && Dmeson.Run!=25444 && Dmeson.Run!=25514 && Dmeson.Run!=25515
+               && Dmeson.Run!=25519 && Dmeson.Run!=25520 && Dmeson.Run!=25523 && Dmeson.Run!=25524 && Dmeson.Run!=25569
+               && Dmeson.Run!=25599 && Dmeson.Run!=25605 && Dmeson.Run!=25622 && Dmeson.Run!=25628 && Dmeson.Run!=25637
+               && Dmeson.Run!=25684 && Dmeson.Run!=26058 && Dmeson.Run!=26059 && Dmeson.Run!=26062 && Dmeson.Run!=26063
+               && Dmeson.Run!=26064 && Dmeson.Run!=26065 && Dmeson.Run!=26072 && Dmeson.Run!=26073 && Dmeson.Run!=26074
+               && Dmeson.Run!=26075 && Dmeson.Run!=26077 && Dmeson.Run!=26078 && Dmeson.Run!=26079 && Dmeson.Run!=26091
+               && Dmeson.Run!=26093 && Dmeson.Run!=26094 && Dmeson.Run!=26095 && Dmeson.Run!=26096 && Dmeson.Run!=26098
+               && Dmeson.Run!=26100 && Dmeson.Run!=26101 && Dmeson.Run!=26126 && Dmeson.Run!=26127 && Dmeson.Run!=26128
+               && Dmeson.Run!=26129 && Dmeson.Run!=26131 && Dmeson.Run!=26132 && Dmeson.Run!=26133 && Dmeson.Run!=26134
+               && Dmeson.Run!=26147 && Dmeson.Run!=26148 && Dmeson.Run!=26150 && Dmeson.Run!=26151
+	      )   //noise <8%
+            */
+            /*
+	   && (Dmeson.Run==23307 || Dmeson.Run==23313 || Dmeson.Run==23342 || Dmeson.Run==23353 || Dmeson.Run==23423
+	       || Dmeson.Run==23429 || Dmeson.Run==23466 || Dmeson.Run==23467 || Dmeson.Run==23470 || Dmeson.Run==23562
+               || Dmeson.Run==23564 || Dmeson.Run==23626 || Dmeson.Run==23632 || Dmeson.Run==23635 || Dmeson.Run==23636
+	       || Dmeson.Run==23642 || Dmeson.Run==23643 || Dmeson.Run==23656 || Dmeson.Run==23658 || Dmeson.Run==23663
+	       || Dmeson.Run==23665 || Dmeson.Run==23666 || Dmeson.Run==23667 || Dmeson.Run==23668 || Dmeson.Run==23669
+	       || Dmeson.Run==23674 || Dmeson.Run==23675 || Dmeson.Run==23677 || Dmeson.Run==23678 || Dmeson.Run==23679
+               || Dmeson.Run==23688 || Dmeson.Run==23689 || Dmeson.Run==23691 || Dmeson.Run==23693 || Dmeson.Run==23694
+               || Dmeson.Run==23695 || Dmeson.Run==23696 || Dmeson.Run==23702 || Dmeson.Run==23703 || Dmeson.Run==23704
+               || Dmeson.Run==23706 || Dmeson.Run==23707 || Dmeson.Run==23708 || Dmeson.Run==23709 || Dmeson.Run==23710
+               || Dmeson.Run==23712 || Dmeson.Run==23713 || Dmeson.Run==23714 || Dmeson.Run==23721 || Dmeson.Run==23722
+               || Dmeson.Run==23723 || Dmeson.Run==23724 || Dmeson.Run==23725 || Dmeson.Run==23727 || Dmeson.Run==23746
+               || Dmeson.Run==23747 || Dmeson.Run==23748 || Dmeson.Run==23749 || Dmeson.Run==23755 || Dmeson.Run==23756
+               || Dmeson.Run==23757 || Dmeson.Run==23759 || Dmeson.Run==23809 || Dmeson.Run==23811 || Dmeson.Run==23812
+               || Dmeson.Run==23813 || Dmeson.Run==23814 || Dmeson.Run==23815 || Dmeson.Run==23817 || Dmeson.Run==23819
+               || Dmeson.Run==23820 || Dmeson.Run==23822 || Dmeson.Run==23823 || Dmeson.Run==23824 || Dmeson.Run==23825
+               || Dmeson.Run==23826 || Dmeson.Run==23828 || Dmeson.Run==23829 || Dmeson.Run==23830 || Dmeson.Run==23831
+               || Dmeson.Run==23833 || Dmeson.Run==23834 || Dmeson.Run==23835 || Dmeson.Run==23836 || Dmeson.Run==23838
+               || Dmeson.Run==23858 || Dmeson.Run==23859 || Dmeson.Run==23860 || Dmeson.Run==23861 || Dmeson.Run==23867
+               || Dmeson.Run==23868 || Dmeson.Run==23869 || Dmeson.Run==23872 || Dmeson.Run==23876 || Dmeson.Run==23877
+               || Dmeson.Run==23881 || Dmeson.Run==23882 || Dmeson.Run==23893 || Dmeson.Run==23895 || Dmeson.Run==23898
+               || Dmeson.Run==23900 || Dmeson.Run==23904 || Dmeson.Run==23917 || Dmeson.Run==23937 || Dmeson.Run==23940
+               || Dmeson.Run==24814 || Dmeson.Run==24819 || Dmeson.Run==24821 || Dmeson.Run==24822 || Dmeson.Run==24831
+               || Dmeson.Run==24844 || Dmeson.Run==24845 || Dmeson.Run==24851 || Dmeson.Run==24859 || Dmeson.Run==24866
+               || Dmeson.Run==24867 || Dmeson.Run==24870 || Dmeson.Run==24876 || Dmeson.Run==24893 || Dmeson.Run==24904
+               || Dmeson.Run==24915 || Dmeson.Run==24916 || Dmeson.Run==25064 || Dmeson.Run==25074 || Dmeson.Run==25079
+               || Dmeson.Run==25105 || Dmeson.Run==25158 || Dmeson.Run==25159 || Dmeson.Run==25173 || Dmeson.Run==25176
+               || Dmeson.Run==25177 || Dmeson.Run==25179 || Dmeson.Run==25182 || Dmeson.Run==25183 || Dmeson.Run==25184
+               || Dmeson.Run==25198 || Dmeson.Run==25200 || Dmeson.Run==25209 || Dmeson.Run==25210 || Dmeson.Run==25211
+               || Dmeson.Run==25212 || Dmeson.Run==25214 || Dmeson.Run==25219 || Dmeson.Run==25222 || Dmeson.Run==25223
+               || Dmeson.Run==25225 || Dmeson.Run==25226 || Dmeson.Run==25227 || Dmeson.Run==25228 || Dmeson.Run==25230
+               || Dmeson.Run==25236 || Dmeson.Run==25347 || Dmeson.Run==25349 || Dmeson.Run==25351 || Dmeson.Run==25358
+               || Dmeson.Run==25359 || Dmeson.Run==25371 || Dmeson.Run==25403 || Dmeson.Run==25404 || Dmeson.Run==25405
+               || Dmeson.Run==25407 || Dmeson.Run==25409 || Dmeson.Run==25410 || Dmeson.Run==25411 || Dmeson.Run==25413
+               || Dmeson.Run==25414 || Dmeson.Run==25415 || Dmeson.Run==25421 || Dmeson.Run==25423 || Dmeson.Run==25425
+               || Dmeson.Run==25433 || Dmeson.Run==25435 || Dmeson.Run==25444 || Dmeson.Run==25514 || Dmeson.Run==25515
+               || Dmeson.Run==25519 || Dmeson.Run==25520 || Dmeson.Run==25523 || Dmeson.Run==25524 || Dmeson.Run==25569
+               || Dmeson.Run==25599 || Dmeson.Run==25605 || Dmeson.Run==25622 || Dmeson.Run==25628 || Dmeson.Run==25637
+               || Dmeson.Run==25684 || Dmeson.Run==26058 || Dmeson.Run==26059 || Dmeson.Run==26062 || Dmeson.Run==26063
+               || Dmeson.Run==26064 || Dmeson.Run==26065 || Dmeson.Run==26072 || Dmeson.Run==26073 || Dmeson.Run==26074
+               || Dmeson.Run==26075 || Dmeson.Run==26077 || Dmeson.Run==26078 || Dmeson.Run==26079 || Dmeson.Run==26091
+               || Dmeson.Run==26093 || Dmeson.Run==26094 || Dmeson.Run==26095 || Dmeson.Run==26096 || Dmeson.Run==26098
+               || Dmeson.Run==26100 || Dmeson.Run==26101 || Dmeson.Run==26126 || Dmeson.Run==26127 || Dmeson.Run==26128
+               || Dmeson.Run==26129 || Dmeson.Run==26131 || Dmeson.Run==26132 || Dmeson.Run==26133 || Dmeson.Run==26134
+               || Dmeson.Run==26147 || Dmeson.Run==26148 || Dmeson.Run==26150 || Dmeson.Run==26151
+	       )   //noise >=8%
+               */
 	   )
 	{
 	    if ( verbose==1 )
@@ -664,7 +713,40 @@ int main(int argc, char* argv[])
             }
 
             nev++;
-	    //if( key==1 && nev>8000 ) continue;
+
+            //=============== ATC identification ================================
+
+	    if( verbose==1 ) cout<<"natccrosst1="<<Dmeson.natccrosst1<<endl;
+	    int good_region_t1=0;
+	    for(int i=0; i<Dmeson.natccrosst1; i++)
+	    {
+		if( verbose==1 ) cout<<"atcCNTt1="<<Dmeson.atcCNTt1[i]<<"\t"<<"atcNpet1="<<Dmeson.atcNpet1[i]<<endl;
+		if( verbose==1 ) cout<<"single_aerogel_REGION0t1="<<Dmeson.single_aerogel_REGION0t1[i]<<endl;
+		if( verbose==1 ) cout<<"wlshitt1="<<Dmeson.wlshitt1[i]<<endl;
+		if( Dmeson.single_aerogel_REGION0t1[i]==1 ) good_region_t1++;
+	    }
+	    if( verbose==1 ) cout<<"atcTotalNpet1="<<Dmeson.atcTotalNpet1<<endl;
+
+	    if( verbose==1 ) cout<<"natccrosst2="<<Dmeson.natccrosst2<<endl;
+	    int good_region_t2=0;
+	    for(int i=0; i<Dmeson.natccrosst2; i++)
+	    {
+		if( verbose==1 ) cout<<"atcCNTt2="<<Dmeson.atcCNTt2[i]<<"\t"<<"atcNpet2="<<Dmeson.atcNpet2[i]<<endl;
+		if( verbose==1 ) cout<<"single_aerogel_REGION0t2="<<Dmeson.single_aerogel_REGION0t2[i]<<endl;
+		if( verbose==1 ) cout<<"wlshitt2="<<Dmeson.wlshitt2[i]<<endl;
+		if( Dmeson.single_aerogel_REGION0t2[i]==1 ) good_region_t2++;
+	    }
+	    if( verbose==1 ) cout<<"atcTotalNpet2="<<Dmeson.atcTotalNpet2<<endl;
+
+            //very hard suppression
+	    //if( (Dmeson.p1>600. && Dmeson.atcTotalNpet1<=0.1) && (Dmeson.p2>600. && Dmeson.atcTotalNpet2<=0.1) ) continue;
+	    //if( (Dmeson.p1>600. && Dmeson.atcTotalNpet1>0.1) && (Dmeson.p2>600. && Dmeson.atcTotalNpet2>0.1) ) continue;
+
+            //soft suppression
+	    if( (Dmeson.p1>600. && good_region_t1>=2 && Dmeson.atcTotalNpet1<=0.1) && (Dmeson.p2>600. && good_region_t2>=2 && Dmeson.atcTotalNpet2<=0.1) ) continue;
+	    if( (Dmeson.p1>600. && good_region_t1>=1 && Dmeson.atcTotalNpet1>0.1) && (Dmeson.p2>600. && good_region_t2>=1 && Dmeson.atcTotalNpet2>0.1) ) continue;
+
+            //===================================================================
 
 	    hDncomb->Fill(Dmeson.ncomb);
 
@@ -680,9 +762,6 @@ int main(int argc, char* argv[])
 	    hvrtntrk->Fill(Dmeson.vrtntrk);
 	    hvrtnip->Fill(Dmeson.vrtnip);
 	    hvrtnbeam->Fill(Dmeson.vrtnbeam);
-
-	    //hDCnhits->Fill(Dmeson.nhitsdc);
-	    //hVDnhits->Fill(Dmeson.nhitsvd);
 
 	    htnhits->Fill(Dmeson.nhitst1);
 	    htnhits->Fill(Dmeson.nhitst2);
@@ -753,11 +832,6 @@ int main(int argc, char* argv[])
 	    hnumo->Fill(Dmeson.numo);
 	    heno->Fill(Dmeson.eno);
 
-	    hMUnhits->Fill(Dmeson.munhits);
-	    hMUnhits1->Fill(Dmeson.mulayerhits1);
-	    hMUnhits2->Fill(Dmeson.mulayerhits2);
-	    hMUnhits3->Fill(Dmeson.mulayerhits3);
-
             htofc1->Fill(Dmeson.tofc1);
             httof1->Fill(Dmeson.ttof1);
             htofc2->Fill(Dmeson.tofc2);
@@ -789,6 +863,17 @@ int main(int argc, char* argv[])
 	    {
 		hmbc->Fill(Dmeson.mbc);
 		hRunSigdECut->Fill(Dmeson.Run);
+
+		if( Dmeson.mbc>=mbcCut1 && Dmeson.mbc<=mbcCut2 )
+		{
+		    hDCnhits->Fill(Dmeson.nhitsdc);
+		    hVDnhits->Fill(Dmeson.nhitsvd);
+
+		    hMUnhits->Fill(Dmeson.munhits);
+		    hMUnhits1->Fill(Dmeson.mulayerhits1);
+		    hMUnhits2->Fill(Dmeson.mulayerhits2);
+		    hMUnhits3->Fill(Dmeson.mulayerhits3);
+		}
                 /*
 		if( Dmeson.mbc>=1855 && Dmeson.mbc<=1870 ){
 		    cout<<"<<<<<<<<<<<<<<<<<<<<<<<<<<< Next combination >>>>>>>>>>>>>>>>>>>>>>>>>>>>"<<endl;

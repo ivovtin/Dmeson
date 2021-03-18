@@ -43,14 +43,18 @@ myrand=$[1000+$i]
 ##inruns=23219
 #Signal
 inruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/runDmeson"$i
-##outfile="/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0173/psi3770_to_D0meson_"$i".root"
-outfile="/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0173_kNoiseReject3_KemcAllowed-1/psi3770_to_D0meson_"$i".root"
+#outfile="/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0173_kNoiseReject3_KemcAllowed-1_kXTKey0_KcExp0/psi3770_to_D0meson_"$i".root"
+#outfile="/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0173_kNoiseReject3_KemcAllowed-1_KtofAllowed0_kIPalternative1_dEinFit0.01/psi3770_to_D0meson_"$i".root"
+#outfile="/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0173_kNoiseReject3_KemcAllowed-1_dEinFit0.01/psi3770_to_D0meson_"$i".root"
+#outfile="/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0173_kNoiseReject3_KemcAllowed-1_dEinFit1/psi3770_to_D0meson_"$i".root"
+##outfile="/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0173_kNoiseReject3_atc/psi3770_to_D0meson_"$i".root"
+outfile="/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0150_kNoiseReject3_atc/psi3770_to_D0meson_"$i".root"
 ##inruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/runDmeson"$i
 ##outfile="/spool/users/ovtin/outDmeson/D0/dataPcorr2004_1.030/psi3770_to_D0meson_"$i".root"
 #Bkg
 #inruns="/home/ovtin/development/Dmeson/runsDmeson/runBkgDmeson"$i
 #outfile="/spool/users/ovtin/psi3770_to_BkgD0meson_"$i".root"
-mintracks=3  
+mintracks=3
 maxtracks=20
 minbeamtracks=0
 minIPtracks=0
@@ -69,7 +73,8 @@ kinefit=1
 ##=========
 ##pSF=1.0240   ##data 2016-17
 ##pSF=1.0185   ##data 2016-17
-pSF=1.0173   ##data 2016-17  - best
+##pSF=1.0173   ##data 2016-17  - best
+pSF=1.0150   ##data 2016-17
 ##=========
 ##pSF=1.030   ##data 2004
 ##=========
