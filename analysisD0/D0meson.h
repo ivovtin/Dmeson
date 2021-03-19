@@ -41,15 +41,16 @@ struct data10
 	nveczt2,ncomb,ncls1,ncls2,ncls,nlkr,ncsi,munhits,mulayerhits1,mulayerhits2,mulayerhits3,Run,numn,numo;
     float mbc,de,dp,prec1,prec2,fchi2,Ebeam,rEv,p1,p2,pt1,pt2,chi2t1,chi2t2,theta2t,phi2t,thetat1,thetat2,phit1,phit2,e1,
 	e2,d1,d2,rr1,rr2,zip1,zip2,ecls1,ecls2,tcls1,tcls2,pcls1,pcls2,emcenergy,lkrenergy,csienergy,enn,eno,tofc1,ttof1,tofc2,ttof2;
-    */
+	*/
+
     int vrtntrk,vrtnip,vrtnbeam,nhitsdc,nhitst1,nhitst2,nhitsvd,nhitsvdt1,nhitsvdt2,nhitsxyt1,nhitszt1,nhitsxyt2,nhitszt2,nvect1,nvecxyt1,nveczt1,nvect2,nvecxyt2,
-    nveczt2,ncomb,ncls1,ncls2,ncls,nlkr,ncsi,munhits,mulayerhits1,mulayerhits2,mulayerhits3,Run,numn,numo,natccrosst1,atcCNTt1[16],natccrosst2,atcCNTt2[16],
-    aerogel_REGIONt1[16],aerogel_REGION0t1[16],aerogel_REGION5t1[16],aerogel_REGION20t1[16],single_aerogel_REGIONt1[16],single_aerogel_REGION0t1[16],
-    single_aerogel_REGION5t1[16],single_aerogel_REGION20t1[16],aerogel_REGIONt2[16],aerogel_REGION0t2[16],aerogel_REGION5t2[16],aerogel_REGION20t2[16],single_aerogel_REGIONt2[16],
-    single_aerogel_REGION0t2[16],single_aerogel_REGION5t2[16],single_aerogel_REGION20t2[16],wlshitt1[16],nearwlst1[16],wlshitt2[16],nearwlst2[16];
+    nveczt2,ncomb,ncls1,ncls2,ncls,nlkr,ncsi,munhits,mulayerhits1,mulayerhits2,mulayerhits3,Run,numn,numo,natccrosst1,atcCNTt1[20],natccrosst2,atcCNTt2[20],
+    aerogel_REGIONt1[20],aerogel_REGION0t1[20],aerogel_REGION5t1[20],aerogel_REGION20t1[20],single_aerogel_REGIONt1[20],single_aerogel_REGION0t1[20],
+    single_aerogel_REGION5t1[20],single_aerogel_REGION20t1[20],aerogel_REGIONt2[20],aerogel_REGION0t2[20],aerogel_REGION5t2[20],aerogel_REGION20t2[20],single_aerogel_REGIONt2[20],
+    single_aerogel_REGION0t2[20],single_aerogel_REGION5t2[20],single_aerogel_REGION20t2[20],wlshitt1[20],nearwlst1[20],wlshitt2[20],nearwlst2[20];
     float mbc,de,dp,prec1,prec2,fchi2,Ebeam,rEv,p1,p2,pt1,pt2,chi2t1,chi2t2,theta2t,phi2t,thetat1,thetat2,phit1,phit2,e1,
-	e2,d1,d2,rr1,rr2,zip1,zip2,ecls1,ecls2,tcls1,tcls2,pcls1,pcls2,emcenergy,lkrenergy,csienergy,enn,eno,tofc1,ttof1,tofc2,ttof2,atcNpet1[16],atcTotalNpet1,
-    atcNpet2[16],atcTotalNpet2,tlent1[16],tlent2[16];
+	e2,d1,d2,rr1,rr2,zip1,zip2,ecls1,ecls2,tcls1,tcls2,pcls1,pcls2,emcenergy,lkrenergy,csienergy,enn,eno,tofc1,ttof1,tofc2,ttof2,atcNpet1[20],atcTotalNpet1,
+    atcNpet2[20],atcTotalNpet2,tlent1[20],tlent2[20];
 
 };
 data10 Dmeson;
@@ -60,9 +61,9 @@ void chain(){
     if(key==0){
 	for(int i=1; i<=693; i++)   //signal 2016+2017
 	{
-	    if( i!=36 && i!=167 && i!=229 && i!=164 && i!=267 && i!=277 && i!=271 && i!=279 && i!=283 && i!=293 && i!=325 && i!=342 && i!=473 && i!=565 && i!=575
-	      && i!=607 && i!=608 && i!=629 && i!=646 && i!=652 ) tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0173_kNoiseReject3_atc/psi3770_to_D0meson_%d.root",i).Data());
-		//tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0173_kNoiseReject3_dEinFit1_KinFitchanged/psi3770_to_D0meson_%d.root",i).Data());
+	        tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0173_kNoiseReject3_atc/psi3770_to_D0meson_%d.root",i).Data());
+	        //tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0150_kNoiseReject3_atc/psi3770_to_D0meson_%d.root",i).Data());
+          	//tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0173_kNoiseReject3_dEinFit1_KinFitchanged/psi3770_to_D0meson_%d.root",i).Data());
 		//tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0173_kNoiseReject3_KemcAllowed-1_dEinFit1/psi3770_to_D0meson_%d.root",i).Data());
 		//tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0173_kNoiseReject3_KemcAllowed-1_dEinFit0.01/psi3770_to_D0meson_%d.root",i).Data());
 		//tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0173_kNoiseReject3_KemcAllowed-1_kIPalternative1_dEinFit0.01/psi3770_to_D0meson_%d.root",i).Data());
@@ -108,16 +109,15 @@ void chain(){
 	for(int i=1; i<=114; i++)
 	{
 	    //tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/outsimD0/Signal/psi3770_to_simD0mesonSignal_%d.root",i).Data());
-	    tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/outsimD0/Signal/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/psi3770_to_simD0mesonSignal_%d.root",i).Data());
+	    //tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/outsimD0/Signal/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/psi3770_to_simD0mesonSignal_%d.root",i).Data());
+	    tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/outsimD0/Signal/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/psi3770_to_simD0mesonSignal_%d.root",i).Data());
 	    //tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/outsimD0/KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0/Signal/psi3770_to_simD0mesonSignal_%d.root",i).Data());
 	}
     }
     else if (key==2){              //uds BG
 	for(int i=1; i<=221; i++)
 	{
-	    //tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/outsimD0/Bkg_continium/psi3770_to_simD0meson_ee_to_qq_%d.root",i).Data());
-	    //tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/outsimD0/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/Bkg_continium/psi3770_to_simD0meson_ee_to_qq_%d.root",i).Data());
-	    tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/outsimD0/KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0/Bkg_continium/psi3770_to_simD0meson_ee_to_qq_%d.root",i).Data());
+	    tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/outsimD0/Bkg_continium/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/psi3770_to_simD0meson_ee_to_qq_%d.root",i).Data());
 	}
     }
     else if (key==3){              //DD BG

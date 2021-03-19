@@ -1029,7 +1029,7 @@ int main(int argc, char* argv[])
                           ":wlshitt1[20]:nearwlst1[20]:wlshitt2[20]:nearwlst2[20]"
 			  ":mbc/F:de:dp:prec1:prec2:fchi2:Ebeam:rEv:p1:p2:pt1:pt2:chi2t1:chi2t2:theta2t:phi2t:thetat1:thetat2:phit1:phit2:e1"
 			  ":e2:d1:d2:rr1:rr2:zip1:zip2:ecls1:ecls2:tcls1:tcls2:pcls1:pcls2:emcenergy:lkrenergy:csienergy:enn:eno:tofc1:ttof1:tofc2:ttof2:atcNpet1[20]:atcTotalNpet1"
-			  ":atcNpet1[20]:atcTotalNpet2:tlent1[20]:tlent2[20]");
+			  ":atcNpet2[20]:atcTotalNpet2:tlent1[20]:tlent2[20]");
 
 //----------------- Configure kframework -----------------//
 	//Set kframework signal handling
