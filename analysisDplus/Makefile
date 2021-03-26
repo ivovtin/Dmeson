@@ -1,26 +1,13 @@
-ifeq (,$(CC_LOCAL))
-CC           := gcc
-else
-CC           := $(CC_LOCAL)
-endif
-ifeq (,$(CXX_LOCAL))
-CXX           := g++
-else
-CXX           := $(CXX_LOCAL)
-endif
+all:    Dplusmeson
 
-CPPFLAGS+=$(shell root-config --cflags) -I.
-LDFLAGS+=$(shell root-config --libs --glibs) -lGui -lMinuit -lNew -Wl,-rpath -Wl,$(shell root-config --libdir)
+LIBS    = $(shell root-config --libs --glibs) -L/space/KEDR/stable/lib -lKDB -lpq -lcrypt -lm -lstdc++
+CERNLIBS        = `cernlib mathlib` -lg2c
 
-.PHONY: all clean
+INC     = $(shell root-config --cflags) -I/space/KEDR/stable/ -I/cern/pro/include/cfortran/ -Df2cFortran
 
-all: Dplusmeson
-
-%.o: %.cc
-	$(CXX) -c $(CPPFLAGS) $^
-
-Dplusmeson: Dplusmeson.o
-	$(CXX) -o $@ $(LDFLAGS) $^
 clean:
-	rm -f Dplusmeson.o Dplusmeson
+	rm Dplusmeson
+
+Dplusmeson:  Dplusmeson.C
+	cc -o Dplusmeson Dplusmeson.C $(LIBS) $(INC)
 

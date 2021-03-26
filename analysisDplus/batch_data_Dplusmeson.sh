@@ -41,7 +41,7 @@ myrand=$[1000+$i]
 
 #Signal
 inruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/runDmeson"$i
-outfile="/spool/users/ovtin/outDmeson/Dplus/dataPcorr_1.0170_kNoiseReject3_KemcAllowed-1/psi3770_to_D0meson_"$i".root"
+outfile="/spool/users/ovtin/outDmeson/Dplus/dataPcorr_1.0170_kNoiseReject3_atc/psi3770_to_D0meson_"$i".root"
 ##inruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/runDmeson"$i
 ##outfile="/spool/users/ovtin/outDmeson/Dplus/dataPcorr2004/psi3770_to_D0meson_"$i".root"
 ##outfile="/spool/users/ovtin/outDmeson/Dplus/dataPcorr2004_1.0250/psi3770_to_D0meson_"$i".root"
@@ -58,7 +58,7 @@ minClusters=0
 maxClusters=35
 minClustersLKr=0
 minClustersCsI=0
-maxtchi2=10000   
+maxtchi2=10000
 minNhits=0
 kinefit=1
 ##pSF=1.0270   ##data 2004
