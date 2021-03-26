@@ -125,6 +125,7 @@ int main(int argc, char* argv[])
     TFile *fout=0;
     TString fnameout;
     TString KEDR;
+    TString fout_result_atc;
     TString fout_result;
     TString dir_out="results";
     TString list_badruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/badruns";
@@ -136,10 +137,11 @@ int main(int argc, char* argv[])
 	mbcCut1=1855, mbcCut2=1875;
 	//fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data_%d.root",key).Data();
 	fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data_test_%d.root",key).Data();
-        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr/";
-        KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_KemcAllowedOn_kNoiseReject3_ATC_1.0173/";
-	//list_badruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/badruns";
-	fout_result=dir_out + "/" + "kp_exp_1.0173_2016-17_KemcAllowedOn_kNoiseReject3_ATC_1.0173.dat";
+        KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_KemcAllowedOn_kNoiseReject3_ATC_1.0110/";
+	fout_result_atc=dir_out + "/" + "kp_exp_2016-17_KemcAllowedOn_kNoiseReject3_ATC_1.0110.dat";
+	fout_result=dir_out + "/" + "kp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0110.dat";
+        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_KemcAllowedOn_kNoiseReject3_ATC_1.0000/";
+	//fout_result=dir_out + "/" + "kp_exp_2016-17_KemcAllowedOn_kNoiseReject3_ATC_1.0000.dat";
     }
     else if (key==4)        //exp 2004
     {
@@ -149,6 +151,7 @@ int main(int argc, char* argv[])
 	fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data2004_%d.root",key).Data();
 	KEDR = "/home/ovtin/public_html/outDmeson/D0/data2004Pcorr/";
         list_badruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/badruns";
+	fout_result_atc=dir_out + "/" + "kp_2004_ATC.dat";
 	fout_result=dir_out + "/" + "kp_2004.dat";
     }
     else if (key==1)        //sig
@@ -157,32 +160,27 @@ int main(int argc, char* argv[])
 	deCut1=-300; deCut2=300;
 	mbcCut1=1800, mbcCut2=1900;
 	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_sig_%d.root",key).Data();
-        //KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Sig/";
         KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Sig_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/";
-	//fout_result=dir_out + "/" + "kp_signal_def.dat";
-	fout_result=dir_out + "/" + "kp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC.dat";
+	fout_result_atc=dir_out + "/" + "kp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC.dat";
+	fout_result=dir_out + "/" + "kp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0.dat";
     }
     else if (key==2)        //uds
     {
 	deCut1=-300; deCut2=300;
 	mbcCut1=1700, mbcCut2=1900;
 	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_BG_continium_%d.root",key).Data();
-        //KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_continium/";
-        //KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_continium_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/";
-        KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_continium_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0/";
-	//fout_result=dir_out + "/" + "kp_uds.dat";
-	fout_result=dir_out + "/" + "kp_uds_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0.dat";
+        KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_continium_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/";
+	fout_result_atc=dir_out + "/" + "kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC.dat";
+	fout_result=dir_out + "/" + "kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0.dat";
     }
     else if (key==3)        //ddBG
     {
 	deCut1=-300; deCut2=300;
 	mbcCut1=1700, mbcCut2=1900;
 	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_BG_eetoDD_%d.root",key).Data();
-        //KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_eetodd/";
-        //KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_eetodd_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/";
-        KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_eetodd_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0/";
-	//fout_result=dir_out + "/" + "kp_dbck.dat";
-	fout_result=dir_out + "/" + "kp_dbck_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0.dat";
+        KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_eetodd_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/";
+	fout_result_atc=dir_out + "/" + "kp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC.dat";
+	fout_result=dir_out + "/" + "kp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0.dat";
     }
 
     gSystem->Exec("mkdir " + KEDR);
@@ -303,6 +301,7 @@ int main(int argc, char* argv[])
     forFit->Branch("dP",&forFitdP,"dP/F");
 
     ofstream Result(TString::Format(fout_result),ios_base::out);
+    ofstream ResultATC(TString::Format(fout_result_atc),ios_base::out);
 
     std::vector<int> badruns;
     string line;
@@ -822,6 +821,17 @@ int main(int argc, char* argv[])
 
 	    hdP->Fill(Dmeson.dp);
 
+	    if( Dmeson.de>=min_dE && Dmeson.de<=max_dE  &&  Dmeson.mbc>=min_Mbc && Dmeson.mbc<=max_Mbc )
+	    {
+		if ( verbose==2 )
+		{
+		    if (Dmeson.de>=deCut1 && Dmeson.de<=deCut2 &&  Dmeson.mbc>=min_Mbc && Dmeson.mbc<=max_Mbc )
+		    {
+			cout<<Dmeson.Run<<"\t"<<Dmeson.rEv<<"\t"<<Dmeson.mbc<<"\t"<<Dmeson.de<<"\t"<<Dmeson.dp<<endl;
+		    }
+		}
+		Result<< Dmeson.mbc <<"\t"<< Dmeson.de <<"\t"<< Dmeson.dp <<endl;
+	    }
 
             //=============== ATC identification ================================
 
@@ -870,7 +880,7 @@ int main(int argc, char* argv[])
 			cout<<Dmeson.Run<<"\t"<<Dmeson.rEv<<"\t"<<Dmeson.mbc<<"\t"<<Dmeson.de<<"\t"<<Dmeson.dp<<endl;
 		    }
 		}
-		Result<< Dmeson.mbc <<"\t"<< Dmeson.de <<"\t"<< Dmeson.dp <<endl;
+		ResultATC<< Dmeson.mbc <<"\t"<< Dmeson.de <<"\t"<< Dmeson.dp <<endl;
 	    }
 
 	    //fill dE
@@ -902,6 +912,7 @@ int main(int argc, char* argv[])
 	}
     }
     Result.close();
+    ResultATC.close();
 
     sort(goodruns.begin(), goodruns.end());
     cout << "Sorted \n";

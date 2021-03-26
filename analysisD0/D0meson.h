@@ -61,7 +61,10 @@ void chain(){
     if(key==0){
 	for(int i=1; i<=693; i++)   //signal 2016+2017
 	{
-	        tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0173_kNoiseReject3_atc/psi3770_to_D0meson_%d.root",i).Data());
+	        //tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0_kNoiseReject3_atc/psi3770_to_D0meson_%d.root",i).Data());
+	        //tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0082_kNoiseReject3_atc/psi3770_to_D0meson_%d.root",i).Data());
+	        tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0110_kNoiseReject3_atc/psi3770_to_D0meson_%d.root",i).Data());
+	        //tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0173_kNoiseReject3_atc/psi3770_to_D0meson_%d.root",i).Data());
 	        //tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0150_kNoiseReject3_atc/psi3770_to_D0meson_%d.root",i).Data());
           	//tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0173_kNoiseReject3_dEinFit1_KinFitchanged/psi3770_to_D0meson_%d.root",i).Data());
 		//tt->Add(TString::Format("/spool/users/ovtin/outDmeson/D0/dataPcorr_1.0173_kNoiseReject3_KemcAllowed-1_dEinFit1/psi3770_to_D0meson_%d.root",i).Data());
@@ -123,9 +126,7 @@ void chain(){
     else if (key==3){              //DD BG
 	for(int i=1; i<=221; i++)
 	{
-	    //tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/outsimD0/Bkg_eetoDD/psi3770_to_simD0mesonBkg_eetoDD_%d.root",i).Data());
-	    //tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/outsimD0/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/Bkg_eetoDD/psi3770_to_simD0mesonBkg_eetoDD_%d.root",i).Data());
-	    tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/outsimD0/KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0/Bkg_eetoDD/psi3770_to_simD0mesonBkg_eetoDD_%d.root",i).Data());
+	    tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/outsimD0/Bkg_eetoDD/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/psi3770_to_simD0mesonBkg_eetoDD_%d.root",i).Data());
 	}
     }
 }
