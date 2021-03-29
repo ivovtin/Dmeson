@@ -60,13 +60,18 @@ LIB_LOCAL= `root-config --libs` -lMinuit -lpq -lcrypt -lbz2 -ldl -lg2c
 ##LIB_LOCAL= `root-config --libs` -lMinuit -lcrypt -lpq -lbz2 -lg2c
 
 # Определим, какие программы мы будем собирать
-BINARIES = analysis_D0meson analysis_Dplusmeson analysis_bhabha analysis_Ks BhaBhaSimpleSampleCC
+BINARIES = analysis_D0meson analysis_Dplusmeson analysis_bhabha analysis_Ks BhaBhaSimpleSampleCC analysis_D0meson_krKrec
 
 # укажем, из каких модулей этого пакета они состоят
 # (эти модули не будут включены в библиотеку)
 # и какие библиотеки надо подключить при сборке
 analysis_D0meson_MODULES := analysis_D0meson
 analysis_D0meson_LIBS := KaFramework KrAtc KDisplay VDDCRec KrVDDCMu KrMu \
+KrdEdxPId KrDCCalibdEdx DchdEdxDataRoot VDDCRec KrToF KsToF KEmcRec LKrTools \
+VDDCRec KsTrg KdConvert KrObjects KdDCSim FitTools DchGeom ReadNat KDB AppFramework KrKRec KrDONLP2
+
+analysis_D0meson_krKrec_MODULES := analysis_D0meson_krKrec
+analysis_D0meson_krKrec_LIBS := KaFramework KrAtc KDisplay VDDCRec KrVDDCMu KrMu \
 KrdEdxPId KrDCCalibdEdx DchdEdxDataRoot VDDCRec KrToF KsToF KEmcRec LKrTools \
 VDDCRec KsTrg KdConvert KrObjects KdDCSim FitTools DchGeom ReadNat KDB AppFramework KrKRec KrDONLP2
 
