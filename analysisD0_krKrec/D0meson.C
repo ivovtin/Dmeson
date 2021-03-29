@@ -129,17 +129,16 @@ int main(int argc, char* argv[])
     TString fout_result;
     TString dir_out="results";
     TString list_badruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/badruns";
-    //TString list_checkruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/runs_ecor1815.000-1818.000";
+    TString out_pref = "KemcAllowedOff_kNoiseReject3_1.0_krKrec";
     if( key==0 ){           //exp 2016-17
 	min_Mbc2=1800;
 	//deCut1=-150; deCut2=150;
 	deCut1=-100; deCut2=100;
 	mbcCut1=1855, mbcCut2=1875;
-	//fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data_%d.root",key).Data();
-	fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data_test_%d.root",key).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_KemcAllowedOff_kNoiseReject3_ATC_1.0_krKrec/";
-	fout_result_atc=dir_out + "/" + "kp_exp_2016-17_KemcAllowedOff_kNoiseReject3_ATC_1.0_krKrec.dat";
-	fout_result=dir_out + "/" + "kp_exp_2016-17_KemcAllowedOff_kNoiseReject3_1.0_krKrec.dat";
+	fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data_%d.root",key).Data();
+        KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_" + out_pref + "_ATC/";
+        fout_result=dir_out + "/" + "kp_exp_2016-17_" + out_pref + ".dat";
+        fout_result_atc=dir_out + "/" + "kp_exp_2016-17_" + out_pref + "_ATC.dat";
     }
     else if (key==4)        //exp 2004
     {
@@ -147,10 +146,10 @@ int main(int argc, char* argv[])
 	deCut1=-100; deCut2=100;
 	mbcCut1=1855, mbcCut2=1875;
 	fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data2004_%d.root",key).Data();
-	KEDR = "/home/ovtin/public_html/outDmeson/D0/data2004Pcorr/";
         list_badruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/badruns";
-	fout_result_atc=dir_out + "/" + "kp_2004_ATC.dat";
-	fout_result=dir_out + "/" + "kp_2004.dat";
+	KEDR = "/home/ovtin/public_html/outDmeson/D0/data2004Pcorr/";
+        fout_result=dir_out + "/" + "kp_2004.dat";
+        fout_result_atc=dir_out + "/" + "kp_2004_ATC.dat";
     }
     else if (key==1)        //sig
     {
@@ -158,27 +157,27 @@ int main(int argc, char* argv[])
 	deCut1=-300; deCut2=300;
 	mbcCut1=1800, mbcCut2=1900;
 	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_sig_%d.root",key).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Sig_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/";
-	fout_result_atc=dir_out + "/" + "kp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC.dat";
-	fout_result=dir_out + "/" + "kp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0.dat";
+        KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Sig_" + out_pref + "_ATC/";
+        fout_result=dir_out + "/" + "kp_signal_" + out_pref + ".dat";
+        fout_result_atc=dir_out + "/" + "kp_signal_" + out_pref + "_ATC.dat";
     }
     else if (key==2)        //uds
     {
 	deCut1=-300; deCut2=300;
 	mbcCut1=1700, mbcCut2=1900;
 	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_BG_continium_%d.root",key).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_continium_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/";
-	fout_result_atc=dir_out + "/" + "kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC.dat";
-	fout_result=dir_out + "/" + "kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0.dat";
+	KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_continium_" + out_pref + "_ATC/";
+        fout_result=dir_out + "/" + "kp_uds_" + out_pref + ".dat";
+	fout_result_atc=dir_out + "/" + "kp_uds_" + out_pref + "_ATC.dat";
     }
     else if (key==3)        //ddBG
     {
 	deCut1=-300; deCut2=300;
 	mbcCut1=1700, mbcCut2=1900;
 	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_BG_eetoDD_%d.root",key).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_eetodd_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/";
-	fout_result_atc=dir_out + "/" + "kp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC.dat";
-	fout_result=dir_out + "/" + "kp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0.dat";
+        KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_eetodd_" + out_pref + "_ATC/";
+        fout_result=dir_out + "/" + "kp_dbck_" + out_pref + ".dat";
+        fout_result_atc=dir_out + "/" + "kp_dbck_" + out_pref + "_ATC.dat";
     }
 
     gSystem->Exec("mkdir " + KEDR);
