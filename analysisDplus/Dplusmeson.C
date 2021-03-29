@@ -118,6 +118,9 @@ int main(int argc, char* argv[])
     }
     //*****************************************
 
+    bool ftof=1;       //on/off tof indentification
+    //===========
+
     float tof1,dtof1;
     double deCut1, deCut2;
     double mbcCut1, mbcCut2;
@@ -133,16 +136,18 @@ int main(int argc, char* argv[])
     TString fout_result=dir_out + "/" + "fout_result.dat";
     TString fout_result_atc;
     TString list_badruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/badruns";
+    //TString out_pref = "KemcAllowedOn_kNoiseReject3_1.0";
+    //TString out_pref = "KemcAllowedOn_kNoiseReject3_1.0170_tofOff";
+    //TString out_pref = "KemcAllowedOn_kNoiseReject3_1.0170";
+    TString out_pref = "KemcAllowedOn_kNoiseReject3_1.0180";
     if( key==0 ){
         min_Mbc2=1790.; max_Mbc2=1900.;
 	deCut1=-70; deCut2=70;
 	mbcCut1=1860, mbcCut2=1880;
 	fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data_%d.root",key).Data();
-	KEDR = "/home/ovtin/public_html/outDmeson/Dplus/dataPcorr_KemcAllowedOn_kNoiseReject3_ATC_1.0170/";
-	gSystem->Exec("mkdir " + KEDR);
-        gSystem->Exec("cp /store/users/ovtin/outDmeson/demo/index.php " + KEDR);
-        fout_result=dir_out + "/" + "kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0170.dat";
-        fout_result_atc=dir_out + "/" + "kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_ATC_1.0170.dat";
+	KEDR = "/home/ovtin/public_html/outDmeson/Dplus/dataPcorr_" + out_pref + "_ATC/";
+        fout_result=dir_out + "/" + "kpp_exp_2016-17_" + out_pref + ".dat";
+        fout_result_atc=dir_out + "/" + "kpp_exp_2016-17_" + out_pref + "_ATC.dat";
     }
     else if (key==4)
     {
@@ -163,27 +168,27 @@ int main(int argc, char* argv[])
 	deCut1=-200; deCut2=200;
 	mbcCut1=1850, mbcCut2=1890;
 	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_sig_%d.root",key).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/Dplus/simulation_Sig_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/";
-        fout_result=dir_out + "/" + "kpp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0.dat";
-        fout_result_atc=dir_out + "/" + "kpp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC.dat";
+	KEDR = "/home/ovtin/public_html/outDmeson/Dplus/simulation_Sig_" + out_pref + "_ATC/";
+        fout_result=dir_out + "/" + "kpp_signal_" + out_pref + ".dat";
+        fout_result_atc=dir_out + "/" + "kpp_signal_" + out_pref + "_ATC.dat";
     }
     else if (key==2)
     {
 	deCut1=-300; deCut2=300;
 	mbcCut1=1700, mbcCut2=1900;
 	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_BG_continium.root",key).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/Dplus/simulation_Bkg_continium_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/";
-        fout_result=dir_out + "/" + "kpp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0.dat";
-        fout_result_atc=dir_out + "/" + "kpp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC.dat";
+	KEDR = "/home/ovtin/public_html/outDmeson/Dplus/simulation_Bkg_continium_" + out_pref + "_ATC/";
+        fout_result=dir_out + "/" + "kpp_uds_" + out_pref + ".dat";
+        fout_result_atc=dir_out + "/" + "kpp_uds_" + out_pref + "_ATC.dat";
     }
     else if (key==3)
     {
 	deCut1=-300; deCut2=300;
 	mbcCut1=1700, mbcCut2=1900;
 	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_BG_eetoDD_%d.root",key).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/Dplus/simulation_Bkg_eetodd_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/";
-        fout_result=dir_out + "/" + "kpp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0.dat";
-        fout_result_atc=dir_out + "/" + "kpp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC.dat";
+	KEDR = "/home/ovtin/public_html/outDmeson/Dplus/simulation_Bkg_eetodd_" + out_pref + "_ATC/";
+        fout_result=dir_out + "/" + "kpp_dbck_" + out_pref + ".dat";
+        fout_result_atc=dir_out + "/" + "kpp_dbck_" + out_pref + "_ATC.dat";
     }
 
     gSystem->Exec("mkdir " + KEDR);
@@ -282,6 +287,8 @@ int main(int argc, char* argv[])
     TH1F* hmom=new TH1F("P","P",100,0.,3000.);
     TH1F* hmomt=new TH1F("Pt","Pt",100,0.,3000.);
     TH1F* hmomrec=new TH1F("P","P",100,0.,3000.);
+    TH1F* hDCnhits=new TH1F("DCnhits","DCnhits",500,0.,500.);
+    TH1F* hVDnhits=new TH1F("VDnhits","VDnhits",100,0.,100.);
     TH1F* htchi2=new TH1F("tchi2","tchi2",100,0.,100.);
 
     TH1F* htnhits=new TH1F("tnhits","tnhits",80,0.,80.);
@@ -521,8 +528,8 @@ int main(int argc, char* argv[])
 	    if (tofk_corr>6.5) tofk_corr = tofk_corr-5.5;
 
 	    dtof1=(tofk_corr-tof1);
-            if( dtof1<-tofCut ) continue;
-	    if( dtof1>1000. ) continue;
+            if( ftof==1 && dtof1<-tofCut ) continue;
+	    if( ftof==1 && dtof1>1000. ) continue;
 
             if( fabs(Dmeson.thetat1/180.*PI-PI/2.)>0.9 ) continue;
 
@@ -671,7 +678,13 @@ int main(int argc, char* argv[])
 	    if( Dmeson.de>=deCut1 && Dmeson.de<=deCut2 && Dmeson.mbc>=min_Mbc2 && Dmeson.mbc<=max_Mbc )
 	    {
 		hmbc->Fill(Dmeson.mbc);
-                hRunSigdECut->Fill(Dmeson.Run);
+		hRunSigdECut->Fill(Dmeson.Run);
+
+		if( Dmeson.mbc>=mbcCut1 && Dmeson.mbc<=mbcCut2 )
+		{
+		    hDCnhits->Fill(Dmeson.nhitsdc);
+		    hVDnhits->Fill(Dmeson.nhitsvd);
+		}
 	    }
 
             double px1 = Dmeson.p1*sin(Dmeson.thetat1/180.*PI)*cos(Dmeson.phit1/180.*PI);
@@ -954,6 +967,8 @@ int main(int argc, char* argv[])
     hnlkr->Draw(); cc1->SaveAs(KEDR+"nlkr.png");
     hncsi->Draw(); cc1->SaveAs(KEDR+"ncsi.png");
     hep->Draw(); cc1->SaveAs(KEDR+"ep.png");
+    hDCnhits->Draw(); cc1->SaveAs(KEDR+"DCnhits.png");
+    hVDnhits->Draw(); cc1->SaveAs(KEDR+"VDnhits.png");
     htchi2->Draw(); cc1->SaveAs(KEDR+"tchi2.png");
     htnhits->Draw(); cc1->SaveAs(KEDR+"tnhits.png");
     htnhitsvd->Draw(); cc1->SaveAs(KEDR+"tnhitsvd.png");
