@@ -10,11 +10,16 @@
 #include "TAxis.h"
 #include "TStyle.h"
 
+//#include "RoodpPdf.h"
+
 using namespace RooFit;
 
 void fit_unbinned_MCBkg_uds()
 {
     //gROOT->SetStyle("Plain");
+    
+    //.L RoodpPdf.cxx+
+    //gSystem->Load("RoodpPdf_cxx.so");
 
     TTree *tree = new TTree("tree", "tree");
     Double_t* br1 = new Double_t ;
@@ -55,25 +60,23 @@ void fit_unbinned_MCBkg_uds()
     cout<<"ndata="<<ndata<<endl;
 
     double par[4];
-    par[0] = -4.37;     //alpha_mbc
+    par[0] = 7.745104;     //alpha_mbc
     par[1] = 1.155407;  //alpha_de
     par[2] = 1888.750;  //ebeam
-    par[3] = -1.38;  //dpcurv
+    par[3] = 3.240319;  //dpcurv
 
-    RooRealVar alpha_mbc("alpha_mbc", "alpha_mbc", par[0], -50., 0.);
+    RooRealVar alpha_mbc("alpha_mbc", "alpha_mbc", par[0], -10., 50.);
     RooRealVar alpha_de("alpha_de", "alpha_de", par[1], -5., 5.);
     RooRealVar ebeam("ebeam", "ebeam", par[2],par[2],par[2]);
-    RooRealVar dpcurv("dpcurv", "dpcurv", par[3], -5., 1.);
-
-    RooArgusBG  argus("argus", "argus",mbc,ebeam,alpha_mbc);
-    RooGenericPdf depdf("depdf", "exp(alpha_de*de/1000.)",RooArgSet(alpha_de, de));
-    RooGenericPdf dppdf("dppdf", "1.+dpcurv*dp*dp/1000./1000.",RooArgSet(dpcurv, dp));    
-    RooProdPdf uds_model("uds_model","argus*depdf*dppdf)",RooArgList(argus, depdf, dppdf));
- 
+    RooRealVar dpcurv("dpcurv", "dpcurv", par[3], -5., 10.);
+    //RooClassFactory::makePdf("RooudsPdf","mbc,ebeam,alpha_mbc,alpha_de,de,dpcurv,dp",0,"exp(alpha_mbc*(mbc*mbc/ebeam/ebeam-1.)-alpha_de*de/1000.)*(1.+dpcurv*dp*dp/1000./1000.)");  .L RooudsPdf.cxx+ 
+    RooudsPdf uds_model("uds_model","uds_model",mbc,ebeam,alpha_mbc,alpha_de,de,dpcurv,dp);   
+    
     uds_model.Print();
 
     // --- Perform fit of composite PDF to data ---
-    uds_model.fitTo(data,RooFit::Minimizer("Minuit2","minimize"));
+    uds_model.fitTo(data);
+    //uds_model.fitTo(data,RooFit::Minimizer("Minuit2","minimize"));
 
     RooPlot* mbc_frame = mbc.frame();
     data.plotOn(mbc_frame);
