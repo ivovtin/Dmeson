@@ -10,16 +10,15 @@
 #include "TAxis.h"
 #include "TStyle.h"
 
-//#include "RoodpPdf.h"
-
 using namespace RooFit;
 
 void fit_unbinned_MCBkg_uds()
 {
     //gROOT->SetStyle("Plain");
-    
-    //.L RoodpPdf.cxx+
-    //gSystem->Load("RoodpPdf_cxx.so");
+
+    //gROOT.LoadMacro(".L RooudsPdf.cxx+"); 
+    //gSystem->Load(".L RooudsPdf.cxx+");
+    gSystem->Load("RooudsPdf_cxx.so");
 
     TTree *tree = new TTree("tree", "tree");
     Double_t* br1 = new Double_t ;
@@ -94,7 +93,7 @@ void fit_unbinned_MCBkg_uds()
     TString format2=".png";
     TString format3=".pdf";
     TString outName;
-    TString KEDR = "/store/users/ovtin/outDmeson/D0/results/fitsD0/forTest/";
+    TString KEDR = "/store/users/ovtin/outDmeson/D0/results/fitsD0/";
 
     TCanvas *c = new TCanvas("Signal", "Signal", 1200, 400);
     c->Divide(3);
@@ -105,6 +104,6 @@ void fit_unbinned_MCBkg_uds()
     c->cd(3);
     dp_frame->Draw();
     outName="uds_RooFit";
-    //c->SaveAs(KEDR + outName + format1);  c->SaveAs(KEDR + outName + format2);  c->SaveAs(KEDR + outName + format3);
+    c->SaveAs(KEDR + outName + format1);  c->SaveAs(KEDR + outName + format2);  c->SaveAs(KEDR + outName + format3);
 }
 
