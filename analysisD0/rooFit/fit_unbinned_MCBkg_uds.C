@@ -9,6 +9,8 @@
 #include "TH2.h"
 #include "TAxis.h"
 #include "TStyle.h"
+#include "RooudsPdf.h"
+R__LOAD_LIBRARY(RooudsPdf_cxx.so)
 
 using namespace RooFit;
 
@@ -18,8 +20,10 @@ void fit_unbinned_MCBkg_uds()
 
     //gROOT.LoadMacro(".L RooudsPdf.cxx+"); 
     //gSystem->Load(".L RooudsPdf.cxx+");
-    gSystem->Load("RooudsPdf_cxx.so");
-
+    //gSystem->Load("RooudsPdf_cxx.so");
+    gROOT->ProcessLine(".L RooudsPdf.cxx+");
+    //gROOT->ProcessLine("RooudsPdf_cxx.so");
+    
     TTree *tree = new TTree("tree", "tree");
     Double_t* br1 = new Double_t ;
     Double_t* br2 = new Double_t ;
