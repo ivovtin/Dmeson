@@ -49,58 +49,49 @@ void fit_unbinned_MCBkg_uds()
 
     // Construct unbinned dataset importing tree branches
     RooDataSet data("data", "data", RooArgSet(mbc, de, dp), Import(*tree));
+    //RooDataSet data("data", "data", RooArgSet(mbc, de), Import(*tree));
 
     int ndata = data.sumEntries();
     cout<<"ndata="<<ndata<<endl;
 
     double par[4];
-    par[0] = 5.0;  //alpha_mbc
+    par[0] = -4.37;     //alpha_mbc
     par[1] = 1.155407;  //alpha_de
     par[2] = 1888.750;  //ebeam
-    par[3] = 3.240319;  //dpcurv
+    par[3] = -1.38;  //dpcurv
 
-    /*
-    if (mbc > ebeam) return 0;
-    double dp_max = sqrt(ebeam*ebeam - mbc*mbc);
-    if (fabs(dp)<dp_max) {
-    */
-
-    RooRealVar alpha_mbc("alpha_mbc", "alpha_mbc", par[0], -10., 15.);
+    RooRealVar alpha_mbc("alpha_mbc", "alpha_mbc", par[0], -50., 0.);
     RooRealVar alpha_de("alpha_de", "alpha_de", par[1], -5., 5.);
-    RooRealVar ebeam("ebeam", "ebeam", par[2], par[2], par[2]);
-    RooRealVar dpcurv("dpcurv", "dpcurv", par[3], -10., 10.);
-    //RooGenericPdf uds_model("uds_model", "exp(alpha_mbc*(mbc*mbc/ebeam/ebeam-1.)-alpha_de*de/1000.)*(1.+dpcurv*dp*dp/1000./1000.)",
-//			    RooArgSet(alpha_mbc, mbc, ebeam, alpha_de, de, dpcurv, dp));
-    RooGenericPdf uds_model("uds_model", "exp(alpha_mbc*(mbc*mbc/ebeam/ebeam-1.)-alpha_de*de/1000.)*(1.+dpcurv*dp*dp/1000./1000.) && (mbc<ebeam) && (abs(dp)<sqrt(ebeam*ebeam - mbc*mbc))",
-			    RooArgSet(alpha_mbc, mbc, ebeam, alpha_de, de, dpcurv, dp));
+    RooRealVar ebeam("ebeam", "ebeam", par[2],par[2],par[2]);
+    RooRealVar dpcurv("dpcurv", "dpcurv", par[3], -5., 1.);
 
-    //mbc.setRange("BkgFitRange",1700.,1900.);
-
+    RooArgusBG  argus("argus", "argus",mbc,ebeam,alpha_mbc);
+    RooGenericPdf depdf("depdf", "exp(alpha_de*de/1000.)",RooArgSet(alpha_de, de));
+    RooGenericPdf dppdf("dppdf", "1.+dpcurv*dp*dp/1000./1000.",RooArgSet(dpcurv, dp));    
+    RooProdPdf uds_model("uds_model","argus*depdf*dppdf)",RooArgList(argus, depdf, dppdf));
+ 
     uds_model.Print();
 
     // --- Perform fit of composite PDF to data ---
-    uds_model.fitTo(data);
-    //uds_model.fitTo(data, Range("BkgFitRange"));
-    //uds_model.fitTo(data,RooFit::Minimizer("Minuit2","minimize"));
-    //uds_model.fitTo(data, RooFit::Constrain(RooArgSet(alpha, f1, f2)));
+    uds_model.fitTo(data,RooFit::Minimizer("Minuit2","minimize"));
 
     RooPlot* mbc_frame = mbc.frame();
     data.plotOn(mbc_frame);
     uds_model.plotOn(mbc_frame);
-
+    
     RooPlot* de_frame = de.frame();
     data.plotOn(de_frame);
     uds_model.plotOn(de_frame);
-
+    
     RooPlot* dp_frame = dp.frame();
     data.plotOn(dp_frame);
     uds_model.plotOn(dp_frame);
-
+     
     TString format1=".eps";
     TString format2=".png";
     TString format3=".pdf";
     TString outName;
-    KEDR = "/store/users/ovtin/outDmeson/D0/results/fitsD0/forTest/";
+    TString KEDR = "/store/users/ovtin/outDmeson/D0/results/fitsD0/forTest/";
 
     TCanvas *c = new TCanvas("Signal", "Signal", 1200, 400);
     c->Divide(3);
@@ -111,6 +102,6 @@ void fit_unbinned_MCBkg_uds()
     c->cd(3);
     dp_frame->Draw();
     outName="uds_RooFit";
-    c->SaveAs(KEDR + outName + format1);  c->SaveAs(KEDR + outName + format2);  c->SaveAs(KEDR + outName + format3);
+    //c->SaveAs(KEDR + outName + format1);  c->SaveAs(KEDR + outName + format2);  c->SaveAs(KEDR + outName + format3);
 }
 
