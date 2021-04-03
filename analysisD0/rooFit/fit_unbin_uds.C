@@ -19,6 +19,7 @@ void fit_unbin_uds()
     //gROOT->SetStyle("Plain");
 
     gROOT->ProcessLine(".L RooudsPdf.cxx+");
+    gROOT.LoadMacro("load_read_write.cpp+");
     
     TTree *tree = new TTree("tree", "tree");
     Double_t* br1 = new Double_t ;
@@ -63,6 +64,8 @@ void fit_unbin_uds()
     par[1] = 1.155407;  //alpha_de
     par[2] = 1888.750;  //ebeam
     par[3] = 3.240319;  //dpcurv
+
+    read_par("par/bck_uds.par", 4, par);
 
     RooRealVar alpha_mbc("alpha_mbc", "alpha_mbc", par[0], -10., 50.);
     RooRealVar alpha_de("alpha_de", "alpha_de", par[1], -5., 5.);
