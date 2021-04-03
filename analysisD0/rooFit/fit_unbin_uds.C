@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "TMath.h"
 #include "TFormula.h"
 #include "RooRealVar.h"
@@ -11,40 +12,22 @@
 #include "TStyle.h"
 #include "RooudsPdf.h"
 R__LOAD_LIBRARY(RooudsPdf_cxx.so)
+R__LOAD_LIBRARY(load_read_write_C.so)
+
+#define BCK_PARS 4
 
 using namespace RooFit;
 
 void fit_unbin_uds()
 {
     //gROOT->SetStyle("Plain");
+    //gROOT->ProcessLine(".L RooudsPdf.cxx+");
+    //gROOT->ProcessLine(".L load_read_write.C++");
 
-    gROOT->ProcessLine(".L RooudsPdf.cxx+");
-    gROOT.LoadMacro("load_read_write.cpp+");
-    
     TTree *tree = new TTree("tree", "tree");
-    Double_t* br1 = new Double_t ;
-    Double_t* br2 = new Double_t ;
-    Double_t* br3 = new Double_t ;
-    tree->Branch("mbc", br1, "mbc/D");
-    tree->Branch("de", br2, "de/D");
-    tree->Branch("dp", br3, "dp/D");
+    load_dat_file(tree,"dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC.dat");
 
-    FILE* file = fopen("kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC.dat","r");
-    int i=0;
-    while (!feof(file)) {
-	double fmbc,fde,fdp;
-	if (fscanf(file,"%lf %lf %lf", &fmbc,&fde,&fdp) == 3) {
-	    *br1 = fmbc;
-	    *br2 = fde;
-            *br3 = fdp;
-	    tree->Fill();
-	    i++;
-	}
-	//if (i >= 4000) break;
-    }
-    fclose(file);
-
-    // Create  component  pdfs in  Mbc and dE
+    // Create  component  pdfs in  Mbc, dE, dP
     // ----------------------------------------------------------------
     RooRealVar mbc("mbc", "M_{bc} (MeV)", 1700, 1900);
     RooRealVar de("de", "#Delta E (MeV)", -300, 300);
@@ -54,18 +37,13 @@ void fit_unbin_uds()
 
     // Construct unbinned dataset importing tree branches
     RooDataSet data("data", "data", RooArgSet(mbc, de, dp), Import(*tree));
-    //RooDataSet data("data", "data", RooArgSet(mbc, de), Import(*tree));
 
     int ndata = data.sumEntries();
     cout<<"ndata="<<ndata<<endl;
 
-    double par[4];
-    par[0] = 7.745104;     //alpha_mbc
-    par[1] = 1.155407;  //alpha_de
-    par[2] = 1888.750;  //ebeam
-    par[3] = 3.240319;  //dpcurv
-
-    read_par("par/bck_uds.par", 4, par);
+    double par[BCK_PARS];
+    double epar[BCK_PARS];
+    read_par("par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/bck_uds.par", BCK_PARS, par, epar);
 
     RooRealVar alpha_mbc("alpha_mbc", "alpha_mbc", par[0], -10., 50.);
     RooRealVar alpha_de("alpha_de", "alpha_de", par[1], -5., 5.);
@@ -76,21 +54,57 @@ void fit_unbin_uds()
     
     uds_model.Print();
 
-    // --- Perform fit of composite PDF to data ---
-    uds_model.fitTo(data);
-    //uds_model.fitTo(data,RooFit::Minimizer("Minuit2","minimize"));
+    //Perform fit and save result
+    RooFitResult* r = uds_model.fitTo(data,RooFit::Minimizer("Minuit2","migrad"),Save());
+    //Print fit results 
+    // ---------------------------------
+    // Verbose printing: Basic info, values of constant parameters, initial and
+    // final values of floating parameters, global correlations
+    r->Print("v");    
+    //Access basic information
+    cout << "EDM = " << r->edm() << endl ;
+    cout << "-log(L) at minimum = " << r->minNll() << endl ; 
+    //Access list of final fit parameter values
+    cout << "final value of floating parameters" << endl ;
+    r->floatParsFinal().Print("s") ;
+    //Extract covariance and correlation matrix as TMatrixDSym
+    const TMatrixDSym& cor = r->correlationMatrix() ;
+    const TMatrixDSym& cov = r->covarianceMatrix() ;
+    //Print correlation, covariance matrix
+    cout << "correlation matrix" << endl ;
+    cor.Print() ;
+    cout << "covariance matrix" << endl ;
+    cov.Print() ;
+        
+    par[0] = alpha_mbc.getVal();
+    par[1] = alpha_de.getVal();
+    par[2] = ebeam.getVal();
+    par[3] = dpcurv.getVal();
+
+    epar[0] = alpha_mbc.getError();
+    epar[1] = alpha_de.getError();
+    epar[2] = ebeam.getError();
+    epar[3] = dpcurv.getError();
+       
+    write_par("par/bck_uds_woDCnoise.par", BCK_PARS, par, epar);
 
     RooPlot* mbc_frame = mbc.frame();
     data.plotOn(mbc_frame);
     uds_model.plotOn(mbc_frame);
+    Double_t chi2_mbc = mbc_frame->chiSquare();
+    cout << "mbc Chi2 : " << chi2_mbc << endl;
     
     RooPlot* de_frame = de.frame();
     data.plotOn(de_frame);
     uds_model.plotOn(de_frame);
+    Double_t chi2_de = de_frame->chiSquare();
+    cout << "de Chi2 : " << chi2_de << endl;
     
     RooPlot* dp_frame = dp.frame();
     data.plotOn(dp_frame);
     uds_model.plotOn(dp_frame);
+    Double_t chi2_dp = dp_frame->chiSquare();
+    cout << "dp Chi2 : " << chi2_dp << endl;
      
     TString format1=".eps";
     TString format2=".png";
