@@ -14,15 +14,11 @@ R__LOAD_LIBRARY(RooudsPdf_cxx.so)
 
 using namespace RooFit;
 
-void fit_unbinned_MCBkg_uds()
+void fit_unbin_uds()
 {
     //gROOT->SetStyle("Plain");
 
-    //gROOT.LoadMacro(".L RooudsPdf.cxx+"); 
-    //gSystem->Load(".L RooudsPdf.cxx+");
-    //gSystem->Load("RooudsPdf_cxx.so");
     gROOT->ProcessLine(".L RooudsPdf.cxx+");
-    //gROOT->ProcessLine("RooudsPdf_cxx.so");
     
     TTree *tree = new TTree("tree", "tree");
     Double_t* br1 = new Double_t ;
@@ -108,6 +104,6 @@ void fit_unbinned_MCBkg_uds()
     c->cd(3);
     dp_frame->Draw();
     outName="uds_RooFit";
-    c->SaveAs(KEDR + outName + format1);  c->SaveAs(KEDR + outName + format2);  c->SaveAs(KEDR + outName + format3);
+    //c->SaveAs(KEDR + outName + format1);  c->SaveAs(KEDR + outName + format2);  c->SaveAs(KEDR + outName + format3);
 }
 
