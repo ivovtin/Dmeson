@@ -11,8 +11,8 @@
 #include "TAxis.h"
 #include "TStyle.h"
 #include "RooudsPdf.h"
-R__LOAD_LIBRARY(RooudsPdf_cxx.so)
-R__LOAD_LIBRARY(load_read_write_C.so)
+R__LOAD_LIBRARY(/home/ovtin/development/Dmeson/analysisD0/rooFit/RooudsPdf_cxx.so)
+R__LOAD_LIBRARY(/home/ovtin/development/Dmeson/analysisD0/rooFit/load_read_write_C.so)
 
 #define BCK_PARS 4
 
@@ -25,7 +25,7 @@ void fit_unbin_uds()
     //gROOT->ProcessLine(".L load_read_write.C++");
 
     TTree *tree = new TTree("tree", "tree");
-    load_dat_file(tree,"dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC.dat");
+    load_dat_file(tree,"/home/ovtin/development/Dmeson/analysisD0/rooFit/dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC.dat");
 
     // Create  component  pdfs in  Mbc, dE, dP
     // ----------------------------------------------------------------
@@ -43,7 +43,7 @@ void fit_unbin_uds()
 
     double par[BCK_PARS];
     double epar[BCK_PARS];
-    read_par("par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/bck_uds.par", BCK_PARS, par, epar);
+    read_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/bck_uds.par", BCK_PARS, par, epar);
 
     RooRealVar alpha_mbc("alpha_mbc", "alpha_mbc", par[0], -10., 50.);
     RooRealVar alpha_de("alpha_de", "alpha_de", par[1], -5., 5.);
@@ -86,7 +86,7 @@ void fit_unbin_uds()
     epar[2] = ebeam.getError();
     epar[3] = dpcurv.getError();
        
-    write_par("par/bck_uds_woDCnoise.par", BCK_PARS, par, epar);
+    write_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/bck_uds_woDCnoise.par", BCK_PARS, par, epar);
 
     RooPlot* mbc_frame = mbc.frame();
     data.plotOn(mbc_frame);
@@ -110,9 +110,11 @@ void fit_unbin_uds()
     TString format2=".png";
     TString format3=".pdf";
     TString outName;
-    TString KEDR = "/store/users/ovtin/outDmeson/D0/results/fitsD0/";
+    //TString KEDR = "/store/users/ovtin/outDmeson/D0/results/fitsD0/";
+    //TString KEDR = "/home/ovtin/development/storekedr/outDmeson/D0/results/fitsD0/";
+    TString KEDR = "/home/ovtin/development/Dmeson/analysisD0/rooFit/";
 
-    TCanvas *c = new TCanvas("Signal", "Signal", 1200, 400);
+    TCanvas *c = new TCanvas("uds", "uds", 1200, 400);
     c->Divide(3);
     c->cd(1);
     mbc_frame->Draw();
@@ -121,6 +123,6 @@ void fit_unbin_uds()
     c->cd(3);
     dp_frame->Draw();
     outName="uds_RooFit";
-    //c->SaveAs(KEDR + outName + format1);  c->SaveAs(KEDR + outName + format2);  c->SaveAs(KEDR + outName + format3);
+    c->SaveAs(KEDR + outName + format1);  c->SaveAs(KEDR + outName + format2);  c->SaveAs(KEDR + outName + format3);
 }
 

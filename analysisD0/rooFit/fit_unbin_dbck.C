@@ -11,8 +11,8 @@
 #include "TAxis.h"
 #include "TStyle.h"
 #include "RoodbckPdf.h"
-R__LOAD_LIBRARY(RoodbckPdf_cxx.so)
-R__LOAD_LIBRARY(load_read_write_C.so)
+R__LOAD_LIBRARY(/home/ovtin/development/Dmeson/analysisD0/rooFit/RoodbckPdf_cxx.so)
+R__LOAD_LIBRARY(/home/ovtin/development/Dmeson/analysisD0/rooFit/load_read_write_C.so)
 
 #define DBCK_PARS 16
 
@@ -25,7 +25,7 @@ void fit_unbin_dbck()
     //gROOT->ProcessLine(".L load_read_write.C++");
 
     TTree *tree = new TTree("tree", "tree");
-    load_dat_file(tree,"dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/kp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC.dat");
+    load_dat_file(tree,"/home/ovtin/development/Dmeson/analysisD0/rooFit/dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/kp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC.dat");
     //load_dat_file(tree,"dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/kp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC.dat",0,8000);
 
     // Create  component  pdfs in  Mbc, dE, dP
@@ -44,7 +44,7 @@ void fit_unbin_dbck()
 
     double par[DBCK_PARS];
     double epar[DBCK_PARS];
-    read_par("par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/dbck_sim.par", DBCK_PARS, par, epar);
+    read_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/dbck_sim.par", DBCK_PARS, par, epar);
     //read_par("par/dbck_sim9.par", DBCK_PARS, par, epar);
 
     RooRealVar alpha_mbc("alpha_mbc", "alpha_mbc", par[0], 5., 14.);
@@ -146,7 +146,7 @@ void fit_unbin_dbck()
     epar[14] = mbc_shift.getError();
     epar[15] = mbc_sigma2.getError();
        
-    write_par("par/dbck_sim.par", DBCK_PARS, par, epar);
+    write_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/dbck_sim.par", DBCK_PARS, par, epar);
 
     RooPlot* mbc_frame = mbc.frame();
     data.plotOn(mbc_frame);
@@ -170,7 +170,8 @@ void fit_unbin_dbck()
     TString format2=".png";
     TString format3=".pdf";
     TString outName;
-    TString KEDR = "/store/users/ovtin/outDmeson/D0/results/fitsD0/";
+    //TString KEDR = "/store/users/ovtin/outDmeson/D0/results/fitsD0/";
+    TString KEDR = "/home/ovtin/development/storekedr/outDmeson/D0/results/fitsD0/";
 
     TCanvas *c = new TCanvas("dbck", "dbck", 1200, 400);
     c->Divide(3);
@@ -181,6 +182,6 @@ void fit_unbin_dbck()
     c->cd(3);
     dp_frame->Draw();
     outName="dbck_RooFit";
-    //c->SaveAs(KEDR + outName + format1);  c->SaveAs(KEDR + outName + format2);  c->SaveAs(KEDR + outName + format3);
+    c->SaveAs(KEDR + outName + format1);  c->SaveAs(KEDR + outName + format2);  c->SaveAs(KEDR + outName + format3);
 }
 
