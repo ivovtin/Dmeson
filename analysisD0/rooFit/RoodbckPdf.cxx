@@ -93,10 +93,12 @@ ClassImp(RoodbckPdf);
    
    //double mbc_mean1 = 1865.1;
    //double mbc_mean1 = 1864.8;
-   //double mbc_mean1 = 1865.5;
+   //double mbc_mean1 = 1865.5; //+ 
    //double mbc_mean1 = 1865.3;
    //double mbc_mean1 = 1865.6;
-   double mbc_mean1 = 1865.4;
+   //double mbc_mean1 = 1865.4;
+   //double mbc_mean1 = 1865.0; //+
+   double mbc_mean1 = 1864.5;
 
    if (mbc > ebeam) return 0;
    double dp_max = sqrt(ebeam*ebeam - mbc*mbc);
