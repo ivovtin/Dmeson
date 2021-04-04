@@ -55,26 +55,26 @@ void generate_fit_unbin_dbck()
     dbck_model.Print();
 
     //Generate an unbinned toy MC set
-    RooDataSet* data = (RooDataSet*) dbck_model.generate(RooArgSet(mbc,de,dp),10000) ;    
+    RooDataSet* data = (RooDataSet*) dbck_model.generate(RooArgSet(mbc,de,dp),8000) ;    
                 
     RooPlot* mbc_frame = mbc.frame();
     data->plotOn(mbc_frame);
     dbck_model.plotOn(mbc_frame);
-    dbck_model.paramOn(mbc_frame);
+    //dbck_model.paramOn(mbc_frame);
     Double_t chi2_mbc = mbc_frame->chiSquare();
     cout << "mbc Chi2 : " << chi2_mbc << endl;
     
     RooPlot* de_frame = de.frame();
     data->plotOn(de_frame);
     dbck_model.plotOn(de_frame);
-    dbck_model.paramOn(de_frame);
+    //dbck_model.paramOn(de_frame);
     Double_t chi2_de = de_frame->chiSquare();
     cout << "de Chi2 : " << chi2_de << endl;
     
     RooPlot* dp_frame = dp.frame();
     data->plotOn(dp_frame);
     dbck_model.plotOn(dp_frame);
-    dbck_model.paramOn(dp_frame);
+    //dbck_model.paramOn(dp_frame);
     Double_t chi2_dp = dp_frame->chiSquare();
     cout << "dp Chi2 : " << chi2_dp << endl;
      

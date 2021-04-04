@@ -91,7 +91,9 @@ ClassImp(RoodbckPdf);
    // ENTER EXPRESSION IN TERMS OF VARIABLE ARGUMENTS HERE 
    //return (p_mbc*p_de+fabs(de_frac)*p_mbc2*p_de2+fabs(de_frac1)*p_mbc3*p_de3 + fabs(de_frac2)*p_mbc4*p_de4)*fabs(1.+dpcurv*dp*dp/1000./1000.) ; 
    
-   double mbc_mean1 = 1865.1;
+   //double mbc_mean1 = 1865.1;
+   //double mbc_mean1 = 1864.8;
+   double mbc_mean1 = 1865.5;
 
    if (mbc > ebeam) return 0;
    double dp_max = sqrt(ebeam*ebeam - mbc*mbc);
@@ -109,8 +111,9 @@ ClassImp(RoodbckPdf);
      double p_de2 = exp(-pow(de-de_mean,2)/2./de_width/de_width);
      double p_de3 = exp(-pow(de-de_mean1,2)/2./de_width1/de_width1);
      double p_de4 = exp(-pow(de+de_mean1,2)/2./de_width1/de_width1);
-     return (p_mbc*p_de+fabs(de_frac)*p_mbc2*p_de2+fabs(de_frac1)*p_mbc3*p_de3 + fabs(de_frac2)*p_mbc4*p_de4)*
-           fabs(1.+dpcurv*dp*dp/1000./1000.);
+     return (p_mbc*p_de+fabs(de_frac)*p_mbc2*p_de2+fabs(de_frac1)*p_mbc3*p_de3 + fabs(de_frac2)*p_mbc4*p_de4)*fabs(1.+dpcurv*dp*dp/1000./1000.);
+     //return (p_mbc*p_de+fabs(de_frac)*p_mbc2*p_de2+fabs(de_frac1)*p_mbc3*p_de3)*fabs(1.+dpcurv*dp*dp/1000./1000.);
+     //return p_mbc*p_de*fabs(1.+dpcurv*dp*dp/1000./1000.);
    }
    return 0.;
  } 

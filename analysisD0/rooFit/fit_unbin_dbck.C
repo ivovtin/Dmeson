@@ -25,8 +25,8 @@ void fit_unbin_dbck()
     //gROOT->ProcessLine(".L load_read_write.C++");
 
     TTree *tree = new TTree("tree", "tree");
-    //load_dat_file(tree,"dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/kp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC.dat");
-    load_dat_file(tree,"dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/kp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC.dat",0,8000);
+    load_dat_file(tree,"dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/kp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC.dat");
+    //load_dat_file(tree,"dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/kp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC.dat",0,8000);
 
     // Create  component  pdfs in  Mbc, dE, dP
     // ----------------------------------------------------------------
@@ -46,25 +46,25 @@ void fit_unbin_dbck()
     double epar[DBCK_PARS];
     read_par("par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/dbck_sim.par", DBCK_PARS, par, epar);
     //read_par("par/dbck_sim9.par", DBCK_PARS, par, epar);
-/*
-    RooRealVar alpha_mbc("alpha_mbc", "alpha_mbc", par[0], 12., 20.);
+
+    RooRealVar alpha_mbc("alpha_mbc", "alpha_mbc", par[0], 5., 14.);
     RooRealVar alpha_de("alpha_de", "alpha_de", par[1], 5., 11.);
     RooRealVar ebeam("ebeam", "ebeam", par[2],par[2],par[2]);
-    RooRealVar dpcurv("dpcurv", "dpcurv", par[3], 0., 10.);
-    RooRealVar de_mean("de_mean", "de_mean", par[4], -300., -100.);
-    RooRealVar de_width("de_width", "de_width", par[5], 40., 100.);
-    RooRealVar de_frac("de_frac", "de_frac", par[6], -30., 1.);
-    RooRealVar mbc_mean("mbc_mean", "mbc_mean", par[7], -1950., 500.);
-    RooRealVar mbc_sigma0("mbc_sigma0", "mbc_sigma0", par[8], 10., 55.);
-    RooRealVar mbc_sigma1("mbc_sigma1", "mbc_sigma1", par[9], 0., 50.);
-    RooRealVar de_mean1("de_mean1", "de_mean1", par[10], 100., 240.);
-    RooRealVar de_width1("de_width1", "de_width1", par[11], 30., 120.);
-    RooRealVar de_frac1("de_frac1", "de_frac1", par[12], -2.0, 0.5);
+    RooRealVar dpcurv("dpcurv", "dpcurv", par[3], -5., 8.);
+    RooRealVar de_mean("de_mean", "de_mean", par[4], -300., -150.);
+    RooRealVar de_width("de_width", "de_width", par[5], 50., 110.);
+    RooRealVar de_frac("de_frac", "de_frac", par[6], -10., 5.);
+    RooRealVar mbc_mean("mbc_mean", "mbc_mean", par[7], 1800., 1900.);
+    RooRealVar mbc_sigma0("mbc_sigma0", "mbc_sigma0", par[8], 20., 58.);
+    RooRealVar mbc_sigma1("mbc_sigma1", "mbc_sigma1", par[9], 20., 50.);
+    RooRealVar de_mean1("de_mean1", "de_mean1", par[10], 130., 220.);
+    RooRealVar de_width1("de_width1", "de_width1", par[11], 80., 140.);
+    RooRealVar de_frac1("de_frac1", "de_frac1", par[12], -0.5, 0.5);
     RooRealVar de_frac2("de_frac2", "de_frac2", par[13], -2.0, 8.);
     RooRealVar mbc_shift("mbc_shift", "mbc_shift", par[14], -1.0, 8.);
-    RooRealVar mbc_sigma2("mbc_sigma2", "mbc_sigma2", par[15], -40., -6.);
-*/
+    RooRealVar mbc_sigma2("mbc_sigma2", "mbc_sigma2", par[15], -20., -6.);
 
+    /*
     RooRealVar alpha_mbc("alpha_mbc", "alpha_mbc", par[0], par[0], par[0]);
     RooRealVar alpha_de("alpha_de", "alpha_de", par[1], par[1], par[1]);
     RooRealVar ebeam("ebeam", "ebeam", par[2],par[2],par[2]);
@@ -81,7 +81,7 @@ void fit_unbin_dbck()
     RooRealVar de_frac2("de_frac2", "de_frac2", par[13], par[13], par[13]);
     RooRealVar mbc_shift("mbc_shift", "mbc_shift", par[14], par[14], par[14]);
     RooRealVar mbc_sigma2("mbc_sigma2", "mbc_sigma2", par[15], par[15], par[15]);
-    
+    */
     //RooClassFactory::makePdf("RoodbckPdf","mbc,ebeam,alpha_mbc,alpha_de,de,dpcurv,dp,de_mean,de_width,de_frac,mbc_mean,mbc_sigma0,mbc_sigma1,de_mean1,de_width1,de_frac1,de_frac2,mbc_shift,mbc_sigma2",0,"(p_mbc*p_de+fabs(de_frac)*p_mbc2*p_de2+fabs(de_frac1)*p_mbc3*p_de3 + fabs(de_frac2)*p_mbc4*p_de4)*fabs(1.+dpcurv*dp*dp/1000./1000.)");  .L RoodbckPdf.cxx+ 
     RoodbckPdf dbck_model("dbck_model","dbck_model",mbc,ebeam,alpha_mbc,alpha_de,de,dpcurv,dp,de_mean,de_width,de_frac,mbc_mean,mbc_sigma0,mbc_sigma1,de_mean1,de_width1,de_frac1,de_frac2,mbc_shift,mbc_sigma2);   
     
