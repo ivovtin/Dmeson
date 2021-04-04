@@ -29,9 +29,9 @@
 #$ -M ovtin.ivan@gmail.com
 
 ## MC signal
-##$HOME/development/Dmeson/analysisD0/rooFit/batch_sig_def
+$HOME/development/Dmeson/analysisD0/rooFit/batch_sig
 ## uds BG
-$HOME/development/Dmeson/analysisD0/rooFit/batch_bck
+##$HOME/development/Dmeson/analysisD0/rooFit/batch_bck
 ## DD BG
 ##$HOME/development/Dmeson/analysisD0/rooFit/batch_dbck
 ## exp
