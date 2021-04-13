@@ -64,24 +64,6 @@ void fit_unbin_dbck()
     RooRealVar mbc_shift("mbc_shift", "mbc_shift", par[14], -1.0, 8.);
     RooRealVar mbc_sigma2("mbc_sigma2", "mbc_sigma2", par[15], -20., -6.);
 
-    /*
-    RooRealVar alpha_mbc("alpha_mbc", "alpha_mbc", par[0], par[0], par[0]);
-    RooRealVar alpha_de("alpha_de", "alpha_de", par[1], par[1], par[1]);
-    RooRealVar ebeam("ebeam", "ebeam", par[2],par[2],par[2]);
-    RooRealVar dpcurv("dpcurv", "dpcurv", par[3], par[3], par[3]);
-    RooRealVar de_mean("de_mean", "de_mean", par[4], par[4], par[4]);
-    RooRealVar de_width("de_width", "de_width", par[5], par[5], par[5]);
-    RooRealVar de_frac("de_frac", "de_frac", par[6], par[6], par[6]);
-    RooRealVar mbc_mean("mbc_mean", "mbc_mean", par[7], par[7], par[7]);
-    RooRealVar mbc_sigma0("mbc_sigma0", "mbc_sigma0", par[8], par[8], par[8]);
-    RooRealVar mbc_sigma1("mbc_sigma1", "mbc_sigma1", par[9], par[9], par[9]);
-    RooRealVar de_mean1("de_mean1", "de_mean1", par[10], par[10], par[10]);
-    RooRealVar de_width1("de_width1", "de_width1", par[11], par[11], par[11]);
-    RooRealVar de_frac1("de_frac1", "de_frac1", par[12], par[12], par[12]);
-    RooRealVar de_frac2("de_frac2", "de_frac2", par[13], par[13], par[13]);
-    RooRealVar mbc_shift("mbc_shift", "mbc_shift", par[14], par[14], par[14]);
-    RooRealVar mbc_sigma2("mbc_sigma2", "mbc_sigma2", par[15], par[15], par[15]);
-    */
     //RooClassFactory::makePdf("RoodbckPdf","mbc,ebeam,alpha_mbc,alpha_de,de,dpcurv,dp,de_mean,de_width,de_frac,mbc_mean,mbc_sigma0,mbc_sigma1,de_mean1,de_width1,de_frac1,de_frac2,mbc_shift,mbc_sigma2",0,"(p_mbc*p_de+fabs(de_frac)*p_mbc2*p_de2+fabs(de_frac1)*p_mbc3*p_de3 + fabs(de_frac2)*p_mbc4*p_de4)*fabs(1.+dpcurv*dp*dp/1000./1000.)");  .L RoodbckPdf.cxx+ 
     RoodbckPdf dbck_model("dbck_model","dbck_model",mbc,ebeam,alpha_mbc,alpha_de,de,dpcurv,dp,de_mean,de_width,de_frac,mbc_mean,mbc_sigma0,mbc_sigma1,de_mean1,de_width1,de_frac1,de_frac2,mbc_shift,mbc_sigma2);   
     
@@ -148,21 +130,23 @@ void fit_unbin_dbck()
        
     write_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/dbck_sim.par", DBCK_PARS, par, epar);
 
-    RooPlot* mbc_frame = mbc.frame();
+    RooAbsReal::defaultIntegratorConfig()->method2D().setLabel("RooMCIntegrator");
+
+    RooPlot* mbc_frame = mbc.frame(Title("Mbc"));
     data.plotOn(mbc_frame);
-    dbck_model.plotOn(mbc_frame);
+    dbck_model.plotOn(mbc_frame, LineColor(kRed));
     Double_t chi2_mbc = mbc_frame->chiSquare();
     cout << "mbc Chi2 : " << chi2_mbc << endl;
     
-    RooPlot* de_frame = de.frame();
+    RooPlot* de_frame = de.frame(Title("dE"));
     data.plotOn(de_frame);
-    dbck_model.plotOn(de_frame);
+    dbck_model.plotOn(de_frame, LineColor(kRed));
     Double_t chi2_de = de_frame->chiSquare();
     cout << "de Chi2 : " << chi2_de << endl;
     
-    RooPlot* dp_frame = dp.frame();
+    RooPlot* dp_frame = dp.frame(Title("dP"));
     data.plotOn(dp_frame);
-    dbck_model.plotOn(dp_frame);
+    dbck_model.plotOn(dp_frame, LineColor(kRed));
     Double_t chi2_dp = dp_frame->chiSquare();
     cout << "dp Chi2 : " << chi2_dp << endl;
      
@@ -170,8 +154,7 @@ void fit_unbin_dbck()
     TString format2=".png";
     TString format3=".pdf";
     TString outName;
-    //TString KEDR = "/store/users/ovtin/outDmeson/D0/results/fitsD0/";
-    TString KEDR = "/home/ovtin/development/storekedr/outDmeson/D0/results/fitsD0/";
+    TString KEDR = "/home/ovtin/development/Dmeson/analysisD0/rooFit/";
 
     TCanvas *c = new TCanvas("dbck", "dbck", 1200, 400);
     c->Divide(3);

@@ -9,12 +9,10 @@
 # --     What to redirect to where         --
 # -- working directory --
 #$ -cwd             # run the job in the directory specified.
-##$ -o /spool/users/ovtin/$JOB_NAME.o$JOB_ID
-#$ -o $JOB_NAME.o$JOB_ID
+#$ -o /home/ovtin/development/Dmeson/analysisD0/rooFit/output/$JOB_NAME.o$JOB_ID
 # -- Merge the standard out and standard error to one file --
-##$ -j y
-#$ -b y
-#$ -shell n
+#$ -j y
+##$ -shell n
 #$ -V                 ##will pass all environment variables to the job
 ##$ -e /dev/null
 # -------------------------------------------
@@ -30,11 +28,12 @@
 
 ## MC signal
 ##$HOME/development/Dmeson/analysisD0/rooFit/batch_sig
-$HOME/development/Dmeson/analysisD0/rooFit/batch_sig_gen
+##$HOME/development/Dmeson/analysisD0/rooFit/batch_sig_gen
 ## uds BG
 ##$HOME/development/Dmeson/analysisD0/rooFit/batch_bck
 ## DD BG
-##$HOME/development/Dmeson/analysisD0/rooFit/batch_dbck
+$HOME/development/Dmeson/analysisD0/rooFit/batch_dbck
+##$HOME/development/Dmeson/analysisD0/rooFit/batch_dbck_gen
 ## exp
 ##$HOME/development/Dmeson/analysisD0/rooFit/batch_exp
 

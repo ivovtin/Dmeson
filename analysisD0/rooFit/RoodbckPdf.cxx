@@ -97,11 +97,13 @@ ClassImp(RoodbckPdf);
    //double mbc_mean1 = 1865.3;
    //double mbc_mean1 = 1865.6;
    //double mbc_mean1 = 1865.4;
-   //double mbc_mean1 = 1865.0; //+
-   double mbc_mean1 = 1864.5;
+   double mbc_mean1 = 1865.0; //+
+   //double mbc_mean1 = 1864.5;
 
    if (mbc > ebeam) return 0;
    double dp_max = sqrt(ebeam*ebeam - mbc*mbc);
+   //max_dp = sqrt(max_mbc*max_mbc-min_mbc*min_mbc);
+   //double dp_max = 848.52814;
    if (fabs(dp)<dp_max) {
      double p_mbc = exp(alpha_mbc*(mbc*mbc-ebeam*ebeam)/ebeam/ebeam);
      double p_de = exp(-alpha_de*de/1000.);
