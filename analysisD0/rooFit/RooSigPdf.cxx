@@ -141,7 +141,7 @@ ClassImp(RooSigPdf);
   double min_mbc = 1700.;
   double max_mbc = 1900.;
   double max_de = 300.;
-  double dbck_mbc_mean1 = 1865.1;
+  double dbck_mbc_mean1 = 1865.0;
 
   if (mbc > ebeam) return 0;
   if (mbc < min_mbc) return 0;
@@ -185,7 +185,8 @@ ClassImp(RooSigPdf);
     double p_de3 = exp(-pow(de-dbck_de_mean1,2)/2./dbck_de_width1/dbck_de_width1);
     double p_de4 = exp(-pow(de+dbck_de_mean1,2)/2./dbck_de_width1/dbck_de_width1);
 
-    return dpsig*(desig*mbcsig + fabs(mbcw_frac)*desig2*mbcsig2) + fabs(bck)/1e5*(p_mbc*p_de+fabs(dbck_de_frac)*p_mbc2*p_de2+fabs(dbck_de_frac1)*p_mbc3*p_de3 + fabs(dbck_de_frac2)*p_mbc4*p_de4)*fabs(1.+dpcurv*dp*dp/1000./1000.);
+    return dpsig*(desig*mbcsig + fabs(mbcw_frac)*desig2*mbcsig2) + fabs(bck)/1e5*(p_mbc*p_de+fabs(dbck_de_frac)*p_mbc2*p_de2+fabs(dbck_de_frac1)*p_mbc3*p_de3 + fabs(dbck_de_frac2)*p_mbc4*p_de4)*fabs(1.+dbck_dpcurv*dp*dp/1000./1000.);
+    //return (p_mbc*p_de+fabs(dbck_de_frac)*p_mbc2*p_de2+fabs(dbck_de_frac1)*p_mbc3*p_de3 + fabs(dbck_de_frac2)*p_mbc4*p_de4)*fabs(1.+dbck_dpcurv*dp*dp/1000./1000.);
   }
   return 0.;
 

@@ -32,39 +32,39 @@ void generate_fit_unbin_signal()
     double epar[SIG_PARS];
     read_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/sig_def.par", SIG_PARS, par, epar);
 
-    RooRealVar mbc_mean("mbc_mean", "mbc_mean", par[0], 1800., 1900.);
-    RooRealVar de_mean("de_mean", "de_mean", par[1], -300., -150.);
-    RooRealVar mbcde_corr("mbcde_corr", "mbcde_corr", par[2], -300., -150.);
-    RooRealVar mbc_sigma0_l("mbc_sigma0_l", "mbc_sigma0_l", par[3], -300., -150.);
-    RooRealVar mbc_sigma0_r("mbc_sigma0_r", "mbc_sigma0_r", par[4], -300., -150.);
-    RooRealVar de_sigma("de_sigma", "de_sigma", par[5], -300., -150.);
+    RooRealVar mbc_mean("mbc_mean", "mbc_mean", par[0], par[0], par[0]);
+    RooRealVar de_mean("de_mean", "de_mean", par[1], par[1], par[1]);
+    RooRealVar mbcde_corr("mbcde_corr", "mbcde_corr", par[2], par[2], par[2]);
+    RooRealVar mbc_sigma0_l("mbc_sigma0_l", "mbc_sigma0_l", par[3], par[3], par[3]);
+    RooRealVar mbc_sigma0_r("mbc_sigma0_r", "mbc_sigma0_r", par[4], par[4], par[4]);
+    RooRealVar de_sigma("de_sigma", "de_sigma", par[5], par[5], par[5]);
     RooRealVar ebeam("ebeam", "ebeam", par[6], par[6], par[6]);
-    RooRealVar bck("bck", "bck", par[7], -300., -150.);
-    RooRealVar mbc_sigma2("mbc_sigma2", "mbc_sigma2", par[8], -300., -150.);
-    RooRealVar mbcw_shift("mbcw_shift", "mbcw_shift", par[9], -300., -150.);
-    RooRealVar mbcw_frac("mbcw_frac", "mbcw_frac", par[10], -300., -150.);
-    RooRealVar mbcw_sigma("mbcw_sigma", "mbcw_sigma", par[11], -300., -150.);
-    RooRealVar dew_sigma("dew_sigma", "dew_sigma", par[12], -300., -150.);
-    RooRealVar mbcdew_corr("mbcdew_corr", "mbcdew_corr", par[13], -300., -150.);
-    RooRealVar dpcurv("dpcurv", "dpcurv", par[14], -300., -150.);
-    RooRealVar mbc_sigma4("mbc_sigma4", "mbc_sigma4", par[15], -300., -150.);
+    RooRealVar bck("bck", "bck", par[7], par[7], par[7]);
+    RooRealVar mbc_sigma2("mbc_sigma2", "mbc_sigma2", par[8], par[8], par[8]);
+    RooRealVar mbcw_shift("mbcw_shift", "mbcw_shift", par[9], par[9], par[9]);
+    RooRealVar mbcw_frac("mbcw_frac", "mbcw_frac", par[10], par[10], par[10]);
+    RooRealVar mbcw_sigma("mbcw_sigma", "mbcw_sigma", par[11], par[11], par[11]);
+    RooRealVar dew_sigma("dew_sigma", "dew_sigma", par[12], par[12], par[12]);
+    RooRealVar mbcdew_corr("mbcdew_corr", "mbcdew_corr", par[13], par[13], par[13]);
+    RooRealVar dpcurv("dpcurv", "dpcurv", par[14], par[14], par[14]);
+    RooRealVar mbc_sigma4("mbc_sigma4", "mbc_sigma4", par[15], par[15], par[15]);
 
-    RooRealVar dbck_alpha_mbc("dbck_alpha_mbc", "dbck_alpha_mbc", par[16], 5., 14.);
-    RooRealVar dbck_alpha_de("dbck_alpha_de", "dbck_alpha_de", par[17], 5., 11.);
+    RooRealVar dbck_alpha_mbc("dbck_alpha_mbc", "dbck_alpha_mbc", par[16], par[16], par[16]);
+    RooRealVar dbck_alpha_de("dbck_alpha_de", "dbck_alpha_de", par[17], par[17], par[17]);
     RooRealVar dbck_ebeam("dbck_ebeam", "dbck_ebeam", par[18],par[18],par[18]);
-    RooRealVar dbck_dpcurv("dbck_dpcurv", "dbck_dpcurv", par[19], -5., 8.);
-    RooRealVar dbck_de_mean("dbck_de_mean", "dbck_de_mean", par[20], -300., -150.);
-    RooRealVar dbck_de_width("dbck_de_width", "dbck_de_width", par[21], 50., 110.);
-    RooRealVar dbck_de_frac("dbck_de_frac", "dbck_de_frac", par[22], -10., 5.);
-    RooRealVar dbck_mbc_mean("dbck_mbc_mean", "dbck_mbc_mean", par[23], 1800., 1900.);
-    RooRealVar dbck_mbc_sigma0("dbck_mbc_sigma0", "dbck_mbc_sigma0", par[24], 20., 58.);
-    RooRealVar dbck_mbc_sigma1("dbck_mbc_sigma1", "dbck_mbc_sigma1", par[25], 20., 50.);  
-    RooRealVar dbck_de_mean1("dbck_de_mean1", "dbck_de_mean1", par[26], 130., 220.);
-    RooRealVar dbck_de_width1("dbck_de_width1", "dbck_de_width1", par[27], 80., 140.);
-    RooRealVar dbck_de_frac1("dbck_de_frac1", "dbck_de_frac1", par[28], -0.5, 0.5);
-    RooRealVar dbck_de_frac2("dbck_de_frac2", "dbck_de_frac2", par[29], -2.0, 8.);
-    RooRealVar dbck_mbc_shift("dbck_mbc_shift", "dbck_mbc_shift", 0., -1.0, 8.);
-    RooRealVar dbck_mbc_sigma2("dbck_mbc_sigma2", "dbck_mbc_sigma2", par[25], -20., -6.);
+    RooRealVar dbck_dpcurv("dbck_dpcurv", "dbck_dpcurv", par[19], par[19], par[19]);
+    RooRealVar dbck_de_mean("dbck_de_mean", "dbck_de_mean", par[20], par[20], par[20]);
+    RooRealVar dbck_de_width("dbck_de_width", "dbck_de_width", par[21], par[21], par[21]);
+    RooRealVar dbck_de_frac("dbck_de_frac", "dbck_de_frac", par[22], par[22], par[22]);
+    RooRealVar dbck_mbc_mean("dbck_mbc_mean", "dbck_mbc_mean", par[23], par[23], par[23]);
+    RooRealVar dbck_mbc_sigma0("dbck_mbc_sigma0", "dbck_mbc_sigma0", par[24], par[24], par[24]);
+    RooRealVar dbck_mbc_sigma1("dbck_mbc_sigma1", "dbck_mbc_sigma1", par[25], par[25], par[25]);  
+    RooRealVar dbck_de_mean1("dbck_de_mean1", "dbck_de_mean1", par[26], par[26], par[26]);
+    RooRealVar dbck_de_width1("dbck_de_width1", "dbck_de_width1", par[27], par[27], par[27]);
+    RooRealVar dbck_de_frac1("dbck_de_frac1", "dbck_de_frac1", par[28], par[28], par[28]);
+    RooRealVar dbck_de_frac2("dbck_de_frac2", "dbck_de_frac2", par[29], par[29], par[29]);
+    RooRealVar dbck_mbc_shift("dbck_mbc_shift", "dbck_mbc_shift", 0., 0., 0.);
+    RooRealVar dbck_mbc_sigma2("dbck_mbc_sigma2", "dbck_mbc_sigma2", par[25], par[25], par[25]);
 
     //RooClassFactory::makePdf("RooSigPdf","mbc,de,dp,mbc_mean,de_mean,mbcde_corr,mbc_sigma0_l,mbc_sigma0_r,de_sigma,ebeam,bck,mbc_sigma2,mbcw_shift,
     //mbcw_frac,mbcw_sigma,dew_sigma,mbcdew_corr,dpcurv,mbc_sigma4,dbck_alpha_mbc,dbck_alpha_de,dbck_ebeam,dbck_dpcurv,dbck_de_mean,dbck_de_width,
@@ -74,23 +74,25 @@ void generate_fit_unbin_signal()
     sig_model.Print();
 
     //Generate an unbinned toy MC set
-    RooDataSet* data = (RooDataSet*) sig_model.generate(RooArgSet(mbc,de,dp),8000) ;
+    RooDataSet* data = (RooDataSet*) sig_model.generate(RooArgSet(mbc,de,dp),4000) ;
        
-    RooPlot* mbc_frame = mbc.frame();
+    RooAbsReal::defaultIntegratorConfig()->method2D().setLabel("RooMCIntegrator");
+
+    RooPlot* mbc_frame = mbc.frame(Title("Mbc"));
     data->plotOn(mbc_frame);
-    sig_model.plotOn(mbc_frame);
+    sig_model.plotOn(mbc_frame, LineColor(kRed));
     Double_t chi2_mbc = mbc_frame->chiSquare();
     cout << "mbc Chi2 : " << chi2_mbc << endl;
     
-    RooPlot* de_frame = de.frame();
+    RooPlot* de_frame = de.frame(Title("dE"));
     data->plotOn(de_frame);
-    sig_model.plotOn(de_frame);
+    sig_model.plotOn(de_frame, LineColor(kRed));
     Double_t chi2_de = de_frame->chiSquare();
     cout << "de Chi2 : " << chi2_de << endl;
     
-    RooPlot* dp_frame = dp.frame();
+    RooPlot* dp_frame = dp.frame(Title("dP"));
     data->plotOn(dp_frame);
-    sig_model.plotOn(dp_frame);
+    sig_model.plotOn(dp_frame, LineColor(kRed));
     Double_t chi2_dp = dp_frame->chiSquare();
     cout << "dp Chi2 : " << chi2_dp << endl;
      
