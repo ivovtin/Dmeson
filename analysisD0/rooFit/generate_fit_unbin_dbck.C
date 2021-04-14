@@ -25,19 +25,18 @@ void generate_fit_unbin_dbck()
     // Create  component  pdfs in  Mbc, dE, dP
     // ----------------------------------------------------------------
     RooRealVar mbc("mbc", "M_{bc} (MeV)", 1700, 1900);
+    mbc.setBins(50);
     RooRealVar de("de", "#Delta E (MeV)", -300, 300);
-    //Double_t minP=-1000;
-    //Double_t maxP=1000;
-    // sqrt(1900*1900-1700*1700)
-    // (double) 848.52814 
-    Double_t minP=-848.0;
-    Double_t maxP=848.0;
+    de.setBins(30);
+    Double_t minP=-1000;
+    Double_t maxP=1000;
     RooRealVar dp("dp", "#Delta P (MeV)", minP, maxP);
+    dp.setBins(200);
 
     double par[DBCK_PARS];
     double epar[DBCK_PARS];
-    //read_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/dbck_sim.par", DBCK_PARS, par, epar);
-    read_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/dbck_sim.par", DBCK_PARS, par, epar);
+    read_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/init/dbck_sim.par", DBCK_PARS, par, epar);
+    //read_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/out/dbck_sim.par", DBCK_PARS, par, epar);
 
     RooRealVar alpha_mbc("alpha_mbc", "alpha_mbc", par[0], par[0], par[0]);
     RooRealVar alpha_de("alpha_de", "alpha_de", par[1], par[1], par[1]);
@@ -67,34 +66,46 @@ void generate_fit_unbin_dbck()
                
     RooAbsReal::defaultIntegratorConfig()->method2D().setLabel("RooMCIntegrator");
  
-    RooPlot *mbc_frame = mbc.frame(Title("Mbc"));
-    data->plotOn(mbc_frame);
+    RooPlot *mbc_frame = mbc.frame(Title(" "));
+    data->plotOn(mbc_frame, MarkerColor(kBlue), LineColor(kBlue));
     dbck_model.plotOn(mbc_frame, LineColor(kRed));
-    //dbck_model.plotOn(mbc_frame, ProjWData(*data), LineColor(kRed));
     Double_t chi2_mbc = mbc_frame->chiSquare();
     cout << "mbc Chi2 : " << chi2_mbc << endl;    
 
-    RooPlot *de_frame = de.frame(Title("dE"));
-    data->plotOn(de_frame);
+    RooPlot *de_frame = de.frame(Title(" "));
+    data->plotOn(de_frame, MarkerColor(kBlue), LineColor(kBlue));
     dbck_model.plotOn(de_frame, LineColor(kRed));
-    //dbck_model.plotOn(de_frame, ProjWData(*data), LineColor(kRed));
     Double_t chi2_de = de_frame->chiSquare();
     cout << "de Chi2 : " << chi2_de << endl;
     
-    RooPlot *dp_frame = dp.frame(Title("dP"));
-    data->plotOn(dp_frame);
+    RooPlot *dp_frame = dp.frame(Title(" "));
+    data->plotOn(dp_frame, MarkerColor(kBlue), LineColor(kBlue));
     dbck_model.plotOn(dp_frame, LineColor(kRed));
-    //dbck_model.plotOn(dp_frame, ProjWData(*data), LineColor(kRed));
     Double_t chi2_dp = dp_frame->chiSquare();
     cout << "dp Chi2 : " << chi2_dp << endl;
     
-    TCanvas* c = new TCanvas("generate_dbck", "generate_dbck", 1200, 400);
+    TCanvas* c = new TCanvas("generate_dbck", "generate_dbck", 1400, 400);
     c->Divide(3);
     c->cd(1);
+    gPad->SetTopMargin(0.03);
+    gPad->SetLeftMargin(0.11);
+    gPad->SetRightMargin(0.03);
+    mbc_frame->GetXaxis()->SetTitleOffset(1.2);
+    mbc_frame->GetYaxis()->SetTitleOffset(1.6);
     mbc_frame->Draw();
     c->cd(2);
+    gPad->SetTopMargin(0.03);
+    gPad->SetLeftMargin(0.11);
+    gPad->SetRightMargin(0.03);
+    de_frame->GetXaxis()->SetTitleOffset(1.2);
+    de_frame->GetYaxis()->SetTitleOffset(1.6);
     de_frame->Draw();
     c->cd(3);
+    gPad->SetTopMargin(0.03);
+    gPad->SetLeftMargin(0.11);
+    gPad->SetRightMargin(0.03);
+    dp_frame->GetXaxis()->SetTitleOffset(1.2);
+    dp_frame->GetYaxis()->SetTitleOffset(1.6); 
     dp_frame->Draw();
 
     TString format1=".eps";

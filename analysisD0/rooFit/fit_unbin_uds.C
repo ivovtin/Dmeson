@@ -30,10 +30,13 @@ void fit_unbin_uds()
     // Create  component  pdfs in  Mbc, dE, dP
     // ----------------------------------------------------------------
     RooRealVar mbc("mbc", "M_{bc} (MeV)", 1700, 1900);
+    mbc.setBins(50);
     RooRealVar de("de", "#Delta E (MeV)", -300, 300);
+    de.setBins(30);
     Double_t minP=-1000;
     Double_t maxP=1000;
     RooRealVar dp("dp", "#Delta P (MeV)", minP, maxP);
+    dp.setBins(200);
 
     // Construct unbinned dataset importing tree branches
     RooDataSet data("data", "data", RooArgSet(mbc, de, dp), Import(*tree));
@@ -43,7 +46,7 @@ void fit_unbin_uds()
 
     double par[BCK_PARS];
     double epar[BCK_PARS];
-    read_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/bck_uds.par", BCK_PARS, par, epar);
+    read_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/init/bck_uds.par", BCK_PARS, par, epar);
 
     RooRealVar alpha_mbc("alpha_mbc", "alpha_mbc", par[0], -10., 50.);
     RooRealVar alpha_de("alpha_de", "alpha_de", par[1], -5., 5.);
@@ -86,23 +89,25 @@ void fit_unbin_uds()
     epar[2] = ebeam.getError();
     epar[3] = dpcurv.getError();
        
-    write_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/bck_uds_woDCnoise.par", BCK_PARS, par, epar);
+    write_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/out/bck_uds.par", BCK_PARS, par, epar);
 
-    RooPlot* mbc_frame = mbc.frame();
-    data.plotOn(mbc_frame);
-    uds_model.plotOn(mbc_frame);
+    RooAbsReal::defaultIntegratorConfig()->method2D().setLabel("RooMCIntegrator");
+
+    RooPlot* mbc_frame = mbc.frame(Title(" "));
+    data.plotOn(mbc_frame, MarkerColor(kBlue), LineColor(kBlue));
+    uds_model.plotOn(mbc_frame, LineColor(kRed));
     Double_t chi2_mbc = mbc_frame->chiSquare();
     cout << "mbc Chi2 : " << chi2_mbc << endl;
     
-    RooPlot* de_frame = de.frame();
-    data.plotOn(de_frame);
-    uds_model.plotOn(de_frame);
+    RooPlot* de_frame = de.frame(Title(" "));
+    data.plotOn(de_frame, MarkerColor(kBlue), LineColor(kBlue));
+    uds_model.plotOn(de_frame, LineColor(kRed));
     Double_t chi2_de = de_frame->chiSquare();
     cout << "de Chi2 : " << chi2_de << endl;
     
-    RooPlot* dp_frame = dp.frame();
-    data.plotOn(dp_frame);
-    uds_model.plotOn(dp_frame);
+    RooPlot* dp_frame = dp.frame(Title(" "));
+    data.plotOn(dp_frame, MarkerColor(kBlue), LineColor(kBlue));
+    uds_model.plotOn(dp_frame, LineColor(kRed));
     Double_t chi2_dp = dp_frame->chiSquare();
     cout << "dp Chi2 : " << chi2_dp << endl;
      
@@ -110,17 +115,30 @@ void fit_unbin_uds()
     TString format2=".png";
     TString format3=".pdf";
     TString outName;
-    //TString KEDR = "/store/users/ovtin/outDmeson/D0/results/fitsD0/";
-    //TString KEDR = "/home/ovtin/development/storekedr/outDmeson/D0/results/fitsD0/";
     TString KEDR = "/home/ovtin/development/Dmeson/analysisD0/rooFit/";
 
-    TCanvas *c = new TCanvas("uds", "uds", 1200, 400);
+    TCanvas *c = new TCanvas("uds", "uds", 1400, 400);
     c->Divide(3);
     c->cd(1);
+    gPad->SetTopMargin(0.03);
+    gPad->SetLeftMargin(0.11);
+    gPad->SetRightMargin(0.03);
+    mbc_frame->GetXaxis()->SetTitleOffset(1.2);
+    mbc_frame->GetYaxis()->SetTitleOffset(1.6);
     mbc_frame->Draw();
     c->cd(2);
+    gPad->SetTopMargin(0.03);
+    gPad->SetLeftMargin(0.11);
+    gPad->SetRightMargin(0.03);
+    de_frame->GetXaxis()->SetTitleOffset(1.2);
+    de_frame->GetYaxis()->SetTitleOffset(1.6);
     de_frame->Draw();
     c->cd(3);
+    gPad->SetTopMargin(0.03);
+    gPad->SetLeftMargin(0.11);
+    gPad->SetRightMargin(0.03);
+    dp_frame->GetXaxis()->SetTitleOffset(1.2);
+    dp_frame->GetYaxis()->SetTitleOffset(1.6); 
     dp_frame->Draw();
     outName="uds_RooFit";
     c->SaveAs(KEDR + outName + format1);  c->SaveAs(KEDR + outName + format2);  c->SaveAs(KEDR + outName + format3);

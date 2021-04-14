@@ -1,0 +1,168 @@
+   ------------------------------------------------------------------
+  | Welcome to ROOT 6.22/06                        https://root.cern |
+  | (c) 1995-2020, The ROOT Team; conception: R. Brun, F. Rademakers |
+  | Built for linuxx8664gcc on Nov 27 2020, 15:14:08                 |
+  | From tags/v6-22-06@v6-22-06                                      |
+  | Try '.help', '.demo', '.license', '.credits', '.quit'/'.q'       |
+   ------------------------------------------------------------------
+
+
+Processing fit_unbin_uds.C...
+
+[1mRooFit v3.60 -- Developed by Wouter Verkerke and David Kirkby[0m 
+                Copyright (C) 2000-2013 NIKHEF, University of California & Stanford University
+                All rights reserved, please read http://roofit.sourceforge.net/license.txt
+
+Warning in <TFile::Init>: no StreamerInfo found in /gcf/stark/home/ovtin/development/Dmeson/analysisD0/rooFit/RooudsPdf_cxx_ACLiC_dict_rdict.pcm therefore preventing schema evolution when reading this file. The file was produced with version 6.22/08 of ROOT.
+Warning in <TFile::Init>: no StreamerInfo found in /gcf/stark/home/ovtin/development/Dmeson/analysisD0/rooFit/load_read_write_C_ACLiC_dict_rdict.pcm therefore preventing schema evolution when reading this file. The file was produced with version 6.22/08 of ROOT.
+In file included from input_line_8:1:
+/gcf/stark/home/ovtin/development/Dmeson/analysisD0/rooFit/fit_unbin_uds.C:28:24: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+    load_dat_file(tree,"/home/ovtin/development/Dmeson/analysisD0/rooFit/dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC.dat");
+                       ^
+/gcf/stark/home/ovtin/development/Dmeson/analysisD0/rooFit/fit_unbin_uds.C:49:14: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+    read_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/init/bck_uds.par", BCK_PARS, par, epar);
+             ^
+/gcf/stark/home/ovtin/development/Dmeson/analysisD0/rooFit/fit_unbin_uds.C:92:15: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+    write_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/out/bck_uds.par", BCK_PARS, par, epar);
+              ^
+ndata=12282
+Reading file /home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/init/bck_uds.par
+par(0)=7.745104 +- 0.208112
+par(1)=1.155407 +- 0.052735
+par(2)=1888.750000 +- 0.000000
+par(3)=3.240319 +- 0.168286
+RooudsPdf::uds_model[ mbc=mbc ebeam=ebeam alpha_mbc=alpha_mbc alpha_de=alpha_de de=de dpcurv=dpcurv dp=dp ] = 0.491268
+Error in <TUnixSystem::FindDynamicLibrary>: libRooFitMore[.so | .dll | .dylib | .sl | .dl | .a] does not exist in /usr/lib64/root:/home/bobrov/InstallationGeant/lib64:/home/bobrov/InstallationGeant/lib64:/usr/lib64/root:.:/usr/lib64/root:/lib64/tls/x86_64:/lib64/tls:/lib64/x86_64:/lib64:/usr/lib64/tls/x86_64:/usr/lib64/tls:/usr/lib64/x86_64:/usr/lib64
+[#0] ERROR:Integration --  RooNumIntFactory::Init : libRooFitMore cannot be loaded. GSL integrators will not beavailable ! 
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(uds_model_Int[de,dp,mbc]) using numeric integrator RooAdaptiveIntegratorND to calculate Int(mbc,de,dp)
+[#1] INFO:Minization -- RooMinimizer::optimizeConst: activating const optimization
+[#1] INFO:Minization -- RooMinimizerFcn::synchronize: set of constant parameters changed, rerunning const optimizer
+Minuit2Minimizer: Minimize with max-calls 2000 convergence for edm < 1 strategy 1
+MnSeedGenerator: for initial parameters FCN = 228000.6342609
+[#0] WARNING:Minization -- RooMinimizerFcn: Minimized function has error status.
+Returning maximum FCN so far (228001) to force MIGRAD to back out of this region. Error log follows
+Parameter values: alpha_de=1.48496, alpha_mbc=7.7451, dpcurv=3.24032, ebeam=1888.75
+RooNLLVar::nll_uds_model_data[ paramSet=(alpha_de,alpha_mbc,dpcurv,ebeam) ]
+     function value is NAN @ paramSet=(alpha_de = 1.48496,alpha_mbc = 7.7451,dpcurv = 3.24032,ebeam = 1888.75)
+RooudsPdf::uds_model[ mbc=mbc ebeam=ebeam alpha_mbc=alpha_mbc alpha_de=alpha_de de=de dpcurv=dpcurv dp=dp ]
+     p.d.f normalization integral is zero or negative: 0 @ mbc=mbc=1721.6, ebeam=ebeam=1888.75, alpha_mbc=alpha_mbc=7.7451, alpha_de=alpha_de=1.48496, de=de=-34.2423, dpcurv=dpcurv=3.24032, dp=dp=266.597
+     getLogVal() top-level p.d.f evaluates to zero @ mbc=mbc=1721.6, ebeam=ebeam=1888.75, alpha_mbc=alpha_mbc=7.7451, alpha_de=alpha_de=1.48496, de=de=-34.2423, dpcurv=dpcurv=3.24032, dp=dp=266.597
+     p.d.f normalization integral is zero or negative: 0 @ mbc=mbc=1742.42, ebeam=ebeam=1888.75, alpha_mbc=alpha_mbc=7.7451, alpha_de=alpha_de=1.48496, de=de=-193.862, dpcurv=dpcurv=3.24032, dp=dp=678.173
+     getLogVal() top-level p.d.f evaluates to zero @ mbc=mbc=1742.42, ebeam=ebeam=1888.75, alpha_mbc=alpha_mbc=7.7451, alpha_de=alpha_de=1.48496, de=de=-193.862, dpcurv=dpcurv=3.24032, dp=dp=678.173
+     p.d.f normalization integral is zero or negative: 0 @ mbc=mbc=1728.24, ebeam=ebeam=1888.75, alpha_mbc=alpha_mbc=7.7451, alpha_de=alpha_de=1.48496, de=de=-75.3792, dpcurv=dpcurv=3.24032, dp=dp=617.517
+     getLogVal() top-level p.d.f evaluates to zero @ mbc=mbc=1728.24, ebeam=ebeam=1888.75, alpha_mbc=alpha_mbc=7.7451, alpha_de=alpha_de=1.48496, de=de=-75.3792, dpcurv=dpcurv=3.24032, dp=dp=617.517
+     p.d.f normalization integral is zero or negative: 0 @ mbc=mbc=1711.62, ebeam=ebeam=1888.75, alpha_mbc=alpha_mbc=7.7451, alpha_de=alpha_de=1.48496, de=de=-78.5225, dpcurv=dpcurv=3.24032, dp=dp=-267.574
+     getLogVal() top-level p.d.f evaluates to zero @ mbc=mbc=1711.62, ebeam=ebeam=1888.75, alpha_mbc=alpha_mbc=7.7451, alpha_de=alpha_de=1.48496, de=de=-78.5225, dpcurv=dpcurv=3.24032, dp=dp=-267.574
+     p.d.f normalization integral is zero or negative: 0 @ mbc=mbc=1855.26, ebeam=ebeam=1888.75, alpha_mbc=alpha_mbc=7.7451, alpha_de=alpha_de=1.48496, de=de=292.502, dpcurv=dpcurv=3.24032, dp=dp=139.292
+     getLogVal() top-level p.d.f evaluates to zero @ mbc=mbc=1855.26, ebeam=ebeam=1888.75, alpha_mbc=alpha_mbc=7.7451, alpha_de=alpha_de=1.48496, de=de=292.502, dpcurv=dpcurv=3.24032, dp=dp=139.292
+     p.d.f normalization integral is zero or negative: 0 @ mbc=mbc=1884.15, ebeam=ebeam=1888.75, alpha_mbc=alpha_mbc=7.7451, alpha_de=alpha_de=1.48496, de=de=-69.6208, dpcurv=dpcurv=3.24032, dp=dp=-67.1922
+     getLogVal() top-level p.d.f evaluates to zero @ mbc=mbc=1884.15, ebeam=ebeam=1888.75, alpha_mbc=alpha_mbc=7.7451, alpha_de=alpha_de=1.48496, de=de=-69.6208, dpcurv=dpcurv=3.24032, dp=dp=-67.1922
+    ... (remaining 2038 messages suppressed)
+
+[#0] WARNING:Minization -- RooMinimizerFcn: Minimized function has error status.
+Returning maximum FCN so far (228072) to force MIGRAD to back out of this region. Error log follows
+Parameter values: alpha_de=1.15541, alpha_mbc=5.77476, dpcurv=3.24032, ebeam=1888.75
+RooNLLVar::nll_uds_model_data[ paramSet=(alpha_de,alpha_mbc,dpcurv,ebeam) ]
+     function value is NAN @ paramSet=(alpha_de = 1.15541,alpha_mbc = 5.77476,dpcurv = 3.24032,ebeam = 1888.75)
+RooudsPdf::uds_model[ mbc=mbc ebeam=ebeam alpha_mbc=alpha_mbc alpha_de=alpha_de de=de dpcurv=dpcurv dp=dp ]
+     p.d.f normalization integral is zero or negative: 0 @ mbc=mbc=1721.6, ebeam=ebeam=1888.75, alpha_mbc=alpha_mbc=5.77476, alpha_de=alpha_de=1.15541, de=de=-34.2423, dpcurv=dpcurv=3.24032, dp=dp=266.597
+     getLogVal() top-level p.d.f evaluates to zero @ mbc=mbc=1721.6, ebeam=ebeam=1888.75, alpha_mbc=alpha_mbc=5.77476, alpha_de=alpha_de=1.15541, de=de=-34.2423, dpcurv=dpcurv=3.24032, dp=dp=266.597
+     p.d.f normalization integral is zero or negative: 0 @ mbc=mbc=1742.42, ebeam=ebeam=1888.75, alpha_mbc=alpha_mbc=5.77476, alpha_de=alpha_de=1.15541, de=de=-193.862, dpcurv=dpcurv=3.24032, dp=dp=678.173
+     getLogVal() top-level p.d.f evaluates to zero @ mbc=mbc=1742.42, ebeam=ebeam=1888.75, alpha_mbc=alpha_mbc=5.77476, alpha_de=alpha_de=1.15541, de=de=-193.862, dpcurv=dpcurv=3.24032, dp=dp=678.173
+     p.d.f normalization integral is zero or negative: 0 @ mbc=mbc=1728.24, ebeam=ebeam=1888.75, alpha_mbc=alpha_mbc=5.77476, alpha_de=alpha_de=1.15541, de=de=-75.3792, dpcurv=dpcurv=3.24032, dp=dp=617.517
+     getLogVal() top-level p.d.f evaluates to zero @ mbc=mbc=1728.24, ebeam=ebeam=1888.75, alpha_mbc=alpha_mbc=5.77476, alpha_de=alpha_de=1.15541, de=de=-75.3792, dpcurv=dpcurv=3.24032, dp=dp=617.517
+     p.d.f normalization integral is zero or negative: 0 @ mbc=mbc=1711.62, ebeam=ebeam=1888.75, alpha_mbc=alpha_mbc=5.77476, alpha_de=alpha_de=1.15541, de=de=-78.5225, dpcurv=dpcurv=3.24032, dp=dp=-267.574
+     getLogVal() top-level p.d.f evaluates to zero @ mbc=mbc=1711.62, ebeam=ebeam=1888.75, alpha_mbc=alpha_mbc=5.77476, alpha_de=alpha_de=1.15541, de=de=-78.5225, dpcurv=dpcurv=3.24032, dp=dp=-267.574
+     p.d.f normalization integral is zero or negative: 0 @ mbc=mbc=1855.26, ebeam=ebeam=1888.75, alpha_mbc=alpha_mbc=5.77476, alpha_de=alpha_de=1.15541, de=de=292.502, dpcurv=dpcurv=3.24032, dp=dp=139.292
+     getLogVal() top-level p.d.f evaluates to zero @ mbc=mbc=1855.26, ebeam=ebeam=1888.75, alpha_mbc=alpha_mbc=5.77476, alpha_de=alpha_de=1.15541, de=de=292.502, dpcurv=dpcurv=3.24032, dp=dp=139.292
+     p.d.f normalization integral is zero or negative: 0 @ mbc=mbc=1884.15, ebeam=ebeam=1888.75, alpha_mbc=alpha_mbc=5.77476, alpha_de=alpha_de=1.15541, de=de=-69.6208, dpcurv=dpcurv=3.24032, dp=dp=-67.1922
+     getLogVal() top-level p.d.f evaluates to zero @ mbc=mbc=1884.15, ebeam=ebeam=1888.75, alpha_mbc=alpha_mbc=5.77476, alpha_de=alpha_de=1.15541, de=de=-69.6208, dpcurv=dpcurv=3.24032, dp=dp=-67.1922
+    ... (remaining 2038 messages suppressed)
+
+MnSeedGenerator: Initial state:   - FCN =   228000.6342609 Edm =     0.174883 NCalls =     19
+VariableMetric: start iterating until Edm is < 0.001
+VariableMetric: Initial state   - FCN =   228000.6342609 Edm =     0.174883 NCalls =     19
+VariableMetric: Iteration #   0 - FCN =   228000.6342609 Edm =     0.174883 NCalls =     19
+VariableMetric: Iteration #   1 - FCN =   228000.6330086 Edm =   0.00129208 NCalls =     43
+VariableMetric: Iteration #   2 - FCN =   228000.6325778 Edm =    0.0222164 NCalls =     59
+VariableMetric: Iteration #   3 - FCN =   228000.6325767 Edm =  0.000937014 NCalls =     79
+Info: VariableMetricBuilder: no improvement in line search
+VariableMetric: Iteration #   4 - FCN =   228000.6325767 Edm =  0.000937014 NCalls =     90
+Info: VariableMetricBuilder: iterations finish without convergence.
+Info in VariableMetricBuilder : edm = 0.0331497
+Info in             requested : edmval = 0.001
+VariableMetric: After Hessian   - FCN =   228000.6325767 Edm =     0.170232 NCalls =    112
+VariableMetric: Iteration #   5 - FCN =   228000.6325767 Edm =     0.170232 NCalls =    112
+Info: VariableMetricBuilder: Tolerance is not sufficient, continue the minimization
+Info in Current  Edm is : edm = 0.170232
+Info in Required Edm is : edmval = 0.001
+Info: VariableMetricBuilder: no improvement in line search
+VariableMetric: Iteration #   6 - FCN =   228000.6325767 Edm =     0.170232 NCalls =    123
+Info: VariableMetricBuilder: iterations finish without convergence.
+Info in VariableMetricBuilder : edm = 0.170232
+Info in             requested : edmval = 0.001
+Info: VariableMetricBuilder: FunctionMinimum is invalid after second try
+Info in Minuit2Minimizer::Minimize : Minimization did NOT converge, Edm is above max
+Minuit2Minimizer : Invalid Minimum - status = 3
+FVAL  = 228001
+Edm   = 0.170232
+Nfcn  = 112
+[#1] INFO:Minization -- RooMinimizerFcn::synchronize: set of constant parameters changed, rerunning const optimizer
+Minuit2Minimizer::Hesse using max-calls 2000
+Info in Minuit2Minimizer::Hesse : Hesse is valid - matrix is accurate
+[#1] INFO:Minization -- RooMinimizer::optimizeConst: deactivating const optimization
+[#0] WARNING:NumericIntegration -- RooAdaptiveIntegratorND::dtor(uds_model) WARNING: Number of suppressed warningings about integral evaluations where target precision was not reached is 166
+
+  RooFitResult: minimized FCN value: 228001, estimated distance to minimum: 5.60455e-05
+                covariance matrix quality: Full, accurate covariance matrix
+                Status : MINIMIZE=-1 HESSE=3 
+
+    Floating Parameter  InitialValue    FinalValue +/-  Error     GblCorr.
+  --------------------  ------------  --------------------------  --------
+              alpha_de    1.1554e+00    1.1535e+00 +/-  5.29e-02  <none>
+             alpha_mbc    7.7451e+00    7.7428e+00 +/-  1.99e-01  <none>
+                dpcurv    3.2403e+00    3.2412e+00 +/-  1.57e-01  <none>
+                 ebeam    1.8888e+03    1.8888e+03 +/-  0.00e+00  <none>
+
+EDM = 5.60455e-05
+-log(L) at minimum = 228001
+final value of floating parameters
+  1) RooRealVar::  alpha_de = 1.15355 +/- 0.0529259
+  2) RooRealVar:: alpha_mbc = 7.74281 +/- 0.198694
+  3) RooRealVar::    dpcurv = 3.2412 +/- 0.157135
+  4) RooRealVar::     ebeam = 1888.75 +/- 0
+correlation matrix
+
+4x4 matrix is as follows
+
+     |      0    |      1    |      2    |      3    |
+---------------------------------------------------------
+   0 |          1   0.0005134  -0.0004924           0 
+   1 |  0.0005134           1      0.4816           0 
+   2 | -0.0004924      0.4816           1           0 
+   3 |          0           0           0           0 
+
+covariance matrix
+
+4x4 matrix is as follows
+
+     |      0    |      1    |      2    |      3    |
+---------------------------------------------------------
+   0 |   0.002801   5.399e-06  -4.096e-06           0 
+   1 |  5.399e-06     0.03948     0.01504           0 
+   2 | -4.096e-06     0.01504      0.0247           0 
+   3 |          0           0           0           0 
+
+[#1] INFO:Plotting -- RooAbsReal::plotOn(uds_model) plot on mbc integrates over variables (de,dp)
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(uds_model_Int[de,dp]_Norm[de,dp,mbc]) using numeric integrator RooMCIntegrator to calculate Int(de,dp)
+mbc Chi2 : 1.74736
+[#1] INFO:Plotting -- RooAbsReal::plotOn(uds_model) plot on de integrates over variables (mbc,dp)
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(uds_model_Int[dp,mbc]_Norm[de,dp,mbc]) using numeric integrator RooMCIntegrator to calculate Int(mbc,dp)
+de Chi2 : 0.902267
+[#1] INFO:Plotting -- RooAbsReal::plotOn(uds_model) plot on dp integrates over variables (mbc,de)
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(uds_model_Int[de,mbc]_Norm[de,dp,mbc]) using numeric integrator RooMCIntegrator to calculate Int(mbc,de)
+dp Chi2 : 1.10591
+Info in <TCanvas::Print>: eps file /home/ovtin/development/Dmeson/analysisD0/rooFit/uds_RooFit.eps has been created
+Info in <TCanvas::Print>: png file /home/ovtin/development/Dmeson/analysisD0/rooFit/uds_RooFit.png has been created
+Info in <TCanvas::Print>: pdf file /home/ovtin/development/Dmeson/analysisD0/rooFit/uds_RooFit.pdf has been created
+Job finished\n

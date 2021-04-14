@@ -23,14 +23,17 @@ void generate_fit_unbin_signal()
     // Create  component  pdfs in  Mbc, dE, dP
     // ----------------------------------------------------------------
     RooRealVar mbc("mbc", "M_{bc} (MeV)", 1700, 1900);
+    mbc.setBins(50);
     RooRealVar de("de", "#Delta E (MeV)", -300, 300);
+    de.setBins(30);
     Double_t minP=-1000;
     Double_t maxP=1000;
     RooRealVar dp("dp", "#Delta P (MeV)", minP, maxP);
+    dp.setBins(200);
 
     double par[SIG_PARS];
     double epar[SIG_PARS];
-    read_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/sig_def.par", SIG_PARS, par, epar);
+    read_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/init/sig_def.par", SIG_PARS, par, epar);
 
     RooRealVar mbc_mean("mbc_mean", "mbc_mean", par[0], par[0], par[0]);
     RooRealVar de_mean("de_mean", "de_mean", par[1], par[1], par[1]);
@@ -74,24 +77,24 @@ void generate_fit_unbin_signal()
     sig_model.Print();
 
     //Generate an unbinned toy MC set
-    RooDataSet* data = (RooDataSet*) sig_model.generate(RooArgSet(mbc,de,dp),4000) ;
+    RooDataSet* data = (RooDataSet*) sig_model.generate(RooArgSet(mbc,de,dp),5000);
        
     RooAbsReal::defaultIntegratorConfig()->method2D().setLabel("RooMCIntegrator");
 
-    RooPlot* mbc_frame = mbc.frame(Title("Mbc"));
-    data->plotOn(mbc_frame);
+    RooPlot* mbc_frame = mbc.frame(Title(" "));
+    data->plotOn(mbc_frame, MarkerColor(kBlue), LineColor(kBlue));
     sig_model.plotOn(mbc_frame, LineColor(kRed));
     Double_t chi2_mbc = mbc_frame->chiSquare();
     cout << "mbc Chi2 : " << chi2_mbc << endl;
     
-    RooPlot* de_frame = de.frame(Title("dE"));
-    data->plotOn(de_frame);
+    RooPlot* de_frame = de.frame(Title(" "));
+    data->plotOn(de_frame, MarkerColor(kBlue), LineColor(kBlue));
     sig_model.plotOn(de_frame, LineColor(kRed));
     Double_t chi2_de = de_frame->chiSquare();
     cout << "de Chi2 : " << chi2_de << endl;
     
-    RooPlot* dp_frame = dp.frame(Title("dP"));
-    data->plotOn(dp_frame);
+    RooPlot* dp_frame = dp.frame(Title(" "));
+    data->plotOn(dp_frame, MarkerColor(kBlue), LineColor(kBlue));
     sig_model.plotOn(dp_frame, LineColor(kRed));
     Double_t chi2_dp = dp_frame->chiSquare();
     cout << "dp Chi2 : " << chi2_dp << endl;
@@ -102,13 +105,28 @@ void generate_fit_unbin_signal()
     TString outName;
     TString KEDR = "/home/ovtin/development/Dmeson/analysisD0/rooFit/";
 
-    TCanvas *c = new TCanvas("generate_signal", "generate_signal", 1200, 400);
+    TCanvas *c = new TCanvas("generate_signal", "generate_signal", 1400, 400);
     c->Divide(3);
     c->cd(1);
+    gPad->SetTopMargin(0.03);
+    gPad->SetLeftMargin(0.11);
+    gPad->SetRightMargin(0.03);
+    mbc_frame->GetXaxis()->SetTitleOffset(1.2);
+    mbc_frame->GetYaxis()->SetTitleOffset(1.6);
     mbc_frame->Draw();
     c->cd(2);
+    gPad->SetTopMargin(0.03);
+    gPad->SetLeftMargin(0.11);
+    gPad->SetRightMargin(0.03);
+    de_frame->GetXaxis()->SetTitleOffset(1.2);
+    de_frame->GetYaxis()->SetTitleOffset(1.6);
     de_frame->Draw();
     c->cd(3);
+    gPad->SetTopMargin(0.03);
+    gPad->SetLeftMargin(0.11);
+    gPad->SetRightMargin(0.03);
+    dp_frame->GetXaxis()->SetTitleOffset(1.2);
+    dp_frame->GetYaxis()->SetTitleOffset(1.6);
     dp_frame->Draw();
     outName="generate_signal_RooFit";
     c->SaveAs(KEDR + outName + format1);  c->SaveAs(KEDR + outName + format2);  c->SaveAs(KEDR + outName + format3);
