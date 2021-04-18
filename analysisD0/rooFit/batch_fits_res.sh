@@ -30,12 +30,13 @@
 ##$HOME/development/Dmeson/analysisD0/rooFit/batch_sig
 ##$HOME/development/Dmeson/analysisD0/rooFit/batch_sig_gen
 ## uds BG
-$HOME/development/Dmeson/analysisD0/rooFit/batch_bck
+##$HOME/development/Dmeson/analysisD0/rooFit/batch_bck
 ## DD BG
 ##$HOME/development/Dmeson/analysisD0/rooFit/batch_dbck
 ##$HOME/development/Dmeson/analysisD0/rooFit/batch_dbck_gen
 ## exp
-##$HOME/development/Dmeson/analysisD0/rooFit/batch_exp
+$HOME/development/Dmeson/analysisD0/rooFit/batch_exp
+##$HOME/development/Dmeson/analysisD0/rooFit/batch_exp_gen
 
 status=$?
 if [ $status != 0 ]; then
