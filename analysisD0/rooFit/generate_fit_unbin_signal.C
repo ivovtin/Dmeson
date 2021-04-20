@@ -23,13 +23,10 @@ void generate_fit_unbin_signal()
     // Create  component  pdfs in  Mbc, dE, dP
     // ----------------------------------------------------------------
     RooRealVar mbc("mbc", "M_{bc} (MeV)", 1700, 1900);
-    mbc.setBins(50);
     RooRealVar de("de", "#Delta E (MeV)", -300, 300);
-    de.setBins(30);
     Double_t minP=-1000;
     Double_t maxP=1000;
     RooRealVar dp("dp", "#Delta P (MeV)", minP, maxP);
-    dp.setBins(200);
 
     double par[SIG_PARS];
     double epar[SIG_PARS];
@@ -77,36 +74,39 @@ void generate_fit_unbin_signal()
     sig_model.Print();
 
     //Generate an unbinned toy MC set
-    RooDataSet* data = (RooDataSet*) sig_model.generate(RooArgSet(mbc,de,dp),5000);
+    RooDataSet* data = (RooDataSet*) sig_model.generate(RooArgSet(mbc,de,dp), 50000);
        
     RooAbsReal::defaultIntegratorConfig()->method2D().setLabel("RooMCIntegrator");
 
+    mbc.setBins(100);
     RooPlot* mbc_frame = mbc.frame(Title(" "));
-    data->plotOn(mbc_frame, MarkerColor(kBlue), LineColor(kBlue));
-    sig_model.plotOn(mbc_frame, LineColor(kRed));
+    mbc_frame->SetAxisRange(1800, 1900,"X");
+    mbc.setRange("mbcsigRegion", 1800, 1900);
+    data->plotOn(mbc_frame, MarkerColor(kBlue), LineColor(kBlue), Range("mbcsigRegion"));
+    sig_model.plotOn(mbc_frame, LineColor(kRed), Range("mbcsigRegion"));
     Double_t chi2_mbc = mbc_frame->chiSquare();
     cout << "mbc Chi2 : " << chi2_mbc << endl;
-    
+ 
+    de.setBins(30);    
     RooPlot* de_frame = de.frame(Title(" "));
-    data->plotOn(de_frame, MarkerColor(kBlue), LineColor(kBlue));
-    sig_model.plotOn(de_frame, LineColor(kRed));
+    de_frame->SetAxisRange(-300, 300,"X");
+    de.setRange("desigRegion", -300, 300);
+    data->plotOn(de_frame, MarkerColor(kBlue), LineColor(kBlue), Range("desigRegion"));
+    sig_model.plotOn(de_frame, LineColor(kRed), Range("desigRegion"));
     Double_t chi2_de = de_frame->chiSquare();
     cout << "de Chi2 : " << chi2_de << endl;
-    
+ 
+    dp.setBins(80);   
     RooPlot* dp_frame = dp.frame(Title(" "));
-    data->plotOn(dp_frame, MarkerColor(kBlue), LineColor(kBlue));
-    sig_model.plotOn(dp_frame, LineColor(kRed));
+    dp_frame->SetAxisRange(-600, 600,"X");
+    dp.setRange("dPsigRegion", -600, 600);
+    data->plotOn(dp_frame, MarkerColor(kBlue), LineColor(kBlue), Range("dPsigRegion"));
+    sig_model.plotOn(dp_frame, LineColor(kRed), Range("dPsigRegion"));
     Double_t chi2_dp = dp_frame->chiSquare();
     cout << "dp Chi2 : " << chi2_dp << endl;
      
-    TString format1=".eps";
-    TString format2=".png";
-    TString format3=".pdf";
-    TString outName;
-    TString KEDR = "/home/ovtin/development/Dmeson/analysisD0/rooFit/";
-
-    TCanvas *c = new TCanvas("generate_signal", "generate_signal", 1400, 400);
-    c->Divide(3);
+    TCanvas *c = new TCanvas("generate_signal", "generate_signal", 1000, 600);
+    c->Divide(2,2);
     c->cd(1);
     gPad->SetTopMargin(0.03);
     gPad->SetLeftMargin(0.11);
@@ -128,6 +128,26 @@ void generate_fit_unbin_signal()
     dp_frame->GetXaxis()->SetTitleOffset(1.2);
     dp_frame->GetYaxis()->SetTitleOffset(1.6);
     dp_frame->Draw();
+    c->cd(4);
+    TH1 *hmbcdp = data->createHistogram("dp,mbc", 200, 200);
+    gPad->SetTopMargin(0.03);
+    gPad->SetLeftMargin(0.11);
+    gPad->SetRightMargin(0.03);
+    gStyle->SetOptStat(0);
+    hmbcdp->SetAxisRange(1820, 1900,"Y");
+    hmbcdp->SetAxisRange(-600, 600,"X");
+    hmbcdp->GetXaxis()->SetTitleOffset(1.1);
+    hmbcdp->GetYaxis()->SetTitleOffset(1.5);
+    hmbcdp->SetTitle(" ");
+    hmbcdp->GetYaxis()->SetTitle("M_{bc}, MeV");
+    hmbcdp->GetXaxis()->SetTitle("#Delta P, MeV");
+    hmbcdp->Draw(); 
+
+    TString format1=".eps";
+    TString format2=".png";
+    TString format3=".pdf";
+    TString outName;
+    TString KEDR = "/home/ovtin/development/Dmeson/analysisD0/rooFit/";
     outName="generate_signal_RooFit";
     c->SaveAs(KEDR + outName + format1);  c->SaveAs(KEDR + outName + format2);  c->SaveAs(KEDR + outName + format3);
 }

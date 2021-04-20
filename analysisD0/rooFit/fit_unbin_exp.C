@@ -7,6 +7,7 @@
 #include "RooFitResult.h"
 #include "RooAddPdf.h"
 #include "TCanvas.h"
+#include "TLegend.h"
 #include "RooPlot.h"
 #include "TH2.h"
 #include "TAxis.h"
@@ -36,13 +37,10 @@ void fit_unbin_exp()
     // Create  component  pdfs in  Mbc, dE, dP
     // ----------------------------------------------------------------
     RooRealVar mbc("mbc", "M_{bc} (MeV)", 1700, 1900);
-    mbc.setBins(50);
     RooRealVar de("de", "#Delta E (MeV)", -300, 300);
-    de.setBins(30);
     Double_t minP=-1000;
     Double_t maxP=1000;
     RooRealVar dp("dp", "#Delta P (MeV)", minP, maxP);
-    dp.setBins(200);
 
     //Construct unbinned dataset importing tree branches
     RooDataSet data("data", "data", RooArgSet(mbc, de, dp), Import(*tree));
@@ -53,19 +51,17 @@ void fit_unbin_exp()
     double exp_epar[EXP_PARS];
     read_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/init/exp_fit.par", EXP_PARS, exp_par, exp_epar);
 
-    RooRealVar MD("MD", "MD", exp_par[0], 1858., 1872.);
-    RooRealVar DE("DE", "DE", exp_par[1], -15., 15.);
-    RooRealVar Bck("Bck", "Bck", exp_par[2], -5., 5.);
-    RooRealVar DBck("DBck", "DBck", exp_par[3], -5., 5.);
-    RooRealVar Sig("Sig", "Sig", exp_par[4], -5., 5.);
+    RooRealVar Bck("Bck", "Bck", exp_par[2], 0., 10.);
+    RooRealVar DBck("DBck", "DBck", exp_par[3], 0., 10.);
+    RooRealVar Sig("Sig", "Sig", exp_par[4], 0., 10.);
 
     double sig_par[SIG_PARS];
     double sig_epar[SIG_PARS];
     read_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/out/sig_sim.par", SIG_PARS, sig_par, sig_epar);
     sig_par[7] = 0;
 
-    RooRealVar sig_mbc_mean("sig_mbc_mean", "sig_mbc_mean", exp_par[0],  1850., 1890.);
-    RooRealVar sig_de_mean("sig_de_mean", "sig_de_mean", exp_par[1], -50., 10.);
+    RooRealVar sig_mbc_mean("sig_mbc_mean", "sig_mbc_mean", exp_par[0],  1860., 1870.);
+    RooRealVar sig_de_mean("sig_de_mean", "sig_de_mean", exp_par[1], -15., 25.);
     RooRealVar sig_mbcde_corr("sig_mbcde_corr", "sig_mbcde_corr", sig_par[2], sig_par[2], sig_par[2]);
     RooRealVar sig_mbc_sigma0_l("sig_mbc_sigma0_l", "sig_mbc_sigma0_l", sig_par[3], sig_par[3], sig_par[3]);
     RooRealVar sig_mbc_sigma0_r("sig_mbc_sigma0_r", "sig_mbc_sigma0_r", sig_par[4], sig_par[4], sig_par[4]);
@@ -139,7 +135,10 @@ void fit_unbin_exp()
     //Total experimental model for D^0 - meson
     RooAddPdf exp_model("exp_model", "uds_model+dbck_model+sig_model", RooArgList(uds_model, dbck_model, sig_model),RooArgList(Bck,DBck,Sig));
 
-    RooFitResult* r = sig_model.fitTo(data,RooFit::Minimizer("Minuit","migrad"),Save(),Extended());
+    //RooFitResult* r = sig_model.fitTo(data,RooFit::Minimizer("Minuit","migrad"),Save());
+    //RooFitResult* r = sig_model.fitTo(data,RooFit::Minimizer("Minuit","minimize"),Save());
+    RooFitResult* r = sig_model.fitTo(data,RooFit::Minimizer("Minuit2","migrad"),Save());
+
     r->Print("v");
     cout << "EDM = " << r->edm() << endl;
     cout << "-log(L) at minimum = " << r->minNll()<<endl;
@@ -160,59 +159,102 @@ void fit_unbin_exp()
 
     write_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/out/exp.par", EXP_PARS, exp_par, exp_epar);
 
+    mbc.setBins(100);
     RooPlot* mbc_frame = mbc.frame(Title(" "));
-    data.plotOn(mbc_frame, MarkerColor(kBlue), LineColor(kBlue));
-    exp_model.plotOn(mbc_frame, LineColor(kRed));
-    exp_model.plotOn(mbc_frame,Components(uds_model),LineStyle(kDashed),LineColor(kGreen));
-    exp_model.plotOn(mbc_frame,Components(RooArgSet(uds_model, dbck_model)),LineStyle(kDashed),LineColor(kMagenta));
+    mbc_frame->SetAxisRange(1790, 1900,"X");
+    de.setRange("dEsigRegion", -100, 100);   
+    data.plotOn(mbc_frame, CutRange("dEsigRegion"));
+    exp_model.plotOn(mbc_frame, LineColor(kRed), ProjectionRange("dEsigRegion"), RooFit::Name("Signal"));
+    exp_model.plotOn(mbc_frame, Components(uds_model), LineStyle(kDashed), LineColor(kGreen), ProjectionRange("dEsigRegion"), RooFit::Name("uds"));
+    exp_model.plotOn(mbc_frame, Components(RooArgSet(uds_model, dbck_model)), LineStyle(kDashed), LineColor(kBlue), ProjectionRange("dEsigRegion"), RooFit::Name("dbck"));
     Double_t chi2_mbc = mbc_frame->chiSquare();
     cout << "mbc Chi2 : " << chi2_mbc << endl;
     
+    de.setBins(30);
     RooPlot* de_frame = de.frame(Title(" "));
-    data.plotOn(de_frame, MarkerColor(kBlue), LineColor(kBlue));
-    exp_model.plotOn(de_frame, LineColor(kRed));
-    exp_model.plotOn(de_frame,Components(uds_model),LineStyle(kDashed),LineColor(kGreen));
-    exp_model.plotOn(de_frame,Components(RooArgSet(uds_model, dbck_model)),LineStyle(kDashed),LineColor(kMagenta));
+    mbc.setRange("MbcsigRegion", 1855, 1875);   
+    data.plotOn(de_frame, CutRange("MbcsigRegion"));
+    exp_model.plotOn(de_frame, LineColor(kRed), ProjectionRange("MbcsigRegion"));
+    exp_model.plotOn(de_frame, Components(uds_model), LineStyle(kDashed), LineColor(kGreen), ProjectionRange("MbcsigRegion"));
+    exp_model.plotOn(de_frame, Components(RooArgSet(uds_model, dbck_model)), LineStyle(kDashed), LineColor(kBlue), ProjectionRange("MbcsigRegion"));
     Double_t chi2_de = de_frame->chiSquare();
     cout << "de Chi2 : " << chi2_de << endl;
     
+    dp.setBins(50);
     RooPlot* dp_frame = dp.frame(Title(" "));
-    data.plotOn(dp_frame, MarkerColor(kBlue), LineColor(kBlue));
-    exp_model.plotOn(dp_frame, LineColor(kRed));
-    exp_model.plotOn(dp_frame,Components(uds_model),LineStyle(kDashed),LineColor(kGreen));
-    exp_model.plotOn(dp_frame,Components(RooArgSet(uds_model, dbck_model)),LineStyle(kDashed),LineColor(kMagenta));
+    dp_frame->SetAxisRange(-600, 600,"X");
+    dp.setRange("dPsigRegion", -600, 600);   
+    data.plotOn(dp_frame, CutRange("dPsigRegion"));
+    exp_model.plotOn(dp_frame, LineColor(kRed), ProjectionRange("dPsigRegion"));
+    exp_model.plotOn(dp_frame, Components(uds_model), LineStyle(kDashed), LineColor(kGreen), ProjectionRange("dPsigRegion"));
+    exp_model.plotOn(dp_frame, Components(RooArgSet(uds_model, dbck_model)), LineStyle(kDashed), LineColor(kBlue), ProjectionRange("dPsigRegion"));
     Double_t chi2_dp = dp_frame->chiSquare();
     cout << "dp Chi2 : " << chi2_dp << endl;
      
-    TString format1=".eps";
-    TString format2=".png";
-    TString format3=".pdf";
-    TString outName;
-    TString KEDR = "/home/ovtin/development/Dmeson/analysisD0/rooFit/";
-
-    TCanvas *c = new TCanvas("exp", "exp", 1400, 400);
-    c->Divide(3);
+    TCanvas *c = new TCanvas("exp", "exp", 1000, 600);
+    c->Divide(2,2);
     c->cd(1);
     gPad->SetTopMargin(0.03);
     gPad->SetLeftMargin(0.11);
     gPad->SetRightMargin(0.03);
-    mbc_frame->GetXaxis()->SetTitleOffset(1.2);
-    mbc_frame->GetYaxis()->SetTitleOffset(1.6);
+    mbc_frame->GetXaxis()->SetTitleOffset(1.1);
+    mbc_frame->GetYaxis()->SetTitleOffset(1.5);
     mbc_frame->Draw();
+    auto leg = new TLegend(0.2,0.7,0.4,0.9);
+    leg->AddEntry(mbc_frame->findObject("Signal"),"Signal", "L");
+    leg->AddEntry(mbc_frame->findObject("dbck"),"D#bar{D} bck", "L");
+    leg->AddEntry(mbc_frame->findObject("uds"),"uds bck", "L");
+    leg->Draw("same");
     c->cd(2);
     gPad->SetTopMargin(0.03);
     gPad->SetLeftMargin(0.11);
     gPad->SetRightMargin(0.03);
-    de_frame->GetXaxis()->SetTitleOffset(1.2);
-    de_frame->GetYaxis()->SetTitleOffset(1.6);
+    de_frame->GetXaxis()->SetTitleOffset(1.1);
+    de_frame->GetYaxis()->SetTitleOffset(1.5);
     de_frame->Draw();
     c->cd(3);
     gPad->SetTopMargin(0.03);
     gPad->SetLeftMargin(0.11);
     gPad->SetRightMargin(0.03);
-    dp_frame->GetXaxis()->SetTitleOffset(1.2);
-    dp_frame->GetYaxis()->SetTitleOffset(1.6);
+    dp_frame->GetXaxis()->SetTitleOffset(1.1);
+    dp_frame->GetYaxis()->SetTitleOffset(1.5);
     dp_frame->Draw();
+    c->cd(4);
+    TH1 *hmbcde = data.createHistogram("mbc,de", 100, 100);
+    gPad->SetTopMargin(0.03);
+    gPad->SetLeftMargin(0.11);
+    gPad->SetRightMargin(0.03);
+    gStyle->SetOptStat(0);
+    hmbcde->GetXaxis()->SetTitleOffset(1.1);
+    hmbcde->GetYaxis()->SetTitleOffset(1.5);
+    hmbcde->SetTitle(" ");
+    hmbcde->GetXaxis()->SetTitle("M_{bc}, MeV");
+    hmbcde->GetYaxis()->SetTitle("#Delta E, MeV");
+    double deCut1=-100, deCut2=100;
+    double mbcCut1=1855, mbcCut2=1875; 
+    TLine line5(mbcCut1,-300,mbcCut1,300);
+    line5.SetLineColor(kMagenta);
+    line5.SetLineWidth(3);
+    TLine line6(mbcCut2,-300,mbcCut2,300);
+    line6.SetLineColor(kMagenta);
+    line6.SetLineWidth(3);
+    TLine line7(1700,deCut1,1900,deCut1);
+    line7.SetLineColor(kMagenta);
+    line7.SetLineWidth(3);
+    TLine line8(1700,deCut2,1900,deCut2);
+    line8.SetLineColor(kMagenta);
+    line8.SetLineWidth(3);
+    hmbcde->Draw(); 
+    line5.Draw("same");
+    line6.Draw("same");
+    line7.Draw("same");
+    line8.Draw("same");
+
+    TString format1=".eps";
+    TString format2=".png";
+    TString format3=".pdf";
+    TString outName;
+    TString KEDR = "/home/ovtin/development/Dmeson/analysisD0/rooFit/";
     outName="exp_RooFit";
     c->SaveAs(KEDR + outName + format1);  c->SaveAs(KEDR + outName + format2);  c->SaveAs(KEDR + outName + format3);
 }

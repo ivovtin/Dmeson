@@ -25,13 +25,10 @@ void generate_fit_unbin_dbck()
     // Create  component  pdfs in  Mbc, dE, dP
     // ----------------------------------------------------------------
     RooRealVar mbc("mbc", "M_{bc} (MeV)", 1700, 1900);
-    mbc.setBins(50);
     RooRealVar de("de", "#Delta E (MeV)", -300, 300);
-    de.setBins(30);
     Double_t minP=-1000;
     Double_t maxP=1000;
     RooRealVar dp("dp", "#Delta P (MeV)", minP, maxP);
-    dp.setBins(200);
 
     double par[DBCK_PARS];
     double epar[DBCK_PARS];
@@ -62,51 +59,69 @@ void generate_fit_unbin_dbck()
     dbck_model.Print();
 
     //Generate an unbinned toy MC set
-    RooDataSet *data = dbck_model.generate(RooArgSet(mbc,de,dp),20000);    
+    RooDataSet *data = dbck_model.generate(RooArgSet(mbc,de,dp),50000);    
                
     RooAbsReal::defaultIntegratorConfig()->method2D().setLabel("RooMCIntegrator");
  
+    mbc.setBins(100);
     RooPlot *mbc_frame = mbc.frame(Title(" "));
     data->plotOn(mbc_frame, MarkerColor(kBlue), LineColor(kBlue));
     dbck_model.plotOn(mbc_frame, LineColor(kRed));
     Double_t chi2_mbc = mbc_frame->chiSquare();
     cout << "mbc Chi2 : " << chi2_mbc << endl;    
 
+    de.setBins(30);
     RooPlot *de_frame = de.frame(Title(" "));
     data->plotOn(de_frame, MarkerColor(kBlue), LineColor(kBlue));
     dbck_model.plotOn(de_frame, LineColor(kRed));
     Double_t chi2_de = de_frame->chiSquare();
     cout << "de Chi2 : " << chi2_de << endl;
     
+    dp.setBins(100);
     RooPlot *dp_frame = dp.frame(Title(" "));
-    data->plotOn(dp_frame, MarkerColor(kBlue), LineColor(kBlue));
-    dbck_model.plotOn(dp_frame, LineColor(kRed));
+    dp_frame->SetAxisRange(-800, 800,"X");
+    dp.setRange("dPsigRegion", -800, 800);
+    data->plotOn(dp_frame, MarkerColor(kBlue), LineColor(kBlue), Range("dPsigRegion"));
+    dbck_model.plotOn(dp_frame, LineColor(kRed), Range("dPsigRegion"));
     Double_t chi2_dp = dp_frame->chiSquare();
     cout << "dp Chi2 : " << chi2_dp << endl;
     
-    TCanvas* c = new TCanvas("generate_dbck", "generate_dbck", 1400, 400);
-    c->Divide(3);
+    TCanvas* c = new TCanvas("generate_dbck", "generate_dbck", 1000, 600);
+    c->Divide(2,2);
     c->cd(1);
     gPad->SetTopMargin(0.03);
     gPad->SetLeftMargin(0.11);
     gPad->SetRightMargin(0.03);
-    mbc_frame->GetXaxis()->SetTitleOffset(1.2);
-    mbc_frame->GetYaxis()->SetTitleOffset(1.6);
+    mbc_frame->GetXaxis()->SetTitleOffset(1.1);
+    mbc_frame->GetYaxis()->SetTitleOffset(1.5);
     mbc_frame->Draw();
     c->cd(2);
     gPad->SetTopMargin(0.03);
     gPad->SetLeftMargin(0.11);
     gPad->SetRightMargin(0.03);
-    de_frame->GetXaxis()->SetTitleOffset(1.2);
-    de_frame->GetYaxis()->SetTitleOffset(1.6);
+    de_frame->GetXaxis()->SetTitleOffset(1.1);
+    de_frame->GetYaxis()->SetTitleOffset(1.5);
     de_frame->Draw();
     c->cd(3);
     gPad->SetTopMargin(0.03);
     gPad->SetLeftMargin(0.11);
     gPad->SetRightMargin(0.03);
-    dp_frame->GetXaxis()->SetTitleOffset(1.2);
-    dp_frame->GetYaxis()->SetTitleOffset(1.6); 
+    dp_frame->GetXaxis()->SetTitleOffset(1.1);
+    dp_frame->GetYaxis()->SetTitleOffset(1.5); 
     dp_frame->Draw();
+    c->cd(4);
+    TH1 *hmbcde = data->createHistogram("mbc,de", 100, 100);
+    gPad->SetTopMargin(0.03);
+    gPad->SetLeftMargin(0.11);
+    gPad->SetRightMargin(0.03);
+    gStyle->SetOptStat(0);
+    hmbcde->GetXaxis()->SetTitleOffset(1.1);
+    hmbcde->GetYaxis()->SetTitleOffset(1.5); 
+    hmbcde->SetTitle(" ");
+    hmbcde->GetXaxis()->SetTitle("M_{bc}, MeV");
+    hmbcde->GetYaxis()->SetTitle("#Delta E, MeV");
+    hmbcde->Draw();
+    //hmbcde->Draw("box");
 
     TString format1=".eps";
     TString format2=".png";
