@@ -28,8 +28,6 @@ using namespace RooFit;
 
 void generate_fit_unbin_exp()
 {
-    RooAbsReal::defaultIntegratorConfig()->method2D().setLabel("RooMCIntegrator");
-
     // Create  component  pdfs in  Mbc, dE, dP
     // ----------------------------------------------------------------
     RooRealVar mbc("mbc", "M_{bc} (MeV)", 1700, 1900);
@@ -42,25 +40,22 @@ void generate_fit_unbin_exp()
     double exp_epar[EXP_PARS];
     read_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/init/exp_fit.par", EXP_PARS, exp_par, exp_epar);
 
-    exp_par[2] = 1.8;  //uds
-    exp_par[3] = 1.10;  //dbck
-    exp_par[4] = 1.0;  //signal
-
-    RooRealVar MD("MD", "MD", exp_par[0], exp_par[0], exp_par[0]);
-    RooRealVar DE("DE", "DE", exp_par[1], exp_par[1], exp_par[1]);
     RooRealVar Bck("Bck", "Bck", exp_par[2], exp_par[2], exp_par[2]);
     RooRealVar DBck("DBck", "DBck", exp_par[3], exp_par[3], exp_par[3]);
     RooRealVar Sig("Sig", "Sig", exp_par[4], exp_par[4], exp_par[4]);
 
     double sig_par[SIG_PARS];
     double sig_epar[SIG_PARS];
-    read_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/out/sig_sim.par", SIG_PARS, sig_par, sig_epar);
+    //read_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/out/sig_sim.par", SIG_PARS, sig_par, sig_epar);
+    //read_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/out/sig_sim_Minuit2_migrad.par", SIG_PARS, sig_par, sig_epar);
+    //read_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/out/sig_sim_Minuit_minimize.par", SIG_PARS, sig_par, sig_epar);
+    read_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/out/sig_sim_Minuit_migrad.par", SIG_PARS, sig_par, sig_epar);
     sig_par[7] = 0;
 
-    //RooRealVar sig_mbc_mean("sig_mbc_mean", "sig_mbc_mean", exp_par[0], exp_par[0], exp_par[0]);
-    //RooRealVar sig_de_mean("sig_de_mean", "sig_de_mean", exp_par[1], exp_par[1], exp_par[1]);
-    RooRealVar sig_mbc_mean("sig_mbc_mean", "sig_mbc_mean", sig_par[0], sig_par[0], sig_par[0]);
-    RooRealVar sig_de_mean("sig_de_mean", "sig_de_mean", sig_par[1], sig_par[1], sig_par[1]);
+    RooRealVar sig_mbc_mean("sig_mbc_mean", "sig_mbc_mean", exp_par[0], exp_par[0], exp_par[0]);
+    RooRealVar sig_de_mean("sig_de_mean", "sig_de_mean", exp_par[1], exp_par[1], exp_par[1]);
+    //RooRealVar sig_mbc_mean("sig_mbc_mean", "sig_mbc_mean", sig_par[0], sig_par[0], sig_par[0]);
+    //RooRealVar sig_de_mean("sig_de_mean", "sig_de_mean", sig_par[1], sig_par[1], sig_par[1]);
     RooRealVar sig_mbcde_corr("sig_mbcde_corr", "sig_mbcde_corr", sig_par[2], sig_par[2], sig_par[2]);
     RooRealVar sig_mbc_sigma0_l("sig_mbc_sigma0_l", "sig_mbc_sigma0_l", sig_par[3], sig_par[3], sig_par[3]);
     RooRealVar sig_mbc_sigma0_r("sig_mbc_sigma0_r", "sig_mbc_sigma0_r", sig_par[4], sig_par[4], sig_par[4]);
@@ -132,55 +127,65 @@ void generate_fit_unbin_exp()
     uds_model.Print();
 
     //Total experimental model for D^0 - meson
-    RooAddPdf exp_model("exp_model", "uds_model+dbck_model+sig_model", RooArgList(uds_model, dbck_model, sig_model),RooArgList(Bck,DBck,Sig));
+    RooAddPdf exp_model("exp_model", "uds_model+dbck_model+sig_model", RooArgList(uds_model, dbck_model, sig_model), RooArgList(Bck,DBck,Sig));
 
     //Generate an unbinned toy MC set
-    RooDataSet* data = (RooDataSet*) exp_model.generate(RooArgSet(mbc,de,dp), 100000);
+    RooDataSet* data = (RooDataSet*) exp_model.generate(RooArgSet(mbc,de,dp), 50000);
 
+    RooAbsReal::defaultIntegratorConfig()->method2D().setLabel("RooMCIntegrator");
+    
     mbc.setRange("Nmbcsignal",1855.,1875.);      //signal region
     de.setRange("Ndesignal",-100.,100.);         //signal region
+    /*
     RooAbsReal* fsigregion_sum = exp_model.createIntegral(RooArgSet(mbc,de), NormSet(RooArgSet(mbc,de)), Range("Nmbcsignal"), Range("Ndesignal"));
     RooAbsReal* fsigregion_bkg1 = uds_model.createIntegral(RooArgSet(mbc,de), NormSet(RooArgSet(mbc,de)), Range("Nmbcsignal"), Range("Ndesignal"));
     RooAbsReal* fsigregion_bkg2 = dbck_model.createIntegral(RooArgSet(mbc,de), NormSet(RooArgSet(mbc,de)), Range("Nmbcsignal"), Range("Ndesignal"));
+    */
+    
+    RooAbsReal* fsigregion_sum = exp_model.createIntegral(RooArgSet(mbc,de), Range("Nmbcsignal"), Range("Ndesignal"));
+    RooAbsReal* fsigregion_bkg1 = uds_model.createIntegral(RooArgSet(mbc,de), Range("Nmbcsignal"), Range("Ndesignal"));
+    RooAbsReal* fsigregion_bkg2 = dbck_model.createIntegral(RooArgSet(mbc,de), Range("Nmbcsignal"), Range("Ndesignal"));
 
     Double_t nsigevents = fsigregion_sum->getVal()*(Sig.getVal()+Bck.getVal()+DBck.getVal())-fsigregion_bkg1->getVal()*Bck.getVal()-fsigregion_bkg2->getVal()*DBck.getVal();
     Double_t nuds_bkgevents = fsigregion_bkg1->getVal()*Bck.getVal();
     Double_t ndbck_bkgevents = fsigregion_bkg2->getVal()*DBck.getVal();
 
     cout<<"nsigevents="<<nsigevents<<"\t"<<"nuds="<<nuds_bkgevents<<"\t"<<"ndbck="<<ndbck_bkgevents<<endl; 
-
+    
+    //RooDataSet* sliceData = (RooDataSet*) data->reduce(RooArgSet(mbc,de,dp),"de>-100 && de<100"); 
+ 
     mbc.setBins(100);
     RooPlot* mbc_frame = mbc.frame(Title(" "));
     mbc_frame->SetAxisRange(1790, 1900,"X");
     de.setRange("dECutsigRegion", -100, 100);
-    data->plotOn(mbc_frame, CutRange("dECutsigRegion"), RooFit::DataError(RooAbsData::Poisson));
-    exp_model.plotOn(mbc_frame, LineColor(kRed), ProjectionRange("dECutsigRegion"), RooFit::Name("Signal"));
-    exp_model.plotOn(mbc_frame, Components(uds_model), LineStyle(kDashed), LineColor(kGreen), ProjectionRange("dECutsigRegion"), RooFit::Name("uds"));
-    exp_model.plotOn(mbc_frame, Components(RooArgSet(uds_model, dbck_model)), LineStyle(kDashed), LineColor(kBlue), ProjectionRange("dECutsigRegion"), RooFit::Name("dbck"));
+    data->plotOn(mbc_frame, CutRange("dECutsigRegion"));
+    exp_model.plotOn(mbc_frame, LineColor(kRed), ProjectionRange("dECutsigRegion"), NumCPU(4), RooFit::Name("Signal"));
     Double_t chi2_mbc = mbc_frame->chiSquare();
     cout << "mbc Chi2 : " << chi2_mbc << endl;
+    //exp_model.plotOn(mbc_frame, Components(uds_model), LineStyle(kDashed), LineColor(kGreen), ProjectionRange("dECutsigRegion"), NumCPU(4), RooFit::Name("uds"));
+    //exp_model.plotOn(mbc_frame, Components(RooArgSet(uds_model, dbck_model)), LineStyle(kDashed), LineColor(kBlue), ProjectionRange("dECutsigRegion"),  NumCPU(4), RooFit::Name("dbck"));
 
     de.setBins(30);
     RooPlot* de_frame = de.frame(Title(" "));
     mbc.setRange("MbcCutsigRegion", 1855, 1875);
-    data->plotOn(de_frame, CutRange("MbcCutsigRegion"), RooFit::DataError(RooAbsData::Poisson));
-    exp_model.plotOn(de_frame, LineColor(kRed), ProjectionRange("MbcCutsigRegion"));
-    exp_model.plotOn(de_frame, Components(uds_model),LineStyle(kDashed), LineColor(kGreen), ProjectionRange("MbcCutsigRegion"));
-    exp_model.plotOn(de_frame, Components(RooArgSet(uds_model, dbck_model)), LineStyle(kDashed), LineColor(kBlue), ProjectionRange("MbcCutsigRegion"));
+    data->plotOn(de_frame, CutRange("MbcCutsigRegion"));
+    exp_model.plotOn(de_frame, LineColor(kRed), ProjectionRange("MbcCutsigRegion"), NumCPU(4));
     Double_t chi2_de = de_frame->chiSquare();
     cout << "de Chi2 : " << chi2_de << endl;
-
+    //exp_model.plotOn(de_frame, Components(uds_model),LineStyle(kDashed), LineColor(kGreen), ProjectionRange("MbcCutsigRegion"), NumCPU(4));
+    //exp_model.plotOn(de_frame, Components(RooArgSet(uds_model, dbck_model)), LineStyle(kDashed), LineColor(kBlue), ProjectionRange("MbcCutsigRegion"), NumCPU(4));
+   
     dp.setBins(50);
     RooPlot* dp_frame = dp.frame(Title(" "));
     dp_frame->SetAxisRange(-600, 600,"X");
     dp.setRange("dPCutsigRegion", -600, 600);
-    data->plotOn(dp_frame, CutRange("dPCutsigRegion"), RooFit::DataError(RooAbsData::Poisson));
-    exp_model.plotOn(dp_frame, LineColor(kRed), ProjectionRange("dPCutsigRegion"));
-    exp_model.plotOn(dp_frame, Components(uds_model), LineStyle(kDashed), LineColor(kGreen), ProjectionRange("dPCutsigRegion"));
-    exp_model.plotOn(dp_frame, Components(RooArgSet(uds_model, dbck_model)), LineStyle(kDashed), LineColor(kBlue), ProjectionRange("dPCutsigRegion"));
+    data->plotOn(dp_frame, CutRange("dPCutsigRegion"));
+    exp_model.plotOn(dp_frame, LineColor(kRed), ProjectionRange("dPCutsigRegion"), NumCPU(4));
     Double_t chi2_dp = dp_frame->chiSquare();
     cout << "dp Chi2 : " << chi2_dp << endl;
-     
+    //exp_model.plotOn(dp_frame, Components(uds_model), LineStyle(kDashed), LineColor(kGreen), ProjectionRange("dPCutsigRegion"), NumCPU(4));
+    //exp_model.plotOn(dp_frame, Components(RooArgSet(uds_model, dbck_model)), LineStyle(kDashed), LineColor(kBlue), ProjectionRange("dPCutsigRegion"), NumCPU(4));
+
     TCanvas *c = new TCanvas("generate_exp", "generate_exp", 1000, 600);
     c->Divide(2,2);
     c->cd(1);

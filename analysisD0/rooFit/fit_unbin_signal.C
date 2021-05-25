@@ -35,16 +35,12 @@ void fit_unbin_signal()
     Double_t maxP=1000;
     RooRealVar dp("dp", "#Delta P (MeV)", minP, maxP);
 
-    // Construct unbinned dataset importing tree branches
-    RooDataSet data("data", "data", RooArgSet(mbc, de, dp), Import(*tree));
-
-    int ndata = data.sumEntries();
-    cout<<"ndata="<<ndata<<endl;
-
     double par[SIG_PARS];
     double epar[SIG_PARS];
     //read_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/init/sig_def.par", SIG_PARS, par, epar);
-    read_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/out/sig_sim_Minuit2_migrad.par", SIG_PARS, par, epar);
+    //read_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/out/sig_sim_Minuit2_migrad.par", SIG_PARS, par, epar);
+    //read_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/out/sig_sim_Minuit_migrad.par", SIG_PARS, par, epar);
+    read_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/out/sig_sim_Minuit_migrad_update4.par", SIG_PARS, par, epar);
 
     RooRealVar mbc_mean("mbc_mean", "mbc_mean", par[0], 1850., 1880.);
     RooRealVar de_mean("de_mean", "de_mean", par[1], -50., 10.);
@@ -80,18 +76,23 @@ void fit_unbin_signal()
     RooRealVar dbck_mbc_shift("dbck_mbc_shift", "dbck_mbc_shift", 0., 0., 0.);
     RooRealVar dbck_mbc_sigma2("dbck_mbc_sigma2", "dbck_mbc_sigma2", par[25], par[25], par[25]);
 
-
     //RooClassFactory::makePdf("RooSigPdf","mbc,de,dp,mbc_mean,de_mean,mbcde_corr,mbc_sigma0_l,mbc_sigma0_r,de_sigma,ebeam,bck,mbc_sigma2,mbcw_shift,
     //mbcw_frac,mbcw_sigma,dew_sigma,mbcdew_corr,dpcurv,mbc_sigma4,dbck_alpha_mbc,dbck_alpha_de,dbck_ebeam,dbck_dpcurv,dbck_de_mean,dbck_de_width,
     //dbck_de_frac,dbck_mbc_mean,dbck_mbc_sigma0,dbck_mbc_sigma1,dbck_de_mean1,dbck_de_width1,dbck_de_frac1,dbck_de_frac2,dbck_mbc_shift,dbck_mbc_sigma2",0,"dpsig*(desig*mbcsig + fabs(mbcw_frac)*desig2*mbcsig2)+fabs(bck)/1e5*pdf_dbck(mbc, de, dp, dbck_par)");  .L RooSigPdf.cxx+ 
     RooSigPdf sig_model("sig_model","sig_model",mbc,de,dp,mbc_mean,de_mean,mbcde_corr,mbc_sigma0_l,mbc_sigma0_r,de_sigma,ebeam,bck,mbc_sigma2,mbcw_shift,mbcw_frac,mbcw_sigma,dew_sigma,mbcdew_corr,dpcurv,mbc_sigma4,dbck_alpha_mbc,dbck_alpha_de,dbck_ebeam,dbck_dpcurv,dbck_de_mean,dbck_de_width,dbck_de_frac,dbck_mbc_mean,dbck_mbc_sigma0,dbck_mbc_sigma1,dbck_de_mean1,dbck_de_width1,dbck_de_frac1,dbck_de_frac2,dbck_mbc_shift,dbck_mbc_sigma2);   
     
     sig_model.Print();
+
+    // Construct unbinned dataset importing tree branches
+    //RooDataSet data("data", "data", RooArgSet(mbc, de, dp), Import(*tree));
+    RooDataSet* data= new RooDataSet("data", "data", RooArgSet(mbc, de, dp), Import(*tree));
+    int ndata = data->sumEntries();
+    cout<<"ndata="<<ndata<<endl;
        
     //Perform fit and save result
-    RooFitResult* r = sig_model.fitTo(data,RooFit::Minimizer("Minuit2","migrad"),Save());
+    //RooFitResult* r = sig_model.fitTo(data,RooFit::Minimizer("Minuit2","migrad"),Save());
     //RooFitResult* r = sig_model.fitTo(data,RooFit::Minimizer("Minuit","minimize"),Save());
-    //RooFitResult* r = sig_model.fitTo(data,RooFit::Minimizer("Minuit","migrad"),Save());
+    RooFitResult* r = sig_model.fitTo(*data,RooFit::Minimizer("Minuit","migrad"),Save());
     //RooFitResult* r = sig_model.fitTo(data,Save());
     //Print fit results 
     // ---------------------------------
@@ -183,7 +184,7 @@ void fit_unbin_signal()
     RooPlot* mbc_frame = mbc.frame(Title(" "));
     mbc_frame->SetAxisRange(1800, 1900,"X");
     mbc.setRange("mbcsigRegion", 1800, 1900);
-    data.plotOn(mbc_frame, MarkerColor(kBlue), LineColor(kBlue), Range("mbcsigRegion"));
+    data->plotOn(mbc_frame, MarkerColor(kBlue), LineColor(kBlue), Range("mbcsigRegion"));
     sig_model.plotOn(mbc_frame, LineColor(kRed), Range("mbcsigRegion"));
     Double_t chi2_mbc = mbc_frame->chiSquare();
     cout << "mbc Chi2 : " << chi2_mbc << endl;
@@ -192,7 +193,7 @@ void fit_unbin_signal()
     RooPlot* de_frame = de.frame(Title(" "));
     de_frame->SetAxisRange(-300, 300,"X");
     de.setRange("desigRegion", -300, 300);
-    data.plotOn(de_frame, MarkerColor(kBlue), LineColor(kBlue), Range("desigRegion"));
+    data->plotOn(de_frame, MarkerColor(kBlue), LineColor(kBlue), Range("desigRegion"));
     sig_model.plotOn(de_frame, LineColor(kRed), Range("desigRegion"));
     Double_t chi2_de = de_frame->chiSquare();
     cout << "de Chi2 : " << chi2_de << endl;
@@ -201,7 +202,7 @@ void fit_unbin_signal()
     RooPlot* dp_frame = dp.frame(Title(" "));
     dp_frame->SetAxisRange(-600, 600,"X");
     dp.setRange("dPsigRegion", -600, 600);
-    data.plotOn(dp_frame, MarkerColor(kBlue), LineColor(kBlue), Range("dPsigRegion"));
+    data->plotOn(dp_frame, MarkerColor(kBlue), LineColor(kBlue), Range("dPsigRegion"));
     sig_model.plotOn(dp_frame, LineColor(kRed), Range("dPsigRegion"));
     Double_t chi2_dp = dp_frame->chiSquare();
     cout << "dp Chi2 : " << chi2_dp << endl;
@@ -231,7 +232,7 @@ void fit_unbin_signal()
     dp_frame->GetYaxis()->SetTitleOffset(1.5);
     dp_frame->Draw();
     c->cd(4);
-    TH1 *hmbcdp = data.createHistogram("dp,mbc", 200, 200);
+    TH1 *hmbcdp = data->createHistogram("dp,mbc", 200, 200);
     gPad->SetTopMargin(0.03);
     gPad->SetLeftMargin(0.11);
     gPad->SetRightMargin(0.03);

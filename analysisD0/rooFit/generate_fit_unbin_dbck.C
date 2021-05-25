@@ -59,26 +59,26 @@ void generate_fit_unbin_dbck()
     dbck_model.Print();
 
     //Generate an unbinned toy MC set
-    RooDataSet *data = dbck_model.generate(RooArgSet(mbc,de,dp),50000);    
+    RooDataSet* data = dbck_model.generate(RooArgSet(mbc,de,dp), 50000);    
                
     RooAbsReal::defaultIntegratorConfig()->method2D().setLabel("RooMCIntegrator");
  
     mbc.setBins(100);
-    RooPlot *mbc_frame = mbc.frame(Title(" "));
+    RooPlot* mbc_frame = mbc.frame(Title(" "));
     data->plotOn(mbc_frame, MarkerColor(kBlue), LineColor(kBlue));
     dbck_model.plotOn(mbc_frame, LineColor(kRed));
     Double_t chi2_mbc = mbc_frame->chiSquare();
     cout << "mbc Chi2 : " << chi2_mbc << endl;    
 
     de.setBins(30);
-    RooPlot *de_frame = de.frame(Title(" "));
+    RooPlot* de_frame = de.frame(Title(" "));
     data->plotOn(de_frame, MarkerColor(kBlue), LineColor(kBlue));
     dbck_model.plotOn(de_frame, LineColor(kRed));
     Double_t chi2_de = de_frame->chiSquare();
     cout << "de Chi2 : " << chi2_de << endl;
     
     dp.setBins(100);
-    RooPlot *dp_frame = dp.frame(Title(" "));
+    RooPlot* dp_frame = dp.frame(Title(" "));
     dp_frame->SetAxisRange(-800, 800,"X");
     dp.setRange("dPsigRegion", -800, 800);
     data->plotOn(dp_frame, MarkerColor(kBlue), LineColor(kBlue), Range("dPsigRegion"));
@@ -86,7 +86,7 @@ void generate_fit_unbin_dbck()
     Double_t chi2_dp = dp_frame->chiSquare();
     cout << "dp Chi2 : " << chi2_dp << endl;
     
-    TCanvas* c = new TCanvas("generate_dbck", "generate_dbck", 1000, 600);
+    TCanvas *c = new TCanvas("generate_dbck", "generate_dbck", 1000, 600);
     c->Divide(2,2);
     c->cd(1);
     gPad->SetTopMargin(0.03);

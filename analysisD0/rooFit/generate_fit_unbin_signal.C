@@ -30,7 +30,10 @@ void generate_fit_unbin_signal()
 
     double par[SIG_PARS];
     double epar[SIG_PARS];
-    read_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/init/sig_def.par", SIG_PARS, par, epar);
+    //read_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/init/sig_def.par", SIG_PARS, par, epar);
+    //read_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/out/sig_sim_Minuit_migrad.par", SIG_PARS, par, epar);
+    //read_par("/home/ovtin/development/Dmeson/analysisD0/fitD0/par/parold/sig.par", SIG_PARS, par, epar);
+    read_par("/home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/out/sig_sim.par", SIG_PARS, par, epar);
 
     RooRealVar mbc_mean("mbc_mean", "mbc_mean", par[0], par[0], par[0]);
     RooRealVar de_mean("de_mean", "de_mean", par[1], par[1], par[1]);
@@ -74,7 +77,7 @@ void generate_fit_unbin_signal()
     sig_model.Print();
 
     //Generate an unbinned toy MC set
-    RooDataSet* data = (RooDataSet*) sig_model.generate(RooArgSet(mbc,de,dp), 50000);
+    RooDataSet* data = (RooDataSet*) sig_model.generate(RooArgSet(mbc,de,dp), 99116);
        
     RooAbsReal::defaultIntegratorConfig()->method2D().setLabel("RooMCIntegrator");
 
