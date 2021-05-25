@@ -80,6 +80,7 @@ void pic_dif_data_sim()
     //TF1 *fun3 = hphi1->GetFunction("fit2");
     hphi1->GetListOfFunctions()->Remove(fun3);
     hphi1->Draw("");
+    double DataMeanPhi = hphi1->GetRMS();
 
     TH1F *hphi2 = (TH1F*)inSim->Get("hphi");
     hphi2->SetLineColor(kRed);
@@ -92,6 +93,10 @@ void pic_dif_data_sim()
     //TF1 *fun4 = hphi2->GetFunction("fit2");
     hphi2->GetListOfFunctions()->Remove(fun4);
     hphi2->Draw("sames");
+    double SimMeanPhi = hphi2->GetRMS();
+
+    cout<<"Compare Means (Data/Sim) for Phi = "<<DataMeanPhi/SimMeanPhi<<endl;
+
     TPaveStats *st3 = (TPaveStats*)hphi1->FindObject("stats");
     st3->SetX1NDC(.70);
     st3->SetX2NDC(.90);
@@ -110,7 +115,8 @@ void pic_dif_data_sim()
     TH1F *htheta1 = (TH1F*)inData->Get("htheta");
     htheta1->SetLineColor(kBlue);
     htheta1->SetMinimum(0.);
-    htheta1->SetMaximum(0.135);
+    htheta1->SetMaximum(0.155);
+    //htheta1->SetMaximum(0.140);
     htheta1->SetName("data");
     htheta1->SetTitle("");
     htheta1->GetYaxis()->SetTitle("Number of events");
@@ -120,6 +126,7 @@ void pic_dif_data_sim()
     //TF1 *fun5 = htheta1->GetFunction("fit3");
     htheta1->GetListOfFunctions()->Remove(fun5);
     htheta1->Draw("");
+    double DataMeanTheta = htheta1->GetRMS();
 
     TH1F *htheta2 = (TH1F*)inSim->Get("htheta");
     htheta2->SetLineColor(kRed);
@@ -132,6 +139,10 @@ void pic_dif_data_sim()
     //TF1 *fun6 = htheta2->GetFunction("fit3");
     htheta2->GetListOfFunctions()->Remove(fun6);
     htheta2->Draw("sames");
+    double SimMeanTheta = htheta2->GetRMS();
+
+    cout<<"Compare Means (Data/Sim) for Thate = "<<DataMeanTheta/SimMeanTheta<<endl;
+
     TPaveStats *st5 = (TPaveStats*)htheta1->FindObject("stats");
     st5->SetX1NDC(.70);
     st5->SetX2NDC(.90);
@@ -147,7 +158,7 @@ void pic_dif_data_sim()
     gPad->Modified();
 
     c.Update();
-    c.Print(dir_out + "compare_data_sim_2016-17_23551-23569.png");
-    c.Print(dir_out + "compare_data_sim_2016-17_23551-23569.eps");
+    c.Print(dir_out + "compare_data_sim_2016-17_KsimSystErr1_2method_corr_S1.0_A9.5_Z5.5.png");
+    c.Print(dir_out + "compare_data_sim_2016-17_KsimSystErr1_2method_corr_S1.0_A9.5_Z5.5.eps");
     c.Print("compare_data_sim_2016-17.root");
 }

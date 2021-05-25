@@ -33,16 +33,16 @@
 ##$ -m beas
 ##$ -M ovtin.ivan@gmail.com
 
-#$ -t 1-221
+##$ -t 1-221
+#$ -t 21-221
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]
 
 #BG ee_to_DD
 simOn=1
-outfile="/spool/users/ovtin/outDmeson/simulation/outsimD0/Bkg_eetoDD/psi3770_to_simD0mesonBkg_eetoDD_"$i".root"
-##mintracks=3
-mintracks=2
+outfile="/spool/users/ovtin/outDmeson/simulation/outsimD0/Bkg_eetoDD/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/psi3770_to_simD0mesonBkg_eetoDD_"$i".root"
+mintracks=3
 maxtracks=20
 minbeamtracks=0
 minIPtracks=0

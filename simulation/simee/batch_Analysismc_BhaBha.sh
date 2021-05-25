@@ -4,7 +4,7 @@
 #$ -S /bin/bash                            ##specifies the interpreting shell for this job to be the Bash shell.
 # -------------------------------------------
 # --             batch name                --
-#$ -N eeSim
+#$ -N bhabhaSim
 # -------------------------------------------
 # --     What to redirect to where         --
 # -- working directory --
@@ -21,21 +21,21 @@
 ##$ -v PATH=$PATH:$HOME/release/KdRunFastMon,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/alexbarn/release/lib,KDBHOST=localhost
 # -------------------------------------------
 # --             Queue list                --
-#$ -soft
+##$ -soft
 ##$ -hard
-#$ -l time=24:00:00
+##$ -l time=24:00:00
 ##$ -q remote
 ##$ -q extralong
 ##$ -q 6h
-#$ -q hour
-##$ -q day
+##$ -q hour
+#$ -q day
 #
 # -- Send mail at submission and completion of script --
-##$ -m beas
-##$ -M ovtin.ivan@gmail.com
+#$ -m beas
+#$ -M ovtin.ivan@gmail.com
 
 ##$ -t 1-124
-#$ -t 1-11
+#$ -t 1-1
 ##$ -t 2-4
 ##$ -t 5-9
 ##$ -t 10-11
@@ -86,7 +86,7 @@ minbeamtracks=0
 minIPtracks=0
 maxIPtracks=20
 minPt=100
-maxPt=2000
+maxPt=10000
 minClusterEnergy=0
 minTotalEnergy=0
 minClusters=0
@@ -100,14 +100,16 @@ minNhits=0
 
 ########################################################################################################
 inruns="/spool/users/ovtin/outDmeson/simulation/BhaBha/simee000001.dat"
+##inruns="/spool/users/ovtin/outDmeson/simulation/BhaBha/simwitholdmccards/simee000001.dat"
 #
 if [ $i == 1 ]; then
 ##NumFirstExpRun=23207
 NumFirstExpRun=23275
 NumLastExpRun=23286   #75 runs        152 -> 87
-NevRate=50
-nevbegin=0
-nevend=6000
+NumLastExpRun=26134
+NevRate=1000
+##nevbegin=0
+##nevend=6000
 fi
 
 if [ $i == 2 ]; then
@@ -368,7 +370,7 @@ fi
 
 if [ $i == 32 ]; then
 NumFirstExpRun=23736
-NumLastExpRun=23742
+NumLastExpRun=23740
 NevRate=50
 nevbegin=35001
 nevend=40000
@@ -1193,7 +1195,9 @@ nevend=15000
 fi
 
 #######################################################################################################
-$HOME/development/Dmeson/analysis_bhabha -D $simOn -v $NumFirstExpRun -m $NumLastExpRun -M $NevRate -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile $inruns -w $nevbegin -g $nevend
+##$HOME/development/Dmeson/analysis_bhabha -D $simOn -v $NumFirstExpRun -m $NumLastExpRun -M $NevRate -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile $inruns -w $nevbegin -g $nevend
+##$HOME/development/Dmeson/analysis_bhabha -D $simOn -v $NumFirstExpRun -m $NumLastExpRun -M $NevRate -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile $inruns
+$HOME/development/Dmeson/analysis_bhabha -D $simOn -v $NumFirstExpRun -m $NumLastExpRun -M $NevRate -S 1.0 -A 7.5 -Z 5.5 -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile $inruns
 
 
 status=$?

@@ -18,17 +18,19 @@
 #$ -soft
 #$ -l time=24:00:00
 ##$ -q remote
-#$ -q extralong
+##$ -q extralong
+#$ -q 6h
+##$ -q day
 #$ -m beas
 #$ -M ovtin.ivan@gmail.com
 
-#$ -t 1-10
+#$ -t 1-12
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]
 
 #start the job
-$HOME/development/bin/ks < $HOME/development/Dmeson/simulation/simD0/BG_eetoDD/mccards/mc.cards.ee_to_DD_"$i" > /dev/null
+$HOME/development/bin/ks < $HOME/development/Dmeson/simulation/simD0/BG_eetoDD/mccards/mc.cards.ee_to_DD_"$i" 
 
 status=$?
 if [ $status != 0 ]; then

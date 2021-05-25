@@ -805,8 +805,8 @@ int main(int argc, char* argv[])
 	kf_register_selection(KF_MU_SEL,mu_event_rejection);
 
 	//Set automatic cosmic run determination
-	kf_cosmic(-1);  //auto
-//	kf_cosmic(0);  //beam
+	//kf_cosmic(-1);  //auto
+	kf_cosmic(0);  //beam
 
 	kf_modify_header(1);     //Modify header flag. REDE energy read from DB will be written to header
 

@@ -17,13 +17,13 @@
 ##$ -e /dev/null
 # -------------------------------------------
 # --             Enviroment                --
-#$ -v PATH=$PATH:$HOME/release/KdRunFastMon,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/alexbarn/release/lib,KDBHOST=bison-2
 ##$ -v PATH=$PATH:$HOME/development/lib:/home/ovtin/development/KrKRec,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/ovtin/development/lib,KDBHOST=bison-2
+#$ -v PATH=$PATH:$HOME/release/KdRunFastMon,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/alexbarn/release/lib,KDBHOST=localhost
 # -------------------------------------------
 # --             Queue list                --
-#$ -soft
+##$ -soft
 ##$ -hard
-#$ -l time=24:00:00
+##$ -l time=24:00:00
 #$ -q remote
 ##$ -q extralong
 ##$ -q 6h
@@ -35,12 +35,16 @@
 
 ##$ -t 1-482
 #$ -t 1-693
+##$ -t 1-1
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]
 
 ##inruns=23219
 #Signal
+##inruns="/spool/users/ovtin/cosmruns/apr16cosmruns_1"
+##inruns=23621
+##outfile="/spool/users/ovtin/psi3770_to_cosmic_"$i".root"
 inruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/runDmeson"$i
 outfile="/spool/users/ovtin/outDmeson/bhabha/data/psi3770_to_bhabha_"$i".root"
 ##inruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/runDmeson"$i
@@ -60,7 +64,7 @@ minClustersLKr=0
 minClustersCsI=0
 maxtchi2=1000
 minNhits=0
-verbose=1
+verbose=0
 
 $HOME/development/Dmeson/analysis_bhabha -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile $inruns -z $verbose
 

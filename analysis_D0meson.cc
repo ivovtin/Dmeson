@@ -14,6 +14,7 @@
 #include "ReadNat/rr_def.h"
 #include "ReadNat/re_def.h"
 #include "ReadNat/ss_def.h"
+#include "ReadNat/mc_def.h"
 #include "VDDCRec/ktracks.h"
 #include "VDDCRec/mtofhits.h"
 #include "VDDCRec/ToFTrack.hh"
@@ -52,6 +53,7 @@
 #include "VDDCRec/ktrkhits.h"
 #include "VDDCRec/ktrkfpar.h"
 #include "VDDCRec/kglobparam.h"
+#include "VDDCRec/mctracks.h"
 #include "ReadNat/mcdc_def.h"
 #include "ReadNat/dcrawhitspar.h"
 //#include "KDisplay/kdisplay_event.h"
@@ -205,9 +207,6 @@ double ebeam;
 
 int numn, numo;
 double enn, eno, pxn, pxo, pyn, pyo, pzn, pzo;
-
-//Rejection prior to reconstruction helps to save CPU time
-extern "C" void kemc_energy_(float Ecsi[2],float *Elkr);
 
 int pre_event_rejection()
 {
@@ -547,7 +546,6 @@ void kine_fit(int ip1, int ip2, double* mbc, double* de, double* dp, double* pre
     *prec2 = pp2;
 
     if (progpar.verbose) printf("mbc=%lf, de=%lf\n", *mbc, *de);
-
 }
 
 
@@ -628,7 +626,8 @@ int analyse_event()
     float EMinPhot=progpar.min_cluster_energy;
     double WTotal=2.*beam_energy;                                                                 //beam_energy - How determined this energy ?
     if( kedrrun_cb_.Header.RunType == 64 ) {   //for MC
-	WTotal=2*1886.75;
+	kmctracks();
+	WTotal=2*1887.0;
     }
 
     ebeam=WTotal/2.;
@@ -677,8 +676,18 @@ int analyse_event()
 
 		if (progpar.verbose) cout<<"i="<< i<<endl;
 		if (progpar.verbose) cout<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"Ebeam="<<WTotal/2<<"\t"<<"t1="<<t1<<"\t"<<"t2="<<t2<<"\t"<<"tCharge(t1)="<<tCharge(t1)<<"\t"<<"tCharge(t2)="<<tCharge(t2)<<endl;
+                if (progpar.verbose) cout<<"kedrmc_.Header.Energy="<<kedrmc_.Header.Energy*0.001<<endl;
 		if (progpar.verbose) cout<<"p(t1)="<<tP(t1)<<"\t"<<"p(t2)="<<tP(t2)<<"\t"<<"tHits(t1)="<<tHits(t1)<<"\t"<<"tHits(t2)="<<tHits(t2)<<"\t"<<"tCh2(t1)="<<tCh2(t1)<<"\t"<<"tCh2(t2)="<<tCh2(t2)<<endl;
 		if (progpar.verbose) cout<<"ktrrec_.PTRAK[t1]="<<ktrrec_.PTRAK[t1]<<"\t"<<"ktrrec_.PTRAK[t2]="<<ktrrec_.PTRAK[t2]<<"\t"<<endl;
+
+		if ( progpar.verbose && kedrrun_cb_.Header.RunType == 64 ) {
+		    int id1 = mctracks_cb_.kf[t1];
+		    int Psim1 = mctracks_cb_.P[t1];
+		    cout<<"t1="<<t1<<"\t"<<"kft1="<<id1<<"\t"<<"Psim1="<<Psim1<<endl;
+		    int id2 = mctracks_cb_.kf[t2];
+		    int Psim2 = mctracks_cb_.P[t2];
+		    cout<<"t2="<<t2<<"\t"<<"kft2="<<id2<<"\t"<<"Psim2="<<Psim2<<endl;
+		}
 
 		Dmeson.p1 = tP(t1);
 		Dmeson.p2 = tP(t2);
@@ -1036,10 +1045,15 @@ int main(int argc, char* argv[])
 	kf_install_signal_handler(1);
 
         kdcswitches_.kNoiseReject=3;      //Cut for DC noise  (0 - not cut, 1 - standart, 2 - soft, 3 - hard)
+	//kdcswitches_.kEmcPatch=1;
+	kdcswitches_.KemcAllowed=0;
+	//kdcpar1_.DeleteTracksGhost=0;
+        //kdcswitches_.kVDRtAlt=1;
+
 	//kdcswitches_.KemcAllowed=-1;      //off use strips for track reconstruction
 	//kdcswitches_.KtofAllowed=0;       //use of TOF for track search
 	//kdcswitches_.kIPalternative = 1;  //alternative track candidate with IP (on)
-	kdcswitches_.kCosmInSigRuns = 0;  //search for cosmic in signal runs (on)
+	//kdcswitches_.kCosmInSigRuns = 0;  //search for cosmic in signal runs (on)
 
         kf_MCCalibRunNumber(progpar.simOn,progpar.MCCalibRunNumber,progpar.MCCalibRunNumberL,progpar.NsimRate,progpar.Scale,progpar.Ascale,progpar.Zscale);
 
@@ -1091,8 +1105,8 @@ int main(int argc, char* argv[])
 	kf_register_selection(KF_MU_SEL,mu_event_rejection);
 
 	//Set automatic cosmic run determination
-	kf_cosmic(-1);  //auto
-//	kf_cosmic(0);  //beam
+//	kf_cosmic(-1);  //auto
+	kf_cosmic(0);  //beam
 
 	kf_modify_header(1);     //Modify header flag. REDE energy read from DB will be written to header
 

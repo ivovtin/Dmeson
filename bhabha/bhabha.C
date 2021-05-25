@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
 	zCut=13.;
 	max_chi2=1000.;
 	min_nhits=23.;
-        max_nhits=100.;
+        //max_nhits=100.;
     }
     if(key==2){
 	//2016-17  - sim
@@ -64,7 +64,7 @@ int main(int argc, char* argv[])
 	max_chi2=1000.;
 	min_nhits=23.;
 	//min_nhits=10.;
-        max_nhits=100.;
+        //max_nhits=100.;
 	epCut1=0.0;
 	epCut2=10.0;
         theta2tCut=178;
@@ -76,7 +76,7 @@ int main(int argc, char* argv[])
 	zCut=13.;
 	max_chi2=1000.;
 	min_nhits=23.;
-	max_nhits=100.;
+	//max_nhits=100.;
 	//max_nhits=50.;
     }
 
@@ -89,8 +89,8 @@ int main(int argc, char* argv[])
     TString list_badruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/badruns";
     if( key==0 ){           //exp 2016-17
 	fnameout=TString::Format("exp_bhabha_data_%d.root",key).Data();
-        //KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/data/";
-        KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/data_test/";
+        KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/data/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/data_test/";
 	list_badruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/badruns";
     }
     else if (key==1)        //exp 2004
@@ -102,8 +102,18 @@ int main(int argc, char* argv[])
     else if (key==2)        //sig
     {
 	fnameout=TString::Format("sim_bhabha_sig_%d.root",key).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/simulation/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/simulation/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/simulation_tuning/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/simulationKsimSystErr2/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/simulationKsimSystErr1_notksimreal_kdcsimxt_kdcsimsigma/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/simulationKsimSystErr1_2method_corr_S1.0_A6.5_Z2.5/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/simulationKsimSystErr1_2method_corr_S1.0_A7.5_Z3.5/";
+        KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/simulationKsimSystErr1_2method_corr_S1.0_A8.5_Z4.5/";
     }
+
+    gSystem->Exec("mkdir " + KEDR);
+    gSystem->Exec("cp /store/users/ovtin/outDmeson/demo/index.php " + KEDR);
+
     cout<<fnameout<<endl;
     fout = new TFile(fnameout,"RECREATE");
 
@@ -223,37 +233,27 @@ int main(int argc, char* argv[])
 	tt->GetEntry(k);
 
 	if(
-           /*
-           //1 variant
-	   bhabha.vrtntrk>=ntrk
-           && bhabha.p1>min_p && bhabha.p1<max_p && bhabha.p2>min_p && bhabha.p2<max_p
-           && bhabha.nhitst1>min_nhits && bhabha.nhitst2>min_nhits
-           && bhabha.rr1<rrCut && bhabha.rr2<rrCut
-	   && fabs(bhabha.zip1)<zCut && fabs(bhabha.zip2)<zCut
-	   && bhabha.ecls1>eclsCut && bhabha.ecls2>eclsCut
- 	   && (bhabha.thetat1>57 && bhabha.thetat1<122 ) && (bhabha.thetat2>57 && bhabha.thetat2<122)
-           && (bhabha.p1 + bhabha.p2)>2000.
-           */
            //=======================================
-	   //2 variant Harlamova dissertation
+	   //Cuts form T.Harlamova dissertation
+	   //((bhabha.Run>=23287 && bhabha.Run<=23402) || (bhabha.Run>=23431 && bhabha.Run<=23472) || (bhabha.Run>=23523 && bhabha.Run<=23798) || (bhabha.Run>=23839 && bhabha.Run<=23862)) &&
 	   //bhabha.Run>=23275 && bhabha.Run<=23286 &&   //1 - 10.8%
 	   //bhabha.Run>=23287 && bhabha.Run<=23317 &&   //2 - 9.8%
 	   //bhabha.Run>=23318 && bhabha.Run<=23369 &&   //3 - 11.12%
-	   //bhabha.Run>=23403 && bhabha.Run<=23430 &&   //4 - 22% - bad runs
+	   //bhabha.Run>=23403 && bhabha.Run<=23430 &&   //4 - 22% - bad runs   !!!!    -
 	   //bhabha.Run>=23431 && bhabha.Run<=23472 &&   //5 - 12.05%
-	   //bhabha.Run>=23473 && bhabha.Run<=23522 &&   //6 - 13.1% - bad runs
+	   //bhabha.Run>=23473 && bhabha.Run<=23522 &&   //6 - 13.1% - bad runs   !!!! -
 	   //bhabha.Run>=23523 && bhabha.Run<=23550 &&   //7 - 12.42%
 	   //bhabha.Run>=23551 && bhabha.Run<=23569 &&   //8 - 11.35%
 	   //bhabha.Run>=23670 && bhabha.Run<=23681 &&   //9 - 10.48%
 	   //bhabha.Run>=23682 && bhabha.Run<=23715 &&   //10 - 11%
-	   //bhabha.Run>=23716 && bhabha.Run<=23742 &&   //11 - 12.5% - bad runs
-	   //bhabha.Run>=23743 && bhabha.Run<=23798 &&   //12 - 16% - bad runs
-	   //bhabha.Run>=23799 && bhabha.Run<=23838 &&   //13 - 19% - bad runs
+	   //bhabha.Run>=23716 && bhabha.Run<=23742 &&   //11 - 12.5%
+	   //bhabha.Run>=23743 && bhabha.Run<=23798 &&   //12 - 15%
+	   //bhabha.Run>=23799 && bhabha.Run<=23838 &&   //13 - 19% - bad runs  -
 	   //bhabha.Run>=23839 && bhabha.Run<=23862 &&   //14 - 11%
 	   //bhabha.Run>=23863 && bhabha.Run<=23885 &&   //15 - 10%
 	   //bhabha.Run>=23886 && bhabha.Run<=23905 &&   //16 - 11%
 	   //bhabha.Run>=23906 && bhabha.Run<=23943 &&   //17 - 11%
-	   //bhabha.Run>=24621 && bhabha.Run<=24647 &&   //18 - 16% - bad runs
+	   //bhabha.Run>=24621 && bhabha.Run<=24647 &&   //18 - 14%
 	   //bhabha.Run>=24676 && bhabha.Run<=24712 &&   //19 - 11%
 	   //bhabha.Run>=24790 && bhabha.Run<=24845 &&   //20 - 11%
 	   //bhabha.Run>=24846 && bhabha.Run<=24875 &&   //21 - 11%
@@ -285,7 +285,6 @@ int main(int argc, char* argv[])
            && bhabha.rr1<rrCut && bhabha.rr2<rrCut
            && fabs(bhabha.zip1)<zCut && fabs(bhabha.zip2)<zCut
            && bhabha.pt1>100 && bhabha.pt2>100
-           && (bhabha.mulayerhits2+bhabha.mulayerhits3)<=1
            && bhabha.vrtnip>=2
            && (bhabha.mulayerhits2+bhabha.mulayerhits3)<=max_munhits
            //=======================================

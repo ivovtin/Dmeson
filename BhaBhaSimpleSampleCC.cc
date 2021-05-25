@@ -41,6 +41,7 @@
 #include "VDDCRec/ktracks.h"
 #include "VDDCRec/kglobparam.h"
 #include "VDDCRec/kdcpar.h"
+#include "VDDCRec/kdcscale.h"
 
 #include "KrAtc/atcrec.h"
 #include "KrAtc/atc_to_track.h"
@@ -243,7 +244,7 @@ void others(int t1, int t2, int* num, double *en, double *px, double* py, double
 
 int main(int argc,char *argv[]) {
     //default parameters
-    int run1=23280,run2=23280,Nevents=1000000,cosmic=0,RecMode=0;
+    int run1=23556,run2=23556,Nevents=1000000,cosmic=0,RecMode=0;
     bool draw=false;
     //for command string arguments
     int iarg;
@@ -253,6 +254,10 @@ int main(int argc,char *argv[]) {
     // for access to tracks
     int sim=0;
     int Nsw=1;
+
+    float Elkr0cut=900.;
+    float EnergyLKR=0;
+    float EnergyCSI[2]={0,0};
 
     // command string arguments
     for(iarg=1; iarg < argc; iarg++) {
@@ -304,42 +309,29 @@ int main(int argc,char *argv[]) {
 			  ":Ebeam/F:rEv:p1:p2:pt1:pt2:chi2t1:chi2t2:theta2t:phi2t:thetat1:thetat2:phit1:phit2:e1"
 			  ":e2:d1:d2:rr1:rr2:zip1:zip2:x0t1:y0t1:z0t1:x0t2:y0t2:z0t2:ecls1:ecls2:tcls1:tcls2:pcls1:pcls2:emcenergy:lkrenergy:csienergy:enn:eno:tofc1:ttof1:tofc2:ttof2");
 
-	//kdcswitches_.KtofAllowed=-2;
+	kdcswitches_.kXTKey=1;
+
+	kdcswitches_.KtofAllowed=-2;
+        kdcpar1_.SigZsyst0=1.;
+        kdcpar1_.SigXsyst0=0.05;
+
+	kdcswitches_.KcExp=0;
+
 	//semc_cards.EMC_MASTER=0;
 	//kdcswitches_.kCosmInSigRuns = 0;
 	//kdcswitches_.kIPalternative = 1;
 	//kdcswitches_.KemcAllowed = -1;
-        //kdcswitches_.KmuAllowed=1;
- 
-	kdcswitches_.kXTKey=1;
-        kdcswitches_.KcExp=0;       
- 
+	//kdcswitches_.KmuAllowed=1;
+	//kdcswitches_.kVDRtAlt=1;
+	//kdcswitches_.kEmcPatch=1;
+	//kEMCpatch=1;
+
+
         cout<<"kdcswitches_.kXTKey="<<kdcswitches_.kXTKey<<"\t"<<"kdcswitches_.KcExp="<<kdcswitches_.KcExp<<endl;
 
-	if(sim)
-        {
-             //tof_initAlternative(bad_listtof1);
-             tof_sim();
-        }
-        else
-        {
-             tof_init();
-        }
+        //mu_default_init(1);
 
-	// general initialization
-	if(sim)
-	{
-	    kdcswitches_.KsimSystErr = 1; //or 2
-	    //kdcsimxt();
-	    //kdcsimsigma();
-	    //kdcsimsysterr();               //simulation system. errors of calibration
-	    //kdcnosimxt();                    //x(t) is not simulated
-	    //kdcsimsigma();                   //call simulation experimental resolution
-	    //ksimreal(50,23272,23282);
-	    //ksimreal(1,23566,23566);
-	    ksimreal(Nsw,run1,run2);
-	}
-	/*
+         /*
 	 int mode=0;
 	 int ierr;
 	 kedr_read_trg_("trigger.dat",&ierr,sizeof("trigger.dat"));
@@ -351,19 +343,36 @@ int main(int argc,char *argv[]) {
 	 ksettrgdb(&run);
 	 printf("trigger for run %d initialized\n",run);// no file "trigger.dat", take trigger formula from DB
 	 }
-	 */
 
+         klkr_loadthr(30.,150.,3.,"lkrthra.txt");
+         kdcpar1_.ScaleEThrLKR=1.2;
+         kcsi_loadthr(30.,150.,3.,"csithra.txt");
+	 kdcpar1_.ScaleEThrCSI=1.1;
+         */
+
+        /*
+	if(sim)
+	{
+            //tof_initAlternative(bad_listtof1);
+	    tof_sim();
+        }
+        else
+        {
+             tof_init();
+	}
+        */
 	if( cosmic>0 )
 	    kdcvdcosmic();
 	else if( cosmic==0 )
 	    kdcvdnocosmic();
 
-        if(mu_default_init(1))  cout<<"Mu init error"<<endl;
-        if(mu_init_status())  cout<<"Mu init status error"<<endl;
+        //if(mu_default_init(1))  cout<<"Mu init error"<<endl;
+        //if(mu_init_status())  cout<<"Mu init status error"<<endl;
 
 	// open run file
 	//if(sim)  sprintf(fname,"/spool/users/ovtin/outDmeson/simulation/BhaBha/simee0000020.dat");
-	if(sim)  sprintf(fname,"/store/sim/ee/Bhabha/1885/theta-15-165-IPzero-Field6kGs.dat.bz2");
+	//if(sim)  sprintf(fname,"/store/sim/ee/Bhabha/1885/theta-15-165-IPzero-Field6kGs.dat.bz2");
+	if(sim)  sprintf(fname,"/space/skim/psi3770/sim/sim713201.dat.bz2");
 	else    sprintf(fname,"/space/runs/daq%06d.nat",run);
 
 	kedr_open_nat(fname,&openerr);
@@ -372,42 +381,80 @@ int main(int argc,char *argv[]) {
 	    exit(1);
 	}
 
-        if (!sim){
+        emc_init();
+
+        if (sim==0){
 	    get_run_data(run);
             if(mu_get_db_status(run))  cout<<"Mu status error"<<endl;
             if(mu_get_db_clbr_for_run(run)<0)  cout<<"Mu calib error"<<endl;
 	    tof_run(run);
         }
 
-        if( sim && NumCurrentSim!=NSimRun&&NSimRun!=0 )
-        {
-            tof_run(NSimRun);
-            tof_sim_real(NSimRun, 1, 1);
-            if(mu_get_db_status(NSimRun))  cout<<"Mu status error"<<endl;
-            if(mu_get_db_clbr_for_run(NSimRun)<0)  cout<<"Mu calib error"<<endl;
-            NumCurrentSim=NSimRun;
-        }
+	// general initialization
+	if(sim)
+	{
+	    //simcalibruns_.KSimUseRealStatus=4;
+	    //kdcpar1_.UseLKRForm=0;
+	    //cout<<"WARNING: FOR SIMULATION LKRFORM set 0"<<endl;
 
-        eNumber=0;
+	    //kdcpar1_.TrackEffCor[0]=0;
+	    //kdcpar1_.TrackEffCor[0]=-1;
+	    //cout<<"eff1trk "<<kdcpar1_.TrackEffCor[0]<<endl;
+	    //kdcswitches_.LoadGarfieldXt=0;
+
+	    cout<<" kdcswitches_.LoadGarfieldXt:"<< kdcswitches_.LoadGarfieldXt<<endl;
+	    kdcswitches_.KsimSystErr = 1; //or 2
+
+	    //tof_sim();
+	    //kdcsimxt();
+	    //kdcsimsigma();
+	    //kdcsimsysterr();               //simulation system. errors of calibration
+	    //kdcnosimxt();                    //x(t) is not simulated
+	    //kdcsimsigma();                   //call simulation experimental resolution
+            cout<<"kdcsysterr_scale_.ScaleSystErrA="<<kdcsysterr_scale_.ScaleSystErrA<<endl;
+            cout<<"kdcsysterr_scale_.ScaleSystErrZ="<<kdcsysterr_scale_.ScaleSystErrZ<<endl;
+	    cout<<"kdcsysterr_scale_.ScaleStatErrA="<<kdcsysterr_scale_.ScaleStatErrA<<endl;
+            cout<<"kdcsysterr_scale_.ScaleStatErrZ="<<kdcsysterr_scale_.ScaleStatErrZ<<endl;
+	    ksimreal(Nsw,run1,run2);
+	}
+
+	eNumber=0;
 
 	while(1)
 	{
 	    // read event
 	    kedr_read_nat(&readerr);
 	    if(readerr) break;
+            /*
+	    if(NumCurrentSim!=NSimRun&&NSimRun!=0)
+	    {
+		tof_run(NSimRun);
+		tof_sim_real(NSimRun, 1, 1);
+		//emc_run(NSimRun);
+		if(mu_get_db_status(NSimRun))  cout<<"Mu status error"<<endl;
+		if(mu_get_db_clbr_for_run(NSimRun)<0)  cout<<"Mu calib error"<<endl;
+		NumCurrentSim=NSimRun;
+	    }
+            */
+	    if(sim) kdcvdrec(-9,&recselect);
 
-            kmctracks_();
+	    kemc_energy(EnergyCSI,&EnergyLKR);
 
-	    kdcvdrec(RecMode,&recselect);
+	    //if(sim) kmctracks_();
 
-	    tof_event();
+	    kdc1trk_elkr_(&Elkr0cut);
+	    if( EnergyLKR>Elkr0cut ) kdcvdrec(0,&recselect);
+
+	    //tof_event();
 	    //atc_event();
 
 	    if(eNumber%1000==0) cout<<"Ev:"<<eNumber<<endl;
 
 	    double WTotal=2.*beam_energy;
 	    if( kedrrun_cb_.Header.RunType == 64 ) {   //for MC
-		WTotal=2*1886.75;
+		//WTotal=2*1886.75;
+		//WTotal=2*1843.05;
+                WTotal = 2*kedrmc_.Header.Energy*0.001;
 	    }
 	    ebeam=WTotal/2.;
 
@@ -424,9 +471,10 @@ int main(int argc,char *argv[]) {
 		    {
 			if( tCharge(t1)==-1 && tCharge(t2)==1 )
 			{
-			    //cout<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"\t"<<"t1="<<t1<<"\t"<<"t2="<<t2<<"\t"<<"tCharge(t1)="<<tCharge(t1)<<"\t"<<"tCharge(t2)="<<tCharge(t2)<<endl;
-			    //cout<<"p(t1)="<<tP(t1)<<"\t"<<"p(t2)="<<tP(t2)<<"\t"<<"tHits(t1)="<<tHits(t1)<<"\t"<<"tHits(t2)="<<tHits(t2)<<"\t"<<"tCh2(t1)="<<tCh2(t1)<<"\t"<<"tCh2(t2)="<<tCh2(t2)<<endl;
-			    //cout<<"Phit1="<<ktrrec_.FITRAK[t1]+(ktrrec_.FITRAK[t1]<0?360:0)<<"\t"<<"Phit2="<<ktrrec_.FITRAK[t2]+(ktrrec_.FITRAK[t2]<0?360:0)<<"\t"<<"tTeta(t1)="<<tTeta(t1)<<"\t"<<"tTeta(t2)="<<tTeta(t2)<<endl;
+			    cout<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"\t"<<"t1="<<t1<<"\t"<<"t2="<<t2<<"\t"<<"tCharge(t1)="<<tCharge(t1)<<"\t"<<"tCharge(t2)="<<tCharge(t2)<<endl;
+                            //cout<<"ebeam="<<ebeam<<endl;
+			    cout<<"p(t1)="<<tP(t1)<<"\t"<<"p(t2)="<<tP(t2)<<"\t"<<"tHits(t1)="<<tHits(t1)<<"\t"<<"tHits(t2)="<<tHits(t2)<<"\t"<<"tCh2(t1)="<<tCh2(t1)<<"\t"<<"tCh2(t2)="<<tCh2(t2)<<endl;
+			    cout<<"Phit1="<<ktrrec_.FITRAK[t1]+(ktrrec_.FITRAK[t1]<0?360:0)<<"\t"<<"Phit2="<<ktrrec_.FITRAK[t2]+(ktrrec_.FITRAK[t2]<0?360:0)<<"\t"<<"tTeta(t1)="<<tTeta(t1)<<"\t"<<"tTeta(t2)="<<tTeta(t2)<<endl;
 
 			    double xx1=tX0IP(t1)*tX0IP(t1);
 			    double yy1=tY0IP(t1)*tY0IP(t1);

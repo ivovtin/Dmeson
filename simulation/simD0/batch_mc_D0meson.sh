@@ -12,24 +12,27 @@
 #$ -j y
 # -------------------------------------------
 # --             Enviroment                --
-#$ -v PATH=$PATH:$HOME/release/KdRunFastMon,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/alexbarn/release/lib,KDBHOST=bison-2
+##$ -v PATH=$PATH:$HOME/release/KdRunFastMon,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/alexbarn/release/lib,KDBHOST=bison-2
 # -------------------------------------------
 # --             Queue list                --
 #$ -soft
 #$ -l time=24:00:00
 ##$ -q remote
-#$ -q extralong
+##$ -q extralong
+#$ -q 6h
+##$ -q day
 #$ -m beas
 #$ -M ovtin.ivan@gmail.com
 
-#$ -t 1-2
+#$ -t 1-1
+##$ -t 2-5
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]
 
 #start the job
 ##$HOME/3.0.0/bin/ks < $HOME/development/Dmeson/simulation/simD0/mccards/mc.cards.ee_to_DD_"$i" > /dev/null
-$HOME/development/bin/ks < $HOME/development/Dmeson/simulation/simD0/mccards/mc.cards.ee_to_DD_"$i" > /dev/null
+$HOME/development/bin/ks < $HOME/development/Dmeson/simulation/simD0/mccards/mc.cards.ee_to_DD_"$i"
 ##$HOME/3.0.0/bin/ks < $HOME/development/Dmeson/simulation/simD0/mccards/mc.cards.ee_to_qq_3 > /dev/null
 status=$?
 if [ $status != 0 ]; then
