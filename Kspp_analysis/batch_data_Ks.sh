@@ -18,12 +18,13 @@
 # -------------------------------------------
 # --             Enviroment                --
 ##$ -v PATH=$PATH:$HOME/development/lib:/home/ovtin/development/KrKRec,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/ovtin/development/lib,KDBHOST=bison-2
+#$ -v PATH=$PATH:$HOME/release/KdRunFastMon,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/alexbarn/release/lib,KDBHOST=localhost
 # -------------------------------------------
 # --             Queue list                --
-#$ -soft
+##$ -soft
 ##$ -hard
 ##$ -l time=24:00:00
-#$ -l time=6:00:00
+##$ -l time=6:00:00
 #$ -q remote
 ##$ -q extralong
 ##$ -q 6h
@@ -33,26 +34,26 @@
 ##$ -m beas
 ##$ -M ovtin.ivan@gmail.com
 
-#$ -t 1-482
-##$ -t 401-482
+##$ -t 1-482
 ##$ -t 1-693
+#$ -t 451-693
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]
 
 ##inruns=23219
 #Signal
-##inruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/runDmeson"$i
-##outfile="/spool/users/ovtin/outDmeson/Kspp/data/psi3770_to_Kspp_"$i".root"
-inruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/runDmeson"$i
-outfile="/spool/users/ovtin/outDmeson/Kspp/data2004/psi3770_to_Kspp_"$i".root"
+inruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/runDmeson"$i
+outfile="/store/users/ovtin/outDmeson/Kspp/data_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/psi3770_to_Kspp_"$i".root"
+##inruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/runDmeson"$i
+##outfile="/store/users/ovtin/outDmeson/Kspp/data2004/psi3770_to_Kspp_"$i".root"
 mintracks=3
 maxtracks=20
 minbeamtracks=0
 minIPtracks=0
 maxIPtracks=20
-minP=100
-maxP=1600
+minP=0
+maxP=5000
 minClusterEnergy=0
 minTotalEnergy=0
 minClusters=0

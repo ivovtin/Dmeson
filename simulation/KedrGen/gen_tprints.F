@@ -1,14 +1,14 @@
       SUBROUTINE GEN_TPRINTS                                
-c*******************************************************************    
-c                                                                       
-c   Subroutine for short prints of movements of particles, Generator 312             
-c   
-c   Maximum number of lines = 10 000
-c
-c   V.A.Tayursky.   
-c                 last update: 15.4.2004
-c                                                                       
-c*******************************************************************    
+c***********************************************************************    
+c                                                                      *                                                                       
+c   Subroutine for short prints of particles movements, Generator 312  *             
+c                                                                      *   
+c   Maximum number of lines = 10 000                                   *
+c                                                                      *
+c   V.A.Tayursky.                                                      *
+c                 last update: 12.10.2011                              *
+c                                                                      *                                                                       
+c***********************************************************************       
 c
 #include "gcflag.inc"
 #include "gckine.inc"
@@ -17,22 +17,23 @@ c
 #include "gctrak.inc"
 #include "gcvolu.inc"                                              
 #include "gcmate.inc"
-c      COMMON /GCMATE/ NMAT,NAMATE(5),A,Z,DENS,RADL,ABSL
 c
       COMMON /KEDR_GEN/KHEP,KGEN,GENPAR(20) ! input parameters for generators
       CHARACTER *4 NAMES,NAMI
-      CHARACTER *3 TXT(2)
+      CHARACTER *4 TXT(2)
 c
       SAVE XIN,YIN,ZIN,LINEMAX,IPRINT,IEVENT0
 c                                                                       
       DATA IPRINT,IEVENT0,LINEMAX/2*0,10000/                                          
       DATA XIN,YIN,ZIN/3*0./
-      DATA TXT/'in ','out'/
+      DATA TXT/'in: ','ou:'/
 c                            
       IF(IPRINT.EQ.LINEMAX) RETURN                                           
       IF(ABS(GENPAR(1)-1.).LT.0.5) GOTO 10  ! geantino, 1 event
       IF(ABS(GENPAR(1)-2.).LT.0.5) GOTO 20
       RETURN
+c
+c-----------------------------------------------------------------------
 c
  10   IF(IEVENT.GT.1) RETURN
 c
@@ -61,11 +62,14 @@ c
         STOT=0.
       END IF
 c
-      IF(INWVOL.EQ.1) PRINT 11,TXT(INWVOL),
-     +      NATMED(1),NAMES(NLEVEL),VECT(1),VECT(2),VECT(3)
+      IF(INWVOL.EQ.1) THEN 
+        PRINT 200, (NAMES(NLEVELI),NLEVELI=1,NLEVEL)
+        PRINT 11,TXT(INWVOL),
+     +    NAMES(NLEVEL),VECT(1),VECT(2),VECT(3),NATMED(1)
+      END IF
+c
       IF(INWVOL.EQ.2) PRINT 1,TXT(INWVOL),                
-     +      NATMED(1),NAMES(NLEVEL),VECT(1),SX,VECT(2),SY,VECT(3),SZ
-
+     +     NAMES(NLEVEL),VECT(1),SX,VECT(2),SY,VECT(3),SZ,NATMED(1)
 c
       XIN=VECT(1)
       YIN=VECT(2)
@@ -77,7 +81,7 @@ c
         PRINT 3,SS,NMAT,RADL,STOT
       END IF
 c
-      RETURN
+      GOTO 500
 c
 c--------------------------------------------------------------------------
 c
@@ -109,15 +113,20 @@ c
       PRINT 301,                                    
      *  (NAPART(IT),IT=1,2),VECT(7)*1.E3,VECT(3),R_PART,FI_PART, 
      *  INWVOL,NATMED(1),NAMES(NLEVEL),ISTOP
-c                     
-1     FORMAT(A3,1X,A4,'  Blk ',A4,'  X=',F7.2,' dX=',F6.2,
-     +       ' Y=',F7.2,' dY=',F6.2,' Z=',F7.2,' dZ=',F6.2)                                                 
-3     FORMAT('Ds=',F7.3,' cm,','  IMATE=',I3,',  Xo=',1pE9.2,' cm,',
+c
+c-----------------------------------------------------------------------
+c
+ 500  RETURN                          
+c
+ 1    FORMAT(A3,' vol=',A4,' X=',F7.2,' dX=',F6.2,' Y=',F7.2,
+     +       ' dY=',F6.2,' Z=',F7.2,' dZ=',F6.2,' mat=',A4)                                                 
+ 3    FORMAT('Ds=',F7.3,' cm,','  IMATE=',I3,',  Xo=',1pE9.2,' cm,',
      +       '  Total lenth of track = ',F6.2,' Xo'/)
-11    FORMAT(A3,1X,A4,'  Blk ',A4,'  X=',F7.2,10X,
-     +       ' Y=',F7.2,10X,' Z=',F7.2,9X)
-301   FORMAT(2A4,' P=',F7.2,' Z=',F8.2,' R=',F8.2,' FI=',F5.1,       
+ 11   FORMAT(A3,' vol=',A4,' X=',F7.2,10X,' Y=',F7.2,
+     +       10X,' Z=',F7.2,10X,' mat=',A4)
+ 200  FORMAT('Volumes: ',8(A4,2X))
+ 301  FORMAT(2A4,' P=',F7.2,' Z=',F8.2,' R=',F8.2,' FI=',F5.1,       
      * ' inw=',i2,' Ma=',A4,' Blk=',A4,' st=',I2)
-303   FORMAT(//,' EVENT #',I3,/)
+ 303  FORMAT(//,' EVENT #',I3,/)
 c                                                                       
       END 

@@ -15,6 +15,7 @@
   char *exp_fit_par;
 
   int key = 2016;
+  bool atc = 1;
 
   if( key==2004 ) {
       infile = "dat/kp_exp_1.030_2004.dat";
@@ -25,37 +26,39 @@
       exp_fit_par = "par/exp_fit_2004.par";
   }
   else{
-      
-      infile = "dat/kp_exp_1.0173_2016-17.dat";
-      exp_def = "gen/exp_def.gen";
-      exp_sig = "gen/exp_sig.gen";
-      exp_bck = "gen/exp_bck.gen";
-      exp_dbck = "gen/exp_dbck.gen";
-      exp_fit_par = "par/exp_fit.par";
-      /*
-      infile = "dat/kp_exp_1.0173_2016-17_woDCnoise.dat";
-      exp_def = "gen/exp_def_woDCnoise.gen";
-      exp_sig = "gen/exp_sig_woDCnoise.gen";
-      exp_bck = "gen/exp_bck_woDCnoise.gen";
-      exp_dbck = "gen/exp_dbck_woDCnoise.gen";
-      exp_fit_par = "par/exp_fit_woDCnoise.par";
-      */
+      if(atc){
+         infile = "dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/kp_exp_2016-17_KemcAllowedOn_kNoiseReject3_ATC_1.0155.dat";
+         exp_def = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/exp_def_S1.0_A6.0_Z0.0.gen";
+         exp_sig = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/exp_sig_S1.0_A6.0_Z0.0.gen";
+         exp_bck = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/exp_bck_S1.0_A6.0_Z0.0.gen";
+         exp_dbck = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/exp_dbck_S1.0_A6.0_Z0.0.gen";
+         exp_fit_par = "par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/exp_fit_S1.0_A6.0_Z0.0.par";
+      }
+      else{
+         infile = "dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/kp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0155.dat";
+         exp_def = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/exp_def_S1.0_A6.0_Z0.0.gen";
+         exp_sig = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/exp_sig_S1.0_A6.0_Z0.0.gen";
+         exp_bck = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/exp_bck_S1.0_A6.0_Z0.0.gen";
+         exp_dbck = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/exp_dbck_S1.0_A6.0_Z0.0.gen";
+         exp_fit_par = "par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/exp_fit_S1.0_A6.0_Z0.0.par";
+      }
   }
 
   //load_sig("dat/kp_exp_1.030.dat");
   load_sig(infile);
-  
+
   read_par("par/exp_init.par", 5, exp_par, exp_epar);
-  read_par("par/bck_uds.par", 4, bck_par, bck_epar);
-  read_par("par/dbck_sim.par", 16, dbck_par, dbck_epar);
-  //read_par("par/sig_def.par", 30, sig_par, sig_epar);
-  read_par("par/parold/sig_def.par", 30, sig_par, sig_epar);
-  /*
-  read_par("par/exp_init_woDCnoise.par", 5, exp_par, exp_epar);
-  read_par("par/bck_uds_woDCnoise.par", 4, bck_par, bck_epar);
-  read_par("par/dbck_sim_woDCnoise.par", 16, dbck_par, dbck_epar);
-  read_par("par/sig_def_woDCnoise.par", 30, sig_par, sig_epar);
-  */
+
+  if(atc){
+      read_par("par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/bck_uds_S1.0_A6.0_Z0.0.par", 4, bck_par, bck_epar);
+      read_par("par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/dbck_sim_S1.0_A6.0_Z0.0.par", 16, dbck_par, dbck_epar);
+      read_par("par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/sig_S1.0_A6.0_Z0.0.par", 30, sig_par, sig_epar);
+  }
+  else{
+     read_par("par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/bck_uds_S1.0_A6.0_Z0.0.par", 4, bck_par, bck_epar);
+     read_par("par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/dbck_sim_S1.0_A6.0_Z0.0.par", 16, dbck_par, dbck_epar);
+     read_par("par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/sig_S1.0_A6.0_Z0.0.par", 30, sig_par, sig_epar);
+  }
 
   double mdsig = sig_par[0];
   double desig = sig_par[1];

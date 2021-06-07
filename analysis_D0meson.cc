@@ -201,6 +201,8 @@ static DMESON Dmeson;
 double mk = 493.68;
 double mpi = 139.57;
 
+int idATC=0;
+
 int dcand_t1;
 int dcand_t2;
 double ebeam;
@@ -327,8 +329,30 @@ int mu_event_rejection()
     return 0;
 }
 
-double pcorr(double p) {
-    double pc = p*fabs(progpar.pSF);
+double pcorr(double p, int type) {
+    double ms, dedx, k;
+
+    if (type==1) {
+	ms = 148.71;
+	dedx = 1.32;
+	k = 0.;
+    } else if (type == 2) {
+	ms = 573.35;
+	dedx = 0.9021;
+	k = 0.;
+    } else {
+	ms = 0.;
+	dedx = 1.57;
+	k = 0.748772e-2;
+    }
+
+    double gamma = sqrt(ms*ms+p*p)/ms;
+
+    double beta = sqrt(1.-1./gamma/gamma);
+
+    double pc = p+1.*dedx/pow(beta,3) + k*p;
+
+    pc = pc*fabs(progpar.pSF);
     if (progpar.verbose==3) cout<<"pc="<<pc<<"\t"<<"p="<<p<<"\t"<<"progpar.pSF="<<progpar.pSF<<endl;
 
     return fabs(pc);
@@ -343,8 +367,8 @@ void kine_fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t ifla
     double mk = 493.68;
     double mpi = 139.57;
 
-    double p1i = pcorr(tP(dcand_t1));
-    double p2i = pcorr(tP(dcand_t2));
+    double p1i = (pcorr(tP(dcand_t1),1)+pcorr(tP(dcand_t1),2))/2.;
+    double p2i = (pcorr(tP(dcand_t2),1)+pcorr(tP(dcand_t2),2))/2.;
 
     double sp1 = sqrt(ktrrec_h_.FitTrack[dcand_t1][fitSigCC]/
 		      pow(ktrrec_h_.FitTrack[dcand_t1][fitC],2)+
@@ -356,11 +380,21 @@ void kine_fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t ifla
 		      ktrrec_h_.FitTrack[dcand_t2][fitSigTheThe]/
 		      pow(tan(ktrrec_.TETRAK[dcand_t2]/180.*PI),2))*p2i;
 
-    double de = (sqrt(mk*mk + pp1*pp1) + sqrt(mpi*mpi+pp1*pp1) +
-    		 sqrt(mk*mk + pp2*pp2) + sqrt(mpi*mpi+pp2*pp2))/2. - ebeam;
+    double de;
 
-    //double chi2 = pow((pp1-p1i)/sp1,2) + pow((pp2-p2i)/sp2,2) + pow(de/0.1,2);
-    double chi2 = pow((pp1-p1i)/sp1,2) + pow((pp2-p2i)/sp2,2) + pow(de,2);
+    if(idATC==1){
+        de = (sqrt(mpi*mpi+pp1*pp1) + sqrt(mk*mk + pp2*pp2))/2. - ebeam;
+    }
+    if(idATC==2){
+        de = (sqrt(mpi*mpi+pp2*pp2) + sqrt(mk*mk + pp1*pp1))/2. - ebeam;
+    }
+    else{
+        de = (sqrt(mk*mk + pp1*pp1) + sqrt(mpi*mpi+pp1*pp1) +
+		 sqrt(mk*mk + pp2*pp2) + sqrt(mpi*mpi+pp2*pp2))/2. - ebeam;
+    }
+
+    double chi2 = pow((pp1-p1i)/sp1,2) + pow((pp2-p2i)/sp2,2) + pow(de/0.1,2);
+    //double chi2 = pow((pp1-p1i)/sp1,2) + pow((pp2-p2i)/sp2,2) + pow(de,2);
 
     if (progpar.verbose==2) printf("  p1i=%lf, p2i=%lf, p1=%lf, p2=%lf, de=%lf, sp1=%lf, sp2=%lf, chi2=%lf\n",p1i, p2i, pp1, pp2, de, sp1, sp2, chi2);
 
@@ -421,8 +455,8 @@ void kine_fit(int ip1, int ip2, double* mbc, double* de, double* dp, double* pre
     double pp1, pp2;
     *fchi2 = 0;
 
-    double p1i = pcorr(tP(dcand_t1));
-    double p2i = pcorr(tP(dcand_t2));
+    double p1i = (pcorr(tP(dcand_t1),1)+pcorr(tP(dcand_t1),2))/2.;
+    double p2i = (pcorr(tP(dcand_t2),1)+pcorr(tP(dcand_t2),2))/2.;
 
     if (enable) {
 
@@ -538,14 +572,25 @@ void kine_fit(int ip1, int ip2, double* mbc, double* de, double* dp, double* pre
 
     if (*mbc>0) *mbc = sqrt(*mbc); else *mbc = 0;
 
-    *de = (sqrt(mpi*mpi + p1i*p1i) + sqrt(mk*mk + p2i*p2i) +
-	   sqrt(mpi*mpi + p2i*p2i) + sqrt(mk*mk + p1i*p1i))/2. - ebeam;
+    double p1pi = pcorr(ktrrec_.PTRAK[dcand_t1],1);
+    double p2pi = pcorr(ktrrec_.PTRAK[dcand_t2],1);
+    double p1ki = pcorr(ktrrec_.PTRAK[dcand_t1],2);
+    double p2ki = pcorr(ktrrec_.PTRAK[dcand_t2],2);
+
+    *de = (sqrt(mk*mk + p1ki*p1ki) + sqrt(mpi*mpi + p1pi*p1pi) +
+	   sqrt(mk*mk + p2ki*p2ki) + sqrt(mpi*mpi + p2pi*p2pi))/2. - ebeam;
+
+    //*de = (sqrt(mpi*mpi + p1i*p1i) + sqrt(mk*mk + p2i*p2i) +
+	//   sqrt(mpi*mpi + p2i*p2i) + sqrt(mk*mk + p1i*p1i))/2. - ebeam;
 
     *dp = pp1-pp2;
     *prec1 = pp1;
     *prec2 = pp2;
 
-    if (progpar.verbose) printf("mbc=%lf, de=%lf\n", *mbc, *de);
+    double derec = (sqrt(mpi*mpi + pp1*pp1) + sqrt(mk*mk + pp2*pp2) +
+	   sqrt(mpi*mpi + pp2*pp2) + sqrt(mk*mk + pp1*pp1))/2. - ebeam;
+
+    if (progpar.verbose) printf("mbc=%lf, de=%lf, derec=%lf\n", *mbc, *de, derec);
 }
 
 
@@ -628,6 +673,7 @@ int analyse_event()
     if( kedrrun_cb_.Header.RunType == 64 ) {   //for MC
 	kmctracks();
 	WTotal=2*1887.0;
+	//WTotal=2*1886.75;
     }
 
     ebeam=WTotal/2.;
@@ -799,16 +845,6 @@ int analyse_event()
                 Dmeson.numo = numo;
                 Dmeson.eno = eno;
 
-		double mbc, de, dp, prec1, prec2, fchi2;
-
-		kine_fit(t1, t2, &mbc, &de, &dp, &prec1, &prec2, &fchi2, progpar.Dkine_fit);
-		Dmeson.mbc = mbc;
-		Dmeson.de = de;
-		Dmeson.dp = dp;
-		Dmeson.prec1 = prec1;
-		Dmeson.prec2 = prec2;
-		Dmeson.fchi2 = fchi2;
-
 		i++;
 		Dmeson.ncomb = i;
 		Dmeson.rEv = kedrraw_.Header.Number;
@@ -847,7 +883,8 @@ int analyse_event()
 		atc_to_track(t1);
                 if (progpar.verbose) cout<<"t1="<<t1<<"\t"<<"atctrackinfo.ncnt="<<atctrackinfo.ncnt<<endl;
 		float totalNpe1=0;
-                int cnt;
+		int cnt;
+		int good_region_t1=0;
 		Dmeson.natccrosst1=atctrackinfo.ncnt;
 		for(int i=0; i<atctrackinfo.ncnt; i++)
 		{
@@ -870,13 +907,16 @@ int analyse_event()
                     Dmeson.single_aerogel_REGION20t1[i]=atctrackinfo.single_aerogel_REGION20[cnt];
 
 		    if (progpar.verbose) cout<<"atc cnt="<<Dmeson.atcCNTt1[i]<<"\t"<<"npe="<<Dmeson.atcNpet1[i]<<endl;
-                    totalNpe1 += atctrackinfo.npe[cnt];
+		    totalNpe1 += atctrackinfo.npe[cnt];
+
+		    if( Dmeson.wlshitt1[i]!=1 ) good_region_t1++;
 		}
 		if (progpar.verbose) cout<<"t1="<<t1<<"\t"<<"Total ATC Npe="<<totalNpe1<<endl;
 		Dmeson.atcTotalNpet1=totalNpe1;
 
 		atc_to_track(t2);
                 float totalNpe2=0;
+		int good_region_t2=0;
 		Dmeson.natccrosst2=atctrackinfo.ncnt;
                 if (progpar.verbose) cout<<"t2="<<t2<<"\t"<<"atctrackinfo.ncnt="<<atctrackinfo.ncnt<<endl;
 		for(int i=0; i<atctrackinfo.ncnt; i++)
@@ -900,10 +940,28 @@ int analyse_event()
                     Dmeson.single_aerogel_REGION20t2[i]=atctrackinfo.single_aerogel_REGION20[cnt];
 
 		    if (progpar.verbose) cout<<"atc cnt="<<Dmeson.atcCNTt2[i]<<"\t"<<"npe="<<Dmeson.atcNpet2[i]<<endl;
-                    totalNpe2 += atctrackinfo.npe[cnt];
+		    totalNpe2 += atctrackinfo.npe[cnt];
+
+		    if( Dmeson.wlshitt2[i]!=1 ) good_region_t2++;
 		}
 		if (progpar.verbose) cout<<"t2="<<t2<<"\t"<<"Total ATC Npe="<<totalNpe2<<endl;
 		Dmeson.atcTotalNpet2=totalNpe2;
+
+		double npetrh=0.5;
+
+		if( (good_region_t1>=1 && Dmeson.atcTotalNpet1>npetrh) && (good_region_t2>=1 && Dmeson.atcTotalNpet2<=npetrh) ){ idATC=1;}  //piK
+		if( (good_region_t1>=1 && Dmeson.atcTotalNpet1<=npetrh) && (good_region_t2>=1 && Dmeson.atcTotalNpet2>npetrh) ){ idATC=2;}  //Kpi
+
+		double mbc, de, dp, prec1, prec2, fchi2;
+
+		kine_fit(t1, t2, &mbc, &de, &dp, &prec1, &prec2, &fchi2, progpar.Dkine_fit);
+                idATC=0;
+		Dmeson.mbc = mbc;
+		Dmeson.de = de;
+		Dmeson.dp = dp;
+		Dmeson.prec1 = prec1;
+		Dmeson.prec2 = prec2;
+		Dmeson.fchi2 = fchi2;
 
 		eventTree->Fill();
 	    }
@@ -1047,10 +1105,10 @@ int main(int argc, char* argv[])
         kdcswitches_.kNoiseReject=3;      //Cut for DC noise  (0 - not cut, 1 - standart, 2 - soft, 3 - hard)
 	//kdcswitches_.kEmcPatch=1;
 	kdcswitches_.KemcAllowed=0;
+	//kdcswitches_.KemcAllowed=-1;      //off use strips for track reconstruction
 	//kdcpar1_.DeleteTracksGhost=0;
         //kdcswitches_.kVDRtAlt=1;
 
-	//kdcswitches_.KemcAllowed=-1;      //off use strips for track reconstruction
 	//kdcswitches_.KtofAllowed=0;       //use of TOF for track search
 	//kdcswitches_.kIPalternative = 1;  //alternative track candidate with IP (on)
 	//kdcswitches_.kCosmInSigRuns = 0;  //search for cosmic in signal runs (on)

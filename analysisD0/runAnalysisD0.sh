@@ -1,23 +1,20 @@
 #!/bin/bash
 
-##inruns=4422 #ev 3653
-##inruns=23665  #ev 527
-##inruns=23443
-inruns=23341
-##nevbegin=16000
-nevbegin=3890
-nevend=30000
-#inruns=4132
-#inruns=4257
-##inruns=4422
-##inruns="/spool/users/ovtin/outDmeson/simulation/D0_Signal/simDmesonSignal08.dat"
+##inruns=23665
+nevbegin=0
+nevend=1000
+##inruns="/store/users/ovtin/outDmeson/simulation/outsimD0/Signal/simDmeson000001.dat"
+##inruns="/store/users/ovtin/simDmeson000001.dat"
+##inruns="/store/users/ovtin/outDmeson/simulation/outsimD0/Signal/simDmesonTEST000001.dat"
+##inruns="/store/users/ovtin/outDmeson/simulation/outsimD0/Signal/TESTallmodes/simDmeson000001.dat"
+inruns="/store/users/ovtin/simout/sim00000gen60_4_0.dat"
 Nevents=100000
 outfile="psi3770_to_D0meson_test.root"
-#mintracks=2
-mintracks=4
+#mintracks=3
+mintracks=2
 maxtracks=20
-minbeamtracks=4
-minIPtracks=4
+minbeamtracks=2
+minIPtracks=2
 maxIPtracks=20
 minPt=0
 maxPt=2000
@@ -31,17 +28,21 @@ maxtchi2=10000
 minNhits=0
 kinefit=1
 #pSF=1.0185   ##data 2016-17
-pSF=1.0173   ##data 2016-17
+##pSF=1.0173   ##data 2016-17
 ##pSF=1.030   ##data 2004
 verbose=2
+#verbose=1
 
 ##echo $pSF
 
-$HOME/development/Dmeson/analysis_D0meson -x -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -z $verbose -o $outfile -f $kinefit $inruns -y $pSF -w $nevbegin -g $nevend
+##$HOME/development/Dmeson/analysis_D0meson -x -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -z $verbose -o $outfile -f $kinefit $inruns -y $pSF -w $nevbegin -g $nevend
+##$HOME/development/Dmeson/analysis_D0meson -x -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -z $verbose -o $outfile -f $kinefit $inruns -y $pSF -w $nevbegin -g $nevend
 ##$HOME/development/Dmeson/analysis_D0meson -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -z $verbose -o $outfile -f $kinefit $inruns -y $pSF -w $nevbegin -g $nevend
 ##$HOME/development/Dmeson/analysis_D0meson -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -n $Nevents -z $verbose -o $outfile -f $kinefit $inruns -y $pSF
 ##$HOME/development/Dmeson/analysis_D0meson -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile -f $kinefit $inruns -y $pSF
 ##For MC
-##$HOME/development/Dmeson/analysis_D0meson -x -v 23665 -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -n $Nevents -z $verbose -o $outfile -f $kinefit $inruns
-##$HOME/development/Dmeson/analysis_D0meson -v 23665 -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -n $Nevents -z $verbose -o $outfile -f $kinefit $inruns -y $pSF
+##$HOME/development/Dmeson/analysis_D0meson -D 1 -x -v 23272 -m 23272 -M 50 -S 1.0 -A 6.5 -Z 5.5 -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -n $Nevents -z $verbose -o $outfile -f $kinefit $inruns
+##$HOME/development/Dmeson/analysis_D0meson -D 1 -x -v 23272 -m 23272 -M 50 -S 1.0 -A 6.5 -Z 5.5 -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -n $Nevents -z $verbose -o $outfile -f $kinefit $inruns
+##$HOME/development/Dmeson/analysis_D0meson -D 1 -v 23272 -m 23272 -M 50 -S 1.0 -A 6.5 -Z 5.5 -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -n $Nevents -z $verbose -o $outfile -f $kinefit $inruns -w $nevbegin -g $nevend
+$HOME/development/Dmeson/analysis_D0meson -D 1 -v 4712 -m 4941 -M 1000 -S 1.0 -A 5.5 -Z 2.5 -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -z $verbose -o $outfile -f $kinefit $inruns -w $nevbegin -g $nevend
 

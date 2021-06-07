@@ -13,8 +13,6 @@ END of section with additional particles
 *
 DECays addition or modification
 anti-D0 geant2 K- pi+ 100.
-*anti-D0 geant2 pi0 pi0 100.
 *
 D0 geant2 pi0 pi0 100.
-*D0 geant2 K- pi+ 100.
 END of decays section

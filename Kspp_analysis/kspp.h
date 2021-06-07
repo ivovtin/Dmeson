@@ -47,21 +47,20 @@ TChain *tt=new TChain("et");
 void chain(){
     if(key==0){
 	for(int i=1; i<=693; i++)   //signal 2016+2017
-	//for(int i=1; i<=171; i++)   //signal 2016+2017
 	{
-	    tt->Add(TString::Format("/spool/users/ovtin/outDmeson/Kspp/data/psi3770_to_Kspp_%d.root",i).Data());
+	    tt->Add(TString::Format("/store/users/ovtin/outDmeson/Kspp/data_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/psi3770_to_Kspp_%d.root",i).Data());
 	}
     }
     else if (key==1){
 	for(int i=1; i<=482; i++)   //signal 2004+2005
 	{
-	    tt->Add(TString::Format("/spool/users/ovtin/outDmeson/Kspp/data2004/psi3770_to_Kspp_%d.root",i).Data());
+	    tt->Add(TString::Format("/store/users/ovtin/outDmeson/Kspp/data2004/psi3770_to_Kspp_%d.root",i).Data());
 	}
     }
     else if (key==2){              //MC Signal
 	for(int i=1; i<=221; i++)
 	{
-	    tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/Kspp/psi3770_to_Kspp_%d.root",i).Data());
+	    tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Kspp/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0/psi3770_to_Kspp_%d.root",i).Data());
 	}
     }
 }

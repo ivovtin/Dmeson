@@ -14,7 +14,8 @@
 
   TNtuple nt2("nt2","NTuple","mbc:de:dp");
 
-  FILE* file = fopen("dat/kp_signal_def.dat","r");
+  FILE* file = fopen("dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/kp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0.dat","r");
+  //FILE* file = fopen("dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/kp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0.dat","r");
 
   int i=0;
   while (!feof(file)) {
@@ -23,12 +24,13 @@
       nt.Fill(mbc,de,dp);
       i++;
     }
-    if (i >= 200000) break;                                 //!!!!!!
+    //if (i >= 15000) break;                                 //!!!!!!
   }
 
   fclose(file);
 
-  FILE* file = fopen("gen/sig_def.gen","r");
+  FILE* file = fopen("gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/sig_S1.0_A6.0_Z0.0.gen","r");
+  //FILE* file = fopen("gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/sig_S1.0_A6.0_Z0.0.gen","r");
 
   while (!feof(file)) {
     double mbc,de,dp;
@@ -102,7 +104,10 @@
   mbcs5.Draw("elp");
   mbcs6.Draw("same");
 
-  c.Print(KEDR+"mbc_dp.eps");
-  c.Print(KEDR+"mbc_dp.png");
+  c.Print(KEDR+"signal_atc_S1.0_A6.0_Z0.0.eps");
+  c.Print(KEDR+"signal_atc_S1.0_A6.0_Z0.0.png");
+
+  //c.Print(KEDR+"signal_S1.0_A6.0_Z0.0.eps");
+  //c.Print(KEDR+"signal_S1.0_A6.0_Z0.0.png");
 
 }

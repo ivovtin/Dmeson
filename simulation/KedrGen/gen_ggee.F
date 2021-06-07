@@ -21,9 +21,10 @@ c   Generated event in /GGPRT/. RNG = RNF100 from gen_ggmmg.f (=RLU) *
 c                                                                    *
 c   Corrections:                                                     *
 c                                                                    *
-c    11.11.2005: deleted: /CENINI/                                   *
+c   11.11.2005: deleted: /CENINI/                                    *
 c                added: MCB, MCC, MCD                                *
 c                modified /SAP/, DOT->DOTGG, names of COMMON-blocks  *
+c   03.11.2008: corrected writing of energy of particles in /GGHPRT/ *
 c                                                                    *
 c*********************************************************************
       IMPLICIT REAL *8 (A-H,O-Z)
@@ -293,25 +294,16 @@ c
         NUMBPART1=4
 c
         DO I1=1,4
-c
-          IF(I1.NE.4) THEN
-            PPARTE(I1,1)=QM(I1)*EB0  ! scattered particle momentum 
-            PPARTE(I1,2)=QP(I1)*EB0  !     - || -
-            PPARTE(I1,3)=PM(I1)*EB0  ! produced particle
-            PPARTE(I1,4)=PP(I1)*EB0  !     - || -
-          ELSE
-            PPARTE(I1,1)=QM(I1)      ! scattered particle energy in GeV
-            PPARTE(I1,2)=QP(I1)      !     - || -
-            PPARTE(I1,3)=PM(I1)      ! produced particle energy in GeV
-            PPARTE(I1,4)=PP(I1)      !     - || -
-          END IF 
-c
+          PPARTE(I1,1)=QM(I1)*EB0  ! scattered particle mom., ener. in GeV 
+          PPARTE(I1,2)=QP(I1)*EB0  !     - || -
+          PPARTE(I1,3)=PM(I1)*EB0  ! produced particle
+          PPARTE(I1,4)=PP(I1)*EB0  !     - || -
         END DO
 c
-        IPARTIC1(1)=3                ! e-
-        IPARTIC1(2)=2                ! e+
-        IPARTIC1(3)=3                ! e-
-        IPARTIC1(4)=2                ! e+
+        IPARTIC1(1)=3              ! e-
+        IPARTIC1(2)=2              ! e+
+        IPARTIC1(3)=3              ! e-
+        IPARTIC1(4)=2              ! e+
 c
         IF(IREQAC.EQ.0.OR.IFINIS.EQ.1) GOTO 9  ! since program is generator
                                                ! IREQAC - events for cr.sec.

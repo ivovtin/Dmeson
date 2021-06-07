@@ -66,6 +66,39 @@ void get_run_lumi(int run, double *en, double *en_err, double *lum, int *t) {
     kd_db_close(conn);
 }
 
+double msf = 1.;        //default
+
+double pcorr(double p, int type)
+{
+    double ms, dedx, k;
+
+    if (type==1) {    //pion
+	ms = 148.71;
+	dedx = 1.3223;
+	k = 0.;
+    }
+    else if(type==2)  //kaon
+    {
+	ms = 573.35;
+	dedx = 0.9021;
+	k = 0.;
+    }
+    else{                //electron
+	ms = 0.;
+	dedx = 1.57;
+	k = 0.748772e-2;
+    }
+    double gamma = sqrt(ms*ms+p*p)/ms;
+
+    double beta = sqrt(1.-1./gamma/gamma);
+
+    double pc = p+1.*dedx/pow(beta,3) + k*p;
+
+    pc = pc*fabs(msf);
+
+    return fabs(pc);
+}
+
 int main(int argc, char* argv[])
 {
     progname=argv[0];
@@ -85,6 +118,7 @@ int main(int argc, char* argv[])
 
     //***************preselections*************
     int ntrk=3;
+    //int max_munhits=0;
     int max_munhits=2;
     float min_pt=100.; //MeV
     float max_pt=2000.; //MeV
@@ -101,6 +135,7 @@ int main(int argc, char* argv[])
 	//2016-17
 	rrCut=0.5;
 	zCut=13.;
+	//max_chi2=50.;
 	max_chi2=1000.;
 	min_nhits=24.;
         max_nhits=1000.;
@@ -135,13 +170,20 @@ int main(int argc, char* argv[])
 	//deCut1=-150; deCut2=150;
 	deCut1=-100; deCut2=100;
 	mbcCut1=1855, mbcCut2=1875;
-	//fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data_%d.root",key).Data();
-	fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data_test_%d.root",key).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_KemcAllowedOn_kNoiseReject3_ATC_1.0110/";
-	fout_result_atc=dir_out + "/" + "kp_exp_2016-17_KemcAllowedOn_kNoiseReject3_ATC_1.0110.dat";
-	fout_result=dir_out + "/" + "kp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0110.dat";
-        //KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_KemcAllowedOn_kNoiseReject3_ATC_1.0000/";
-	//fout_result=dir_out + "/" + "kp_exp_2016-17_KemcAllowedOn_kNoiseReject3_ATC_1.0000.dat";
+	fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data_%d.root",key).Data();
+
+        msf = 1.0155;
+
+	/*
+	KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_KemcAllowedOn_kNoiseReject3_ATC_1.0155/";
+	fout_result_atc=dir_out + "/" + "kp_exp_2016-17_KemcAllowedOn_kNoiseReject3_ATC_1.0155.dat";
+	fout_result=dir_out + "/" + "kp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0155.dat";
+        */
+
+	KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_test/";
+	fout_result_atc=dir_out + "/" + "kp_exp_2016-17_test_atc.dat";
+	fout_result=dir_out + "/" + "kp_exp_2016-17_test.dat";
+
     }
     else if (key==4)        //exp 2004
     {
@@ -156,31 +198,37 @@ int main(int argc, char* argv[])
     }
     else if (key==1)        //sig
     {
+	ntrk=2;
 	min_Mbc2=1800;
-	deCut1=-300; deCut2=300;
-	mbcCut1=1800, mbcCut2=1900;
+	deCut1=-100; deCut2=100;
+	mbcCut1=1855, mbcCut2=1875;
 	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_sig_%d.root",key).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Sig_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/";
-	fout_result_atc=dir_out + "/" + "kp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC.dat";
-	fout_result=dir_out + "/" + "kp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0.dat";
+	KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Sig_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_test/";
+	fout_result_atc=dir_out + "/" + "kp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0.dat";
+	fout_result=dir_out + "/" + "kp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0.dat";
+        /*
+	KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Sig_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0/";
+	fout_result_atc=dir_out + "/" + "kp_signal_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0.dat";
+	fout_result=dir_out + "/" + "kp_signal_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0.dat";
+        */
     }
     else if (key==2)        //uds
     {
 	deCut1=-300; deCut2=300;
 	mbcCut1=1700, mbcCut2=1900;
 	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_BG_continium_%d.root",key).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_continium_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/";
-	fout_result_atc=dir_out + "/" + "kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC.dat";
-	fout_result=dir_out + "/" + "kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0.dat";
+        KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_continium_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_test/";
+	fout_result_atc=dir_out + "/" + "kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0.dat";
+	fout_result=dir_out + "/" + "kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0.dat";
     }
     else if (key==3)        //ddBG
     {
 	deCut1=-300; deCut2=300;
 	mbcCut1=1700, mbcCut2=1900;
 	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_BG_eetoDD_%d.root",key).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_eetodd_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/";
-	fout_result_atc=dir_out + "/" + "kp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC.dat";
-	fout_result=dir_out + "/" + "kp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0.dat";
+        KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_eetodd_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_test/";
+	fout_result_atc=dir_out + "/" + "kp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0.dat";
+	fout_result=dir_out + "/" + "kp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0.dat";
     }
 
     gSystem->Exec("mkdir " + KEDR);
@@ -513,9 +561,8 @@ int main(int argc, char* argv[])
 	}
 
 	if(
-	   Dmeson.de>=min_dE && Dmeson.de<=max_dE
-           && Dmeson.mbc>=min_Mbc && Dmeson.mbc<=max_Mbc
-	   && Dmeson.vrtntrk>=ntrk
+	   Dmeson.vrtntrk>=ntrk
+           //&& Dmeson.de>=min_dE && Dmeson.de<=max_dE  &&  Dmeson.mbc>=min_Mbc && Dmeson.mbc<=max_Mbc
 	   && Dmeson.chi2t1<max_chi2 && Dmeson.chi2t2<max_chi2
 	   && Dmeson.nhitst1>=min_nhits && Dmeson.nhitst2>=min_nhits
 	   && Dmeson.nhitst1<=max_nhits && Dmeson.nhitst2<=max_nhits
@@ -523,11 +570,13 @@ int main(int argc, char* argv[])
 	   && fabs(Dmeson.zip1)<zCut && fabs(Dmeson.zip2)<zCut
 	   && Dmeson.ecls1<eclsCut && Dmeson.ecls2<eclsCut
 	   && (Dmeson.mulayerhits2+Dmeson.mulayerhits3)<=max_munhits
-	   //&& Dmeson.pt1>min_pt && Dmeson.pt1<max_pt && Dmeson.pt2>min_pt && Dmeson.pt2<max_pt
+	   //&& ((Dmeson.Run>=23275 && Dmeson.Run<=23402) || (Dmeson.Run>=23431 && Dmeson.Run<=23472) || (Dmeson.Run>=23523 && Dmeson.Run<=23798) || (Dmeson.Run>=23839 && Dmeson.Run<=23862)) //!!!!
+	   //&& (Dmeson.Run>24000)
+	   && Dmeson.pt1>min_pt && Dmeson.pt1<max_pt && Dmeson.pt2>min_pt && Dmeson.pt2<max_pt
            /*
 	   && (Dmeson.Run<23478 || Dmeson.Run>23524)  //7 layer DC with problems
            && (Dmeson.Run<23746 || Dmeson.Run>23808)  //7+6 layer DC with problems
-           */
+           *?
 	   //&& (Dmeson.Run<23435 || Dmeson.Run>23808)
 	   //&& (Dmeson.Run<23858 || Dmeson.Run>23866)
 	   //&& (Dmeson.Run<23886)
@@ -649,6 +698,7 @@ int main(int argc, char* argv[])
                 cout<<"run="<<Dmeson.Run<<"\t"<<"event="<<Dmeson.rEv<<"\t"<<"Ebeam="<<Dmeson.Ebeam<<endl;
                 cout<<"Dmeson.ncomb="<<Dmeson.ncomb<<"\t"<<endl;
 		cout<<"p1="<<Dmeson.p1<<"\t"<<"p2="<<Dmeson.p2<<endl;
+		cout<<"prec1="<<Dmeson.prec1<<"\t"<<"prec2="<<Dmeson.prec2<<endl;
 		cout<<"e1/p1="<<Dmeson.e1/Dmeson.p1<<"\t"<<"e2/p2="<<Dmeson.e2/Dmeson.p2<<endl;
 		cout<<"(e1+e2)="<<Dmeson.e1+Dmeson.e2<<endl;
 		cout<<"rr1="<<Dmeson.rr1<<"\t"<<"rr2="<<Dmeson.rr2<<"\t"<<endl;
@@ -753,7 +803,7 @@ int main(int argc, char* argv[])
 	    hfchi2->Fill(Dmeson.fchi2);
 
 	    //fill dE
-	    if( Dmeson.mbc>=mbcCut1 && Dmeson.mbc<=mbcCut2 )
+	    if( Dmeson.mbc>=mbcCut1 && Dmeson.mbc<=mbcCut2 && Dmeson.de>=min_dE && Dmeson.de<=max_dE )
 	    {
 		hdE->Fill(Dmeson.de);
 		hRunSigMbcCut->Fill(Dmeson.Run);
@@ -775,14 +825,15 @@ int main(int argc, char* argv[])
 		    hMUnhits2->Fill(Dmeson.mulayerhits2);
 		    hMUnhits3->Fill(Dmeson.mulayerhits3);
 		}
+
                 /*
 		if( Dmeson.mbc>=1855 && Dmeson.mbc<=1870 ){
 		    cout<<"<<<<<<<<<<<<<<<<<<<<<<<<<<< Next combination >>>>>>>>>>>>>>>>>>>>>>>>>>>>"<<endl;
 		    cout<<"Run="<<Dmeson.Run<<"\t"<<"event="<<Dmeson.rEv<<"\t"<<Dmeson.mbc<<"\t"<<Dmeson.de<<"\t"<<endl;
-		    cout<<"Dmeson.ncomb="<<Dmeson.ncomb<<"\t"<<endl;
+		    cout<<"ntrks="<<Dmeson.vrtntrk<<"\t"<<"Dmeson.ncomb="<<Dmeson.ncomb<<"\t"<<endl;
 		    cout<<"p1="<<Dmeson.p1<<"\t"<<"p2="<<Dmeson.p2<<endl;
 		}
-                */
+               */
 	    }
 
 	    double px1 = Dmeson.p1*sin(Dmeson.thetat1/180.*PI)*cos(Dmeson.phit1/180.*PI);
@@ -813,16 +864,13 @@ int main(int argc, char* argv[])
 	    //}
 
             //--
-	    if( Dmeson.mbc>=min_Mbc && Dmeson.mbc<=max_Mbc )
+	    if( Dmeson.de>=min_dE && Dmeson.de<=max_dE  &&  Dmeson.mbc>=min_Mbc && Dmeson.mbc<=max_Mbc )
 	    {
 		h2MbcdE->Fill(Dmeson.mbc, Dmeson.de);
 		h2MbcdP->Fill(Dmeson.dp, Dmeson.mbc);
-	    }
 
-	    hdP->Fill(Dmeson.dp);
+		hdP->Fill(Dmeson.dp);
 
-	    if( Dmeson.de>=min_dE && Dmeson.de<=max_dE  &&  Dmeson.mbc>=min_Mbc && Dmeson.mbc<=max_Mbc )
-	    {
 		if ( verbose==2 )
 		{
 		    if (Dmeson.de>=deCut1 && Dmeson.de<=deCut2 &&  Dmeson.mbc>=min_Mbc && Dmeson.mbc<=max_Mbc )
@@ -843,9 +891,11 @@ int main(int argc, char* argv[])
 		if( verbose==1 ) cout<<"single_aerogel_REGION0t1="<<Dmeson.single_aerogel_REGION0t1[i]<<endl;
 		if( verbose==1 ) cout<<"wlshitt1="<<Dmeson.wlshitt1[i]<<endl;
 		hATCcnt->Fill(Dmeson.atcCNTt1[i]);
-		if( Dmeson.single_aerogel_REGION0t1[i]==1 ) good_region_t1++;
+		//if( Dmeson.single_aerogel_REGION0t1[i]==1 ) good_region_t1++;
+                if( Dmeson.wlshitt1[i]!=1 ) good_region_t1++;
 	    }
 	    if( verbose==1 ) cout<<"atcTotalNpet1="<<Dmeson.atcTotalNpet1<<endl;
+	    if( verbose==1 ) cout<<"good_region_t1="<<good_region_t1<<endl;
             hATCnpe->Fill(Dmeson.atcTotalNpet1);
 
 	    if( verbose==1 ) cout<<"natccrosst2="<<Dmeson.natccrosst2<<endl;
@@ -856,48 +906,67 @@ int main(int argc, char* argv[])
 		if( verbose==1 ) cout<<"single_aerogel_REGION0t2="<<Dmeson.single_aerogel_REGION0t2[i]<<endl;
 		if( verbose==1 ) cout<<"wlshitt2="<<Dmeson.wlshitt2[i]<<endl;
 		hATCcnt->Fill(Dmeson.atcCNTt2[i]);
-		if( Dmeson.single_aerogel_REGION0t2[i]==1 ) good_region_t2++;
+		//if( Dmeson.single_aerogel_REGION0t2[i]==1 ) good_region_t2++;
+                if( Dmeson.wlshitt2[i]!=1 ) good_region_t2++;
 	    }
 	    if( verbose==1 ) cout<<"atcTotalNpet2="<<Dmeson.atcTotalNpet2<<endl;
+	    if( verbose==1 ) cout<<"good_region_t2="<<good_region_t2<<endl;
             hATCnpe->Fill(Dmeson.atcTotalNpet2);
 
             //very hard suppression
 	    //if( (Dmeson.p1>600. && Dmeson.atcTotalNpet1<=0.1) && (Dmeson.p2>600. && Dmeson.atcTotalNpet2<=0.1) ) continue;
 	    //if( (Dmeson.p1>600. && Dmeson.atcTotalNpet1>0.1) && (Dmeson.p2>600. && Dmeson.atcTotalNpet2>0.1) ) continue;
 
-            //soft suppression
-	    //if( (Dmeson.p1>600. && good_region_t1>=2 && Dmeson.atcTotalNpet1<=0.1) && (Dmeson.p2>600. && good_region_t2>=2 && Dmeson.atcTotalNpet2<=0.1) ) continue;
-	    //if( (Dmeson.p1>600. && good_region_t1>=1 && Dmeson.atcTotalNpet1>0.1) && (Dmeson.p2>600. && good_region_t2>=1 && Dmeson.atcTotalNpet2>0.1) ) continue;
-	    if( (Dmeson.prec1>450. && good_region_t1>=2 && Dmeson.atcTotalNpet1<=0.1) && (Dmeson.prec2>450. && good_region_t2>=2 && Dmeson.atcTotalNpet2<=0.1) ) continue;
-	    if( (Dmeson.prec1>450. && good_region_t1>=1 && Dmeson.atcTotalNpet1>0.1) && (Dmeson.prec2>450. && good_region_t2>=1 && Dmeson.atcTotalNpet2>0.1) ) continue;
+            double npetrh=0.5;
+	    double Pcut1=450.;
+            double Pcut2=1500.;
+	    double mk = 493.68;
+	    double mpi = 139.57;
 
-	    if( Dmeson.de>=min_dE && Dmeson.de<=max_dE  &&  Dmeson.mbc>=min_Mbc && Dmeson.mbc<=max_Mbc )
+	    //soft suppression
+	    if( (Dmeson.prec1>Pcut1 && Dmeson.prec1<Pcut2 && good_region_t1>=1 && Dmeson.atcTotalNpet1<=npetrh) && (Dmeson.prec2>Pcut1 && Dmeson.prec2<Pcut2 && good_region_t2>=1 && Dmeson.atcTotalNpet2<=npetrh) ) continue;   //KK
+	    if( (Dmeson.prec1>Pcut1 && Dmeson.prec1<Pcut2 && good_region_t1>=1 && Dmeson.atcTotalNpet1>npetrh) && (Dmeson.prec2>Pcut1 && Dmeson.prec2<Pcut2 && good_region_t2>=1 && Dmeson.atcTotalNpet2>npetrh) ) continue;     //pipi
+
+            double ppi=Dmeson.p1;
+            double pk=Dmeson.p2;
+
+	    int id=0;
+	    if( (Dmeson.prec1>Pcut1 && Dmeson.prec1<Pcut2 && good_region_t1>=1 && Dmeson.atcTotalNpet1>npetrh) && (Dmeson.prec2>Pcut1 && Dmeson.prec2<Pcut2 && good_region_t2>=1 && Dmeson.atcTotalNpet2<=npetrh) ){ ppi=Dmeson.p1; pk=Dmeson.p2;  id=1;}  //piK
+	    if( (Dmeson.prec1>Pcut1 && Dmeson.prec1<Pcut2 && good_region_t1>=1 && Dmeson.atcTotalNpet1<=npetrh) && (Dmeson.prec2>Pcut1 && Dmeson.prec2<Pcut2 && good_region_t2>=1 && Dmeson.atcTotalNpet2>npetrh) ){ pk=Dmeson.p1;  ppi=Dmeson.p2; id=1;}  //Kpi
+
+	    double deATC=Dmeson.de;
+	    //if(id==1) deATC = (sqrt(mpi*mpi + ppi*ppi) + sqrt(mk*mk + pk*pk)) - Dmeson.Ebeam;
+            if(id==1) deATC = (sqrt(mpi*mpi + pcorr(ppi,1)*pcorr(ppi,1)) + sqrt(mk*mk + pcorr(pk,2)*pcorr(pk,2))) - Dmeson.Ebeam;
+
+	    if( verbose==1 ) cout<<"atc id ="<<id<<"\t"<<"de="<<Dmeson.de<<"\t"<<"deATC="<<deATC<<endl;
+
+	    if( deATC>=min_dE && deATC<=max_dE  &&  Dmeson.mbc>=min_Mbc && Dmeson.mbc<=max_Mbc )
 	    {
 		if ( verbose==2 )
 		{
-		    if (Dmeson.de>=deCut1 && Dmeson.de<=deCut2 &&  Dmeson.mbc>=min_Mbc && Dmeson.mbc<=max_Mbc )
+		    if (deATC>=deCut1 && deATC<=deCut2 &&  Dmeson.mbc>=min_Mbc && Dmeson.mbc<=max_Mbc )
 		    {
-			cout<<Dmeson.Run<<"\t"<<Dmeson.rEv<<"\t"<<Dmeson.mbc<<"\t"<<Dmeson.de<<"\t"<<Dmeson.dp<<endl;
+			cout<<Dmeson.Run<<"\t"<<Dmeson.rEv<<"\t"<<Dmeson.mbc<<"\t"<<deATC<<"\t"<<Dmeson.dp<<endl;
 		    }
 		}
-		ResultATC<< Dmeson.mbc <<"\t"<< Dmeson.de <<"\t"<< Dmeson.dp <<endl;
+		ResultATC<< Dmeson.mbc <<"\t"<< deATC <<"\t"<< Dmeson.dp <<endl;
 	    }
 
 	    //fill dE
-	    if( Dmeson.mbc>=mbcCut1 && Dmeson.mbc<=mbcCut2 )
+	    if( Dmeson.mbc>=mbcCut1 && Dmeson.mbc<=mbcCut2 && deATC>=min_dE && deATC<=max_dE )
 	    {
-		hdE_ATC->Fill(Dmeson.de);
+		hdE_ATC->Fill(deATC);
 	    }
 
             //fill Mbc
-	    if( Dmeson.de>=deCut1 && Dmeson.de<=deCut2 &&  Dmeson.mbc>=min_Mbc2 && Dmeson.mbc<=max_Mbc )
+	    if( deATC>=deCut1 && deATC<=deCut2 &&  Dmeson.mbc>=min_Mbc2 && Dmeson.mbc<=max_Mbc )
 	    {
 		hmbc_ATC->Fill(Dmeson.mbc);
 	    }
 
-	    if( Dmeson.mbc>=min_Mbc && Dmeson.mbc<=max_Mbc )
+	    if( Dmeson.mbc>=min_Mbc && Dmeson.mbc<=max_Mbc && deATC>=min_dE && deATC<=max_dE )
 	    {
-		h2MbcdE_ATC->Fill(Dmeson.mbc, Dmeson.de);
+		h2MbcdE_ATC->Fill(Dmeson.mbc, deATC);
 		h2MbcdP_ATC->Fill(Dmeson.dp, Dmeson.mbc);
 	    }
 
@@ -998,7 +1067,7 @@ int main(int argc, char* argv[])
     TLine line8(1700,deCut2,1900,deCut2);
     line8.SetLineColor(kGreen);
     line8.SetLineWidth(3);
-    if( key==0 || key==4 ){
+    if( key==0 || key==1 || key==4 ){
 	line5.Draw("same");
 	line6.Draw("same");
 	line7.Draw("same");

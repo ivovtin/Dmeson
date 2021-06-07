@@ -1,56 +1,85 @@
-      SUBROUTINE KEDRGEN2(VERTEX,IPRTRK)
+      SUBROUTINE KEDRGEN2(EACT,VERG)
 c********************************************************************
 c
 c   Primary tracks kinematics: generators 301-400, V.A.Tayursky
 c
-c   Input: VERTEX - vertex of event
-c          IPRTRK = 1/0 - print/no print initial tracks 
-c          KGEN - number of generator of process: from /KEDR_GEN/ 
+c   Calls: GUKINE -> KEDRGEN -> KEDRGEN2  
 c
-c   Changes:
+c   Output: EACT - actual energy (GeV) of beam in cms. EACT=0 - special
+c           /PKIN/ - contains event 
+c           VERG(3) - vertex from generators
 c
-c   18.02.2003. Corrections: + prints of primary tracks (generator 310)
-c                        + psi'->psi pi+pi- (psi->l+l-) (generator 311) 
-c                        + test prints generator        (generator 312) 
-c   20.03.2003. Corrections: for generator 307: goto 333 -> return
-c   25.04.2003. added generator  313 ee->tau tau (gamma) (KORALB)
-c   10.06.2003. added generator  314 ee->2 PS PS 
-c   18.11.2003. added generators 315 ee->psi'-> ... and
-c                                316 ee->gamma + X
-c   04.03.2004. added generator  317 of Vermaseren ee->ee+ee(mumu)
-c   15.03.2004. changed generat. 314 ee->A+Bz+Cz^2, z=cos(theta)
-c   21.03.2004. in /PSEVT/ added SPINPS(3,100) 
-c   01.03.2005. gen 314 moved to PST, gen 316 corrected 
-c   01.04.2005. gen 311 add pi+pi- mode without J/psi: 311 0
-c   02.09.2005. added generator 319 ee->ee+ pi+pi-
-c   01.02.2006. added generator 320 (KMD-generator)
-c   02.02.2006. corrected parameters for call gen. 318
-c   16.04.2007. added generator 321 e+e- -> e+e- gamma
-c   09.06.2007. added GOTO 999 before lable 321
+c   Last changes: see A_history
 c
 c********************************************************************
       IMPLICIT NONE
-      COMMON /GCONST/ PI,TWOPI ,PIBY2,DEGRAD,RADDEG,CLIGHT ,BIG,EMASS
-      common /PKIN/    NTRACK,IPARTICLE(50),EPART(50), ! - for output file
-     +                 PXPART(50),PYPART(50),PZPART(50)
-      COMMON /GCFLAG/  IDEBUG,IDEMIN,IDEMAX,ITEST,IDRUN,IDEVT,IEORUN,
-     +                 IEOTRI,IEVENT,ISWIT(10),IFINIT(20),NEVENT,
-     $                 NRNDM(2)
-c
+
+      Real *4 PI,TWOPI,PIBY2,DEGRAD,RADDEG,CLIGHT,BIG,EMASS
+      COMMON/GCONST/PI,TWOPI,PIBY2,DEGRAD,RADDEG,CLIGHT,BIG,EMASS
+
+      INTEGER *4 NTRACK,IPARTICLE
+      REAL *4 EPART,PXPART,PYPART,PZPART
+      COMMON /PKIN/ NTRACK,IPARTICLE(50),EPART(50),     ! - for output file
+     +              PXPART(50),PYPART(50),PZPART(50)
+
+c#include "../KedrSim/pkin.inc"
+
+      Integer *4 IDEBUG,IDEMIN,IDEMAX,ITEST,IDRUN,IDEVT,IEORUN,
+     &           IEOTRI,IEVENT,ISWIT,IFINIT,NEVENT,NRNDM
+      COMMON/GCFLAG/IDEBUG,IDEMIN,IDEMAX,ITEST,IDRUN,IDEVT,IEORUN
+     +        ,IEOTRI,IEVENT,ISWIT(10),IFINIT(20),NEVENT,NRNDM(2)
+
+      Real *4 GENPAR
+      Integer *4 KHEP,KGEN
       COMMON /KEDR_GEN/KHEP,KGEN,GENPAR(20) ! input parameters for generators
-      COMMON /PSEVT/   NPS,KPS(4,100),PPS(4,100),SPINPS(3,100) ! package PST
-      COMMON /PSCONS/  PIPS,NGNT,AMASS(600)
+
+      Real *8 pPart,mPart
+      Integer *4 KfTyp,IParent,IChilds,NPS
+      COMMON /PSEVT/ pPart(4,100),mPart(100),KfTyp(100),
+     &               IParent(100),IChilds(2,100),NPS
+
+      Real *8 PIPS,AMASS
+      Integer *4 NGNT
+      COMMON /PSCONS/  PIPS,AMASS(600),NGNT
+
+      Integer *4 NPIND,INDP
       COMMON /PSPIND/  NPIND,INDP(600)
-      COMMON /PSEEHPS/ NEST,PHSI,ERPHSI,SN,WM,NGTEE,IDEE(20)
-      COMMON /PSGGSEC/ NOBR,TSEC,ERSEC,FM,ID(20),NGT,IDUM(2)
+
+      Real *8 PHSI,ERPHSI,SN,WM,FMAJ
+      Integer *4 NGTEE,NEST,NCALLS
+      COMMON /PSEEHPS/ PHSI,ERPHSI,SN,WM,FMAJ,NGTEE,NEST,NCALLS
+
+      Real *8 TSEC,ERSEC,WEMAX,GGEST,GWE
+      Integer *4 NOBR,NGT,NGT1,KODVDM,IOBR
+      COMMON /PSGGHPS/ TSEC,ERSEC,WEMAX,GGEST,GWE,NGT,NGT1,KODVDM,NOBR,
+     &                 IOBR
+
+      INTEGER *4 NPART,IPART
+      REAL *4 P41
       COMMON /GGHPRT/  NPART,P41(4,20),IPART(20)               ! gen. 306,307
+
+      INTEGER *4 IVEDUM,INPMAJ,IVEDUM1
+      REAL *8 FMAXI
       COMMON /VECO /   IVEDUM(2),INPMAJ,IVEDUM1(1635),FMAXI    ! gen. 317         
+
+      INTEGER *4 N,KK
+      REAL *4 P,V
       COMMON /LUJETS/  N,KK(4000,5),P(4000,5),V(4000,5)             !: 315
+
+      INTEGER *4 KCHG
+      REAL *4 PMAS,PARF,VCKM
       COMMON /LUDAT2/  KCHG(500,3),PMAS(500,4),PARF(2000),VCKM(4,4) !: 315
+
+      INTEGER *4 MDCY,MDME,KFDP
+      REAL *4 BRAT
       COMMON /LUDAT3/  MDCY(500,3),MDME(2000,2),BRAT(2000),KFDP(2000,5) !: 315
+
+      REAL *8 SAP,SAPT,CROSEC
       COMMON /GG_EESAP/SAP(4),SAPT,CROSEC ! 307 
+
       INTEGER NMXHEP
       PARAMETER (NMXHEP=2000)
+
       COMMON /HEPEVT/             ! for PHOTOS
      $      nevhep,               ! serial number
      $      nhep,                 ! number of particles
@@ -63,33 +92,36 @@ c
       REAL*8  phep,  vhep         ! to be real*4 / *8  depending on host
       INTEGER nevhep,nhep,isthep,idhep,jmohep, jdahep
 
-      INTEGER *4 KHEP,KGEN,NPS,KPS,NGNT,NPIND,INDP,NEST,NGTEE,IDEE
-      INTEGER *4 NOBR,ID,NGT,IDUM,NPART,IPART,N,KK,KCHG,MDCY,MDME,KFDP
-      INTEGER *4 IDEBUG,IDEMIN,IDEMAX,ITEST,IDRUN,IDEVT,IEORUN,NRNDM
-      INTEGER *4 IVEDUM,IVEDUM1,INPMAJ,ITER,NPRT
-      INTEGER *4 NTRACK,IPARTICLE,IEOTRI,IEVENT,ISWIT,IFINIT,NEVENT
+      COMMON /BBYRESLTS/ CTRL,XNCALLS,SEZ,ERR,WSEZ,WERR,SDMAX,SDMAXR, ! 323
+     &                   BBYEVENT(25)
+      REAL *8 CTRL,XNCALLS,SEZ,ERR,WSEZ,WERR,SDMAX,SDMAXR
+      REAL *4 BBYEVENT
+
+      INTEGER *4 ITER,NPRT,KC
 c
-      REAL *4 GENPAR,PPS,AMASS,PHSI,ERPHSI,SN,WM,TSEC,ERSEC,FM,P41
-      REAL *4 P,V,PMAS,PARF,VCKM,BRAT,EPART,PXPART,PYPART,PZPART
-      REAL *4 PI,TWOPI ,PIBY2,DEGRAD,RADDEG,CLIGHT ,BIG,EMASS
       REAL *4 VERTEX(3),PLAB(3),ARREVT(7,100),EVENT(6,100)
-      REAL *4 AMC,AMN,ECM,EN1,WEID(4)
-      REAL *4 PTLIFE,PCHARGE,PAMASS,PP,UB,TLIFE,CHARGE,CTAU,SPIN
-      REAL *4 CHRG,APMASS,WIDTH,DUMM,RE_INT,PMASS,VEPART(4,4)
-      REAL *4 TI1,TS1,AVGI,SD,CHI2A,SPINPS
-      REAL *8 PIPS,FMAXI,ALT,SAP,SAPT,CROSEC,ACC,ANGMIN,EBEAM,FMAX,WMAX
-      REAL *8 QQ(4,10),OMEMIN,HSIGB,VSIGB,HBET,VBET,ELEFIN(4),PHOFIN(4)
-      REAL *8 SECBREM,ERRBREM
-      INTEGER *4 I,KODHEP,IDC,IMODE,I1_CHAN,NB_CHAN,KC_PSI1,KGEN0,ks
+      REAL *4 ECM,EN1,WEID(4)
+      REAL *4 PTLIFE,PCHARGE,PAMASS,PP,UB,TLIFE,CHARGE
+      REAL *4 RE_INT,PMASS,VEPART(4,4)
+      REAL *4 TI1,TS1,AVGI,SD,CHI2A,EACT,VERG(3)
+      REAL *8 ALT,ACC,ANGMIN,EBEAM,FMAX
+      REAL *8 QQ(4,10),OMEMIN,HSIGB,VSIGB,ELEFIN(4),PHOFIN(4)
+      REAL *8 SECBREM,ERRBREM,GENPAR8(20),THSIGB,TVSIGB
+      REAL *8 APMASS,WIDTH,CHRG,SPIN,CTAU,THMIN,THMAX,EMIN,ZMAX
+      REAL *8 PPART324(4,25)
+      INTEGER *4 I,KODHEP,IDC,IMODE,I1_CHAN,NB_CHAN,KC_PSI1,KS
       INTEGER *4 NSTABL,ITRTYPE,J,NWB,ITRTYP,ICALLS,MDEC,LUCOMP,NEVREAD
-      INTEGER *4 MDUM,ITYP,ITHEP,ICALLS1,ICALLS2,KODTAG1,IREGGGH,KVDM
-      INTEGER *4 KODTAG,IPRTRK,NT,ITYPE,KGE,KHE,IGE,NVERT,INT_RE
-      INTEGER *4 KPART(100),ITPS(20),IGENPAR(20),IPROC,ISORT(10)
+      INTEGER *4 ITYP,ITHEP,ICALLS1,ICALLS2,KODTAG1,IREGGGH,KVDM
+      INTEGER *4 KODTAG,ITYPE,KGE,KHE,IGE,INT_RE
+      INTEGER *4 KPART(100),ITPS(20),IGENPAR(20),IPROC,ISORT(10),IR
+      INTEGER *4 IRES,IMAX,I1,KGFROMKF,IND,NSTAB324,TYPE324(25)
       CHARACTER *20 NAMPART,CHNPAR
       CHARACTER *12 ANAME	
       CHARACTER *15 TEXT320(3)
       CHARACTER *14 T315(12)
       EQUIVALENCE (RE_INT,INT_RE)
+c
+      SAVE
 c
       DATA TEXT320/'e+e-(n gam)    ','mu+mu-(n gam)  ',
      &             'tau+tau-(n gam)'/
@@ -102,18 +134,22 @@ c
         IGENPAR(I)=IFIX(GENPAR(I))   ! real -> integer 
       END DO
 c
+      DO I=1,3
+        VERG(I)=0.    ! def. vertex from generators
+      END DO
+c
 c-------------------------------------------------------------------
 c
 c    Determination of process for simulation from IKINE=KGEN (GENE card)
 c    ===================================================================
 c
-c**  KGEN=301-310: V.A.Tayursky
+c**  KGEN=301-323: V.A.Tayursky
 c
       IF(KGEN.EQ.301) GOTO 301 ! e+e- -> hadrons (stat.model)
       IF(KGEN.EQ.302) GOTO 302 ! e+e- -> e+e- + hadrons (stat.model)
-      IF(KGEN.EQ.303) GOTO 303 ! e+e- -> e+e- + pi0
-      IF(KGEN.EQ.304) GOTO 304 ! e+e- -> e+e- + eta
-      IF(KGEN.EQ.305) GOTO 305 ! e+e- -> e+e- + eta'
+      IF(KGEN.EQ.303) GOTO 309 ! e+e- -> e+e- + pi0
+      IF(KGEN.EQ.304) GOTO 309 ! e+e- -> e+e- + eta
+      IF(KGEN.EQ.305) GOTO 309 ! e+e- -> e+e- + eta'
       IF(KGEN.EQ.306) GOTO 306 ! e+e- -> e+e- + mu(tau)+mu(tau)- (gamma) 
       IF(KGEN.EQ.307) GOTO 307 ! e+e- -> e+e- + e+e-
       IF(KGEN.EQ.308) GOTO 308 ! e+e- -> J/psi(psi') ->VP
@@ -122,7 +158,7 @@ c
       IF(KGEN.EQ.311) GOTO 311 ! e+e- -> psi' -> J/psi(->l+l-) +pi+pi-
       IF(KGEN.EQ.312) GOTO 312 ! 1 particle with test print (from gustep)
       IF(KGEN.EQ.313) GOTO 313 ! e+e- -> tau+ tau- (gamma) (KORALB)
-      IF(KGEN.EQ.314) GOTO 314 ! e+e- -> A+Bz+Cz^2
+      IF(KGEN.EQ.314) GOTO 314 ! e+e- -> A+Bz+Cz^2, z=cos(teta)
       IF(KGEN.EQ.315) GOTO 315 ! e+e- -> psi' (jetset)
       IF(KGEN.EQ.316) GOTO 316 ! e+e- -> gamma + X (gamma d.f. ~ 1+cos^2 teta)
       IF(KGEN.EQ.317) GOTO 317 ! e+e- -> e+e- + e+e-(mu+mu-) (J.A.M.Vermas.)
@@ -130,17 +166,18 @@ c
       IF(KGEN.EQ.319) GOTO 319 ! e+e- -> e+e- + pi+pi- 
       IF(KGEN.EQ.320) GOTO 320 ! KMD-generator
       IF(KGEN.EQ.321) GOTO 321 ! e+e- -> e+ e- gamma (Bremsstrahlung)
+      IF(KGEN.EQ.322) GOTO 309 ! e+e- -> e+ e- + eta_c
+      IF(KGEN.EQ.323) GOTO 323 ! e+e- -> e+ e-, mu+mu, gam gam, pi+pi- с р.п.
+      IF(KGEN.EQ.324) GOTO 324 ! e+e- -> e+ e- +PS  с р.п.
 c
       PRINT *,' Wrong generator number! See the KEDR WWW page '
       stop
 c
-c------------------------------------------------------------------
+c=======================================================================
 c
- 301  continue
+ 301  CONTINUE
 c
 c  e+e- -> hadrons (stat.model)
-c
-      CALL GSVERT(VERTEX,0,0,0,0,NVERT)
 c
       DO I=1,20
         ITPS(I)=0
@@ -152,8 +189,10 @@ c
         STOP                                         	  
       END IF
 c
-      AMC=GENPAR(3) ! paramaters for multiplicity generation
-      AMN=GENPAR(4)
+      EACT=GENPAR(1)          ! actual beam energy
+      GENPAR8(1)=GENPAR(1)
+      GENPAR8(3)=GENPAR(3)    ! paramaters for multiplicity generation
+      GENPAR8(4)=GENPAR(4)
 c
       IF (IGENPAR(2).EQ.1) GOTO 3    ! generator regime 
 c
@@ -163,45 +202,39 @@ c
       END DO
 c
  3    CONTINUE
-c                    Ebeam    Ireg      AMC AMN  NT     Maj
-      CALL PSTEEH(GENPAR(1),IGENPAR(2),AMC,AMN,ITPS,GENPAR(3)) ! N_pi
-c                    
+c                    Ebeam     Ireg      AMC          AMN      NT     
+      CALL PstEeH(GENPAR8(1),IGENPAR(2),GENPAR8(3),GENPAR8(4),ITPS,
+     &            GENPAR8(3))                                       ! N_pi
+c                      Maj for Ireg=2                    
+c
       DO 2 I=1,NPS
 c
-        KHE=KPS(1,i)              ! HEP-code of particle
+        KHE=KfTyp(I)              ! HEP-code of particle
 c
-        CALL PSTPCODE1(KHE,KGE)  ! HEP-code -> GEANT-code
+        CALL PstPCode1(KHE,KGE)  ! HEP-code -> GEANT-code
 c
-        PLAB(1)=PPS(1,I)
-        PLAB(2)=PPS(2,I)
-        PLAB(3)=PPS(3,I)
+        PLAB(1)=pPart(1,I)
+        PLAB(2)=pPart(2,I)
+        PLAB(3)=pPart(3,I)
         ITYPE=KGE
-c
-        CALL GSKINE(PLAB,ITYPE,NVERT,0,0,NT)
 c
         NTRACK=I
         IPARTICLE(I)=ITYPE
-        EPART(I)=PPS(4,I)
+        EPART(I)=pPart(4,I)
         PXPART(I)=PLAB(1)
         PYPART(I)=PLAB(2)
         PZPART(I)=PLAB(3)
 c
- 	IF(IPRTRK.EQ.1) THEN
-          PRINT 397,IEVENT,I,ITYPE,PLAB,VERTEX
- 	END IF
-c
  2    CONTINUE
 c
       IF(IEVENT.EQ.NEVENT) PRINT 401,WM,NGTEE
-      RETURN
+      GOTO 500
 c
-c----------------------------------------------------------------------
+c=======================================================================
 c
  302  CONTINUE
 c
 c  e+e- -> e+e- + hadrons (stat.model)
-c
-      CALL GSVERT(VERTEX,0,0,0,0,NVERT)
 c
       DO I=1,20
         ITPS(I)=0
@@ -214,199 +247,99 @@ c
       END IF  
 c
       KODTAG=IGENPAR(3)
+c
       IF(KODTAG.LT.0.OR.KODTAG.GT.2) THEN
-        PRINT *,' GUKINE_T, error: Itag for generator 302',
+        PRINT *,' GUKINE_T, error: Itag for generator # 302',
      +	        ' should be 0, 1 or 2'   
         STOP
       END IF
 c
+      EACT=GENPAR(1)         !  actual beam energy
       KVDM=IGENPAR(7)
+      GENPAR8(1)=GENPAR(1)
+      GENPAR8(4)=GENPAR(4)
+      GENPAR8(5)=GENPAR(5)
+      GENPAR8(6)=GENPAR(6)
+      GENPAR8(8)=GENPAR(8)
+      GENPAR8(9)=GENPAR(9)
+      GENPAR8(10)=GENPAR(10)
+      GENPAR8(11)=GENPAR(11)
+      GENPAR8(12)=GENPAR(12)
+      GENPAR8(13)=GENPAR(13)
 c
-      IF(IGENPAR(2).EQ.2) GOTO 6    ! 1-st or 2-nd regime
+      IF(IGENPAR(2).EQ.2) GOTO 6    ! to 2-nd regime
+c...........
+c  1-st  regime
+      IREGGGH=1              ! for variable event composition
 c
-      IREGGGH=1     ! for variable event composition
-      AMC=GENPAR(11)
-      AMN=GENPAR(12)
-      GOTO 396
-c
-c  Fixeed event composition (1 - 14 particles)
+      GOTO 390
+c...........
+c  2-nd regime. Fixeed event composition (gg-system of 1 - 8 particles)
 c
  6    IREGGGH=2
-      AMC=0.
-      AMN=0.
+      GENPAR8(12)=0.D0
+      GENPAR8(13)=0.D0
 c
-      DO I=1,10                      ! fixed mult.events, <=10 particles
-        IGE=IGENPAR(I+10)            ! Geant-code of final paticle
+      DO I=1,8                      ! fixed mult.events, <=10 particles
+        IGE=IGENPAR(I+11)           ! Geant-code of final paticle
         IF(IGE.GE.1) ITPS(I)=IGE
       END DO
 c
-c                    Eb         Wmin   Wmax      IREG     AMC
- 396  CALL PSTGGH(GENPAR(1),GENPAR(4),GENPAR(5),IREGGGH, AMC,
-     + AMN,ITPS, GENPAR(6), KVDM, GENPAR(8),GENPAR(9),GENPAR(10))
-c       AMN        SEC      KVDM       t1        t2        maj
+c                    Eb         Wmin      Wmax      IREG     AMC
+ 390  CALL PstGgH(GENPAR8(1),GENPAR8(4),GENPAR8(5),IREGGGH, GENPAR8(12),
+c         AMN                SEC       KVDM     -t1mi     -t1ma  
+     &   GENPAR8(13),ITPS, GENPAR8(6), KVDM, GENPAR8(8),GENPAR8(9),
+c         -t2mi     -t2ma       
+     &   GENPAR8(10),GENPAR8(11))     
+c
+      ICALLS=0
+      ICALLS1=0
+      ICALLS2=0
 c
       IF(KODTAG.GT.0) THEN    ! are there hits into tagging system?
 c
         CALL TS_TAG(302,GENPAR(1),KODTAG1,ICALLS,ICALLS1,ICALLS2)
 c
-        IF(KODTAG1.LT.KODTAG) GOTO 396
+        IF(KODTAG1.LT.KODTAG) GOTO 390
       END IF
 c
       DO 32 I=1,NPS   
 c
-        KHE=KPS(1,I)              ! HEP-code of particle
+        KHE=KfTyp(I)              ! HEP-code of particle
 c
-        CALL PSTPCODE1(KHE,KGE)  ! HEP-code -> GEANT-code
+        CALL PstPCode1(KHE,KGE)  ! HEP-code -> GEANT-code
 c
-        PLAB(1)=PPS(1,I)
-        PLAB(2)=PPS(2,I)
-        PLAB(3)=PPS(3,I)
+        PLAB(1)=pPart(1,I)
+        PLAB(2)=pPart(2,I)
+        PLAB(3)=pPart(3,I)
         ITYPE=KGE
-c
-        CALL GSKINE(PLAB,ITYPE,NVERT,0,0,NT)
 c
         NTRACK=I
         IPARTICLE(I)=ITYPE
-        EPART(I)=PPS(4,I) 
+        EPART(I)=pPart(4,I) 
         PXPART(I)=PLAB(1) 
         PYPART(I)=PLAB(2)
         PZPART(I)=PLAB(3)
 c
- 	IF(IPRTRK.EQ.1) PRINT 397,IEVENT,I,ITYPE,PLAB,VERTEX
-c
  32   CONTINUE
 c
-      IF(IEVENT.EQ.NEVENT) PRINT 3022,(1.*ICALLS1)/ICALLS,
-     *  (1.*ICALLS2)/ICALLS
+      IF(IEVENT.EQ.NEVENT.AND.IGENPAR(3).NE.0) PRINT 3022,
+     &  (1.*ICALLS1)/ICALLS,(1.*ICALLS2)/ICALLS
+c
       IF(IEVENT.EQ.NEVENT) THEN 
         ALT=NEVENT/TSEC
-        PRINT 400,TSEC,ERSEC,ALT,FM,NGT
+        PRINT 402,TSEC,ERSEC,ALT
       END IF
 c
-      RETURN
+      GOTO 500
 c
-c---------------------------------------------------------------------
+c=======================================================================
 c
- 303  CONTINUE
-c
-c  e+e- -> e+e- + pi0 (with pi0 decays)
-c
-c
-      CALL GSVERT(VERTEX,0,0,0,0,NVERT)
-c
-      MDEC=igenpar(3)
-      KODtag=igenpar(2)
-      KVDM=genpar(4)+0.5
-c
-c   MDEC=1: pi0 -> 2gamma,
-c   MDEC=2: pi0 -> e+e-gamma
-c
- 3031 CALL PSTGGRPS(genpar(1),1,MDEC,dumm,8.0E-3,KVDM,genpar(5),
-     &               genpar(6),genpar(7))
-c
-      if(KODtag.gt.0) then
-c
-        CALL TS_TAG(303,genpar(1),KODtag1,ICALLS,ICALLS1,ICALLS2)
-c
-        IF(KODtag1.lt.KODtag) GOTO 3031
-      end if
-c
-      if(IEVENT.NE.NEVENT) goto 333
-c
-c  Print at end of simulation
-c
-        ALT=NEVENT/TSEC
-        PRINT 400,TSEC,ERSEC,ALT,FM,NGT 
-c
-      goto 333
-c
-c------------------------------------------------------------------
- 304  CONTINUE
-c
-c  e+e- -> e+e- + eta (with eta decays)
-c
-      CALL GSVERT(VERTEX,0,0,0,0,NVERT)
-c
-      MDEC=igenpar(3)
-      KODtag=igenpar(2)
-      KVDM=genpar(4)+0.5
-c
-c                  1: eta -> 2gamma      (PDG: 39.2%)
-c                  2: eta -> 3pi0        (PDG: 32.2%)
-c                  3: eta -> pi+pi-pi0   (PDG: 21.3%)
-c                  4: eta -> pi+pi-gamma (PDG: 4.8%)
-c
- 3041 CALL PSTGGRPS(genpar(1),2,MDEC,dumm,0.46,KVDM,genpar(5),
-     +               genpar(6),genpar(7))
-c
-      if(KODtag.gt.0) then
-c
-        CALL TS_TAG(304,genpar(1),KODtag1,ICALLS,ICALLS1,ICALLS2)
-c
-        IF(KODtag1.lt.KODtag) GOTO 3041
-      end if
-c
-      if(IEVENT.NE.NEVENT) goto 333
-c
-c  Print at end of simulation
-c
-        ALT=NEVENT/TSEC
-        PRINT 400,TSEC,ERSEC,ALT,FM,NGT 
-c
-      goto 333
-c
-c----------------------------------------------------------------------
- 305  CONTINUE
-c
-c  e+e- -> e+e- + eta' (with eta' decays)
-c
-      CALL GSVERT(VERTEX,0,0,0,0,NVERT)
-c
-      KODtag=igenpar(2)
-      MDEC  =igenpar(3)
-      KVDM=genpar(4)+0.5
-c
-c    MDEC=1:     ' eta-prime -> 2gamma'
-c         2:     ' eta-prime -> pi+ pi- eta (eta->2gamma)'            
-c         3:     ' eta-prime -> pi+ pi- eta (eta ->3pi0)'             
-c         4:     ' eta-prime -> pi+ pi- eta (eta ->pi+ pi- pi0)'      
-c         5:     ' eta-prime -> pi+ pi- eta (eta ->pi+ pi- gamma)'    
-c         6:     ' eta-prime -> pi0 pi0 eta (eta ->2gamma)'           
-c         7:     ' eta-prime -> pi0 pi0 eta (eta ->3pi0)'             
-c         8:     ' eta-prime -> pi0 pi0 eta (eta ->pi+ pi- pi0)'      
-c         9:     ' eta-prime -> pi0 pi0 eta (eta ->pi+ pi- gamma)'    
-c        10:     ' eta-prime -> rho0 gamma (rho0 ->pi+ pi-)'          
-c
- 3051 CALL PSTGGRPS(genpar(1), 3, MDEC, dumm, 4.28, KVDM,genpar(5),
-     +               genpar(6),genpar(7))
-c
-      if(KODtag.gt.0) then
-c
-        CALL TS_TAG(305,genpar(1),KODtag1,ICALLS,ICALLS1,ICALLS2)
-c
-        IF(KODtag1.lt.KODtag) GOTO 3051
-      end if
-c
-        if(IEVENT.EQ.NEVENT) print 3022,(1.*ICALLS1)/ICALLS,
-     *  (1.*ICALLS2)/ICALLS         ! print ts-hits
-c
-      if(IEVENT.NE.NEVENT) goto 333
-c
-c  Print at end of simulation
-c
-        ALT=NEVENT/TSEC
-        PRINT 400,TSEC,ERSEC,ALT,FM,NGT 
-c
-      goto 333
-c
-c----------------------------------------------------------------------
  306  continue
 c
 c     e+e- -> e+e- + mu+mu-(gamma) (F.A.Berends e.a)
 c  or  
 c     e+e- -> e+e- + tau+tau-(gamma) (F.A.Berends e.a)
-c
-      CALL GSVERT(VERTEX,0,0,0,0,NVERT)
 c
 c
 c    Parameters:
@@ -420,6 +353,7 @@ c     genpar(6)= majoranta
 c     genpar(7)= 0/1: two-photon production mu+mu-/ tau+tau-
 c
       KODtag=genpar(2)
+      EACT=GENPAR(1)     ! actual beam energy
 c
  3061 call gen_ggmmg(genpar(1),igenpar(3),genpar(4),genpar(5),genpar(6),
      +               igenpar(7))
@@ -442,8 +376,6 @@ c
           IF(I.EQ.4) ITYPE=52         ! tau-  ............................
         END IF
 c
-        call gskine(plab,itype,nvert,0,0,nt)
-c
         NTRACK=I
         IPARTICLE(I)=ITYPE
 c
@@ -452,20 +384,17 @@ c
         PYPART(I)=PLAB(2)
         PZPART(I)=PLAB(3)
 c
-        IF(IPRTRK.EQ.1) PRINT 397,IEVENT,I,ITYPE,PLAB,VERTEX
-c
       END DO
 c
-      if(IEVENT.EQ.NEVENT) print 3022,(1.*ICALLS1)/ICALLS,
-     *  (1.*ICALLS2)/ICALLS
-      RETURN
-c------------------------------------------------------------
-
+      if(IEVENT.EQ.NEVENT.AND.IGENPAR(2).NE.0) print 3022,
+     &  (1.*ICALLS1)/ICALLS,(1.*ICALLS2)/ICALLS
+      GOTO 500
+c
+c=======================================================================
+c
  307  continue
 c
 c  e+e- -> e+e- + e+e- (F.A.Berends e.a., all diagrams)
-c
-      CALL GSVERT(VERTEX,0,0,0,0,NVERT)
 c
 c   Parameters:
 c
@@ -484,6 +413,7 @@ c   genpar(12)= majoranta (1.0 or less)
 c
 c   igenpar(3) /=0: cross section calculation before events generation
 c
+      EACT=GENPAR(1)        ! actual beam energy
       KODtag=igenpar(2)
       KODTAG1=IGENPAR(3)
       IF(KODTAG1.LT.1000) KODTAG1=1000 ! cr.section is estimated by min 1000 ev
@@ -508,8 +438,6 @@ c
         PLAB(3)=P41(3,i)
         ITYPE=IPART(i)
 c
-        call gskine(plab,itype,nvert,0,0,nt)
-c 
         NTRACK=I
         IPARTICLE(I)=ITYPE
         EPART(I)=P41(4,I)
@@ -517,24 +445,21 @@ c
         PYPART(I)=PLAB(2)
         PZPART(I)=PLAB(3)
 c
-        IF(IPRTRK.EQ.1) PRINT 397,IEVENT,I,ITYPE,PLAB,VERTEX
-c
       end do
 c
       IF(IEVENT.EQ.NEVENT) THEN
-        PRINT 3022,(1.*ICALLS1)/ICALLS,(1.*ICALLS2)/ICALLS
+        IF(IGENPAR(2).NE.0) PRINT 3022,(1.*ICALLS1)/ICALLS,
+     &    (1.*ICALLS2)/ICALLS
         PRINT 3023,(1.*NEVENT)/CROSEC 
       END IF
 c
-      RETURN
+      GOTO 500
 c
-c------------------------------------------------------------
+c=======================================================================
 c
  308  continue
 c
-c  e+e- -> J/psi(pis') -> VP (vector + psevdoscalar meson)
-c
-      CALL GSVERT(VERTEX,0,0,0,0,NVERT)
+c  e+e- -> J/psi(psi') -> VP (vector + pseudoscalar meson)
 c
 c   Parameters genpar(1-7): 
 
@@ -543,27 +468,53 @@ c      genpar(2): 1-11 decay mode of R
 c      genpar(3): decay mode of vector meson
 c      genpar(4): decay mode of psevdoscalar meson
 c
-      call PSTPSIVP(igenpar(1),igenpar(2),igenpar(3),igenpar(4))
+      KC=134                              ! KC-Lund of J/psi
+      IF(IGENPAR(1).EQ.2) KC=231          ! ...         psi'
+      Ecm=pmas(kc,1)                      ! mass of J/psi (psi')
+      EACT=Ecm/2                          ! actual beam energy in cms
+c
+      CALL PstPsiVP(igenpar(1),igenpar(2),igenpar(3),igenpar(4))
 c
       goto 333
 c
-c------------------------------------------------------------
+c=======================================================================
 c
  309  continue
 c
-c  e+e- -> e+e- + X (any GEANT particle, X=pseudoscalar)
+c  e+e- -> e+e- + X (X=pi0, eta, eta', eta_c or any GEANT particle, X=PS)
 c
-      CALL GSVERT(VERTEX,0,0,0,0,NVERT)
+      EACT=GENPAR(1)
+      GENPAR8(1)=GENPAR(1)
+      KODtag=IGENPAR(2)
+      MDEC=IGENPAR(3)
+      KVDM=IGENPAR(4)
+      GENPAR8(5)=GENPAR(5)
+      GENPAR8(6)=GENPAR(6)
+      GENPAR8(7)=GENPAR(7)
+      GENPAR8(8)=GENPAR(8)
 c
-      KODTAG=IGENPAR(2)
-      ITYP=IGENPAR(3)       ! Geant typ of particle produced in gg
-      ITHEP=INDP(ITYP)
-      KVDM=GENPAR(4)+0.5
+      IF(KGEN.EQ.303) IR=1
+      IF(KGEN.EQ.304) IR=2
+      IF(KGEN.EQ.305) IR=3
+      IF(KGEN.EQ.322) IR=4
+      APMASS=0.D0
 c
-      CALL PSTPPAR(ITHEP,ANAME,APMASS,WIDTH,CHRG,SPIN,CTAU) ! X parameters
+      IF(KGEN.EQ.309) THEN ! arbitrary PS resonance
+        IR=0
+        MDEC=0
+        ITYP=IGENPAR(3)       ! Geant typ of particle produced in gg
+        ITHEP=INDP(ITYP)
 c
- 3091  CALL PSTGGRPS(GENPAR(1),0,MDUM,APMASS,1.,KVDM,GENPAR(5),
-     +               GENPAR(6),GENPAR(7))
+        CALL PstPPar(ITHEP,ANAME,APMASS,WIDTH,CHRG,SPIN,CTAU) ! X parameters
+c
+      END IF
+
+ 3091 CALL PstGgRPS(GENPAR8(1),IR,MDEC,APMASS,1.D0,KVDM,GENPAR8(5),
+     +               GENPAR8(6),GENPAR8(7),GENPAR8(8))
+c
+      ICALLS=0
+      ICALLS1=0
+      ICALLS2=0
 c
       IF(KODTAG.GT.0) THEN
 c
@@ -577,41 +528,37 @@ c
 c  Print at end of simulation 
 c
       ALT=NEVENT/TSEC
-      PRINT 400,TSEC,ERSEC,ALT,FM,NGT 
+      PRINT 402,TSEC,ERSEC,ALT 
 c
-c------------------------------------------------------------------
+c-----------------------------------------------------------------------
 c
  333  NTRACK=0
 c
       DO 3032 I=1,NPS
-   	IF(KPS(3,I).ne.0) goto 3032  ! here - daughter of int. resonance
+   	IF(IChilds(1,I).ne.0) goto 3032  ! here - daughter of int. resonance
 c
-        if(kgen.eq.309.and.i.eq.3) KPS(1,i)=ithep
- 	KHE=KPS(1,i)              ! HEP-code of particle
+        if(kgen.eq.309.and.i.eq.3) KfTyp(i)=ithep
+ 	KHE=KfTyp(i)              ! HEP-code of particle
 c
- 	call pstpcode1(KHE,KGE)  ! HEP-code -> GEANT-code
+ 	call PstPCode1(KHE,KGE)   ! HEP-code -> GEANT-code
 c
- 	plab(1)=pps(1,i)
- 	plab(2)=pps(2,i)
- 	plab(3)=pps(3,i)
+ 	plab(1)=pPart(1,i)
+ 	plab(2)=pPart(2,i)
+ 	plab(3)=pPart(3,i)
         ITYPE=KGE
-c
-        CALL GSKINE(PLAB,ITYPE,NVERT,0,0,NT)
 c
  	NTRACK=NTRACK+1
         IPARTICLE(NTRACK)=itype
- 	epart(NTRACK)=pps(4,I)
+ 	epart(NTRACK)=pPart(4,I)
  	pxpart(NTRACK)=plab(1)  
  	pypart(NTRACK)=plab(2)  
 	pzpart(NTRACK)=plab(3)  
 c
-        IF(IPRTRK.EQ.1) PRINT 397,IEVENT,NTRACK,ITYPE,PLAB,VERTEX
-c
  3032 continue 
 c
-      GOTO 999
+      GOTO 500
 c
-c------------------------------------------------------------
+c=======================================================================
 c
  310  CONTINUE
 c
@@ -627,11 +574,10 @@ c  NEVREAD          - were read events from file
 c  NPART            - particles (tracks) in the event
 c  ARREVT           - array with the event
 c
-      VERTEX(1)=VERTEX(1)+ARREVT(5,1)   ! addition to vertex of event is used
-      VERTEX(2)=VERTEX(2)+ARREVT(6,1)   ! from 1-st particle in file
-      VERTEX(3)=VERTEX(3)+ARREVT(7,1)   ! 
-c
-      CALL GSVERT(VERTEX,0,0,0,0,NVERT)
+      EACT=0.                           ! beam energy (special)
+      VERG(1)=ARREVT(5,1)   ! vertex of event equals
+      VERG(2)=ARREVT(6,1)   ! vertex of 1-st track of the event 
+      VERG(3)=ARREVT(7,1)   ! 
 c
        NTRACK=0
 c
@@ -641,10 +587,6 @@ c
           PLAB(1)=ARREVT(2,I)   ! Px
  	  PLAB(2)=ARREVT(3,I)   ! Py
           PLAB(3)=ARREVT(4,I)   ! Pz
-c
- 	  IF(IPRTRK.EQ.1) PRINT 397,IEVENT,I,ITYPE,PLAB,VERTEX
-c
-          CALL GSKINE(PLAB,ITYPE,NVERT,0,0,NT)
 c
           NTRACK=NTRACK+1
           IPARTICLE(NTRACK)=ITYPE
@@ -657,59 +599,60 @@ c
           PZPART(NTRACK)=PLAB(3) 
  3101 CONTINUE 
 c
-      GOTO 999
+      GOTO 500
 c
-c------------------------------------------------------------
+c=======================================================================
 c
  311  CONTINUE
 c
 c  Generator e+e- -> psi' -> psi(->l+l-) +pi+pi-
 c
+      KC=231                              ! KC-Lund of psi'
+      Ecm=pmas(kc,1)                      ! mass of psi'
+      EACT=Ecm/2                          ! actual beam energy in cms
+c
       if (IGENPAR(1).eq.0) then
-C     only pi+pi- - no J/psi product for trigger estimation
-        CALL PSTPSI1(1)
+c.......
+c   only pi+pi- - no J/psi product for trigger estimation
+        CALL PstPsi1(1)
       else
 c                   decay mode of J/psi
 c                      |	
-        CALL PSTPSI1(IGENPAR(1))
+        CALL PstPsi1(IGENPAR(1))
       endif
 c
 c  IGENPAR(1)=0 : no J/psi - only pi+pi-
-C            =1 : J/psi->e+e-
+c            =1 : J/psi->e+e-
 c            =2 : J/psi->mu+mu-
-c
-      CALL GSVERT(VERTEX,0,0,0,0,NVERT)
 c
       NTRACK=0
 
       DO 3111 I=1,4
 c
 C       only pi+pi- - no J/psi product for trigger estimation
-        if ((IGENPAR(1).eq.0).and.(I.eq.3)) GOTO 999
+        if ((IGENPAR(1).eq.0).and.(I.eq.3)) GOTO 500
 
-        KHE=KPS(1,I+1)              ! HEP-code of particle
+        KHE=KfTyp(I+1)              ! HEP-code of particle
 c
-        CALL PSTPCODE1(KHE,KGE)  ! HEP-code -> GEANT-code
+        CALL PstPCode1(KHE,KGE)     ! HEP-code -> GEANT-code
 c
-        PLAB(1)=PPS(1,I+1)
-        PLAB(2)=PPS(2,I+1)
-        PLAB(3)=PPS(3,I+1)
+        PLAB(1)=pPart(1,I+1)
+        PLAB(2)=pPart(2,I+1)
+        PLAB(3)=pPart(3,I+1)
         ITYPE=KGE
-c
-        CALL GSKINE(PLAB,ITYPE,NVERT,0,0,NT)
 c
         NTRACK=NTRACK+1
         IPARTICLE(NTRACK)=ITYPE
-        EPART(NTRACK)=PPS(4,I+1) 
+        EPART(NTRACK)=pPart(4,I+1) 
         PXPART(NTRACK)=PLAB(1) 
         PYPART(NTRACK)=PLAB(2) 
         PZPART(NTRACK)=PLAB(3) 
-        IF(IPRTRK.EQ.1) PRINT 397,IEVENT,I,ITYPE,PLAB,VERTEX
+c
  3111 CONTINUE
 c
-      GOTO 999
+      GOTO 500
 c
-c-------------------------------------------------------------------
+c=======================================================================
 c
  312  CONTINUE
 c
@@ -722,6 +665,7 @@ c
         STOP
       END IF
 c
+      EACT=0.                ! beam energy (special)
       ITYPE = GENPAR(2)+0.5  ! particle type: is it in /PSPIND/ ?
       IF(IFIX(GENPAR(1)).EQ.1) THEN  ! 1-st regime: geantino
         ITYPE=48
@@ -742,16 +686,12 @@ c
       VERTEX(2)=GENPAR(5)
       VERTEX(3)=GENPAR(6)
 c
-      CALL GSVERT(VERTEX,0,0,0,0,NVERT)
-c
       IF(IFIX(GENPAR(1)).EQ.2) ITYPE=IFIX(GENPAR(2))  ! particle type
       PP=GENPAR(3)           ! particle momentum GeV/c
 c
       PLAB(1)=PP*SIN(GENPAR(7)*DEGRAD)*COS(GENPAR(8)*DEGRAD)
       PLAB(2)=PP*SIN(GENPAR(7)*DEGRAD)*SIN(GENPAR(8)*DEGRAD)
       PLAB(3)=PP*COS(GENPAR(7)*DEGRAD)
-c
-      CALL GSKINE(PLAB,ITYPE,NVERT,0,0,NT)
 c
       NTRACK=0
       NTRACK=NTRACK+1
@@ -764,16 +704,11 @@ c
       PYPART(NTRACK)=PLAB(2)
       PZPART(NTRACK)=PLAB(3)
 c
-      IF(IPRTRK.EQ.1) THEN
-        PRINT 397,IEVENT,IPRTRK,ITYPE,PLAB,VERTEX 
-        KGEN=KGEN0
-      END IF
-c
 c  Test prints are being performed from gustep.f
 c
-      GOTO 999
+      GOTO 500
 c
-c-----------------------------------------------------------------------
+c=======================================================================
 c
 c   Generator ee->tau tau (gamma) (KORAL-B)
 c
@@ -802,12 +737,11 @@ c IGENPAR(9)   ITDKRC - (1) switch for bremmstrahlung in tau decay
 c IGENPAR(10)  ITRANS - (1) switch for transverse spin correlations   
 c GENPAR(11)   XK0 - (0.005) soft/hard photon cut-off for QED bremsstr.
 c
+      EACT=GENPAR(1)         ! actual beam energy
 c
       CALL GEN_KORALB(GENPAR(1),IGENPAR(2),IGENPAR(3),IGENPAR(4),
      +          IGENPAR(5),IGENPAR(6),IGENPAR(7),IGENPAR(8),IGENPAR(9),
      +          IGENPAR(10),GENPAR(11),NSTABL,KPART,EVENT)
-c
-      CALL GSVERT(VERTEX,0,0,0,0,NVERT)
 c
       NTRACK=0
 c
@@ -816,10 +750,6 @@ c
         PLAB(1)=EVENT(1,I)	! Px
         PLAB(2)=EVENT(2,I)	! Py
  	PLAB(3)=EVENT(3,I)	! Pz
-c
-        IF(IPRTRK.EQ.1)  PRINT 397,IEVENT,I,ITYPE,PLAB,VERTEX
-c
-        CALL GSKINE(PLAB,ITYPE,NVERT,0,0,NT)
 c
         NTRACK=NTRACK+1
         IPARTICLE(NTRACK)=ITYPE
@@ -833,8 +763,9 @@ c
 c
  3131 CONTINUE 
 c
-      GOTO 999
-c----------------------------------------
+      GOTO 500
+c
+c=======================================================================
 c
 c   Generator ee->2 particles ( ds/dz = A+Bz+Cz^2, z=cos(teta) )
 c   i.e. PS PS: distribution ds/dz ~ 1-z^2              
@@ -844,51 +775,57 @@ c
 c
 c  Input parameters:                                                  
 c                                                                
-c GENPAR(1)   <W> -  average energy of collision (GeV)                
-c GENPAR(2)   SIG_W - sigma of total energy of collision (Gev)
-c IGENPAR(3)  GEANT type of 1-st particle
-c IGENPAR(4   GEANT type of 2-nd particle
-c GENPAR(5)   A
-c GENPAR(6)   B
-c GENPAR(7)   C
+c  GENPAR(1)   <W> -  average energy of collision (GeV)                
+c  GENPAR(2)   SIG_W - sigma of total energy of collision (Gev)
+c  IGENPAR(3)  GEANT type of 1-st particle
+c  IGENPAR(4)  GEANT type of 2-nd particle
+c  GENPAR(5)   A
+c  GENPAR(6)   B
+c  GENPAR(7)   C
 c
-      CALL PSTABC(GENPAR(1),GENPAR(2),IGENPAR(3),IGENPAR(4),GENPAR(5),
-     +             GENPAR(6),GENPAR(7))  
+      GENPAR8(1)=GENPAR(1)
+      GENPAR8(2)=GENPAR(2)
+      GENPAR8(5)=GENPAR(5)
+      GENPAR8(6)=GENPAR(6)
+      GENPAR8(7)=GENPAR(7)
 c
-      CALL GSVERT(VERTEX,0,0,0,0,NVERT)
+      CALL PstAbc(GENPAR8(1),GENPAR8(2),IGENPAR(3),IGENPAR(4),
+     &            GENPAR8(5),GENPAR8(6),GENPAR8(7))  
 c
       NTRACK=0
 c
       DO 3141 I=1,NPS
- 	IF(KPS(3,I).NE.0) goto 3141  ! should be last daughter of int.res.
+ 	IF(IChilds(1,I).NE.0) goto 3141  ! should be last daughter of int.res.
         ITYPE=0
-        KODHEP=KPS(1,I)
+        KODHEP=KfTyp(I)
 c
- 	CALL PSTPCODE1(KODHEP,ITYPE)  ! KF code -> GEANT code
+ 	CALL PstPCode1(KODHEP,ITYPE)  ! KF code -> GEANT code
 c
  	IF(ITYPE.EQ.0) THEN
  	  print *,' GUKINE_T: for gen.314 unknown type of particle',
-     +            KPS(1,I)
+     +            KfTyp(I)
  	 	  STOP
         END IF
 c
- 	PLAB(1)=PPS(1,I)
- 	PLAB(2)=PPS(2,I)
- 	PLAB(3)=PPS(3,I)
+ 	PLAB(1)=pPart(1,I)
+ 	PLAB(2)=pPart(2,I)
+ 	PLAB(3)=pPart(3,I)
 c	                
- 	CALL GSKINE(PLAB,ITYPE,NVERT,0,0,NT)
-c
  	NTRACK=NTRACK+1
  	IPARTICLE(NTRACK)=ITYPE
- 	EPART(NTRACK)=PPS(4,I) 
+ 	EPART(NTRACK)=pPart(4,I) 
  	PXPART(NTRACK)=PLAB(1) 
  	PYPART(NTRACK)=PLAB(2) 
         PZPART(NTRACK)=PLAB(3) 
-	IF(IPRTRK.EQ.1) PRINT 397,IEVENT,NTRACK,ITYPE,PLAB,VERTEX
+c
  3141   CONTINUE
 c
-      GOTO 999
-c----------------------------------------------------------------------
+        EACT=0.             ! actual beam energy in cms (special)
+
+c
+      GOTO 500
+c
+c=======================================================================
 c
  315  CONTINUE
 c
@@ -909,10 +846,11 @@ c  9 - chi_c1 gamma
 c  10 -chi_c2 gamma
 c  11 -eta_c gamma
 c
-c  IGENPAR(2)=1 - include f. s. r. c.
+c  IGENPAR(2)=1,2 - include final state r.c.
 c
       KC_PSI1=LUCOMP(30443)	      ! kc - short code of paticle psi'
       ECM=PMAS(KC_PSI1,1)
+      EACT=ECM/2                      ! actual beam energy in cms
 c
       IF(IGENPAR(1).LT.0.OR.IGENPAR(1).GT.11) THEN ! error
         PRINT 3152,IGENPAR(1)
@@ -922,7 +860,7 @@ c
       IF(IEVENT.EQ.1) THEN
         PRINT 3151,IGENPAR(1),T315(IGENPAR(1)+1),IGENPAR(2),ECM  ! print title
 c
-        IF(IGENPAR(2).EQ.1) CALL PHOINI  ! initialization of PHOTOS
+        IF(IGENPAR(2).GT.0) CALL PHOINI  ! initialization of PHOTOS
 c
       END IF       
 c
@@ -947,7 +885,7 @@ c
 c      CALL LUEDIT(2)	  ! excludes unstable or undetectable particles
 c
 c======
-      IF(IGENPAR(2).EQ.1) THEN  ! f.s. rad. corr. by PHOTOS
+      IF(IGENPAR(2).GT.0) THEN  ! f.s. rad. corr. by PHOTOS
 c
         CALL LUHEPC(1)        ! Conversion from JETSET to /HEPEVT/ standard
 c
@@ -980,9 +918,6 @@ c
 c
       END IF
 c
-c=====
-      CALL GSVERT(VERTEX,0,0,0,0,NVERT)
-c
       NTRACK=0
 c
       DO I=1,N          
@@ -992,34 +927,31 @@ c
 c
         IF(KS.EQ.1.OR.KS.EQ.4) THEN
 c
-        CALL PSTPCODE1(KODHEP,ITYPE)  ! KF code -> GEANT code
+          CALL PstPCode1(KODHEP,ITYPE)  ! KF code -> GEANT code
 c
- 	IF(ITYPE.EQ.0) THEN
-          write(6,*)' Gen.315: unknown type of particle', kk(i,2)
-          STOP
-        END IF
+ 	  IF(ITYPE.EQ.0) THEN
+            write(6,*)' Gen.315: unknown type of particle', kk(i,2)
+            STOP
+          END IF
 c
-        PLAB(1)=P(I,1)
-        PLAB(2)=P(I,2)
-        PLAB(3)=P(I,3)      
-        IF(IPRTRK.EQ.1) PRINT 397,IEVENT,I,ITYPE,PLAB,VERTEX
- 	                                    
-        CALL GSKINE(PLAB,ITYPE,NVERT,0,0,NT)
+          PLAB(1)=P(I,1)
+          PLAB(2)=P(I,2)
+          PLAB(3)=P(I,3)      
 c
-        NTRACK=NTRACK+1
- 	IPARTICLE(NTRACK)=ITYPE
- 	EPART(NTRACK)=EN1
- 	PXPART(NTRACK)=PLAB(1)
- 	PYPART(NTRACK)=PLAB(2)
- 	PZPART(NTRACK)=PLAB(3)
+          NTRACK=NTRACK+1
+ 	  IPARTICLE(NTRACK)=ITYPE
+ 	  EPART(NTRACK)=EN1
+ 	  PXPART(NTRACK)=PLAB(1)
+ 	  PYPART(NTRACK)=PLAB(2)
+ 	  PZPART(NTRACK)=PLAB(3)
 c	
-      END IF
+        END IF
 c
       END DO
 c
-      GOTO 999
+      GOTO 500
 c
-c----------------------------------------------------------------------
+c=======================================================================
 c
  316  CONTINUE   
 c
@@ -1035,44 +967,43 @@ c              (for original GEANT (type 1-32,45-50) - without decays here,
 c               for extended GEANT (type > 50) - decays are performed here)
 c  Photon energy is determined inside generator
 c
-      CALL PSTGAMMAX(GENPAR(1),GENPAR(2),IGENPAR(3))      
+      GENPAR8(1)=GENPAR(1)
+      GENPAR8(2)=GENPAR(2)
 c
-      CALL GSVERT(VERTEX,0,0,0,0,NVERT)
+      CALL PstGammaX(GENPAR8(1),GENPAR8(2),IGENPAR(3))      
 c
       NTRACK=0
 c
       DO 3161 I=1,NPS 
-        IF(KPS(3,I).NE.0) goto 3161  ! should be last daughter of int.res.
+        IF(IChilds(1,I).NE.0) goto 3161  ! should be last daughter of int.res.
         ITYPE=0
-        KODHEP=KPS(1,I)
+        KODHEP=KfTyp(I)
 c
- 	CALL PSTPCODE1(KODHEP,ITYPE)  ! KF code -> GEANT code
+ 	CALL PstPCode1(KODHEP,ITYPE)  ! KF code -> GEANT code
 c
  	IF(ITYPE.EQ.0) THEN
  	  print *,' GUKINE_T: for gen.316 unknown type of particle', 
-     +            KPS(1,I)
+     +            KfTyp(I)
  	  STOP
  	END IF
 c
- 	PLAB(1)=PPS(1,I)
- 	PLAB(2)=PPS(2,I)      
- 	PLAB(3)=PPS(3,I)      
+ 	PLAB(1)=pPart(1,I)
+ 	PLAB(2)=pPart(2,I)      
+ 	PLAB(3)=pPart(3,I)      
 c 	                                    
- 	CALL GSKINE(PLAB,ITYPE,NVERT,0,0,NT)
-c
         NTRACK=NTRACK+1
         IPARTICLE(NTRACK)=ITYPE
-        EPART(NTRACK)=PPS(4,I)
+        EPART(NTRACK)=pPart(4,I)
         PXPART(NTRACK)=PLAB(1)
         PYPART(NTRACK)=PLAB(2)
         PZPART(NTRACK)=PLAB(3)
-        IF(IPRTRK.EQ.1) PRINT 397,IEVENT,NTRACK,ITYPE,PLAB,VERTEX
+c
  3161   CONTINUE
 c
-      GOTO 999
+      GOTO 500
 c
-c----------------------------------------------------------------------
-   
+c=======================================================================
+c
  317  CONTINUE
 c
 c  Generator e+e- -> e+e- + e+e-(mu+ mu-) (J.A.M.Vermaseren)
@@ -1101,10 +1032,10 @@ c
 c  VEPART(4,4) - P,E - parameters of generated particles
 c  ITER,TI1,TS1 - iterations, int., accum. int.
 c
+      EACT=GENPAR(1)  ! actual beam energy in cms
+c
       CALL GEN_VERMAS(GENPAR(1),IGENPAR(2),IGENPAR(3),IGENPAR(4),
      +     IGENPAR(5),GENPAR(6),VEPART,ITER,TI1,TS1,AVGI,SD,CHI2A)
-c
-      CALL GSVERT(VERTEX,0,0,0,0,NVERT)
 c
       NTRACK=0
 c
@@ -1125,15 +1056,13 @@ c
           IF(IGENPAR(2).GE.6) ITYPE=6  ! mu-
         END IF                              
 c                                           
-        CALL GSKINE(PLAB,ITYPE,NVERT,0,0,NT)
-c
         NTRACK=NTRACK+1
         IPARTICLE(NTRACK)=ITYPE
         EPART(NTRACK)=VEPART(I,4)
         PXPART(NTRACK)=PLAB(1)
         PYPART(NTRACK)=PLAB(2)
         PZPART(NTRACK)=PLAB(3)
-        IF(IPRTRK.EQ.1) PRINT 397,IEVENT,NTRACK,ITYPE,PLAB,VERTEX
+c
  3171 CONTINUE
 c
       IF(IEVENT.EQ.NEVENT) THEN
@@ -1144,10 +1073,10 @@ c
         PRINT 3172,INPMAJ,FMAXI
       END IF
 c
-      GOTO 999
+      GOTO 500
 c
-c----------------------------------------------------------------------
-
+c=======================================================================
+c
  318  CONTINUE
 c
 c  Generator e+e- -> e+e- + (tau+ tau-) (J.A.M.Vermaseren)                   
@@ -1168,10 +1097,10 @@ c
 c  VEPART(4,4) - P,E - parameters of generated particles
 c  ITER,TI1,TS1 - iterations, int., accum. int.
 c
+      EACT=GENPAR(1)   ! actual beam energy in cms
+c
       CALL GEN_VERMAS(GENPAR(1),8,IGENPAR(2),IGENPAR(3),  ! 8:2tau, main diag.
      +     IGENPAR(4),GENPAR(5),VEPART,ITER,TI1,TS1,AVGI,SD,CHI2A)
-c
-      CALL GSVERT(VERTEX,0,0,0,0,NVERT)
 c
       NTRACK=0
 c
@@ -1184,15 +1113,13 @@ c
         IF(I.EQ.3) ITYPE=51 ! tau+
         IF(I.EQ.4) ITYPE=52 ! tau-                              
 c	                                    
- 	CALL GSKINE(PLAB,ITYPE,NVERT,0,0,NT)
-c
  	NTRACK=NTRACK+1
  	IPARTICLE(NTRACK)=ITYPE
-        EPART(NTRACK)=PPS(4,I)
+        EPART(NTRACK)=pPart(4,I)
  	PXPART(NTRACK)=PLAB(1)   
  	PYPART(NTRACK)=PLAB(2)   
- 	PZPART(NTRACK)=PLAB(3)   
- 	IF(IPRTRK.EQ.1) PRINT 397,IEVENT,NTRACK,ITYPE,PLAB,VERTEX
+ 	PZPART(NTRACK)=PLAB(3) 
+c  
  3181 CONTINUE
 c
       IF(IEVENT.EQ.NEVENT) THEN
@@ -1203,9 +1130,10 @@ c
  	PRINT 3172,INPMAJ,FMAXI
       END IF
 c
-      GOTO 999
+      GOTO 500
 c
-c----------------------------------------------------------------------
+c=======================================================================
+c
  319  CONTINUE
 c
 c  Generator e+e- -> e+e- + pi+pi- 
@@ -1219,49 +1147,54 @@ c                 2 - Born, lambda=2
 c                 3 - Born(lambda=0) + Born(lambda=2)                           
 c                 4 - Born(l=0)+interf.ampl. |Born(l=2) + f_2(1270)| 
 c                 5 - f_2(1270)                                       
-c   GENPAR(3)-GENPAR(4) - inv. masses (GeV) interval                            
-c   IGENPAR(5) - key  Vector Dom. model: 1 - included                     
-c   GENPAR(6)  - cut on momenter transfer squared t1 (t1<0) for subr. INV 
-c   GENPAR(7)  - cut on momenter transfer squared t2 (t2<0) for subr. INV 
-c   GENPAR(8)  - majoranta for generation events with W=1                 
-c                                                                     
-      CALL PSTGG2PI(GENPAR(1),IGENPAR(2),GENPAR(3),GENPAR(4),IGENPAR(5)
-     &              ,GENPAR(6),GENPAR(7),GENPAR(8))
+c  GENPAR(3)-GENPAR(4) - inv. masses (GeV) interval                            
+c  IGENPAR(5) - key  Vector Dom. model: 1 - included                     
+c  GENPAR(6), GENPAR(7)  - cut on -t1 (>0) for subr. INV 
+c  GENPAR(8), GENPAR(9)  - cut on -t2 (>0) for subr. INV    
+c                                                
+      EACT=GENPAR(1)           ! actual beam energy in cms                     
+      GENPAR8(1)=GENPAR(1)
+      GENPAR8(3)=GENPAR(3)
+      GENPAR8(4)=GENPAR(4)
+      KVDM=IGENPAR(5)     
+      GENPAR8(6)=GENPAR(6)
+      GENPAR8(7)=GENPAR(7)
+      GENPAR8(8)=GENPAR(8)
+      GENPAR8(9)=GENPAR(9)
 c
-      CALL GSVERT(VERTEX,0,0,0,0,NVERT)
+      CALL PstGg2pi(GENPAR8(1),IGENPAR(2),GENPAR8(3),GENPAR8(4),KVDM,
+     &       GENPAR8(6),GENPAR8(7),GENPAR8(8),GENPAR8(9))
 c
       NTRACK=0
 c
       DO I=1,4
-        PLAB(1)=PPS(1,I)
-        PLAB(2)=PPS(2,I)
-        PLAB(3)=PPS(3,I)
+        PLAB(1)=pPart(1,I)
+        PLAB(2)=pPart(2,I)
+        PLAB(3)=pPart(3,I)
 c             
         IF(I.EQ.1) ITYPE=3  ! e-
         IF(I.EQ.2) ITYPE=2  ! e+
         IF(I.EQ.3) ITYPE=9  ! pi-
         IF(I.EQ.4) ITYPE=8  ! pi+
 c                                
-        CALL GSKINE(PLAB,ITYPE,NVERT,0,0,NT)
-c
         NTRACK=NTRACK+1
         IPARTICLE(NTRACK)=ITYPE
-        EPART(NTRACK)=PPS(4,I)
+        EPART(NTRACK)=pPart(4,I)
         PXPART(NTRACK)=PLAB(1)   
         PYPART(NTRACK)=PLAB(2)   
-        PZPART(NTRACK)=PLAB(3)   
-        IF(IPRTRK.EQ.1) PRINT 397,IEVENT,NTRACK,ITYPE,PLAB,VERTEX
+        PZPART(NTRACK)=PLAB(3)
+c   
       END DO
 c
       IF(IEVENT.EQ.NEVENT) THEN          ! last event
-c
         ALT=NEVENT/TSEC
-        PRINT 400,TSEC,ERSEC,ALT,FM,NGT
+        PRINT 402,TSEC,ERSEC,ALT
       END IF
 c
-      GOTO 999
+      GOTO 500
 c
-c----------------------------------------------------------------------
+c=======================================================================
+c
  320  CONTINUE   !  KMD-generator (MCGPJ)
 c
 c  KMD-generator (used e+e- -> e+e-, mu+mu-, tau+tau- with r.c.)
@@ -1277,6 +1210,7 @@ c  GENPAR(3)  - accuracy of cr.sec in nb
 c  GENPAR(4)  - min. angle with axis, degrees
 c  GENPAR(5)  = 0/1 - calculation outside/inside resonance   
 c
+      EACT=GENPAR(1)            ! actual beam energy in cms
       EBEAM=GENPAR(1)*1000      ! Beam energy, GeV ->MeV
       IPROC=IGENPAR(2)-1        ! now 0-2
       IF(IPROC.EQ.2) IPROC=5    
@@ -1291,7 +1225,7 @@ c                                 are not valid at our energy
 c
       IF(IEVENT.EQ.1) THEN  ! first event - initialization of generator
 c
-        PRINT 324,IGENPAR(2),TEXT320(IGENPAR(2)),GENPAR(1),GENPAR(3),
+        PRINT 3204,IGENPAR(2),TEXT320(IGENPAR(2)),GENPAR(1),GENPAR(3),
      &            GENPAR(4),IGENPAR(5)
 
         CALL INIT_PRIME_GEN(IPROC,EBEAM,ACC,ANGMIN,IGENPAR(5)) 
@@ -1299,20 +1233,16 @@ c
 c
       CALL MAKEEVENT(QQ,ISORT,NPRT)  ! event of MCGPJ
 c
-      CALL GSVERT(VERTEX,0,0,0,0,NVERT)
-c
       NTRACK=0
 c
-      DO 322 I=1,NPRT                     ! cycle on particles from MCGPJ
+      DO 422 I=1,NPRT                     ! cycle on particles from MCGPJ
 c
-        IF(ISORT(I).EQ.1.AND.QQ(4,I).LE.0.) GOTO 322  ! P(photon) <= 0 
+        IF(ISORT(I).EQ.1.AND.QQ(4,I).LE.0.) GOTO 422  ! P(photon) <= 0 
 c
         PLAB(1)=QQ(4,I)*QQ(1,I)     ! Px in GeV
         PLAB(2)=QQ(4,I)*QQ(2,I)
         PLAB(3)=QQ(4,I)*QQ(3,I)
         ITYPE=ISORT(I) ! 51, 52: tau+-  should decay in kedr_dec.dat
-c
-       CALL GSKINE(PLAB,ITYPE,NVERT,0,0,NT)
 c
         NTRACK=NTRACK+1
         IPARTICLE(NTRACK)=ITYPE           ! GEANT-code:1,2,...,51,52
@@ -1320,8 +1250,8 @@ c
         PXPART(NTRACK)=PLAB(1)        
         PYPART(NTRACK)=PLAB(2) 
         PZPART(NTRACK)=PLAB(3) 
-        IF(IPRTRK.EQ.1) PRINT 397,IEVENT,NTRACK,ITYPE,PLAB,VERTEX
- 322    CONTINUE
+c
+ 422    CONTINUE
 c
       IF(IEVENT.EQ.NEVENT) THEN         ! last event
 c
@@ -1331,39 +1261,40 @@ c        ALT=NEVENT/TSEC
 c        PRINT 400,TSEC,ERSEC,ALT,FM,NGT
       END IF
 c
-      GOTO 999
+      GOTO 500
 c
-c----------------------------------------------------------------------
+c=======================================================================
+c
  321  CONTINUE   !  Bremmstrahlung-generator 
 c
-c  Generator  e+e- -> e+e- gamma in lowest order with
+c  Generator  e+e- -> e+e- gamma (in one dir.) in lowest order with
 c  account of effect of impact parameters limitation
 c
 c  Input:
 c
-c  GENPAR(1)  - Energy of beam in GeV (<7.5 GeV)
+c  GENPAR(1)  - energy of beam in GeV (0.1 - 7.5 GeV)
 c  GENPAR(2)  - photon min. energy (>0.0015 GeV)
 c  GENPAR(3)  - horizontal beam size, cm
 c  GENPAR(4)  - vertical beamsize, cm
-c  GENPAR(5)  - horizontal beta-function, cm
-c  GENPAR(6)  - vertical beta-function, cm
+c  GENPAR(5)  - horiz. angular size, Rad
+c  GENPAR(6)  - vertical angular size, Rad
 c  IGENPAR(7) - phot. direction (0 -both, 1 - in e- dir., 2 - in e+ dir.)         
 c  IGENPAR(8) - 1 - include impact parameters limitation
 c  IGENPAR(9) - 1 - include beam angular spread 
-c  GENPAR(10) - majoranta, if <=0, estimation in program
+c  GENPAR(10) - sigma of Gaussian beam energy spred in GeV
 c
-      EBEAM=GENPAR(1)
+      EACT=0.              ! actual beam energy (special)
+      EBEAM=GENPAR(1)      ! beam energy
+      WIDTH=GENPAR(10)     ! its sigma      
       OMEMIN=GENPAR(2)
       HSIGB=GENPAR(3)
       VSIGB=GENPAR(4)
-      HBET=GENPAR(5)
-      VBET=GENPAR(6)
-      FMAX=GENPAR(10)
+      THSIGB=GENPAR(5)
+      TVSIGB=GENPAR(6)
 c
-      CALL PSTBREM(EBEAM,OMEMIN,HSIGB,VSIGB,HBET,VBET,IGENPAR(7),
-     &  IGENPAR(8),IGENPAR(9),FMAX,ELEFIN,PHOFIN,SECBREM,ERRBREM,WMAX) 
-c
-      CALL GSVERT(VERTEX,0,0,0,0,NVERT)
+      CALL PstBrem(EBEAM,WIDTH,OMEMIN,HSIGB,VSIGB,THSIGB,TVSIGB,
+     &             IGENPAR(7),IGENPAR(8),IGENPAR(9),ELEFIN,PHOFIN,
+     &             SECBREM,ERRBREM) 
 c
       NTRACK=0
 c
@@ -1384,9 +1315,9 @@ c
       END IF
 c
       ITYPE=3
-      IF(ELEFIN(3).LT.0.) ITYPE=2
+      IF(ELEFIN(3).LT.0.) ITYPE=2   ! both directions
 c
- 3211 CALL GSKINE(PLAB,ITYPE,NVERT,0,0,NT)
+ 3211 CONTINUE
 c
       NTRACK=NTRACK+1
       IPARTICLE(NTRACK)=ITYPE
@@ -1394,7 +1325,6 @@ c
       PXPART(NTRACK)=ELEFIN(1)
       PYPART(NTRACK)=ELEFIN(2)
       PZPART(NTRACK)=ELEFIN(3)
-      IF(IPRTRK.EQ.1) PRINT 397,IEVENT,NTRACK,ITYPE,PLAB,VERTEX
 c
 c  Bremsstrahlung photon
 c
@@ -1404,45 +1334,172 @@ c
 c
       ITYPE=1
 c
-      CALL GSKINE(PLAB,ITYPE,NVERT,0,0,NT)
-c
       NTRACK=NTRACK+1
       IPARTICLE(NTRACK)=ITYPE
       EPART(NTRACK)=PHOFIN(4)
       PXPART(NTRACK)=PHOFIN(1)
       PYPART(NTRACK)=PHOFIN(2)
       PZPART(NTRACK)=PHOFIN(3)
-      IF(IPRTRK.EQ.1) PRINT 397,IEVENT,NTRACK,ITYPE,PLAB,VERTEX
 c
       IF(IEVENT.EQ.NEVENT) THEN           ! last event
         ERRBREM=ERRBREM/SECBREM*100
-        PRINT 3212,SECBREM,ERRBREM,WMAX,(1.*NEVENT)/SECBREM
+        PRINT 3212,SECBREM,ERRBREM,(1.*NEVENT)/SECBREM
+      END IF
+c
+      GOTO 500
+c
+c=======================================================================
+c
+ 323  CONTINUE   !  BabaYaga 3.5 generator
+c
+c  Generator  e+e- -> e+e-, mu+mu-, gam gam, pi+pi- с радпоправками
+c
+c  Input:
+c
+c  GENPAR(1)  - energy of beam in GeV (0.5 - 5 GeV)
+c  IGENPAR(2) - channel: 1 - e+e- (n gam),   2 - mu+mu- (n gam),
+c                        3 - mu+mu- (n gam), 4 - pi+pi- (n gam)
+c  GENPAR(3)  - min. energy of particle of pair, GeV
+c  GENPAR(4)  - minimum angle with beam axis, deg.
+c  GENPAR(5)  - maximum angle of acollinearity, deg.
+c  IGENPAR(6)  =1/0 - 1: include hadr. resonances in vacuum polarization
+c  GENPAR(7) - maximum weight, if <=0 - determined in the generator                
+c
+      EBEAM=GENPAR(1)
+      EMIN=GENPAR(3)
+      ZMAX=GENPAR(5)      
+      THMIN=GENPAR(4)   ! minimum angle with beam axis, deg.
+      IRES=IGENPAR(6)   ! inclusion of resonances in VP
+      THMAX=180.-THMIN  ! maximum angle with beam axis, deg.
+      FMAX=GENPAR(7)
+c
+      CALL GEN_BBYGA35(IGENPAR(2),EBEAM,THMIN,THMAX,EMIN,ZMAX,IRES,FMAX)
+c
+      IF(IGENPAR(2).EQ.1) IPARTICLE(1)=2 ! final state: e+e-
+      IF(IGENPAR(2).EQ.2) IPARTICLE(1)=5 ! mu+ mu-
+      IF(IGENPAR(2).EQ.3) IPARTICLE(1)=1 ! gam gam
+      IF(IGENPAR(2).EQ.4) IPARTICLE(1)=8 ! pi+ pi-    
+      PXPART(1)=BBYEVENT(17)
+      PYPART(1)=BBYEVENT(18)
+      PZPART(1)=BBYEVENT(19)
+      EPART(1)=BBYEVENT(20)
+      IF(IGENPAR(2).EQ.1) IPARTICLE(2)=3 ! final state: e+e-
+      IF(IGENPAR(2).EQ.2) IPARTICLE(2)=6 ! mu+ mu-
+      IF(IGENPAR(2).EQ.3) IPARTICLE(2)=1 ! gam gam
+      IF(IGENPAR(2).EQ.4) IPARTICLE(2)=9 ! pi+ pi-
+      PXPART(2)=BBYEVENT(21)
+      PYPART(2)=BBYEVENT(22)
+      PZPART(2)=BBYEVENT(23)
+      EPART(2)=BBYEVENT(24)
+c
+      IMAX=BBYEVENT(25)+0.1     ! number of gammas
+      NTRACK=2
+      IF(IMAX.EQ.0) GOTO 3232
+c
+      DO I=1,IMAX
+        NTRACK=NTRACK+1
+        I1=4*(NTRACK-3)
+        IPARTICLE(NTRACK)=1
+        PXPART(NTRACK)=BBYEVENT(I1+1)
+        PYPART(NTRACK)=BBYEVENT(I1+2)
+        PZPART(NTRACK)=BBYEVENT(I1+3)
+        EPART(NTRACK) =BBYEVENT(I1+4)
+      END DO
+c
+ 3232 IF(IEVENT.EQ.NEVENT) THEN           ! last event
+        Print *,' '
+        PRINT 3230
+        Print *,'  --------------- Results of simulation ------------'
+        Print *,' '
+
+        IF(CTRL.gt.0) THEN
+          Print *,' Warning: Maximum weight too small:'
+          Print *,' Maximum weight was exceeded ',CTRL,' times'
+          PRINT *,' Per NCALLS=',XNCALLS,' (',CTRL/XNCALLS*100,')%'
+        END IF
+
+        PRINT 3235, SDMAX,SDMAXR
+        IF(CTRL.EQ.0) print *,' NCALLS=',XNCALLS
+        PRINT *,' Efficiency=',(100.*NEVENT)/XNCALLS,' %'
+        PRINT 3234,SEZ,ERR,WSEZ,WERR ! unweighted and weighted cr. sections                                       
+        PRINT 3230
       END IF
 c        
-c----------------------------------------------------------------------
+      GOTO 500
 c
- 
-cXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
- 
- 999  CONTINUE 
- 
+c=======================================================================
 c
- 324  FORMAT(/,1x,60(1H*),//,
-     &   ' Generator 320, process=',I2,': e+e- -> ',A15,/,
-     &   ' Ebeam=',F8.4,' GeV',/,
-     &   ' Acc of cr. sec.=',F8.4,' nb',/,
-     &   ' Min. angle with axis=',F8.4,' Deg.',/,
-     &   ' Hadron v.p. corr. inclusion =',I2,': 0-all/1-without res.'
-     &    ,//,1x,60(1H*),/)
- 397  FORMAT(I5,2I4,3F10.6,3F10.4)
+ 324  CONTINUE   !  e+e- -> e+e- + PS(pi0, eta, eta', eta_c, eta_b)
+c  Input:
+c
+c  GENPAR(1)  - energy of beam in GeV 
+c  IGENPAR(2) - KVMDM (1/0)
+c  IGENPAR(3) - IR=1-pi0, 2-eta, 3-eta', 4-eta_c, 5-eta_b  
+c  IGENPAR(4) - IMODE - decay mode
+c  IGENPAR(5) - ITAG=1-e+, 2-e-, 3- e+ or e- (tagged particle)  
+c  IGENPAR(6) - IRAD=1/0 (include or no r.c. to tagged particle) 
+c  GENPAR(7)  - Rmax - maximum energy of ISR photon in Ebeam units 
+c  GENPAR(8)  - Kmin - minimum energy of ISR photon in GeV 
+c  GENPAR(9)  - Q1Smin (>0) 
+c  GENPAR(10)  - Q1Smax (>0)
+c  GENPAR(11) - Q2Smin (>0)
+c  GENPAR(12) - Q2Smax (>0)
+c  GENPAR(13) - maximum weight, if <=0 - determined in the generator
+c
+      DO I=1,13
+        GENPAR8(I)=GENPAR(I)
+      END DO
+c
+      EBEAM=GENPAR8(1)
+      KVDM=IGENPAR(2)
+      FMAX=GENPAR8(13)
+c
+      IF(IEVENT.EQ.1) THEN
+        CAll GGRESINI(EBEAM,IGENPAR(3),IGENPAR(4),KVDM,IGENPAR(5),
+     &   IGENPAR(6),FMAX,GENPAR8(7),GENPAR8(9),GENPAR8(10),
+     &   GENPAR8(11),GENPAR8(12),GENPAR8(8)) 
+      END IF
+c   
+      CALL gen_GgResRc(EBEAM,IGENPAR(5),GENPAR8(9),GENPAR8(10),
+     &                 GENPAR8(11),GENPAR8(12))
+c
+      CALL GGRSTAB(NSTAB324,TYPE324,PPART324)   ! stable particles of event
+c
+      NTRACK=0
+c
+      DO 3241 I=1,NSTAB324
+        NTRACK=NTRACK+1
+        KHE=TYPE324(I)            ! HEP-code of particle
+c
+        CALL PstPCode1(KHE,KGE)   ! HEP-code -> GEANT-code
+c
+        IPARTICLE(NTRACK)=KGE
+        PXPART(NTRACK)=PPART324(1,I)
+        PYPART(NTRACK)=PPART324(2,I)
+        PZPART(NTRACK)=PPART324(3,I)
+        EPART(NTRACK) =PPART324(4,I)
+ 3241 CONTINUE
+c
+      IF(IEVENT.EQ.NEVENT) THEN           ! last event
+c 
+        CALL GGRESEND                     ! end of simulation
+c
+      END IF
+
+ 500  CONTINUE
+c
+cXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+c
+c
  398  FORMAT(//,' Event',/)
  395  FORMAT(1x,i3,' P=',3f10.3,' typ=',i2)
  400  FORMAT(/,80(1h*),//,' Cross section =',1pe9.2,' +-',1pe9.2,' nb',/
      &       ,' L*t= ',1pe9.2,' 1/nb',/,
-     &       
      &       ' Fmax =',1pe9.2,/, ' NGT =',I3,//,80(1h*))
  401  FORMAT(/,80(1h*),//,
      +       ' Fmax =',1pe9.2,/, ' NGT =',I3,//,80(1h*))
+ 402  FORMAT(/,80(1h*),//,' Cross section =',1pe9.2,' +-',1pe9.2,' nb',/
+     &       ,' L*t= ',1pe9.2,' 1/nb',//,80(1h*))
  3022 FORMAT(/,' Fractions of st- and dt-events: ',2F6.3,/)  
  3023 FORMAT(/,' L*t=',1pE12.3,' 1/nb',/)
  3121 FORMAT(/,1x,60(1H*),//,
@@ -1470,9 +1527,28 @@ c
      2 ' Accum. res.: Int=',1PD10.3,' +-',
      3 1PD10.3,' nb  chi**2 per int=',0pF10.3,/)
  3201 FORMAT(/,' Error in data for Generator 320, process=',I2)
+ 3204 FORMAT(/,1x,60(1H*),//,
+     &   ' Generator 320, process=',I2,': e+e- -> ',A15,/,
+     &   ' Ebeam=',F8.4,' GeV',/,
+     &   ' Acc of cr. sec.=',F8.4,' nb',/,
+     &   ' Min. angle with axis=',F8.4,' Deg.',/,
+     &   ' Hadron v.p. corr. inclusion =',I2,': 0-all/1-without res.'
+     &    ,//,1x,60(1H*),/)
  3212 FORMAT(/,' Sigma =',1pE10.3,' cm^2 (+-',0pF6.3,'%) : ',
      &         'cross-section for generated events',//,
-     &         ' Maximum weight=',1pE10.2,//,
      &         ' L*t = ',1pE10.2,' 1/cm^2',/)
-      RETURN 
+ 3230 FORMAT(/,1x,60(1H*),/)
+c
+ 3231 FORMAT(' Ebeam =',F7.4,' GeV',/,
+     &   ' Minimum angle with axis =',F8.2,' deg.',/,
+     &   ' Maximum acollinearity =',F9.2,' deg.',/,
+     &   ' Resonances inclusion in VP =',I2)
+ 3233 FORMAT(' PS photons cuts: E >',F7.4,' GeV, theta-min =',F6.2,
+     &' deg.')
+ 3234 FORMAT(/,'  Unweighted cross section =',1pE12.3,' +-',
+     &          1pE10.3,' nb',/,
+     &         '  Weighted cross section   =',1pE12.3,' +-',
+     &          1pE10.3,' nb')
+ 3235 FORMAT('  Used and real maximum weight:',2(1pE12.3))
+
       END

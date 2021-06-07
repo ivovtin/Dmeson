@@ -5,7 +5,7 @@ filename='/home/ovtin/development/Dmeson/runsDmeson/runs_list_Psi3770_Psi2_2016-
 echo Start rewriting
 
 while read run; do
-    if [ $run -ge 23453 ]; then
+    if [ $run -ge 26152 ]; then
       echo "Stop"
       break
     fi

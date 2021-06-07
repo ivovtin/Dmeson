@@ -64,7 +64,7 @@ int main(int argc, char* argv[])
 	    {
 		std::istringstream i_str1(line1);
 		i_str1 >> run;
-		if( run < 23453 )
+		if( run < 26152 )
 		{
 		    cout << run << endl;
 		    runs.push_back(run);
@@ -78,7 +78,7 @@ int main(int argc, char* argv[])
     TH2D* hDCnoise1 = new TH2D("DC noise, 20 wires","DC noise, 20 wires",3042,1454284800,1514592000,15,0,15);
     TH2D* hDCnoise2 = new TH2D("DC noise, 100 wires","DC noise, 100 wires",3042,1454284800,1514592000,15,0,15);
     */
-    TH2D* hDCnoise1 = new TH2D("DC noise, 20 wires","DC noise, 20 wires",3042,23206,26248,15,0,15);
+    TH2D* hDCnoise1 = new TH2D("DC noise, 20 wires","DC noise, 20 wires",3042,23206,26248,25,0,25);
     TH2D* hDCnoise2 = new TH2D("DC noise, 100 wires","DC noise, 100 wires",3042,23206,26248,15,0,15);
 
     for (vector<int>::iterator it = runs.begin(); it != runs.end(); ++it )
@@ -98,7 +98,8 @@ int main(int argc, char* argv[])
 		    //cout<<run<<"\t"<<Nev<<"\t"<<N20w<<endl;
 		    //pr1[cnt]->Fill(key,Ksigma);
                     hDCnoise1->Fill(*it,N20w);
-                    hDCnoise2->Fill(*it,N100w);
+		    hDCnoise2->Fill(*it,N100w);
+                    //if(N20w>=8.0) cout<<*it<<"\t"<<N20w<<endl;
 		}
 	    }
 	}
@@ -123,18 +124,18 @@ int main(int argc, char* argv[])
     hDCnoise1->GetXaxis()->SetTitle("Runs");
     hDCnoise1->GetYaxis()->SetTitle("DC noise, %");
     hDCnoise1->Draw("");
+    /*
     TLine l;
     l.SetLineColor(kRed);
     l.SetLineWidth(3);
-    l.DrawLine(23466., 0., 23466., 15.); //1
-    l.DrawLine(23694., 0., 23694., 15.); //2
-    l.DrawLine(24635., 0., 24635., 15.); //3
-    l.DrawLine(24870., 0., 24870., 15.); //4
-    l.DrawLine(25198., 0., 25198., 15.); //5
-    l.DrawLine(25567., 0., 25567., 15.); //6
-    l.DrawLine(26151., 0., 26151., 15.); //7
+    l.DrawLine(23560., 0., 23560., 25.); //1
+    l.DrawLine(23943., 0., 23943., 25.); //2
+    l.DrawLine(24870., 0., 24870., 25.); //3
+    l.DrawLine(25198., 0., 25198., 25.); //4
+    l.DrawLine(25524., 0., 25524., 25.); //5
+    l.DrawLine(25687., 0., 25687., 25.); //6
+    */
     gPad->Modified();
-
     c.cd(2);
 
     hDCnoise2->SetMarkerStyle(7);
@@ -145,34 +146,22 @@ int main(int argc, char* argv[])
     hDCnoise2->GetXaxis()->SetTitle("Runs");
     hDCnoise2->GetYaxis()->SetTitle("DC noise, %");
     hDCnoise2->Draw("");
-    TLine l2;
+    /*TLine l2;
     l2.SetLineColor(kRed);
     l2.SetLineWidth(3);
-    l2.DrawLine(23466., 0., 23466., 15.); //1
-    l2.DrawLine(23694., 0., 23694., 15.); //2
-    l2.DrawLine(24635., 0., 24635., 15.); //3
-    l2.DrawLine(24870., 0., 24870., 15.); //4
-    l2.DrawLine(25198., 0., 25198., 15.); //5
-    l2.DrawLine(25567., 0., 25567., 15.); //6
-    l2.DrawLine(26151., 0., 26151., 15.); //7
+    l2.DrawLine(23560., 0., 23560., 15.); //1
+    l2.DrawLine(23943., 0., 23943., 15.); //2
+    l2.DrawLine(24870., 0., 24870., 15.); //3
+    l2.DrawLine(25198., 0., 25198., 15.); //4
+    l2.DrawLine(25524., 0., 25524., 15.); //5
+    l2.DrawLine(25687., 0., 25687., 15.); //6
+    */
     gPad->Modified();
 
     c.Update();
     c.Print(result + "/" + "DCnoise.png");
     c.Print(result + "/" + "DCnoise.eps");
+    c.Print(result + "/" + "DCnoise.root");
 
     cout << "End of program" << endl;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

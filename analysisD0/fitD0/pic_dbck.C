@@ -13,7 +13,7 @@
 
   TNtuple nt("nt","NTuple","mbc:de:dp");
 
-  FILE* file = fopen("dat/kp_dbck.dat","r");
+  FILE* file = fopen("dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/kp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0.dat","r");
   while (!feof(file)) {
     double mbc,de,dp;
     if (fscanf(file,"%lf %lf %lf", &mbc,&de,&dp) == 3) {
@@ -25,7 +25,7 @@
 
   TNtuple nt2("nt2","NTuple","mbc:de:dp");
 
-  file = fopen("gen/dbck_sim.gen","r");
+  file = fopen("gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/dbck_sim_S1.0_A6.0_Z0.0.gen","r");
   while (!feof(file)) {
     double mbc,de,dp;
     if (fscanf(file,"%lf %lf %lf", &mbc,&de,&dp) == 3) {
@@ -155,6 +155,6 @@
 //  c.cd(9);
 //  nt2->Draw("mbc:de");
 
-  c.Print(KEDR+"dbck.eps");
-  c.Print(KEDR+"dbck.png");
+  c.Print(KEDR+"dbck_atc_S1.0_A6.0_Z0.0.eps");
+  c.Print(KEDR+"dbck_atc_S1.0_A6.0_Z0.0.png");
 }

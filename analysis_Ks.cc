@@ -42,6 +42,7 @@
 #include "KaFramework/mubr.h"
 #include "KrAtc/AtcHit.hh"
 
+#include "VDDCRec/kdcswitches.h"
 #include "VDDCRec/kdcvd.h"
 #include "VDDCRec/kvd.h"
 #include "VDDCRec/kdcpar.h"
@@ -490,7 +491,8 @@ int analyse_event()
     float EMinPhot=progpar.min_cluster_energy;
     double WTotal=2.*beam_energy;
     if( kedrrun_cb_.Header.RunType == 64 ) {   //for MC
-	WTotal=2*1886.75;
+	//WTotal=2*1886.75;
+	WTotal=2*1887.0;
     }
 
     ebeam=WTotal/2.;
@@ -534,7 +536,7 @@ int analyse_event()
 		if( tCh2(t2)>progpar.max_tchi2 )  continue;
 		if( tHits(t2)<progpar.min_Nhits )  continue;
 
-		if (tP(t1)+tP(t2) < 380. || tP(t1)+tP(t2) > 620 ) continue;
+		//if (tP(t1)+tP(t2) < 380. || tP(t1)+tP(t2) > 620 ) continue;
 
 		ks.d1 = d1;
 		ks.d2 = d2;
@@ -835,6 +837,10 @@ int main(int argc, char* argv[])
 //----------------- Configure kframework -----------------//
 	//Set kframework signal handling
 	kf_install_signal_handler(1);
+
+        kdcswitches_.kNoiseReject=3;   //Cut for DC noise  (0 - not cut, 1 - standart, 2 - soft, 3 - hard)
+        //kdcswitches_.KemcAllowed=-1;   //off use strips for track reconstruction
+	kdcswitches_.KemcAllowed=0;
 
 	kf_MCCalibRunNumber(progpar.simOn,progpar.MCCalibRunNumber,progpar.MCCalibRunNumberL,progpar.NsimRate,progpar.Scale,progpar.Ascale,progpar.Zscale);
 

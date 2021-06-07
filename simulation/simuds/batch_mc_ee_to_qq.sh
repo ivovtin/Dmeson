@@ -18,17 +18,20 @@
 #$ -soft
 #$ -l time=24:00:00
 ##$ -q remote
-#$ -q extralong
-#$ -m beas
-#$ -M ovtin.ivan@gmail.com
+##$ -q extralong
+#$ -q 6h
+##$ -q day
+##$ -m beas
+##$ -M ovtin.ivan@gmail.com
 
-#$ -t 1-3
+#$ -t 1-12
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]
 
 #start the job
-$HOME/3.0.0/bin/ks < $HOME/development/Dmeson/simulation/simuds/mccards/mc.cards.ee_to_DD_"$i" > /dev/null
+##$HOME/3.0.0/bin/ks < $HOME/development/Dmeson/simulation/simuds/mc.cards.ee_to_qq_"$i" > /dev/null
+$HOME/development/bin/ks < $HOME/development/Dmeson/simulation/simuds/mc.cards.ee_to_qq_"$i" > /dev/null
 status=$?
 if [ $status != 0 ]; then
   echo "Program exited with status $status"

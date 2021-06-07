@@ -2,6 +2,7 @@
 #include "TFile.h"
 #include "TDirectory.h"
 #include "TCanvas.h"
+#include <TSystem.h>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -19,44 +20,35 @@ int Usage(string status)
         exit(0);
 }
 
-//double msf = 1.;        //Sim
-double msf = 1.030;  //2004
-//double msf = 1.017;    //2016-17
-//======
-//double msf = 1.040;  //2004
-//double msf = 1.037;    //2016-17
-double xcorr = 0.033;
-//double scorr = 0.023;
-double scorr = 0.010;
+double msf = 1.;        //default
 
-double pcorr(double p, int type, double ran)
+double pcorr(double p, int type)
 {
     double ms, dedx, k;
 
     if (type==1) {    //pion
-	ms = 134.7;
-	dedx = 1.74;
+	ms = 148.71;
+	dedx = 1.3223;
 	k = 0.;
     }
-    else if(type==2)
-    { //kaon
-	ms = 228.;
-	dedx = 3.095;
+    else if(type==2)  //kaon
+    {
+	ms = 573.35;
+	dedx = 0.9021;
 	k = 0.;
     }
     else{                //electron
 	ms = 0.;
-	dedx = 1.24;
-	k = 0.29286e-2;
+	dedx = 1.57;
+	k = 0.748772e-2;
     }
     double gamma = sqrt(ms*ms+p*p)/ms;
 
     double beta = sqrt(1.-1./gamma/gamma);
 
-    //double pc = p+1.*dedx/pow(beta,3) + k*p;
-    double pc = p;
+    double pc = p+1.*dedx/pow(beta,3) + k*p;
 
-    pc = pc*fabs(msf)*(1.+ran*sqrt(scorr*scorr+pow(xcorr*p/1000.,2)));
+    pc = pc*fabs(msf);
 
     return fabs(pc);
 }
@@ -116,26 +108,30 @@ int main(int argc, char* argv[])
     TString list_badruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/badruns";
     if( key==0 ){           //exp 2016-17
 	fnameout=TString::Format("exp_kspp_data_%d.root",key).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/Kspp/data/";
-        //fnameout=TString::Format("exp_kspp_data_withDCnoise_%d.root",key).Data();
-        //KEDR = "/home/ovtin/public_html/outDmeson/Kspp/data_withDCnoise/";
-	//fnameout=TString::Format("exp_kspp_data_woDCnoise_%d.root",key).Data();
-        //KEDR = "/home/ovtin/public_html/outDmeson/Kspp/data_woDCnoise/";
-	//fnameout=TString::Format("exp_kspp_data_Run1-171_%d.root",key).Data();
-        //KEDR = "/home/ovtin/public_html/outDmeson/Kspp/dataRun1-171/";
+        KEDR = "/home/ovtin/public_html/outDmeson/Kspp/data_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_msf1.0150/";
 	list_badruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/badruns";
+        msf = 1.0150;    //2016-17
+        //msf = 1.0155;    //2016-17
     }
     else if (key==1)        //exp 2004
     {
 	fnameout=TString::Format("exp_kspp_data2004_%d.root",key).Data();
 	KEDR = "/home/ovtin/public_html/outDmeson/Kspp/data2004/";
         list_badruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/badruns";
+        //msf = 1.030;  //2004
+        msf = 1.035;  //2004
     }
     else if (key==2)        //sig
     {
 	fnameout=TString::Format("sim_kspp_sig_%d.root",key).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/Kspp/simulation/";
+        KEDR = "/home/ovtin/public_html/outDmeson/Kspp/simulation_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0/";
+        msf = 1.0;
+        //msf = 1.014;
     }
+
+    gSystem->Exec("mkdir " + KEDR);
+    gSystem->Exec("cp /store/users/ovtin/outDmeson/demo/index.php " + KEDR);
+
     cout<<fnameout<<endl;
     fout = new TFile(fnameout,"RECREATE");
 
@@ -259,6 +255,7 @@ int main(int argc, char* argv[])
 
 	if(
 	   ks.vrtntrk>=ntrk
+           && ((ks.p1+ks.p2)>380 || (ks.p1+ks.p2)<620)
 	   && ks.p1>min_p && ks.p1<max_p && ks.p2>min_p && ks.p2<max_p
 	   && ks.chi2t1<max_chi2 && ks.chi2t2<max_chi2
 	   && ks.nhitst1>=min_nhits && ks.nhitst1<=max_nhits
@@ -266,100 +263,6 @@ int main(int argc, char* argv[])
            && ks.rr1>rrCut && ks.rr2>rrCut
 	   && fabs(ks.zip1)<zCut && fabs(ks.zip2)<zCut
 	   && -1.<abs(ks.zip1-ks.zip2)<3.
-           /*
-           && (ks.Run!=23307 && ks.Run!=23313 && ks.Run!=23342 && ks.Run!=23353 && ks.Run!=23423
-               && ks.Run!=23429 && ks.Run!=23466 && ks.Run!=23467 && ks.Run!=23470 && ks.Run!=23562
-               && ks.Run!=23564 && ks.Run!=23626 && ks.Run!=23632 && ks.Run!=23635 && ks.Run!=23636
-               && ks.Run!=23642 && ks.Run!=23643 && ks.Run!=23656 && ks.Run!=23658 && ks.Run!=23663
-               && ks.Run!=23665 && ks.Run!=23666 && ks.Run!=23667 && ks.Run!=23668 && ks.Run!=23669
-               && ks.Run!=23674 && ks.Run!=23675 && ks.Run!=23677 && ks.Run!=23678 && ks.Run!=23679
-               && ks.Run!=23688 && ks.Run!=23689 && ks.Run!=23691 && ks.Run!=23693 && ks.Run!=23694
-               && ks.Run!=23695 && ks.Run!=23696 && ks.Run!=23702 && ks.Run!=23703 && ks.Run!=23704
-               && ks.Run!=23706 && ks.Run!=23707 && ks.Run!=23708 && ks.Run!=23709 && ks.Run!=23710
-               && ks.Run!=23712 && ks.Run!=23713 && ks.Run!=23714 && ks.Run!=23721 && ks.Run!=23722
-               && ks.Run!=23723 && ks.Run!=23724 && ks.Run!=23725 && ks.Run!=23727 && ks.Run!=23746
-               && ks.Run!=23747 && ks.Run!=23748 && ks.Run!=23749 && ks.Run!=23755 && ks.Run!=23756
-               && ks.Run!=23757 && ks.Run!=23759 && ks.Run!=23809 && ks.Run!=23811 && ks.Run!=23812
-               && ks.Run!=23813 && ks.Run!=23814 && ks.Run!=23815 && ks.Run!=23817 && ks.Run!=23819
-               && ks.Run!=23820 && ks.Run!=23822 && ks.Run!=23823 && ks.Run!=23824 && ks.Run!=23825
-               && ks.Run!=23826 && ks.Run!=23828 && ks.Run!=23829 && ks.Run!=23830 && ks.Run!=23831
-               && ks.Run!=23833 && ks.Run!=23834 && ks.Run!=23835 && ks.Run!=23836 && ks.Run!=23838
-               && ks.Run!=23858 && ks.Run!=23859 && ks.Run!=23860 && ks.Run!=23861 && ks.Run!=23867
-               && ks.Run!=23868 && ks.Run!=23869 && ks.Run!=23872 && ks.Run!=23876 && ks.Run!=23877
-               && ks.Run!=23881 && ks.Run!=23882 && ks.Run!=23893 && ks.Run!=23895 && ks.Run!=23898
-               && ks.Run!=23900 && ks.Run!=23904 && ks.Run!=23917 && ks.Run!=23937 && ks.Run!=23940
-               && ks.Run!=24814 && ks.Run!=24819 && ks.Run!=24821 && ks.Run!=24822 && ks.Run!=24831
-               && ks.Run!=24844 && ks.Run!=24845 && ks.Run!=24851 && ks.Run!=24859 && ks.Run!=24866
-               && ks.Run!=24867 && ks.Run!=24870 && ks.Run!=24876 && ks.Run!=24893 && ks.Run!=24904
-               && ks.Run!=24915 && ks.Run!=24916 && ks.Run!=25064 && ks.Run!=25074 && ks.Run!=25079
-               && ks.Run!=25105 && ks.Run!=25158 && ks.Run!=25159 && ks.Run!=25173 && ks.Run!=25176
-               && ks.Run!=25177 && ks.Run!=25179 && ks.Run!=25182 && ks.Run!=25183 && ks.Run!=25184
-               && ks.Run!=25198 && ks.Run!=25200 && ks.Run!=25209 && ks.Run!=25210 && ks.Run!=25211
-               && ks.Run!=25212 && ks.Run!=25214 && ks.Run!=25219 && ks.Run!=25222 && ks.Run!=25223
-               && ks.Run!=25225 && ks.Run!=25226 && ks.Run!=25227 && ks.Run!=25228 && ks.Run!=25230
-               && ks.Run!=25236 && ks.Run!=25347 && ks.Run!=25349 && ks.Run!=25351 && ks.Run!=25358
-               && ks.Run!=25359 && ks.Run!=25371 && ks.Run!=25403 && ks.Run!=25404 && ks.Run!=25405
-               && ks.Run!=25407 && ks.Run!=25409 && ks.Run!=25410 && ks.Run!=25411 && ks.Run!=25413
-               && ks.Run!=25414 && ks.Run!=25415 && ks.Run!=25421 && ks.Run!=25423 && ks.Run!=25425
-               && ks.Run!=25433 && ks.Run!=25435 && ks.Run!=25444 && ks.Run!=25514 && ks.Run!=25515
-               && ks.Run!=25519 && ks.Run!=25520 && ks.Run!=25523 && ks.Run!=25524 && ks.Run!=25569
-               && ks.Run!=25599 && ks.Run!=25605 && ks.Run!=25622 && ks.Run!=25628 && ks.Run!=25637
-               && ks.Run!=25684 && ks.Run!=26058 && ks.Run!=26059 && ks.Run!=26062 && ks.Run!=26063
-               && ks.Run!=26064 && ks.Run!=26065 && ks.Run!=26072 && ks.Run!=26073 && ks.Run!=26074
-               && ks.Run!=26075 && ks.Run!=26077 && ks.Run!=26078 && ks.Run!=26079 && ks.Run!=26091
-               && ks.Run!=26093 && ks.Run!=26094 && ks.Run!=26095 && ks.Run!=26096 && ks.Run!=26098
-               && ks.Run!=26100 && ks.Run!=26101 && ks.Run!=26126 && ks.Run!=26127 && ks.Run!=26128
-               && ks.Run!=26129 && ks.Run!=26131 && ks.Run!=26132 && ks.Run!=26133 && ks.Run!=26134
-               && ks.Run!=26147 && ks.Run!=26148 && ks.Run!=26150 && ks.Run!=26151
-              )   //noise <8%
-              */
-              /*
-             && (ks.Run==23307 || ks.Run==23313 || ks.Run==23342 || ks.Run==23353 || ks.Run==23423
-               || ks.Run==23429 || ks.Run==23466 || ks.Run==23467 || ks.Run==23470 || ks.Run==23562
-               || ks.Run==23564 || ks.Run==23626 || ks.Run==23632 || ks.Run==23635 || ks.Run==23636
-               || ks.Run==23642 || ks.Run==23643 || ks.Run==23656 || ks.Run==23658 || ks.Run==23663
-               || ks.Run==23665 || ks.Run==23666 || ks.Run==23667 || ks.Run==23668 || ks.Run==23669
-               || ks.Run==23674 || ks.Run==23675 || ks.Run==23677 || ks.Run==23678 || ks.Run==23679
-               || ks.Run==23688 || ks.Run==23689 || ks.Run==23691 || ks.Run==23693 || ks.Run==23694
-               || ks.Run==23695 || ks.Run==23696 || ks.Run==23702 || ks.Run==23703 || ks.Run==23704
-               || ks.Run==23706 || ks.Run==23707 || ks.Run==23708 || ks.Run==23709 || ks.Run==23710
-               || ks.Run==23712 || ks.Run==23713 || ks.Run==23714 || ks.Run==23721 || ks.Run==23722
-               || ks.Run==23723 || ks.Run==23724 || ks.Run==23725 || ks.Run==23727 || ks.Run==23746
-               || ks.Run==23747 || ks.Run==23748 || ks.Run==23749 || ks.Run==23755 || ks.Run==23756
-               || ks.Run==23757 || ks.Run==23759 || ks.Run==23809 || ks.Run==23811 || ks.Run==23812
-               || ks.Run==23813 || ks.Run==23814 || ks.Run==23815 || ks.Run==23817 || ks.Run==23819
-               || ks.Run==23820 || ks.Run==23822 || ks.Run==23823 || ks.Run==23824 || ks.Run==23825
-               || ks.Run==23826 || ks.Run==23828 || ks.Run==23829 || ks.Run==23830 || ks.Run==23831
-               || ks.Run==23833 || ks.Run==23834 || ks.Run==23835 || ks.Run==23836 || ks.Run==23838
-               || ks.Run==23858 || ks.Run==23859 || ks.Run==23860 || ks.Run==23861 || ks.Run==23867
-               || ks.Run==23868 || ks.Run==23869 || ks.Run==23872 || ks.Run==23876 || ks.Run==23877
-               || ks.Run==23881 || ks.Run==23882 || ks.Run==23893 || ks.Run==23895 || ks.Run==23898
-               || ks.Run==23900 || ks.Run==23904 || ks.Run==23917 || ks.Run==23937 || ks.Run==23940
-               || ks.Run==24814 || ks.Run==24819 || ks.Run==24821 || ks.Run==24822 || ks.Run==24831
-               || ks.Run==24844 || ks.Run==24845 || ks.Run==24851 || ks.Run==24859 || ks.Run==24866
-               || ks.Run==24867 || ks.Run==24870 || ks.Run==24876 || ks.Run==24893 || ks.Run==24904
-               || ks.Run==24915 || ks.Run==24916 || ks.Run==25064 || ks.Run==25074 || ks.Run==25079
-               || ks.Run==25105 || ks.Run==25158 || ks.Run==25159 || ks.Run==25173 || ks.Run==25176
-               || ks.Run==25177 || ks.Run==25179 || ks.Run==25182 || ks.Run==25183 || ks.Run==25184
-               || ks.Run==25198 || ks.Run==25200 || ks.Run==25209 || ks.Run==25210 || ks.Run==25211
-               || ks.Run==25212 || ks.Run==25214 || ks.Run==25219 || ks.Run==25222 || ks.Run==25223
-               || ks.Run==25225 || ks.Run==25226 || ks.Run==25227 || ks.Run==25228 || ks.Run==25230
-               || ks.Run==25236 || ks.Run==25347 || ks.Run==25349 || ks.Run==25351 || ks.Run==25358
-               || ks.Run==25359 || ks.Run==25371 || ks.Run==25403 || ks.Run==25404 || ks.Run==25405
-               || ks.Run==25407 || ks.Run==25409 || ks.Run==25410 || ks.Run==25411 || ks.Run==25413
-               || ks.Run==25414 || ks.Run==25415 || ks.Run==25421 || ks.Run==25423 || ks.Run==25425
-               || ks.Run==25433 || ks.Run==25435 || ks.Run==25444 || ks.Run==25514 || ks.Run==25515
-               || ks.Run==25519 || ks.Run==25520 || ks.Run==25523 || ks.Run==25524 || ks.Run==25569
-               || ks.Run==25599 || ks.Run==25605 || ks.Run==25622 || ks.Run==25628 || ks.Run==25637
-               || ks.Run==25684 || ks.Run==26058 || ks.Run==26059 || ks.Run==26062 || ks.Run==26063
-               || ks.Run==26064 || ks.Run==26065 || ks.Run==26072 || ks.Run==26073 || ks.Run==26074
-               || ks.Run==26075 || ks.Run==26077 || ks.Run==26078 || ks.Run==26079 || ks.Run==26091
-               || ks.Run==26093 || ks.Run==26094 || ks.Run==26095 || ks.Run==26096 || ks.Run==26098
-               || ks.Run==26100 || ks.Run==26101 || ks.Run==26126 || ks.Run==26127 || ks.Run==26128
-               || ks.Run==26129 || ks.Run==26131 || ks.Run==26132 || ks.Run==26133 || ks.Run==26134
-               || ks.Run==26147 || ks.Run==26148 || ks.Run==26150 || ks.Run==26151
-               )   //noise >=8%
-               */
 	  )
 	{
 	    pm=ks.p1;
@@ -369,7 +272,7 @@ int main(int argc, char* argv[])
 	    phim=ks.phit1/180.*PI;
 	    phip=ks.phit2/180.*PI;
 
-	    if ( fabs((fabs(phip-phim)-PI)*180./PI) < 0.10 ) continue;
+	    //if ( fabs((fabs(phip-phim)-PI)*180./PI) < 0.10 ) continue;
 
 	    if ( verbose==1 )
 	    {
@@ -387,10 +290,8 @@ int main(int argc, char* argv[])
 
             double pxm, pym, pzm, em, pxp, pyp, pzp, ep, mom, invm;
 
-	    double pmcorr = pcorr(pm*sin(tm),1,0)/sin(tm);
-	    double ppcorr = pcorr(pp*sin(tp),1,0)/sin(tp);
-	    //double pmcorr = pcorr(pm*sin(tm),1,1)/sin(tm);
-	    //double ppcorr = pcorr(pp*sin(tp),1,1)/sin(tp);
+	    double pmcorr = pcorr(pm*sin(tm),1)/sin(tm);
+	    double ppcorr = pcorr(pp*sin(tp),1)/sin(tp);
 
 	    pxm = pmcorr*sin(tm)*cos(phim);
 	    pym = pmcorr*sin(tm)*sin(phim);
@@ -596,44 +497,48 @@ int main(int argc, char* argv[])
     hvrtnbeam->Draw(); cc1->SaveAs(KEDR+"vrtnbeam.png");
 
     TF1 *func1 = new TF1("fitInvM1","[2]*(1+[1]*(x-500.)+[5]*pow((x-500.),2))*([0]+exp(-pow((x-[4]),2)/2./pow([3],2))/sqrt(2*3.141592)/[3]*(600-400)/100)");
+    //sim
+    func1->SetParameter(0,0.1541);
+    func1->SetParameter(1,0.0002432);
+    func1->SetParameter(2,12500.);
+    func1->SetParameter(3,8.727);
+    func1->SetParameter(4,494.2);
+    func1->SetParameter(5,-0.000125);
     /*
-    func1->SetParameter(0,0.05);
-    func1->SetParameter(1,-0.2);
-    func1->SetParameter(2,1000.);
-    func1->SetParameter(3,8.);
-    func1->SetParameter(4,498.);
-    func1->SetParameter(5,0.);
-    */
+    //exp
     func1->SetParameter(0,1.39401e-01);
     func1->SetParameter(1,-1.11893e-03);
     func1->SetParameter(2,3.81878e+03);
     func1->SetParameter(3,1.32897e+01);
-    func1->SetParameter(4,4.93039e+02);
+    func1->SetParameter(4,4.985e+02);
     func1->SetParameter(5,-4.25396e-05);
+    */
     hinvM->Fit("fitInvM1","","",400,600);
-    hinvM->GetXaxis()->SetTitle("M_{#pi#pi} (MeV/c^2)");
+    hinvM->GetXaxis()->SetTitle("M_{#pi#pi} (MeV)");
     hinvM->Draw("E1"); cc1->SaveAs(KEDR + "invM" + format1);
     hinvM->Draw("E1"); cc1->SaveAs(KEDR + "invM" + format2);
 
     TF1 *func2 = new TF1("fitInvM2","[2]*(1+[1]*(x-500.)+[5]*pow((x-500.),2))*([0]+exp(-pow((x-[4]),2)/2./pow([3],2))/sqrt(2*3.141592)/[3]*(600-400)/100)");
+
+    //sim
+    func2->SetParameter(0,0.1541);
+    func2->SetParameter(1,0.0002432);
+    func2->SetParameter(2,12500.);
+    func2->SetParameter(3,8.727);
+    func2->SetParameter(4,494.2);
+    func2->SetParameter(5,-0.000125);
     /*
-    func2->SetParameter(0,0.05);
-    func2->SetParameter(1,-0.2);
-    func2->SetParameter(2,1000.);
-    func2->SetParameter(3,8.);
-    func2->SetParameter(4,498.);
-    func2->SetParameter(5,0.);
-    */
+    //exp
     func2->SetParameter(0,1.39401e-01);
     func2->SetParameter(1,-1.11893e-03);
     func2->SetParameter(2,3.81878e+03);
     func2->SetParameter(3,1.32897e+01);
-    func2->SetParameter(4,4.93039e+02);
+    func2->SetParameter(4,4.985e+02);
     func2->SetParameter(5,-4.25396e-05);
-
+    */
     hinvMcor->Fit("fitInvM2","","",400,600);
     //hinvMcor->GetYaxis()->SetRangeUser(0., 300.);
-    hinvMcor->GetXaxis()->SetTitle("M_{#pi#pi} (MeV/c^2)");
+    hinvMcor->GetXaxis()->SetTitle("M_{#pi#pi} (MeV)");
     hinvMcor->Draw("E1"); cc1->SaveAs(KEDR + "invMcor" + format1);
     hinvMcor->Draw("E1"); cc1->SaveAs(KEDR + "invMcor" + format2);
 

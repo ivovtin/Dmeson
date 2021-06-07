@@ -7,12 +7,19 @@
   mid_de = 300.;
   mid_mbc = 1700.;
 
-  //load_sig("/spool/users/ovtin/outDmeson/D0/results/fitsD0/dat/kp_uds.dat");
-  load_sig("/spool/users/ovtin/outDmeson/D0/results/fitsD0/dat/kp_uds_woDCnoise.dat");
+  
+  load_sig("/store/users/ovtin/outDmeson/D0/results/fitsD0/dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0.dat");
   read_par("par/bck_uds.par", 4, bck_par, bck_epar);
   fit_bck();
-  //write_par("par/bck_uds.par", 4, bck_par, bck_epar);
-  write_par("par/bck_uds_woDCnoise.par", 4, bck_par, bck_epar);
-  //gen_bck("/spool/users/ovtin/outDmeson/D0/results/fitsD0/gen/bck_uds.gen", 100000, bck_par, 0.);
-  gen_bck("/spool/users/ovtin/outDmeson/D0/results/fitsD0/gen/bck_uds_woDCnoise.gen", 100000, bck_par, 0.);
+  write_par("par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/bck_uds_S1.0_A6.0_Z0.0.par", 4, bck_par, bck_epar);
+  gen_bck("/store/users/ovtin/outDmeson/D0/results/fitsD0/gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/bck_uds_S1.0_A6.0_Z0.0.gen", 100000, bck_par, 0.);
+  
+  /*
+  // w/o ATC
+  load_sig("/store/users/ovtin/outDmeson/D0/results/fitsD0/dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0.dat");
+  read_par("par/bck_uds.par", 4, bck_par, bck_epar);
+  fit_bck();
+  write_par("par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/bck_uds_S1.0_A6.0_Z0.0.par", 4, bck_par, bck_epar);
+  gen_bck("/store/users/ovtin/outDmeson/D0/results/fitsD0/gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/bck_uds_S1.0_A6.0_Z0.0.gen", 100000, bck_par, 0.);
+  */
 }

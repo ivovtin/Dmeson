@@ -9,7 +9,7 @@
 #      Software developed for the KEDR Detector at BINP.
 #
 # Author:
-#      Baldin Evgueni Mihailovich (E.M.Baldin@inp.nsk.su)
+#      Baldin Evgueni Mihailovich (E.M.Baldin@inp.nsk.su)             
 #
 # Copyright Information:
 #      Copyright (C) 2000-2004  Budker's Institute of Nuclear Physics
@@ -17,13 +17,12 @@
 #--------------------------------------------------------------------------
 # следующие 3 строки лучше не трогать
 ifeq (,$(WORKDIR))
-##WORKDIR = $(shell pushd ../ 1>/dev/null && pwd )
 WORKDIR = $(shell pushd ../../../ 1>/dev/null && pwd )
 endif
 
-#Всё что делается с выводом результата на экран - желательно раскомментировать
+#Всё что делается с выводом результата на экран - желательно раскомментировать       
 VERBOSEMAKE=""
-#Если ключик -g при сборке не нужен - если уверен в себе
+#Если ключик -g при сборке не нужен - если уверен в себе                 
 #NDEBUG=""
 
 #Компилятор для *.с файлов
@@ -44,12 +43,12 @@ FOPTS  =  -g -fvxt -Wall -fno-automatic -finit-local-zero \
 -DCERNLIB_LINUX -DCERNLIB_UNIX -DCERNLIB_LNX -DCERNLIB_QMGLIBC -DCERNLIB_BLDLIB \
 -DCOMPDATE="'$(COMPDATE)'" -I$(CERN)/pro/include -I$(CERN)/pro/include/geant321
 
-# Дополнительные опции для линкера
+# Дополнительные опции для линкера                                      
 #LDOPTS = -lg2c $(shell $(ROOTSYS)/bin/root-config --libs --glibs)
 LDOPTS = -lg2c $(shell root-config --libs --glibs)
 #-shared #если хочется использовать разделяемую библиотеку
 #Если необходимо добавить CERNLIB, то лучше воспользоваться этим ключиком
-CERNLIBRARY = ""
+CERNLIBRARY = "" 
 #Список библиотек, если вам не нравится стандартный набор (расширяем по требованию)
 # jetset74 mathlib graflib geant321 grafX11 packlib
 CERNLIBS = jetset74 mathlib graflib grafX11
@@ -63,13 +62,13 @@ CERNLIBS = jetset74 mathlib graflib grafX11
 
 # Дополнительные библиотеки (вставляются после библиотек)
 LIB_LOCAL= -lstdc++
-# `root-config --libs`
+# `root-config --libs`       
 
 # Определим, какие программы мы будем собирать
-# Здесь следует указывать только используемые при работе пакеты,
-# чтобы не засорять bin - все программки, которые пишутся для примера
+# Здесь следует указывать только используемые при работе пакеты, 
+# чтобы не засорять bin - все программки, которые пишутся для примера   
 # и тестирования следует складывать в директорию example
-BINARIES =
+BINARIES = 
 
 # укажем, из каких модулей этого пакета они состоят
 # (эти модули не будут включены в библиотеку)
@@ -79,11 +78,4 @@ BINARIES =
 
 # следующую строку лучше не трогать
 include $(WORKDIR)/KcReleaseTools/rules.mk
-
-
-
-
-
-
-
 

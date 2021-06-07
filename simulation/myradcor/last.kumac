@@ -1,0 +1,20 @@
+*** Begin of history file: Mon Nov 12 12:07:19 2007
+exe test
+ed test
+exe test
+ed test
+exe test
+ed test
+exe test
+exe test
+exe test
+nt/plo 20.e
+nt/plo 20.e e>0
+nt/plo 20.e e>0.1
+nt/plo 20.e e>0.05
+nt/plo 20.e e>0.1
+nt/plo 20.e e>0.01
+nt/plo 20.e e>0.02
+nt/plo 20.e e>1
+q
+*** End   of history file: Mon Nov 12 13:13:17 2007

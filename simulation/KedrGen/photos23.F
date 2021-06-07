@@ -1509,6 +1509,7 @@ C--
 C--   Calculate  invariant  mass of 'neutral' etc. systems
           MPASQR=PPHO(5,IP)**2
           MCHSQR=PPHO(5,CHAPOI(NCHARG))**2
+
           IF ((JDAPHO(2,IP)-JDAPHO(1,IP)).EQ.1) THEN
             NEUPOI=JDAPHO(1,IP)
             IF (NEUPOI.EQ.CHAPOI(NCHARG)) NEUPOI=JDAPHO(2,IP)
@@ -1533,6 +1534,7 @@ C--
 C--   No radiation was accepted, check  for more daughters  that may ra-
 C--   diate and correct radiation probability...
             NCHARG=NCHARG-1
+
             IF (NCHARG.GT.0) THEN
               IREP=IREP+1
               GOTO 30
@@ -1682,6 +1684,7 @@ C.----------------------------------------------------------------------
       REAL*8 FINT,FSEC
       COMMON /PHOKEY/ FSEC,FINT,INTERF,ISEC,IFTOP
 C--
+
       IF (XPHMAX.LE.XPHCUT) THEN
         XPHOTO=0.0D0
         RETURN
@@ -1695,11 +1698,13 @@ C--   Probabilities for hard and soft bremstrahlung...
      &XPHMAX-.25D0*XPHCUT**2/XPHMAX**2)
       PRHARD=PRHARD*PHOCHA(IDENT)**2*FINT*FSEC
       IF (IREP.EQ.0) PROBH=0.D0
+
       PRHARD=PRHARD*PHOFAC(0)
       PROBH=PRHARD
       PRSOFT=1.D0-PRHARD
 C--
 C--   Check on kinematical bounds
+
       IF (PRSOFT.LT.0.1D0) THEN
         DATA=PRSOFT
 
@@ -2483,8 +2488,15 @@ C.
 C.    Author(s):  B. van Eijk                     Created at:  29/11/89
 C.                                                Last Update: 10/01/92
 C.
+c     Updated 29.10.2009, V.A.T. 
+c
 C.----------------------------------------------------------------------
       IMPLICIT NONE
+
+      Real *4 GENPAR
+      Integer *4 KHEP,KGEN
+      COMMON /KEDR_GEN/KHEP,KGEN,GENPAR(20) ! input parameters for generators
+
       DOUBLE PRECISION DATA
       INTEGER IMES,IERROR
       REAL*8 SDATA
@@ -2496,16 +2508,24 @@ C.----------------------------------------------------------------------
       COMMON/PHOSTA/STATUS(PHOMES)
       CHARACTER TEXT*(*)
       SAVE IERROR
-C--   security STOP switch
-      LOGICAL ISEC
+c............
+c  Security STOP switch
+      LOGICAL ISEC,ISECT,ISECF                   ! V.A.T.
       SAVE ISEC
-      DATA ISEC /.TRUE./
+
+      DATA ISECT /.TRUE./                        ! V.A.T.
+      DATA ISECF /.FALSE./                       ! V.A.T.
       DATA IERROR/ 0/
+
       IF (IMES.LE.PHOMES) STATUS(IMES)=STATUS(IMES)+1
 C--
 C--   Count number of non-fatal errors...
       IF ((IMES.EQ. 6).AND.(STATUS(IMES).GE.2)) RETURN
       IF ((IMES.EQ.10).AND.(STATUS(IMES).GE.2)) RETURN
+
+      ISEC=ISECT                                 ! V.A.T.
+      IF(GENPAR(2).GT.1.5) ISEC=ISECF            ! V.A.T.
+
       SDATA=DATA
       WRITE(6,9000)
       WRITE(6,9120)
@@ -2533,9 +2553,10 @@ C--   Count number of non-fatal errors...
   100 WRITE(6,9100) TEXT,SDATA
       GOTO 130
   110 CONTINUE
-      WRITE(6,9140)
-      WRITE(6,9120)
-      WRITE(6,9000)
+      IF(ABS(GENPAR(2)-1.).LT.0.1) WRITE(6,9140)   ! Fatal Error Message ...
+      IF(ABS(GENPAR(2)-2.).LT.0.1) WRITE(6,9141)   
+      WRITE(6,9120)   !
+      WRITE(6,9000)   ! ******
       IF (ISEC) THEN
         STOP
       ELSE
@@ -2543,17 +2564,18 @@ C--   Count number of non-fatal errors...
       ENDIF
   120 IERROR=IERROR+1
       IF (IERROR.GE.10) THEN
-        WRITE(6,9150)
-        WRITE(6,9120)
-        WRITE(6,9000)
+        IF(ABS(GENPAR(2)-1.).LT.0.1) WRITE(6,9150) ! 10 Error Messages ...
+        IF(ABS(GENPAR(2)-2.).LT.0.1) WRITE(6,9151) 
+        WRITE(6,9120) ! 
+        WRITE(6,9000) ! ******
         IF (ISEC) THEN
           STOP
         ELSE
           GOTO 130
         ENDIF
       ENDIF
-  130 WRITE(6,9120)
-      WRITE(6,9000)
+  130 WRITE(6,9120) !
+      WRITE(6,9000) ! ******
       RETURN
  9000 FORMAT(1H ,80('*'))
  9010 FORMAT(1H ,'* ',A,': Too many charged Particles, NCHARG =',I6,T81,
@@ -2581,8 +2603,13 @@ C--   Count number of non-fatal errors...
  9120 FORMAT(1H ,'*',T81,'*')
  9130 FORMAT(1H ,'* Funny Error Message: ',I4,' ! What to do ?',T81,'*')
  9140 FORMAT(1H ,'* Fatal Error Message, I stop this Run !',T81,'*')
+ 9141 FORMAT(1H ,'* Fatal Error Message, I could stop this Run !',T81,
+     &'*')
  9150 FORMAT(1H ,'* 10 Error Messages generated, I stop this Run !',T81,
      &'*')
+ 9151 FORMAT(1H ,'* 10 Error Messages generated, I could stop this Run !
+     &',T81,'*')
+
       END
 
 

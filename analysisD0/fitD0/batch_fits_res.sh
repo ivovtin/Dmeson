@@ -20,7 +20,7 @@
 ##$ -v PATH=$PATH:$HOME/development/lib:/home/ovtin/development/KrKRec,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/ovtin/development/lib,KDBHOST=bison-2
 # -------------------------------------------
 # --             Queue list                --
-#$ -soft
+##$ -soft
 ##$ -hard
 #$ -l time=24:00:00
 ##$ -q remote
@@ -37,9 +37,9 @@
 ## uds BG
 ##$HOME/development/Dmeson/analysisD0/fitD0/batch_bck
 ## DD BG
-##$HOME/development/Dmeson/analysisD0/fitD0/batch_dbck
+$HOME/development/Dmeson/analysisD0/fitD0/batch_dbck
 ## exp
-$HOME/development/Dmeson/analysisD0/fitD0/batch_exp
+##$HOME/development/Dmeson/analysisD0/fitD0/batch_exp
 
 status=$?
 if [ $status != 0 ]; then

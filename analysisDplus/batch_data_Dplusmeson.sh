@@ -21,7 +21,7 @@
 #$ -v PATH=$PATH:$HOME/release/KdRunFastMon,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/alexbarn/release/lib,KDBHOST=localhost
 # -------------------------------------------
 # --             Queue list                --
-#$ -soft
+##$ -soft
 ##$ -hard
 #$ -l time=24:00:00
 #$ -q remote
@@ -41,7 +41,8 @@ myrand=$[1000+$i]
 
 #Signal
 inruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/runDmeson"$i
-outfile="/spool/users/ovtin/outDmeson/Dplus/dataPcorr_1.0170_kNoiseReject3_atc/psi3770_to_D0meson_"$i".root"
+##outfile="/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0210_kNoiseReject3_atc_KemcAllowediOn/psi3770_to_D0meson_"$i".root"
+outfile="/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0150_kNoiseReject3_atc_KemcAllowediOn/psi3770_to_D0meson_"$i".root"
 ##inruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/runDmeson"$i
 ##outfile="/spool/users/ovtin/outDmeson/Dplus/dataPcorr2004/psi3770_to_D0meson_"$i".root"
 ##outfile="/spool/users/ovtin/outDmeson/Dplus/dataPcorr2004_1.0250/psi3770_to_D0meson_"$i".root"
@@ -70,7 +71,11 @@ kinefit=1
 ##pSF=1.0360   ##data 2004
 ##pSF=1.0250   ##data 2004
 ##pSF=1.0155   ##data 2016-17
-pSF=1.0170   ##data 2016-17
+##pSF=1.0170   ##data 2016-17
+##pSF=1.0180   ##data 2016-17
+##pSF=1.0210   ##data 2016-17
+pSF=1.0150   ##data 2016-17
+#pSF=1.0   ##data 2016-17
 ##verbose=1
 
 ##$HOME/development/Dmeson/analysis_Dplusmeson -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile -f $kinefit $inruns

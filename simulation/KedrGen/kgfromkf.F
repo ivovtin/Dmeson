@@ -1,10 +1,12 @@
-	function kgfromkf(kf)
+	FUNCTION kgfromkf(kf)
+c***********************************************************************
 c
-c gets GEANT code (if exist) from LUND kf code 
+c  Gets GEANT code (if exist) from LUND kf code 
 c
-      call pstpcode1(kf,kgeant)
+c***********************************************************************
+c
+      CALL PstPCode1(kf,kgeant)
 c
       kgfromkf=kgeant
 c	
-      return
-      end
+      END

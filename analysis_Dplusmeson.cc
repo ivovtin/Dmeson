@@ -182,12 +182,15 @@ enum {
 static TTree *eventTree;
 
 typedef struct {
-    Int_t vrtntrk,vrtnip,vrtnbeam,charge1,charge2,charge3,nhitst1,nhitst2,nhitst3,nhitsvdt1,nhitsvdt2,nhitsvdt3,nhitsxyt1,nhitszt1,nhitsxyt2,
-	nhitszt2,nhitsxyt3,nhitszt3,nvect1,nvecxyt1,nveczt1,nvect2,nvecxyt2,nveczt2,nvect3,
-	nvecxyt3,nveczt3,ncomb,ncls1,ncls2,ncls3,ncls,nlkr,ncsi,munhits,mulayerhits1,mulayerhits2,mulayerhits3,Run;
-    Float_t mbc,de,prec1,prec2,prec3,fchi2,Ebeam,rEv,p1,p2,p3,pt1,pt2,pt3,thetat1,thetat2,thetat3,phit1,phit2,phit3,chi2t1,chi2t2,chi2t3,
-	e1,e2,e3,rr1,rr2,rr3,zip1,zip2,zip3,ecls1,ecls2,ecls3,tcls1,tcls2,tcls3,pcls1,pcls2,pcls3,emcenergy,lkrenergy,csienergy,timet1,betat1,lengtht1,
-        timet2,betat2,lengtht2,timet3,betat3,lengtht3;
+    Int_t vrtntrk,vrtnip,vrtnbeam,charge1,charge2,charge3,nhitsdc,nhitst1,nhitst2,nhitst3,nhitsvd,nhitsvdt1,nhitsvdt2,nhitsvdt3,nhitsxyt1,nhitszt1,nhitsxyt2,
+    nhitszt2,nhitsxyt3,nhitszt3,nvect1,nvecxyt1,nveczt1,nvect2,nvecxyt2,nveczt2,nvect3,nvecxyt3,nveczt3,ncomb,ncls1,ncls2,ncls3,ncls,nlkr,ncsi,munhits,mulayerhits1,
+    mulayerhits2,mulayerhits3,Run,natccrosst1,atcCNTt1[20],natccrosst2,atcCNTt2[20],natccrosst3,atcCNTt3[20],aerogel_REGIONt1[20],aerogel_REGION0t1[20],aerogel_REGION5t1[20],aerogel_REGION20t1[20],single_aerogel_REGIONt1[20],single_aerogel_REGION0t1[20],
+    single_aerogel_REGION5t1[20],single_aerogel_REGION20t1[20],aerogel_REGIONt2[20],aerogel_REGION0t2[20],aerogel_REGION5t2[20],aerogel_REGION20t2[20],single_aerogel_REGIONt2[20],
+    single_aerogel_REGION0t2[20],single_aerogel_REGION5t2[20],single_aerogel_REGION20t2[20],aerogel_REGIONt3[20],aerogel_REGION0t3[20],aerogel_REGION5t3[20],aerogel_REGION20t3[20],single_aerogel_REGIONt3[20],
+    single_aerogel_REGION0t3[20],single_aerogel_REGION5t3[20],single_aerogel_REGION20t3[20],wlshitt1[20],nearwlst1[20],wlshitt2[20],nearwlst2[20],wlshitt3[20],nearwlst3[20];
+    Float_t mbc,de,prec1,prec2,prec3,fchi2,Ebeam,rEv,p1,p2,p3,pt1,pt2,pt3,thetat1,thetat2,thetat3,phit1,phit2,phit3,chi2t1,chi2t2,chi2t3,e1,e2,e3,rr1,rr2,rr3,zip1,zip2,zip3,
+	ecls1,ecls2,ecls3,tcls1,tcls2,tcls3,pcls1,pcls2,pcls3,emcenergy,lkrenergy,csienergy,timet1,betat1,lengtht1,timet2,betat2,lengtht2,timet3,betat3,lengtht3,
+        atcNpet1[20],atcTotalNpet1,atcNpet2[20],atcTotalNpet2,atcNpet3[20],atcTotalNpet3,tlent1[20],tlent2[20],tlent3[20];
 } DMESON;
 
 static DMESON Dmeson;
@@ -343,9 +346,31 @@ int match_dir(int mc, int rec) {
   return (prod>0.95);
 }
 
-double pcorr(double p) {
-    double pc =p*fabs(progpar.pSF);
-    if (progpar.verbose) cout<<"pc="<<pc<<"\t"<<"p="<<p<<"\t"<<"progpar.pSF="<<progpar.pSF<<endl;
+double pcorr(double p, int type) {
+    double ms, dedx, k;
+
+    if (type==1) {
+	ms = 148.71;
+	dedx = 1.32;
+	k = 0.;
+    } else if (type == 2) {
+	ms = 573.35;
+	dedx = 0.9021;
+	k = 0.;
+    } else {
+	ms = 0.;
+	dedx = 1.57;
+	k = 0.748772e-2;
+    }
+
+    double gamma = sqrt(ms*ms+p*p)/ms;
+
+    double beta = sqrt(1.-1./gamma/gamma);
+
+    double pc = p+1.*dedx/pow(beta,3) + k*p;
+
+    pc = pc*fabs(progpar.pSF);
+    if (progpar.verbose==3) cout<<"pc="<<pc<<"\t"<<"p="<<p<<"\t"<<"progpar.pSF="<<progpar.pSF<<endl;
 
     return fabs(pc);
 }
@@ -361,9 +386,9 @@ void kine_fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *parval, Int_t i
     else
 	pk = sqrt(ek*ek-mk*mk);       //from condition dE=0
 
-    double pki = pcorr(tP(dcand_t1));
-    double p1i = pcorr(tP(dcand_t2));
-    double p2i = pcorr(tP(dcand_t3));
+    double pki = pcorr(tP(dcand_t1),2);
+    double p1i = pcorr(tP(dcand_t2),1);
+    double p2i = pcorr(tP(dcand_t3),1);
 
     double sp1 = sqrt(ktrrec_h_.FitTrack[dcand_t2][fitSigCC]/
 		      pow(ktrrec_h_.FitTrack[dcand_t2][fitC],2)+
@@ -430,9 +455,9 @@ void kine_fit(int ip1, int ip2, int ip3, double* mbc, double* de, double* prec1,
     dcand_t2 = ip2;   //pion
     dcand_t3 = ip3;   //pion
 
-    double p1i = pcorr(tP(dcand_t1));   //kaon
-    double p2i = pcorr(tP(dcand_t2));   //pion
-    double p3i = pcorr(tP(dcand_t3));   //pion
+    double p1i = pcorr(tP(dcand_t1),2);   //kaon
+    double p2i = pcorr(tP(dcand_t2),1);   //pion
+    double p3i = pcorr(tP(dcand_t3),1);   //pion
 
     double pp1, pp2;
     double pk;
@@ -443,15 +468,17 @@ void kine_fit(int ip1, int ip2, int ip3, double* mbc, double* de, double* prec1,
 	dMinuit->SetFCN(kine_fcn);         //set the function to minimise
 	dMinuit->SetPrintLevel(progpar.verbose-1); //set print out level for Minuit
 	Double_t arglist[2];
-	arglist[0]=1000;
+	arglist[0]=1;
 	Int_t iflag=0;
 	dMinuit->mnexcm("SET ERR",arglist,2,iflag);    //Interprets command
 	//gMinuit->mninit(1,1,1);
 	double lowerLimit = 0.0;
 	double upperLimit = 0.0;
-	dMinuit->mnparm(0,"p1", p2i, 1., lowerLimit, upperLimit, iflag);    //set the parameters used in the fit
-	dMinuit->mnparm(1,"p2", p3i, 1., lowerLimit, upperLimit, iflag);
-	dMinuit->mnexcm("CALL FCN",arglist,1,iflag);                        //call the user defined function, to calculate the value FCN, and print the result out to the screen.
+	dMinuit->mnparm(0,"p1", p2i, 0.5, lowerLimit, upperLimit, iflag);    //set the parameters used in the fit
+	dMinuit->mnparm(1,"p2", p3i, 0.5, lowerLimit, upperLimit, iflag);
+	//dMinuit->mnexcm("CALL FCN",arglist,1,iflag);                        //call the user defined function, to calculate the value FCN, and print the result out to the screen.
+	arglist[0] = 5000;  //maximum number of function calls after which the calculation will be stopped even if it has not yet converged.
+	arglist[1] = 1.; //The optional argument [tolerance] specifies required tolerance on the function value at the minimum. The default tolerance is 0.1, and the minimization will stop when the estimated vertical distance to the minimum (EDM) is less than 0.001*[tolerance]*UP (see [SET ERRordef]).
 	dMinuit->mnexcm("MIGRAD",arglist,2,iflag);                          //run the minimisation Using MIGRAD
 
 	Double_t val[2],err[2],bnd1[2],bnd2[2];
@@ -617,18 +644,18 @@ int analyse_event()
 			if (progpar.verbose) cout<<"i="<< i<<endl;
 			if (progpar.verbose) cout<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"Ebeam="<<WTotal/2<<"\t"<<"t1="<<t1<<"\t"<<"t2="<<t2<<"\t"<<"t3="<<t3<<"\t"<<"tCharge(t1)="<<tCharge(t1)<<"\t"<<"tCharge(t2)="<<tCharge(t2)<<"\t"<<"tCharge(t3)="<<tCharge(t3)<<endl;
 			if (progpar.verbose) cout<<"P(t1)="<<tP(t1)<<"\t"<<"P(t2)="<<tP(t2)<<"\t"<<"P(t3)="<<tP(t3)<<"\t"<<"tHits(t1)="<<tHits(t1)<<"\t"<<"tHits(t2)="<<tHits(t2)<<"\t"<<"tHits(t3)="<<tHits(t3)<<"\t"<<"tCh2(t1)="<<tCh2(t1)<<"\t"<<"tCh2(t2)="<<tCh2(t2)<<"\t"<<"tCh2(t3)="<<tCh2(t3)<<endl;
-			if (progpar.verbose) cout<<"Pcor(t1)="<<pcorr(tP(t1))<<"\t"<<"Pcor(t2)="<<pcorr(tP(t2))<<"\t"<<"Pcor(t3)="<<pcorr(tP(t3))<<endl;
+			if (progpar.verbose) cout<<"Pcor(t1)="<<pcorr(tP(t1),2)<<"\t"<<"Pcor(t2)="<<pcorr(tP(t2),1)<<"\t"<<"Pcor(t3)="<<pcorr(tP(t3),1)<<endl;
 
 			double px1, px2, px3, py1, py2, py3, pz1, pz2, pz3;
-			px1 = pcorr(tP(t1))*tVx(t1);
-			px2 = pcorr(tP(t2))*tVx(t2);
-			px3 = pcorr(tP(t3))*tVx(t3);
-			py1 = pcorr(tP(t1))*tVy(t1);
-			py2 = pcorr(tP(t2))*tVy(t2);
-			py3 = pcorr(tP(t3))*tVy(t3);
-			pz1 = pcorr(tP(t1))*tVz(t1);
-			pz2 = pcorr(tP(t2))*tVz(t2);
-			pz3 = pcorr(tP(t3))*tVz(t3);
+			px1 = pcorr(tP(t1),2)*tVx(t1);
+			px2 = pcorr(tP(t2),1)*tVx(t2);
+			px3 = pcorr(tP(t3),1)*tVx(t3);
+			py1 = pcorr(tP(t1),2)*tVy(t1);
+			py2 = pcorr(tP(t2),1)*tVy(t2);
+			py3 = pcorr(tP(t3),1)*tVy(t3);
+			pz1 = pcorr(tP(t1),2)*tVz(t1);
+			pz2 = pcorr(tP(t2),1)*tVz(t2);
+			pz3 = pcorr(tP(t3),1)*tVz(t3);
 
 			Dmeson.p1 = tP(t1);      //kaon
 			Dmeson.p2 = tP(t2);      //pion
@@ -657,6 +684,9 @@ int analyse_event()
 			Dmeson.charge1 = ktrrec_.CHTRAK[t1];
 			Dmeson.charge2 = ktrrec_.CHTRAK[t2];
 			Dmeson.charge3 = ktrrec_.CHTRAK[t3];
+
+			Dmeson.nhitsvd=kvdrec_.NHITVD;
+			Dmeson.nhitsdc=kdcrec_.NHIT;
 
 			Dmeson.nhitst1 = tHits(t1);
 			Dmeson.nhitst2 = tHits(t2);
@@ -839,6 +869,97 @@ int analyse_event()
 			Dmeson.mulayerhits2 = mu_layer_hits[1];
 			Dmeson.mulayerhits3 = mu_layer_hits[2];
 
+			atc_to_track(t1);
+			if (progpar.verbose) cout<<"t1="<<t1<<"\t"<<"atctrackinfo.ncnt="<<atctrackinfo.ncnt<<endl;
+			float totalNpe1=0;
+			int cnt;
+			Dmeson.natccrosst1=atctrackinfo.ncnt;
+			for(int i=0; i<atctrackinfo.ncnt; i++)
+			{
+			    Dmeson.atcCNTt1[i]=atctrackinfo.cnt[i];
+			    cnt=atctrackinfo.cnt[i];
+			    Dmeson.atcNpet1[i]=atctrackinfo.npe[cnt];
+
+			    Dmeson.tlent1[i]=atctrackinfo.tlen[cnt];
+			    Dmeson.wlshitt1[i]=atctrackinfo.wlshit[cnt];
+			    Dmeson.nearwlst1[i]=atctrackinfo.nearwls[cnt];
+
+			    Dmeson.aerogel_REGIONt1[i]=atctrackinfo.aerogel_REGION[cnt];
+			    Dmeson.aerogel_REGION0t1[i]=atctrackinfo.aerogel_REGION0[cnt];
+			    Dmeson.aerogel_REGION5t1[i]=atctrackinfo.aerogel_REGION5[cnt];
+			    Dmeson.aerogel_REGION20t1[i]=atctrackinfo.aerogel_REGION20[cnt];
+
+			    Dmeson.single_aerogel_REGIONt1[i]=atctrackinfo.single_aerogel_REGION[cnt];
+			    Dmeson.single_aerogel_REGION0t1[i]=atctrackinfo.single_aerogel_REGION0[cnt];
+			    Dmeson.single_aerogel_REGION5t1[i]=atctrackinfo.single_aerogel_REGION5[cnt];
+			    Dmeson.single_aerogel_REGION20t1[i]=atctrackinfo.single_aerogel_REGION20[cnt];
+
+			    if (progpar.verbose) cout<<"atc cnt="<<Dmeson.atcCNTt1[i]<<"\t"<<"npe="<<Dmeson.atcNpet1[i]<<endl;
+			    totalNpe1 += atctrackinfo.npe[cnt];
+			}
+			if (progpar.verbose) cout<<"t1="<<t1<<"\t"<<"Total ATC Npe="<<totalNpe1<<endl;
+			Dmeson.atcTotalNpet1=totalNpe1;
+
+			atc_to_track(t2);
+			float totalNpe2=0;
+			Dmeson.natccrosst2=atctrackinfo.ncnt;
+			if (progpar.verbose) cout<<"t2="<<t2<<"\t"<<"atctrackinfo.ncnt="<<atctrackinfo.ncnt<<endl;
+			for(int i=0; i<atctrackinfo.ncnt; i++)
+			{
+			    Dmeson.atcCNTt2[i]=atctrackinfo.cnt[i];
+			    cnt=atctrackinfo.cnt[i];
+			    Dmeson.atcNpet2[i]=atctrackinfo.npe[cnt];
+
+			    Dmeson.tlent2[i]=atctrackinfo.tlen[cnt];
+			    Dmeson.wlshitt2[i]=atctrackinfo.wlshit[cnt];
+			    Dmeson.nearwlst2[i]=atctrackinfo.nearwls[cnt];
+
+			    Dmeson.aerogel_REGIONt2[i]=atctrackinfo.aerogel_REGION[cnt];
+			    Dmeson.aerogel_REGION0t2[i]=atctrackinfo.aerogel_REGION0[cnt];
+			    Dmeson.aerogel_REGION5t2[i]=atctrackinfo.aerogel_REGION5[cnt];
+			    Dmeson.aerogel_REGION20t2[i]=atctrackinfo.aerogel_REGION20[cnt];
+
+			    Dmeson.single_aerogel_REGIONt2[i]=atctrackinfo.single_aerogel_REGION[cnt];
+			    Dmeson.single_aerogel_REGION0t2[i]=atctrackinfo.single_aerogel_REGION0[cnt];
+			    Dmeson.single_aerogel_REGION5t2[i]=atctrackinfo.single_aerogel_REGION5[cnt];
+			    Dmeson.single_aerogel_REGION20t2[i]=atctrackinfo.single_aerogel_REGION20[cnt];
+
+			    if (progpar.verbose) cout<<"atc cnt="<<Dmeson.atcCNTt2[i]<<"\t"<<"npe="<<Dmeson.atcNpet2[i]<<endl;
+			    totalNpe2 += atctrackinfo.npe[cnt];
+			}
+			if (progpar.verbose) cout<<"t2="<<t2<<"\t"<<"Total ATC Npe="<<totalNpe2<<endl;
+			Dmeson.atcTotalNpet2=totalNpe2;
+
+			atc_to_track(t3);
+			float totalNpe3=0;
+			Dmeson.natccrosst3=atctrackinfo.ncnt;
+			if (progpar.verbose) cout<<"t3="<<t3<<"\t"<<"atctrackinfo.ncnt="<<atctrackinfo.ncnt<<endl;
+			for(int i=0; i<atctrackinfo.ncnt; i++)
+			{
+			    Dmeson.atcCNTt3[i]=atctrackinfo.cnt[i];
+			    cnt=atctrackinfo.cnt[i];
+			    Dmeson.atcNpet3[i]=atctrackinfo.npe[cnt];
+
+			    Dmeson.tlent3[i]=atctrackinfo.tlen[cnt];
+			    Dmeson.wlshitt3[i]=atctrackinfo.wlshit[cnt];
+			    Dmeson.nearwlst3[i]=atctrackinfo.nearwls[cnt];
+
+			    Dmeson.aerogel_REGIONt3[i]=atctrackinfo.aerogel_REGION[cnt];
+			    Dmeson.aerogel_REGION0t3[i]=atctrackinfo.aerogel_REGION0[cnt];
+			    Dmeson.aerogel_REGION5t3[i]=atctrackinfo.aerogel_REGION5[cnt];
+			    Dmeson.aerogel_REGION20t3[i]=atctrackinfo.aerogel_REGION20[cnt];
+
+			    Dmeson.single_aerogel_REGIONt3[i]=atctrackinfo.single_aerogel_REGION[cnt];
+			    Dmeson.single_aerogel_REGION0t3[i]=atctrackinfo.single_aerogel_REGION0[cnt];
+			    Dmeson.single_aerogel_REGION5t3[i]=atctrackinfo.single_aerogel_REGION5[cnt];
+			    Dmeson.single_aerogel_REGION20t3[i]=atctrackinfo.single_aerogel_REGION20[cnt];
+
+			    if (progpar.verbose) cout<<"atc cnt="<<Dmeson.atcCNTt3[i]<<"\t"<<"npe="<<Dmeson.atcNpet3[i]<<endl;
+			    totalNpe3 += atctrackinfo.npe[cnt];
+			}
+			if (progpar.verbose) cout<<"t3="<<t3<<"\t"<<"Total ATC Npe="<<totalNpe3<<endl;
+			Dmeson.atcTotalNpet3=totalNpe3;
+
 			eventTree->Fill();
 		    }
 		}
@@ -966,18 +1087,25 @@ int main(int argc, char* argv[])
 
 	eventTree = new TTree("et","Event tree");
 	eventTree->SetAutoSave(500000000);  // autosave when 0.5 Gbyte written
-	eventTree->Branch("Dmeson",&Dmeson,"vrtntrk/I:vrtnip:vrtnbeam:charge1:charge2:charge3:nhitst1:nhitst2:nhitst3:nhitsvdt1:nhitsvdt2:nhitsvdt3:nhitsxyt1:nhitszt1:nhitsxyt2"
-			  ":nhitszt2:nhitsxyt3:nhitszt3:nvect1:nvecxyt1:nveczt1:nvect2:nvecxyt2:nveczt2:nvect3:nvecxyt3"
-			  ":nveczt3:ncomb:ncls1:ncls2:ncls3:ncls:nlkr:ncsi:munhits:mulayerhits1:mulayerhits2:mulayerhits3:Run"
+	eventTree->Branch("Dmeson",&Dmeson,"vrtntrk/I:vrtnip:vrtnbeam:charge1:charge2:charge3:nhitsdc:nhitst1:nhitst2:nhitst3:nhitsvd:nhitsvdt1:nhitsvdt2:nhitsvdt3"
+			  ":nhitsxyt1:nhitszt1:nhitsxyt2:nhitszt2:nhitsxyt3:nhitszt3:nvect1:nvecxyt1:nveczt1:nvect2:nvecxyt2:nveczt2:nvect3:nvecxyt3"
+			  ":nveczt3:ncomb:ncls1:ncls2:ncls3:ncls:nlkr:ncsi:munhits:mulayerhits1:mulayerhits2:mulayerhits3:Run:natccrosst1:atcCNTt1[20]:natccrosst2:atcCNTt2[20]"
+			  ":natccrosst3:atcCNTt3[20]:aerogel_REGIONt1[20]:aerogel_REGION0t1[20]:aerogel_REGION5t1[20]:aerogel_REGION20t1[20]:single_aerogel_REGIONt1[20]"
+                          ":single_aerogel_REGION0t1[20]:single_aerogel_REGION5t1[20]:single_aerogel_REGION20t1[20]:aerogel_REGIONt2[20]:aerogel_REGION0t2[20]:aerogel_REGION5t2[20]"
+			  ":aerogel_REGION20t2[20]:single_aerogel_REGIONt2[20]:single_aerogel_REGION0t2[20]:single_aerogel_REGION5t2[20]:single_aerogel_REGION20t2[20]"
+			  ":aerogel_REGIONt3[20]:aerogel_REGION0t3[20]:aerogel_REGION5t3[20]:aerogel_REGION20t3[20]:single_aerogel_REGIONt3[20]:single_aerogel_REGION0t3[20]"
+			  ":single_aerogel_REGION5t3[20]:single_aerogel_REGION20t3[20]:wlshitt1[20]:nearwlst1[20]:wlshitt2[20]:nearwlst2[20]:wlshitt3[20]:nearwlst3[20]"
 			  ":mbc/F:de:prec1:prec2:prec3:fchi2:Ebeam:rEv:P1:P2:P3:Pt1:Pt2:Pt3:thetat1:thetat2:thetat3:phit1:phit2:phit3:chi2t1:chi2t2:chi2t3:e1"
 			  ":e2:e3:rr1:rr2:rr3:Zip1:Zip2:Zip3:ecls1:ecls2:ecls3:tcls1:tcls2:tcls3:pcls1"
-			  ":pcls2:pcls3:emcenergy:lkrenergy:csienergy:timet1:betat1:lengtht1:timet2:betat2:lengtht2:timet3:betat3:lengtht3");
-//----------------- Configure kframework -----------------//
+			  ":pcls2:pcls3:emcenergy:lkrenergy:csienergy:timet1:betat1:lengtht1:timet2:betat2:lengtht2:timet3:betat3:lengtht3:atcNpet1[20]:atcTotalNpet1"
+			  ":atcNpet2[20]:atcTotalNpet2:atcNpet3[20]:atcTotalNpet3:tlent1[20]:tlent2[20]:tlent3[20]");
+	//----------------- Configure kframework -----------------//
 	//Set kframework signal handling
 	kf_install_signal_handler(1);
 
         kdcswitches_.kNoiseReject=3;   //Cut for DC noise  (0 - not cut, 1 - standart, 2 - soft, 3 - hard)
-        kdcswitches_.KemcAllowed=-1;  //off use strips for track reconstruction
+        kdcswitches_.KemcAllowed=0;
+	//kdcswitches_.KemcAllowed=-1;  //off use strips for track reconstruction
 
 	kf_MCCalibRunNumber(progpar.simOn,progpar.MCCalibRunNumber,progpar.MCCalibRunNumberL,progpar.NsimRate,progpar.Scale,progpar.Ascale,progpar.Zscale);
 

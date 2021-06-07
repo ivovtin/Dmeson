@@ -34,7 +34,8 @@ FOPTS  = -g -fvxt -Wall -fno-automatic -finit-local-zero \
 
 # Дополнительные опции для линкера
 #LDOPTS = -Xlinker -rpath -Xlinker `root-config --libdir`
-LDOPTS = -lg2c -Wl,-rpath=`root-config --libdir`
+#LDOPTS = -lg2c -Wl,-rpath=`root-config --libdir`
+LDOPTS = -lg2c `root-config --libs` /space/KEDR/stable/lib/libVDDCRec.a  -lMinuit
 
 #Если определена переменная ONLYBINARY, то библиотека в пакете отсутствует
 ONLYBINARY=""
@@ -60,7 +61,7 @@ LIB_LOCAL= `root-config --libs` -lMinuit -lpq -lcrypt -lbz2 -ldl -lg2c
 ##LIB_LOCAL= `root-config --libs` -lMinuit -lcrypt -lpq -lbz2 -lg2c
 
 # Определим, какие программы мы будем собирать
-BINARIES = analysis_D0meson analysis_Dplusmeson analysis_bhabha analysis_Ks BhaBhaSimpleSampleCC analysis_D0meson_krKrec
+BINARIES = analysis_D0meson analysis_Dplusmeson analysis_bhabha analysis_Ks BhaBhaSimpleSampleCC analysis_D0meson_krKrec analysis_mono
 
 # укажем, из каких модулей этого пакета они состоят
 # (эти модули не будут включены в библиотеку)
@@ -90,12 +91,18 @@ analysis_Ks_LIBS := KaFramework KrAtc KDisplay VDDCRec KrVDDCMu KrMu \
 KrdEdxPId KrDCCalibdEdx DchdEdxDataRoot VDDCRec KrToF KsToF KEmcRec LKrTools \
 VDDCRec KsTrg KdConvert KrObjects KdDCSim FitTools DchGeom ReadNat KDB AppFramework KrKRec KrDONLP2
 
-BhaBhaSimpleSampleCC_MODULES := BhaBhaSimpleSampleCC
-#BhaBhaSimpleSampleCC_LIBS := KaFramework KrAtc KDisplay VDDCRec KrVDDCMu KrMu \
+analysis_mono_MODULES := analysis_mono
+analysis_mono_LIBS := KaFramework KrAtc KDisplay VDDCRec KrVDDCMu KrMu \
 KrdEdxPId KrDCCalibdEdx DchdEdxDataRoot VDDCRec KrToF KsToF KEmcRec LKrTools \
 VDDCRec KsTrg KdConvert KrObjects KdDCSim FitTools DchGeom ReadNat KDB AppFramework KrKRec KrDONLP2
 
-BhaBhaSimpleSampleCC_LIBS := VDDCRec  KDisplay  ReadNat  KDB VDDCRec  KsTrg  KdDCSim KrToF KsToF KrVDDCMu KrMu KEmcRec  VDDCRec  KrAtc LKrTools  KdConvert KrObjects AppFramework FitTools DchGeom
+BhaBhaSimpleSampleCC_MODULES := BhaBhaSimpleSampleCC
+#BhaBhaSimpleSampleCC_LIBS := KaFramework KrAtc KDisplay VDDCRec KrVDDCMu KrMu \
+##KrdEdxPId KrDCCalibdEdx DchdEdxDataRoot VDDCRec KrToF KsToF KEmcRec LKrTools \
+##VDDCRec KsTrg KdConvert KrObjects KdDCSim FitTools DchGeom ReadNat KDB AppFramework KrKRec KrDONLP2
+
+##BhaBhaSimpleSampleCC_LIBS := VDDCRec  KDisplay  ReadNat  KDB VDDCRec  KsTrg  KdDCSim KrToF KsToF KrVDDCMu KrMu KEmcRec  VDDCRec  KrAtc LKrTools  KdConvert KrObjects AppFramework FitTools DchGeom
+BhaBhaSimpleSampleCC_LIBS := VDDCRec  KsTrg  KDisplay VDRec ReadNat KDB KdDCSim  VDDCRec DchGeom KrAtc VDDCRec  KrToF KsToF KrVDDCMu KrMu KEmcRec  VDDCRec  ReadNat LKrTools AppFramework FitTools DchGeom KdConvert  KrObjects
 
 # следующую строку лучше не трогать
 include $(WORKDIR)/KcReleaseTools/rules.mk

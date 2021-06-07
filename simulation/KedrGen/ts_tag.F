@@ -14,7 +14,7 @@ c                                                                      *
 c     KOD=0/1/2 - notag / single tag/ double tag                       *
 c     ICALLS    - calls of TSTAG                                       *
 c     ICALLS1   - calls of TSTAG with single tag result                *
-c     ICALLS1   - calls of TSTAG with double tag result                *
+c     ICALLS2   - calls of TSTAG with double tag result                *
 c                                                                      *
 c   Author: V.A.Tayursky                                               *
 c                                                                      *
@@ -22,8 +22,13 @@ c   Last change:    19.04.2002                                         *
 c                                                                      *
 c***********************************************************************
 c
-      COMMON /PSEVT/  NPS,KPS(4,100),PPS(4,100)   ! Event, package PST
-      COMMON /GGHPRT/ N1,P1(4,20),I1(20)          ! gen. 306,307
+      Real *8 pPart,mPart
+      Integer *4 KfTyp,IParent,IChilds,NPS
+      COMMON /PSEVT/ pPart(4,100),mPart(100),KfTyp(100),
+     &               IParent(100),IChilds(2,100),NPS
+c      COMMON /PSEVT/  NPS,KPS(4,100),PPS(4,100)            ! old
+
+      COMMON /GGHPRT/ N1,P1(4,20),I1(20)                    ! gen. 306,307
       DIMENSION P(4,4)
 c 
       DATA ICALL,ICALL2,ICALL2/3*0/
@@ -37,7 +42,7 @@ c
       DO 2 J=1,4
 c
       IF(J.LE.2) THEN
-        IF(NGEN.GE.302.AND.NGEN.LE.305)  P(I,J)=PPS(I,J)
+        IF(NGEN.GE.302.AND.NGEN.LE.305)  P(I,J)=pPart(I,J)
         IF(NGEN.EQ.306.OR.NGEN.EQ.307)   P(I,J)=P1(I,J)  
       ELSE
         IF(NGEN.EQ.307) P(I,J)=P1(I,J) ! for ee->4e

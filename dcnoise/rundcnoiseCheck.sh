@@ -46,8 +46,11 @@ while read run; do
     #  echo "Stop"
     #  break
     #fi
-    echo $run
+    #echo $run
+    #$HOME/development/Dmeson/dcnoise/dcnoise.sh $run > "/spool/users/ovtin/dcnoises/out"$run".dat"
+    if [ $run -ge 25415 ]; then
     $HOME/development/Dmeson/dcnoise/dcnoise.sh $run > "/spool/users/ovtin/dcnoises/out"$run".dat"
+    fi 
 done < $filename
 
 status=$?

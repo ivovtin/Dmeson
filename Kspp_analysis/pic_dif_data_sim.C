@@ -20,8 +20,11 @@ void pic_dif_data_sim()
     TF1 *fun1 = h1->GetFunction("fitInvM2");
     h1->GetListOfFunctions()->Remove(fun1);
     Double_t sc1=h1->GetEntries();
+    h1->Sumw2();
     h1->Scale(1/sc1);
-    h1->Draw("");
+    h1->SetMinimum(0.0020);
+    h1->SetMaximum(0.0054);
+    h1->Draw("ep");
 
     TH1F *h2 = (TH1F*)inSim->Get("invMcor");
     h2->SetLineColor(kRed);
@@ -33,8 +36,9 @@ void pic_dif_data_sim()
     TF1 *fun2 = h2->GetFunction("fitInvM2");
     h2->GetListOfFunctions()->Remove(fun2);
     Double_t sc2=h2->GetEntries();
+    h2->Sumw2();
     h2->Scale(1/sc2);
-    h2->Draw("sames");
+    h2->Draw("sames, ep");
     TPaveStats *st1 = (TPaveStats*)h1->FindObject("stats");
     st1->SetX1NDC(.70);
     st1->SetX2NDC(.90);
@@ -53,7 +57,4 @@ void pic_dif_data_sim()
     c.Print(dir_out + "compare_data_sim_2016-17.png");
     c.Print(dir_out + "compare_data_sim_2016-17.eps");
     c.Print("compare_data_sim_2016-17.root");
-    //c.Print(dir_out + "compare_data_sim_2004.png");
-    //c.Print(dir_out + "compare_data_sim_2004.eps");
-    //c.Print("compare_data_sim_2004.root");
 }

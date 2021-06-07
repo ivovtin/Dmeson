@@ -1,0 +1,5 @@
+nt/cre 20 ' ' 3 ! ! e t p
+nt/rea 20 out4.dat
+opt logy
+opt stat
+nt/plo 20.sqrt((1885.-e)**2-277.**2)-1864.5 e<10.

@@ -13,7 +13,7 @@
 
   TNtuple nt("nt","NTuple","mbc:de:dp");
 
-  FILE* file = fopen("dat/kp_uds.dat","r");
+  FILE* file = fopen("dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0.dat","r");
   while (!feof(file)) {
     double mbc,de,dp;
     if (fscanf(file,"%lf %lf %lf", &mbc,&de,&dp) == 3) {
@@ -25,7 +25,7 @@
 
   TNtuple nt2("nt2","NTuple","mbc:de:dp");
 
-  file = fopen("gen/bck_uds.gen","r");
+  file = fopen("gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/bck_uds_S1.0_A6.0_Z0.0.gen","r");
   while (!feof(file)) {
     double mbc,de,dp;
     if (fscanf(file,"%lf %lf %lf", &mbc,&de,&dp) == 3) {
@@ -113,7 +113,7 @@
   de7.GetXaxis()->SetTitle("#Delta E (MeV)");
   de8.Draw("same");
 
-  c.Print(KEDR+"uds.eps");
-  c.Print(KEDR+"uds.png");
+  c.Print(KEDR+"uds_atc_S1.0_A6.0_Z0.0.eps");
+  c.Print(KEDR+"uds_atc_S1.0_A6.0_Z0.0.png");
 
 }

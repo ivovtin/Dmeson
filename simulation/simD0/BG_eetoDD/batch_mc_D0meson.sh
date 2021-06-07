@@ -24,7 +24,8 @@
 #$ -m beas
 #$ -M ovtin.ivan@gmail.com
 
-#$ -t 1-12
+##$ -t 1-12
+#$ -t 7-12
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]

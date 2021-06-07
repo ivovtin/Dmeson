@@ -1,5 +1,4 @@
 {
-
   gROOT->Reset();
   gROOT->DeleteAll();
   gStyle->SetOptStat(0);
@@ -47,6 +46,13 @@
   char *exp_bck;
   char *exp_dbck;
 
+  bool atc=1;
+
+  float decut1=100.;
+  float decut2=-100.;
+  //float decut1=150.;
+  //float decut2=-150.;
+
   if( key==2004 ) {
       infile = "dat/kp_exp_1.030_2004.dat";
       mbcmax = 38;
@@ -61,24 +67,39 @@
       exp_dbck = "gen/exp_dbck_2004.gen";
   }
   else{
-      infile = "dat/kp_exp_1.0173_2016-17.dat";
-      //infile = "dat/kp_exp_1.0173_2016-17_woDCnoise.dat";
-      mbcmax = 105; //70
-      mbcmax2 = 40;   
+      mbcmax = 85; //105
+      mbcmax2 = 40;
       mbcmax3 = 45;
-      demax = 68; //48 
-      dpmax = 250; //170
-      rmax = 90.; //70.
-      outfile1 = "exp2016-17_parold";
-      exp_sig = "gen/exp_sig.gen";
-      exp_bck = "gen/exp_bck.gen";
-      exp_dbck = "gen/exp_dbck.gen";
-/*
-      outfile1 = "exp2016-17_woDCnoise";
-      exp_sig = "gen/exp_sig_woDCnoise.gen";
-      exp_bck = "gen/exp_bck_woDCnoise.gen";
-      exp_dbck = "gen/exp_dbck_woDCnoise.gen";
-*/
+      demax = 72; //48
+      dpmax = 270; //170
+      rmax = 70.; //95.
+      if(atc){
+	  mbcmax = 62;
+	  demax = 43;
+	  dpmax = 133;
+	  rmax = 62.;
+      }
+
+      //infile = "dat/kp_exp_1.0173_2016-17.dat";
+      //infile = "dat/kp_exp_1.0173_2016-17_woDCnoise.dat";
+      //infile = "dat/kp_exp_1.0173_2016-17_KemcAllowedOff_kNoiseReject3.dat";
+      //infile = "dat/kp_exp_1.0173_2016-17_merge.dat";
+      //infile = "dat/KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0/kp_exp_1.0173_2016-17_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0.dat";
+
+      if(atc || key==2004){
+          infile = "dat/KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_ATC/kp_exp_2016-17_KemcAllowedOff_kNoiseReject3_ATC_1.0155.dat";
+          outfile1 = "exp2016-17_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0";
+          exp_sig = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/exp_sig_S1.0_A6.0_Z0.0.gen";
+          exp_bck = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/exp_bck_S1.0_A6.0_Z0.0.gen";
+          exp_dbck = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/exp_dbck_S1.0_A6.0_Z0.0.gen";
+      }
+      else{
+          infile = "dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/kp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0155.dat";
+          outfile1 = "exp2016-17_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0";
+          exp_sig = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/exp_sig_S1.0_A6.0_Z0.0.gen";
+          exp_bck = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/exp_bck_S1.0_A6.0_Z0.0.gen";
+          exp_dbck = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/exp_dbck_S1.0_A6.0_Z0.0.gen";
+      }
   }
 
   TNtuple exp_nt("exp_nt","NTuple","mbc:de:dp");
@@ -151,17 +172,11 @@
   TH1F sig_mbc("sig_mbc","Mbc (MeV)",55,1790.,1900.);
   TH1F bck_mbc("bck_mbc","Mbc (MeV)",55,1790.,1900.);
   TH1F dbck_mbc("dbck_mbc","Mbc (MeV)",55,1790.,1900.);
-  
-  exp_nt->Project("exp_mbc","mbc","abs(de)<100");
-  sig_nt->Project("sig_mbc","mbc","abs(de)<100");
-  bck_nt->Project("bck_mbc","mbc","abs(de)<100");
-  dbck_nt->Project("dbck_mbc","mbc","abs(de)<100");
-  /*
-  exp_nt->Project("exp_mbc","mbc","abs(de)<150");
-  sig_nt->Project("sig_mbc","mbc","abs(de)<150");
-  bck_nt->Project("bck_mbc","mbc","abs(de)<150");
-  dbck_nt->Project("dbck_mbc","mbc","abs(de)<150");
-  */
+  exp_nt->Project("exp_mbc","mbc",Form("abs(de)<%f",decut1));
+  sig_nt->Project("sig_mbc","mbc",Form("abs(de)<%f",decut1));
+  bck_nt->Project("bck_mbc","mbc",Form("abs(de)<%f",decut1));
+  dbck_nt->Project("dbck_mbc","mbc",Form("abs(de)<%f",decut1));
+
   sig_mbc->Scale(scale);
   bck_mbc->Scale(scale);
   dbck_mbc->Scale(scale);
@@ -170,7 +185,7 @@
   TH1F sig_mbcs1("sig_mbcs1","Mbc (MeV)",55,1790.,1900.);
   TH1F bck_mbcs1("bck_mbcs1","Mbc (MeV)",55,1790.,1900.);
   TH1F dbck_mbcs1("dbck_mbcs1","Mbc (MeV)",55,1790.,1900.);
-  
+
   exp_nt->Project("exp_mbcs1","mbc","abs(de)<100&&abs(dp)<100");
   sig_nt->Project("sig_mbcs1","mbc","abs(de)<100&&abs(dp)<100");
   bck_nt->Project("bck_mbcs1","mbc","abs(de)<100&&abs(dp)<100");
@@ -189,7 +204,7 @@
   TH1F sig_mbcs2("sig_mbcs2","Mbc (MeV)",55,1790.,1900.);
   TH1F bck_mbcs2("bck_mbcs2","Mbc (MeV)",55,1790.,1900.);
   TH1F dbck_mbcs2("dbck_mbcs2","Mbc (MeV)",55,1790.,1900.);
-  
+
   exp_nt->Project("exp_mbcs2","mbc","abs(de)<100&&abs(dp)>100");
   sig_nt->Project("sig_mbcs2","mbc","abs(de)<100&&abs(dp)>100");
   bck_nt->Project("bck_mbcs2","mbc","abs(de)<100&&abs(dp)>100");
@@ -220,17 +235,10 @@
   TH1F sig_mbcde("sig_mbcde","",30,-300.,300);
   TH1F bck_mbcde("bck_mbcde","DE (MeV)",30,-300.,300);
   TH1F dbck_mbcde("dbck_mbcde","DE (MeV)",30,-300.,300);
-  
-  exp_nt->Project("exp_mbcde","de","abs(mbc-1865)<10&&abs(de)<100");
-  sig_nt->Project("sig_mbcde","de","abs(mbc-1865)<10&&abs(de)<100");
-  bck_nt->Project("bck_mbcde","de","abs(mbc-1865)<10&&abs(de)<100");
-  dbck_nt->Project("dbck_mbcde","de","abs(mbc-1865)<10&&abs(de)<100");
-  /*
-  exp_nt->Project("exp_mbcde","de","abs(mbc-1865)<10&&abs(de)<150");
-  sig_nt->Project("sig_mbcde","de","abs(mbc-1865)<10&&abs(de)<150");
-  bck_nt->Project("bck_mbcde","de","abs(mbc-1865)<10&&abs(de)<150");
-  dbck_nt->Project("dbck_mbcde","de","abs(mbc-1865)<10&&abs(de)<150");
-  */
+  exp_nt->Project("exp_mbcde","de",Form("abs(mbc-1865)<10&&abs(de)<%f",decut1));
+  sig_nt->Project("sig_mbcde","de",Form("abs(mbc-1865)<10&&abs(de)<%f",decut1));
+  bck_nt->Project("bck_mbcde","de",Form("abs(mbc-1865)<10&&abs(de)<%f",decut1));
+  dbck_nt->Project("dbck_mbcde","de",Form("abs(mbc-1865)<10&&abs(de)<%f",decut1));
   sig_mbcde->Scale(scale);
   bck_mbcde->Scale(scale);
   dbck_mbcde->Scale(scale);
@@ -317,6 +325,26 @@
   exp_de.SetLineWidth(2);
   exp_de.Draw("elpsame");
 
+  /*
+  TH1F* sum_h= new TH1F(bck_de);
+  sum_h->Add(dbck_de,1.);
+  //sum_h->Add(sig_de,1.);
+  sum_h->SetLineColor(kBlue);
+  sum_h->Draw("same,hist");
+
+
+  TH1F* hdE1exp=new TH1F("hdE1exp","hdE1exp",30,-300.,300.);
+  hdE1exp = (TH1F*) exp_de->Clone();
+  //cout<<hdE1exp->GetRMS()<<endl;
+  cout<<de_hs->GetRMS()<<endl;
+  TH1F* hdE1sim=new TH1F("hdE1sim","hdE1sim",30,-300.,300.);
+  //hdE1sim = (TH1F*) sig_de->Clone();
+  TList * histKeys = de_hs->GetHists();
+  histKeys->Print();
+  //hdE1sim = (TH1F*) de_hs->Clone();
+  //Double_t deKT = hdE1exp->KolmogorovTest(hdE1sim);
+  //cout<<"deKT="<<deKT<<endl;
+  */
   c.Update();
 
   c.cd(3);
@@ -360,17 +388,17 @@
   TLine l;
   l.SetLineColor(sig_color);
   l.SetLineWidth(2);
-  
+
   l.DrawLine(1855., -300., 1855., 300);
   l.DrawLine(1875., -300., 1875., 300);
-  l.DrawLine(1700., -100., 1900., -100);
-  l.DrawLine(1700.,  100., 1900.,  100);
+  l.DrawLine(1700., decut2, 1900., decut2);
+  l.DrawLine(1700.,  decut1, 1900.,  decut1);
   /*
   l.DrawLine(1855., -300., 1855., 300);
   l.DrawLine(1875., -300., 1875., 300);
   l.DrawLine(1700., -150., 1900., -150);
   l.DrawLine(1700.,  150., 1900.,  150);
-  */ 
+  */
   c.Update();
 
   c.Print(KEDR + outfile1 + ".eps");

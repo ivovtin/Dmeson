@@ -375,7 +375,10 @@ int analyse_event()
 	double yy=tY0IP(i)*tY0IP(i);
 	double rr=sqrt(xx+yy);
 
-	if( rr<=20 ) {
+        cout<<"idt="<<i<<"\t"<<"charge="<<tCharge(i)<<"\t"<<"rr="<<rr<<"\t"<<"z="<<tZ0IP(i)<<endl;
+
+	//if( rr<=20 ) {
+	if( rr<=0.5 && fabs(tZ0IP(i))<10. ) {
 	    ntrfromip++;
 	    if(ntrfromip<=20){
 		listtr[ntrfromip-1]=i+1;
@@ -399,7 +402,8 @@ int analyse_event()
     }
 
     int qst=0;
-    int ntracks=eTracksAll;
+    //int ntracks=eTracksAll;
+    int ntracks=ntrfromip;
     lclg[nclnft-1]=lclpi0[nclnft-1];
 
     double Mpart[20];
@@ -423,7 +427,8 @@ int analyse_event()
 		for(int ih=0; ih<hNumOfHyp; ih++){
 		    if (progpar.verbose) cout<<"chi2:"<<hHChi2(ih)<<endl;
 		    int ii1=0, ii2=0;
-		    for(int it=0; it<ntracks; it++){
+		    for(int idtr1=0; idtr1<ntracks; idtr1++){
+                        int it=listtr[idtr1]-1;
 			if (progpar.verbose) cout<<"track:"<<it<<"  Mass:"<<hMPc(ih,it)<<"  P:"<<hPPc(ih,it)<<"\t"<<"tP(t)="<<tP(it)<<"\t"<<"tCharge="<<tCharge(it)<<endl;
 			if( (hMPc(ih,it)>493.0 && hMPc(ih,it)<494.0) && tCharge(it)<0 )
 			{
@@ -432,13 +437,13 @@ int analyse_event()
 			if( (hMPc(ih,it)>139.0 && hMPc(ih,it)<140.0) && tCharge(it)>0 )
 			{
 			    ii2++;
-
 			}
 		    }
 		    if( ii1>0 && ii2>0 && hHChi2(ih)<minhHchi2 ){
 			minhHchi2=hHChi2(ih);
-                        for(int i=0; i<ntracks; i++)
+                        for(int idtr2=0; idtr2<ntracks; idtr2++)
 			{
+			    int i=listtr[idtr2]-1;
 			    Ppart[i]=hPPc(ih,i);
 			    Mpart[i]=hMPc(ih,i);
 			}
@@ -448,10 +453,14 @@ int analyse_event()
 		{
 		    int comb=0;
 
-		    for (int t1 = 0; t1 < eTracksAll; t1++)                                  //cycle for first track
+		    for (int tr1 = 0; tr1 < ntracks; tr1++)                                  //cycle for first track
 		    {
-			for (int t2 = 0; t2 < eTracksAll; t2++)                              //cycle for second track
+			int t1=listtr[tr1]-1;
+
+			for (int tr2 = 0; tr2 < ntracks; tr2++)                              //cycle for second track
 			{
+			    int t2=listtr[tr2]-1;
+
 			    if( ((Mpart[t1]>493.0 && Mpart[t1]<494.0) && tCharge(t1)==-1 ) && ((Mpart[t2]>139.0 && Mpart[t2]) && tCharge(t2)==1) )  //condition for part1: K-(pi-), part2: pi+(K+)    (D0->K-pi+)
 			    {
 				double xx1=tX0IP(t1)*tX0IP(t1);
@@ -608,7 +617,8 @@ int analyse_event()
 				double mk = 493.68;
 				double mpi = 139.57;
 
-				double de = sqrt(mk*mk + Ppart[t1]*Ppart[t1]) + sqrt(mpi*mpi + Ppart[t2]*Ppart[t2]) - ebeam;
+				//double de = sqrt(mk*mk + Ppart[t1]*Ppart[t1]) + sqrt(mpi*mpi + Ppart[t2]*Ppart[t2]) - ebeam;
+				double de = (sqrt(mpi*mpi + tP(t1)*tP(t1)) + sqrt(mk*mk + tP(t2)*tP(t2)) + sqrt(mpi*mpi + tP(t2)*tP(t2)) + sqrt(mk*mk + tP(t1)*tP(t1)))/2. - ebeam;
 
 				double dp = Ppart[t1]-Ppart[t2];
 

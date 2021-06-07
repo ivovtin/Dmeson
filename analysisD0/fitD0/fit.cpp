@@ -11,7 +11,8 @@ typedef struct {
 } t_point;
 
 int num_sig;
-t_point sig[300000];
+//t_point sig[300000];
+t_point sig[600000];
 int num_norm;
 t_point norm[5000000];
 
@@ -195,6 +196,8 @@ double pdf_sig(double mbc, double de, double dp, double *par) {
                          pow(fr*mbc_sigma2,2.) +
                          pow(fr*fr*mbc_sigma4,2.));
 
+    //printf("mbc_sigma_l=%f mbc_sigma_r=%f\n", mbc_sigma_l, mbc_sigma_r);
+
     double desig = exp(-dde*dde/2./de_sigma/de_sigma);
     double mbcsig;
     if (dmbc<0)
@@ -275,7 +278,7 @@ double pdf_sig2(double mbc, double de, double dp, double *par) {
     double desig = exp(-dde*dde/2./de_sigma/de_sigma);
     double mbcsig;
     if (dmbc<0)
-      mbcsig = exp(-dmbc*dmbc/2./mbc_sigma_l/mbc_sigma_l)/(mbc_sigma_l+mbc_sigma_r);
+	mbcsig = exp(-dmbc*dmbc/2./mbc_sigma_l/mbc_sigma_l)/(mbc_sigma_l+mbc_sigma_r);
     else
       mbcsig = exp(-dmbc*dmbc/2./mbc_sigma_r/mbc_sigma_r)/(mbc_sigma_l+mbc_sigma_r);
 
