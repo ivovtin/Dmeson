@@ -34,8 +34,7 @@
 ##$ -M ovtin.ivan@gmail.com
 
 ##for Signal
-##$ -t 1-114
-#$ -t 1-20
+#$ -t 1-114
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]
