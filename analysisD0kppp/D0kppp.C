@@ -81,7 +81,7 @@ int main(int argc, char* argv[])
     }
 
     //for print DEBUG information
-    bool verbose=0;
+    int verbose=0;
 
     //***************preselections*************
     int ntrk=4;
@@ -139,13 +139,9 @@ int main(int argc, char* argv[])
     TString fout_result=dir_out + "/" + "fout_result.dat";
     TString fout_result_atc;
     TString list_badruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/badruns";
-    TString out_pref = "KemcAllowedOn_kNoiseReject3_1.0240_KinFit";
+    TString out_pref = "KemcAllowedOn_kNoiseReject3_1.0220_KinFit";
     if( key==0 ){
         min_Mbc2=1800.; max_Mbc2=1900.;
-	//deCut1=-100; deCut2=100;
-	//deCut1=-40; deCut2=20;
-	//deCut1=-40; deCut2=40;
-	//deCut1=-60; deCut2=40;
 	deCut1=-60; deCut2=60;
 	mbcCut1=1858, mbcCut2=1873;
 	fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data_%d.root",key).Data();
@@ -171,7 +167,7 @@ int main(int argc, char* argv[])
 	deCut1=-100; deCut2=100;
 	mbcCut1=1855, mbcCut2=1875;
 	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_sig_%d.root",key).Data();
-        out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_KinFit_v2";
+        out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_KinFit";
 	KEDR = "/home/ovtin/public_html/outDmeson/D0kppp/simulation_Sig_" + out_pref + "_ATC/";
         fout_result=dir_out + "/" + "kppp_signal_" + out_pref + ".dat";
         fout_result_atc=dir_out + "/" + "kppp_signal_" + out_pref + "_ATC.dat";
@@ -193,7 +189,7 @@ int main(int argc, char* argv[])
 	deCut1=-60; deCut2=60;
 	mbcCut1=1858, mbcCut2=1873;
 	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_BG_eetoDD_%d.root",key).Data();
-        out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_test";
+        out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_v5_idPID";
 	KEDR = "/home/ovtin/public_html/outDmeson/D0kppp/simulation_Bkg_eetodd_" + out_pref + "_ATC/";
         fout_result=dir_out + "/" + "kppp_dbck_" + out_pref + ".dat";
         fout_result_atc=dir_out + "/" + "kpp_dbck_" + out_pref + "_ATC.dat";
@@ -208,7 +204,7 @@ int main(int argc, char* argv[])
     //include samples
     chain();
     Int_t nentr=tt->GetEntries();
-    if(verbose) cout<<"Nentries="<<nentr<<endl;
+    if(verbose==1) cout<<"Nentries="<<nentr<<endl;
 
     setbranchstatus();
     setbranchaddress();
@@ -222,6 +218,13 @@ int main(int argc, char* argv[])
     TH1F* hep=new TH1F("E/p","E/p",100,-0.5,3.5);
 
     TH1F* hrr=new TH1F("rr","rr",50,0.,3.);
+    TH1F* hr_track_intersect12=new TH1F("hr_track_intersect12","hr_track_intersect12",50,0.,3.);
+    TH1F* hr_track_intersect13=new TH1F("hr_track_intersect13","hr_track_intersect13",50,0.,3.);
+    TH1F* hr_track_intersect14=new TH1F("hr_track_intersect14","hr_track_intersect14",50,0.,3.);
+    TH1F* hr_track_intersect23=new TH1F("hr_track_intersect23","hr_track_intersect23",50,0.,3.);
+    TH1F* hr_track_intersect24=new TH1F("hr_track_intersect24","hr_track_intersect24",50,0.,3.);
+    TH1F* hr_track_intersect34=new TH1F("hr_track_intersect34","hr_track_intersect34",50,0.,3.);
+    TH1F* hr_intersect1234=new TH1F("hr_intersect1234","hr_intersect1234",50,0.,3.);
     TH1F* hZip=new TH1F("ZIP","ZIP",100,-50.,50.);
     TH1F* henass=new TH1F("Energy_ass","Energy ass",100,0.,4500.);
 
@@ -337,7 +340,14 @@ int main(int argc, char* argv[])
     TProfile* pr2=new TProfile("#pi","#pi npe/Momentum",60,0,1200,0,50);
 
     TH1F* hdedx=new TH1F("dedx","dedx",150,0.0,1500.0);
-    TH1F* hprob=new TH1F("prob","prob",100,0.0,1.0);
+    TH1F* hprobKt1=new TH1F("probKt1","probKt1",100,0.0,1.0);
+    TH1F* hprobKt2=new TH1F("probKt2","probKt2",100,0.0,1.0);
+    TH1F* hprobKt3=new TH1F("probKt3","probKt3",100,0.0,1.0);
+    TH1F* hprobKt4=new TH1F("probKt4","probKt4",100,0.0,1.0);
+    TH1F* hprobpit1=new TH1F("probpit1","probpit1",100,0.0,1.0);
+    TH1F* hprobpit2=new TH1F("probpit2","probpit2",100,0.0,1.0);
+    TH1F* hprobpit3=new TH1F("probpit3","probpit3",100,0.0,1.0);
+    TH1F* hprobpit4=new TH1F("probpit4","probpit4",100,0.0,1.0);
     TH1F* hresd=new TH1F("resd","resd",150,0.0,1500.0);
 
     TTree *forFit = new TTree("forFit","forFit");
@@ -536,14 +546,45 @@ int main(int argc, char* argv[])
                */
 	  )
 	{
+	    //if ( Dmeson.emcenergy<1200. ) continue;
+
+            /*
+            if( abs(Dmeson.kft1)!=321 && Dmeson.prec1<550 ) continue;
+            if( abs(Dmeson.kft2)!=211 && Dmeson.prec2<550 ) continue;
+            if( abs(Dmeson.kft3)!=211 && Dmeson.prec3<550 ) continue;
+            if( abs(Dmeson.kft4)!=211 && Dmeson.prec4<550 ) continue;
+            */
+            /*
+            if( abs(Dmeson.kft1)!=321 ) continue;
+            if( abs(Dmeson.kft2)!=211 ) continue;
+            if( abs(Dmeson.kft3)!=211 ) continue;
+            if( abs(Dmeson.kft4)!=211 ) continue;
+            */
+
+           //if( Dmeson.r_track_intersect12>0.7 && Dmeson.r_track_intersect13>0.7 && Dmeson.r_track_intersect14>0.7 && Dmeson.r_track_intersect23>0.7 && Dmeson.r_track_intersect24>0.7 && Dmeson.r_track_intersect34>0.7  ) continue;
+           //if( Dmeson.r_track_intersect12>0.75 ) continue;
+           //if( Dmeson.r_track_intersect24>0.80 || Dmeson.r_track_intersect34>0.80 ) continue;
+           //if( Dmeson.r_track_intersect24>0.90 ) continue;
+
+            hr_track_intersect12->Fill(Dmeson.r_track_intersect12);
+            hr_track_intersect13->Fill(Dmeson.r_track_intersect13);
+            hr_track_intersect14->Fill(Dmeson.r_track_intersect14);
+            hr_track_intersect23->Fill(Dmeson.r_track_intersect23);
+            hr_track_intersect24->Fill(Dmeson.r_track_intersect24);
+            hr_track_intersect34->Fill(Dmeson.r_track_intersect34);
+
+            hr_intersect1234->Fill(Dmeson.r_track_intersect12-Dmeson.r_track_intersect34);
+
+	    //if(Dmeson.mbc>=1864 && Dmeson.mbc<=1872) hr_intersect1234->Fill(Dmeson.r_track_intersect12-Dmeson.r_track_intersect34);
+
 	    hDncomb->Fill(Dmeson.ncomb);
 	    hRun->Fill(Dmeson.Run);
             hTime->Fill(runTime_begin);
 	    hEbeam->Fill(Dmeson.Ebeam);
 
-	    if(verbose) cout<<"<<<<<<<<<<<<<<<<<<<<<<<<<<< Next event >>>>>>>>>>>>>>>>>>>>>>>>>>>>"<<endl;
-	    if(verbose) cout<<"run="<<Dmeson.Run<<"\t"<<"event="<<Dmeson.rEv<<endl;
-	    if(verbose) cout<<"Dmeson.ncomb="<<Dmeson.ncomb<<"\t"<<endl;
+	    if(verbose==2) cout<<"<<<<<<<<<<<<<<<<<<<<<<<<<<< Next event >>>>>>>>>>>>>>>>>>>>>>>>>>>>"<<endl;
+	    if(verbose==2) cout<<"run="<<Dmeson.Run<<"\t"<<"event="<<Dmeson.rEv<<endl;
+	    if(verbose==1) cout<<"Dmeson.ncomb="<<Dmeson.ncomb<<"\t"<<endl;
 
 	    htimetof->Fill(Dmeson.timet1);
 	    hbeta->Fill(Dmeson.betat1);
@@ -561,7 +602,7 @@ int main(int argc, char* argv[])
 	    hbeta->Fill(Dmeson.betat4);
 	    hlength->Fill(Dmeson.lengtht4);
 
-	    if ( verbose )
+	    if ( verbose==1 )
 	    {
 		cout<<"p1="<<Dmeson.p1<<"\t"<<"p2="<<Dmeson.p2<<"\t"<<"p3="<<Dmeson.p3<<endl;
 		cout<<"e1/p1="<<Dmeson.e1/Dmeson.p1<<"\t"<<"e2/p2="<<Dmeson.e2/Dmeson.p2<<"\t"<<"e3/p3="<<Dmeson.e3/Dmeson.p3<<endl;
@@ -664,12 +705,8 @@ int main(int argc, char* argv[])
 	    henergy->Fill(Dmeson.emcenergy);
 	    hlkrenergy->Fill(Dmeson.lkrenergy);
 	    hcsienergy->Fill(Dmeson.csienergy);
-            /*
-            hnumn->Fill(Dmeson.numn);
-	    henn->Fill(Dmeson.enn);
-	    hnumo->Fill(Dmeson.numo);
-	    heno->Fill(Dmeson.eno);
-            */
+
+
 	    hep->Fill(Dmeson.e1/Dmeson.p1);
 	    hep->Fill(Dmeson.e2/Dmeson.p2);
 	    hep->Fill(Dmeson.e3/Dmeson.p3);
@@ -697,19 +734,37 @@ int main(int argc, char* argv[])
 
 	    hfchi2->Fill(Dmeson.fchi2);
 
-            //if ( Dmeson.numn>=2 && Dmeson.enn>=120 ) continue;
-            //if ( Dmeson.vrtntrk>=4 && Dmeson.numn>=2 ) continue;
+            //if ( Dmeson.numn>=5 && Dmeson.enn>=1500 ) continue;
+            //if ( Dmeson.numn>=5 && Dmeson.enn<=1500 ) continue;
+            //if ( Dmeson.enn<=800 ) continue;
+            //if ( Dmeson.enn<=1000 ) continue;
+            //if ( Dmeson.enn<=1200 ) continue;
+            //if ( Dmeson.numn>=3 && Dmeson.enn>500 ) continue;          !!!!!!!!
+            //if ( Dmeson.enn<=1500 ) continue;
+	    //if ( Dmeson.vrtntrk>=4 && Dmeson.numn>=2 ) continue;
 
-            
+
+            hnumn->Fill(Dmeson.numn);
+	    henn->Fill(Dmeson.enn);
+	    hnumo->Fill(Dmeson.numo);
+	    heno->Fill(Dmeson.eno);
+
+
             hdedx->Fill(Dmeson.dedxt1);
             hdedx->Fill(Dmeson.dedxt2);
             hdedx->Fill(Dmeson.dedxt3);
 	    hdedx->Fill(Dmeson.dedxt4);
 
-            if(Dmeson.probKt1>0.) hprob->Fill(Dmeson.probKt1);
-            if(Dmeson.probKt2>0.) hprob->Fill(Dmeson.probKt2);
-            if(Dmeson.probKt3>0.) hprob->Fill(Dmeson.probKt3);
-            if(Dmeson.probKt4>0.) hprob->Fill(Dmeson.probKt4);
+            if(Dmeson.probKt1>0.) hprobKt1->Fill(Dmeson.probKt1);
+            if(Dmeson.probKt2>0.) hprobKt2->Fill(Dmeson.probKt2);
+            if(Dmeson.probKt3>0.) hprobKt3->Fill(Dmeson.probKt3);
+            if(Dmeson.probKt4>0.) hprobKt4->Fill(Dmeson.probKt4);
+
+            if(Dmeson.probpit1>0.) hprobpit1->Fill(Dmeson.probpit1);
+            if(Dmeson.probpit2>0.) hprobpit2->Fill(Dmeson.probpit2);
+            if(Dmeson.probpit3>0.) hprobpit3->Fill(Dmeson.probpit3);
+            if(Dmeson.probpit4>0.) hprobpit4->Fill(Dmeson.probpit4);
+
 
             hresd->Fill(Dmeson.resdKt1);
             hresd->Fill(Dmeson.resdKt2);
@@ -899,14 +954,15 @@ int main(int argc, char* argv[])
 	    if ( Dmeson.betat4>0 ) h2betaP->Fill(Dmeson.p4, 1/Dmeson.betat4);
 
 
-            if( ftof==1 && fabs(dtof1_K)>tofCut ) continue;
+            //if( ftof==1 && fabs(dtof1_K)>tofCut ) continue;
+            if( ftof==1 && dtof1_K<-tofCut ) continue;
 	    if( ftof==1 && dtof1_K>1000. ) continue;
 
 	    //if( ftof==1 && dtof4_K>-0.5 ) continue;
-	    if( ftof==1 && dtof1_pi<0.5 ) continue;
-	    if( ftof==1 && fabs(dtof2_pi)>1.0 ) continue;
-            if( ftof==1 && fabs(dtof3_pi)>1.0 ) continue;
-            if( ftof==1 && fabs(dtof4_pi)>1.0 ) continue;
+	    //if( ftof==1 && dtof1_pi<0.5 ) continue;
+	    //if( ftof==1 && fabs(dtof2_pi)>1.0 ) continue;
+            //if( ftof==1 && fabs(dtof3_pi)>1.0 ) continue;
+            //if( ftof==1 && fabs(dtof4_pi)>1.0 ) continue;
 
 	    hdtof1_K->Fill(dtof1_K);
 	    hdtof1_pi->Fill(dtof1_pi);
@@ -931,7 +987,18 @@ int main(int argc, char* argv[])
 	    {
 		hmbc->Fill(Dmeson.mbc);
 		hRunSigdECut->Fill(Dmeson.Run);
+                /*
+                if(Dmeson.r_track_intersect12>0.0)
+		{
+                   if(verbose==3) cout<<"<<<<<<<<<<<<<<<<<<<<<<<<<<< Next event >>>>>>>>>>>>>>>>>>>>>>>>>>>>"<<endl;
+                   if(verbose==3) cout<<"run="<<Dmeson.Run<<"\t"<<"event="<<Dmeson.rEv<<endl;
 
+                   if(verbose==3) cout<<"Dmeson.kft1="<<Dmeson.kft1<<"\t"<<"Dmeson.kft2="<<Dmeson.kft2<<"\t"<<"Dmeson.kft3="<<Dmeson.kft3<<"\t"<<"Dmeson.kft4="<<Dmeson.kft4<<"\t"<<endl;
+                   if(verbose==3) cout<<"intersect12="<<Dmeson.r_track_intersect12<<"\t"<<"intersect13="<<Dmeson.r_track_intersect13<<"\t"<<"intersect14="<<Dmeson.r_track_intersect14<<"\t"<<"intersect23="<<Dmeson.r_track_intersect23<<"\t"<<"intersect23="<<Dmeson.r_track_intersect23<<"\t"<<"intersect34="<<Dmeson.r_track_intersect34<<endl;
+
+                  if(verbose==3) cout<<"diff_intersect1234="<<Dmeson.r_track_intersect12-Dmeson.r_track_intersect34<<endl;
+                }
+                */
 		if( Dmeson.mbc>=mbcCut1 && Dmeson.mbc<=mbcCut2 )
 		{
 		    hDCnhits->Fill(Dmeson.nhitsdc);
@@ -974,7 +1041,7 @@ int main(int argc, char* argv[])
 		Result<< Dmeson.mbc <<"\t"<< Dmeson.de <<"\t"<< 0.1000000 <<endl;
 	    }
 
-	    if(verbose) cout<<"Dmeson.mbc="<<Dmeson.mbc<<"\t"<<"Dmeson.de="<<Dmeson.de<<"\t"<<endl;
+	    if(verbose==1) cout<<"Dmeson.mbc="<<Dmeson.mbc<<"\t"<<"Dmeson.de="<<Dmeson.de<<"\t"<<endl;
 
 
 	    //=============== ATC identification ================================
@@ -1188,6 +1255,14 @@ int main(int argc, char* argv[])
     hrr->GetXaxis()->SetTitle("r_{ip}, cm");
     hrr->Draw(); cc1->SaveAs(KEDR+"rr.png");
 
+    hr_track_intersect12->Draw(); cc1->SaveAs(KEDR+"r_track_intersect12.png");
+    hr_track_intersect13->Draw(); cc1->SaveAs(KEDR+"r_track_intersect13.png");
+    hr_track_intersect14->Draw(); cc1->SaveAs(KEDR+"r_track_intersect14.png");
+    hr_track_intersect23->Draw(); cc1->SaveAs(KEDR+"r_track_intersect23.png");
+    hr_track_intersect24->Draw(); cc1->SaveAs(KEDR+"r_track_intersect24.png");
+    hr_track_intersect34->Draw(); cc1->SaveAs(KEDR+"r_track_intersect34.png");
+    hr_intersect1234->Draw(); cc1->SaveAs(KEDR+"r_track_intersect1234.png");
+
     hZip->GetXaxis()->SetTitle("Z_{ip}, cm");
     hZip->Draw(); cc1->SaveAs(KEDR+"Zip.png");
 
@@ -1272,7 +1347,14 @@ int main(int argc, char* argv[])
     cc1->SaveAs(KEDR+"ATC_npe_p.png");
 
     hdedx->Draw();  cc1->SaveAs(KEDR+"dedx.png");
-    hprob->Draw();  cc1->SaveAs(KEDR+"prob.png");
+    hprobKt1->Draw();  cc1->SaveAs(KEDR+"probKt1.png");
+    hprobKt2->Draw();  cc1->SaveAs(KEDR+"probKt2.png");
+    hprobKt3->Draw();  cc1->SaveAs(KEDR+"probKt3.png");
+    hprobKt4->Draw();  cc1->SaveAs(KEDR+"probKt4.png");
+    hprobpit1->Draw();  cc1->SaveAs(KEDR+"probpit1.png");
+    hprobpit2->Draw();  cc1->SaveAs(KEDR+"probpit2.png");
+    hprobpit3->Draw();  cc1->SaveAs(KEDR+"probpit3.png");
+    hprobpit4->Draw();  cc1->SaveAs(KEDR+"probpit4.png");
     hresd->Draw();  cc1->SaveAs(KEDR+"resd.png");
 
     fout->Write();

@@ -4,7 +4,7 @@
 #$ -S /bin/bash                            ##specifies the interpreting shell for this job to be the Bash shell.
 # -------------------------------------------
 # --             batch name                --
-#$ -N SimD0BG
+#$ -N SimD0K3pBG
 # -------------------------------------------
 # --     What to redirect to where         --
 # -- working directory --
@@ -34,7 +34,8 @@
 ##$ -M ovtin.ivan@gmail.com
 
 ##$ -t 1-221
-#$ -t 1-20
+##$ -t 18-221
+#$ -t 145-221
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]
@@ -42,7 +43,7 @@ myrand=$[1000+$i]
 #BG ee_to_DD
 simOn=1
 ##outfile="/store/users/ovtin/outDmeson/simulation/outsimD0_kppp/Bkg_eetoDD/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0/psi3770_to_simD0mesonBkg_eetoDD_"$i".root"
-outfile="/store/users/ovtin/outDmeson/simulation/outsimD0_kppp/Bkg_eetoDD/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_v2/psi3770_to_simD0mesonBkg_eetoDD_"$i".root"
+outfile="/store/users/ovtin/outDmeson/simulation/outsimD0_kppp/Bkg_eetoDD/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_v5/psi3770_to_simD0mesonBkg_eetoDD_"$i".root"
 mintracks=4
 maxtracks=30
 minbeamtracks=0
@@ -61,7 +62,7 @@ minNhits=18
 kinefit=1
 ##nevbegin=0
 ##nevend=5000
-#pSF=1.000
+pSF=1.000
 
 ########################################################################################################
 inruns="/store/users/ovtin/outDmeson/simulation/outsimD0_kppp/Bkg_eetoDD/simDmeson000001.dat"

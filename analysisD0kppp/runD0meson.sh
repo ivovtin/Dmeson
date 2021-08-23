@@ -1,5 +1,5 @@
 #!/bin/bash
-dataORmc=1
+dataORmc=0
 verbose=0
 
 ./D0kppp $dataORmc $verbose
