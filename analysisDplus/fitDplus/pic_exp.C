@@ -31,8 +31,6 @@
   gStyle->SetHistLineWidth(3);
   gStyle->SetHatchesLineWidth(3);
 
-  //TString KEDR="/spool/users/ovtin/outDmeson/Dplus/results/fitsDplus/";
-  TString KEDR="/spool/users/ovtin/outDmeson/Dplus/results/fitsDplus/forTest/";
 
   char *infile;
   int mbcmax;
@@ -46,6 +44,14 @@
 
   int key = 2016;
 
+  bool atc = 1;
+
+  TFile *fout=0;
+  fout = new TFile("result_hists.root","RECREATE");
+
+  //TString KEDR="/spool/users/ovtin/outDmeson/Dplus/results/fitsDplus/";
+  TString KEDR="/spool/users/ovtin/outDmeson/Dplus/results/fitsDplus/forTest/";
+
   if( key==2004 ) {
       infile = "dat/kpp_2004.dat";
       mbcmax = 45;
@@ -58,22 +64,37 @@
       exp_dbck = "gen/exp_dbck_2004.gen";
   }
   else{
-      infile = "dat/kpp_2016-17.dat";
-      mbcmax = 120;
-      rmax = 120.;
-      outfile1 = "kpp_exp_mbc";
-      outfile2 = "kpp_exp_de";
-      outfile3 = "kpp_exp_mbcde";
-      exp_sig = "gen/exp_sig.gen";
-      exp_bck = "gen/exp_bck.gen";
-      exp_dbck = "gen/exp_dbck.gen";
+      if (atc ){
+	  infile = "dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0150_ATC.dat";
+	  //infile = "dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0150_ntrphe1.5_ATC.dat";
+	  mbcmax = 70;
+	  rmax = 70.;
+
+	  outfile1 = "kpp_exp_mbc_KemcAllowedOn_kNoiseReject3_1.0150_atc";
+	  outfile2 = "kpp_exp_de_KemcAllowedOn_kNoiseReject3_1.0150_atc";
+	  outfile3 = "kpp_exp_mbcde_KemcAllowedOn_kNoiseReject3_1.0150_atc";
+          /*
+	  outfile1 = "kpp_exp_mbc_KemcAllowedOn_kNoiseReject3_1.0150_atc_ntrphe1.0";
+	  outfile2 = "kpp_exp_de_KemcAllowedOn_kNoiseReject3_1.0150_atc_ntrphe1.0";
+	  outfile3 = "kpp_exp_mbcde_KemcAllowedOn_kNoiseReject3_1.0150_atc_ntrphe1.0";
+          */
+	  exp_sig = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/exp_sig_S1.0_A6.0_Z0.0.gen";
+	  exp_bck = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/exp_bck_S1.0_A6.0_Z0.0.gen";
+	  exp_dbck = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/exp_dbck_S1.0_A6.0_Z0.0.gen";
+      }
+      else{
+	  infile = "dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0150.dat";
+	  mbcmax = 120;
+	  rmax = 120.;
+	  outfile1 = "kpp_exp_mbc_KemcAllowedOn_kNoiseReject3_1.0150";
+	  outfile2 = "kpp_exp_de_KemcAllowedOn_kNoiseReject3_1.0150";
+	  outfile3 = "kpp_exp_mbcde_KemcAllowedOn_kNoiseReject3_1.0150";
+	  exp_sig = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/exp_sig_S1.0_A6.0_Z0.0.gen";
+	  exp_bck = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/exp_bck_S1.0_A6.0_Z0.0.gen";
+	  exp_dbck = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/exp_dbck_S1.0_A6.0_Z0.0.gen";
+      }
   }
 
-  /*
-  int bck_color = 41;
-  int dbck_color = 38;
-  int sig_color = 50;
-  */
   int bck_color = 8;
   int dbck_color = 9;
   int sig_color = 2;
@@ -284,4 +305,7 @@
 
   c3.Print(KEDR + outfile3 + ".eps");
   c3.Print(KEDR + outfile3 + ".png");
+
+  fout->Write();
+  fout->Close();
 }
