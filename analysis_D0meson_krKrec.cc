@@ -233,17 +233,17 @@ int vddc_event_rejection()
     if( eTracksIP<progpar.min_ip_track_number )     return CutIPTrackNumber_min;
     if( eTracksIP>progpar.max_ip_track_number )     return CutIPTrackNumber_max;
 
-    /*
+
     double charge=0;
     for (int t = 0; t< eTracksAll; t++) {
 	if( tPt(t)<=progpar.min_momentum )  return MinMomentumCut;
 	if( tPt(t)>=progpar.max_momentum )  return MaxMomentumCut;
-	if( tCh2(t)>progpar.max_tchi2 )  return Chi2Cut;
-	if( tHits(t)<progpar.min_Nhits )  return tHitsCut;
+	//if( tCh2(t)>progpar.max_tchi2 )  return Chi2Cut;
+	//if( tHits(t)<progpar.min_Nhits )  return tHitsCut;
 	//charge += tCharge(t);
     }
     //if( (charge)!=0 )  return ChargeCut;   //if sum charge of tracks do not equal 0 then delete event
-    */
+
     return 0;
 }
 
@@ -326,8 +326,39 @@ int mu_event_rejection()
     return 0;
 }
 
-double pcorr(double p) {
-    double pc = p*fabs(progpar.pSF);
+double pcorr(double p, int type) {
+    double ms, dedx, k;
+
+    if (type==1) {    //pion
+	ms = 149.484;
+	dedx = 1.30782;
+	k = 0.;
+    }
+    else if(type==2)  //kaon
+    {
+	ms = 502.997;
+	dedx = 1.28546;
+	k = 0.;
+    }
+    else if(type==3)  //muon
+    {
+	ms = 138.315;
+	dedx = 1.06861;
+	k = 0.;
+    }
+    else{                //electron
+	ms = 0.;
+	dedx = 1.57548;
+	k = 0.748772e-2;
+    }
+
+    double gamma = sqrt(ms*ms+p*p)/ms;
+
+    double beta = sqrt(1.-1./gamma/gamma);
+
+    double pc = p+1.*dedx/pow(beta,3) + k*p;
+
+    pc = pc*fabs(progpar.pSF);
     if (progpar.verbose==3) cout<<"pc="<<pc<<"\t"<<"p="<<p<<"\t"<<"progpar.pSF="<<progpar.pSF<<endl;
 
     return fabs(pc);
@@ -358,11 +389,11 @@ double clust_dist(int t, int cl) {
 int analyse_event()
 {
     float EMinPhot=progpar.min_cluster_energy;
-    double WTotal=2.*beam_energy;
+    double WTotal=1864.84;
+    ebeam=beam_energy;
     if( kedrrun_cb_.Header.RunType == 64 ) {   //for MC
-	WTotal=2*1886.75;
+	ebeam=1886.75;
     }
-    ebeam=WTotal/2.;
 
     if (progpar.verbose) cout<<"RunNumber="<<kedrraw_.Header.RunNumber<<"\t"<<"Ebeam="<<WTotal/2<<endl;
     if (progpar.verbose) cout<<"Event="<<kdcenum_.EvNum<<"\t"<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"eTracksAll="<<eTracksAll<<"\t"<<"eTracksBeam="<<eTracksBeam<<"\t"<<"eTracksIP="<<eTracksIP<<endl;
@@ -375,10 +406,10 @@ int analyse_event()
 	double yy=tY0IP(i)*tY0IP(i);
 	double rr=sqrt(xx+yy);
 
-        cout<<"idt="<<i<<"\t"<<"charge="<<tCharge(i)<<"\t"<<"rr="<<rr<<"\t"<<"z="<<tZ0IP(i)<<endl;
+        if (progpar.verbose) cout<<"idt="<<i<<"\t"<<"charge="<<tCharge(i)<<"\t"<<"rr="<<rr<<"\t"<<"z="<<tZ0IP(i)<<endl;
 
 	//if( rr<=20 ) {
-	if( rr<=0.5 && fabs(tZ0IP(i))<10. ) {
+	if( rr<=5.0 && fabs(tZ0IP(i))<15. ) {
 	    ntrfromip++;
 	    if(ntrfromip<=20){
 		listtr[ntrfromip-1]=i+1;
@@ -409,26 +440,37 @@ int analyse_event()
     double Mpart[20];
     double Ppart[20];
 
+    float minhHchi2=5000.;
+
+    int Num_pi0=2;
+    //int Num_pi0=nclnft;
+
+    int comb=0;
+
     //for( int ng=0; ng<nclnft; ng++ )
     for( int ng=0; ng<1; ng++ )
+    //for( int ng=0; ng<Num_pi0; ng++ )
     {
 	//for( int npi0=0; npi0<nclnft; npi0++ )
-	for( int npi0=0; npi0<1; npi0++ )
+	for( int npi0=0; npi0<Num_pi0+1; npi0++ )
+	//for( int npi0=0; npi0<Num_pi0; npi0++ )
 	{
+	    if (progpar.verbose) cout<<"Event="<<eDaqNumber<<"\t"<<"ntracks="<<ntracks<<"\t"<<"ng="<<ng<<"\t"<<"npi0="<<npi0<<endl;
+
 	    reckfitmulticpi0gamma(&WTotal,&ntracks,&npi0,&ng,listtr,lclpi0,lclg,&qst);
 
-	    if (progpar.verbose) cout<<"Event="<<eDaqNumber<<"\t"<<"ntracks="<<ntracks<<"\t"<<"ng="<<ng<<"\t"<<"npi0="<<npi0<<endl;
 	    if (progpar.verbose) cout<<"qst:"<<qst<<endl;
 	    if (progpar.verbose) cout<<"NumOfHyp:"<<hNumOfHyp<<endl;
 
-	    if(qst>=0){
+	    if(qst>=0)
+	    {
 		if (progpar.verbose) cout<<"NumOfHyp:"<<hNumOfHyp<<endl;
-		float minhHchi2=10000.;
-		for(int ih=0; ih<hNumOfHyp; ih++){
+		for(int ih=0; ih<hNumOfHyp; ih++)
+		{
 		    if (progpar.verbose) cout<<"chi2:"<<hHChi2(ih)<<endl;
 		    int ii1=0, ii2=0;
 		    for(int idtr1=0; idtr1<ntracks; idtr1++){
-                        int it=listtr[idtr1]-1;
+			int it=listtr[idtr1]-1;
 			if (progpar.verbose) cout<<"track:"<<it<<"  Mass:"<<hMPc(ih,it)<<"  P:"<<hPPc(ih,it)<<"\t"<<"tP(t)="<<tP(it)<<"\t"<<"tCharge="<<tCharge(it)<<endl;
 			if( (hMPc(ih,it)>493.0 && hMPc(ih,it)<494.0) && tCharge(it)<0 )
 			{
@@ -439,300 +481,310 @@ int analyse_event()
 			    ii2++;
 			}
 		    }
-		    if( ii1>0 && ii2>0 && hHChi2(ih)<minhHchi2 ){
-			minhHchi2=hHChi2(ih);
-                        for(int idtr2=0; idtr2<ntracks; idtr2++)
+		    if( ii1>0 && ii2>0 && hHChi2(ih)<minhHchi2 )
+		    {
+			//minhHchi2=hHChi2(ih);
+			for(int idtr2=0; idtr2<ntracks; idtr2++)
 			{
 			    int i=listtr[idtr2]-1;
 			    Ppart[i]=hPPc(ih,i);
 			    Mpart[i]=hMPc(ih,i);
 			}
-		    }
-		}
-		if(hNumOfHyp>0)
-		{
-		    int comb=0;
 
-		    for (int tr1 = 0; tr1 < ntracks; tr1++)                                  //cycle for first track
-		    {
-			int t1=listtr[tr1]-1;
-
-			for (int tr2 = 0; tr2 < ntracks; tr2++)                              //cycle for second track
+			for (int tr1 = 0; tr1 < ntracks; tr1++)                                  //cycle for first track
 			{
-			    int t2=listtr[tr2]-1;
+			    int t1=listtr[tr1]-1;
 
-			    if( ((Mpart[t1]>493.0 && Mpart[t1]<494.0) && tCharge(t1)==-1 ) && ((Mpart[t2]>139.0 && Mpart[t2]) && tCharge(t2)==1) )  //condition for part1: K-(pi-), part2: pi+(K+)    (D0->K-pi+)
+			    for (int tr2 = 0; tr2 < ntracks; tr2++)                              //cycle for second track
 			    {
-				double xx1=tX0IP(t1)*tX0IP(t1);
-				double yy1=tY0IP(t1)*tY0IP(t1);
-				double rr1=sqrt(xx1+yy1);
-				double xx2=tX0IP(t2)*tX0IP(t2);
-				double yy2=tY0IP(t2)*tY0IP(t2);
-				double rr2=sqrt(xx2+yy2);
+				int t2=listtr[tr2]-1;
 
-				if ( fabs(tZ0IP(t1))>30. ) continue;
-				if ( fabs(tZ0IP(t2))>30. ) continue;
-				if ( rr1>8 ) continue;
-				if ( rr2>8 ) continue;
-
-				if( tPt(t1)<=progpar.min_momentum || tPt(t1)>=progpar.max_momentum )  continue;
-				if( tCh2(t1)>progpar.max_tchi2 )  continue;
-				if( tHits(t1)<progpar.min_Nhits )  continue;
-
-				if( tPt(t2)<=progpar.min_momentum || tPt(t2)>=progpar.max_momentum )  continue;
-				if( tCh2(t2)>progpar.max_tchi2 )  continue;
-				if( tHits(t2)<progpar.min_Nhits )  continue;
-
-				comb++;
-				Dmeson.ncomb = comb;
-
-				Dmeson.rr1 = rr1;
-				Dmeson.rr2 = rr2;
-				Dmeson.zip1 = tZ0IP(t1);
-				Dmeson.zip2 = tZ0IP(t2);
-
-				if (progpar.verbose) cout<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"Ebeam="<<WTotal/2<<"\t"<<"t1="<<t1<<"\t"<<"t2="<<t2<<"\t"<<"tCharge(t1)="<<tCharge(t1)<<"\t"<<"tCharge(t2)="<<tCharge(t2)<<endl;
-				if (progpar.verbose) cout<<"p(t1)="<<tP(t1)<<"\t"<<"p(t2)="<<tP(t2)<<"\t"<<"tHits(t1)="<<tHits(t1)<<"\t"<<"tHits(t2)="<<tHits(t2)<<"\t"<<"tCh2(t1)="<<tCh2(t1)<<"\t"<<"tCh2(t2)="<<tCh2(t2)<<endl;
-				if (progpar.verbose) cout<<"ktrrec_.PTRAK[t1]="<<ktrrec_.PTRAK[t1]<<"\t"<<"ktrrec_.PTRAK[t2]="<<ktrrec_.PTRAK[t2]<<"\t"<<endl;
-
-				Dmeson.p1 = tP(t1);
-				Dmeson.p2 = tP(t2);
-				Dmeson.pt1 = tPt(t1);
-				Dmeson.pt2 = tPt(t2);
-
-				Dmeson.chi2t1 = tCh2(t1);
-				Dmeson.chi2t2 = tCh2(t2);
-
-				Dmeson.vrtntrk = eTracksAll;
-				Dmeson.vrtnip = eTracksIP;
-				Dmeson.vrtnbeam = eTracksBeam;
-
-				//for (eTracksAll=2)
-				Dmeson.theta2t=acos(CThe2t)*180./M_PI;
-				Dmeson.phi2t=acos(CPhi2t)*180./M_PI;
-
-				Dmeson.thetat1 = tTeta(t1);
-				Dmeson.thetat2 = tTeta(t2);
-
-				Dmeson.phit1 = ktrrec_.FITRAK[t1]+(ktrrec_.FITRAK[t1]<0?360:0);;
-				Dmeson.phit2 = ktrrec_.FITRAK[t2]+(ktrrec_.FITRAK[t2]<0?360:0);;
-
-				Dmeson.nhitsvd=kvdrec_.NHITVD;
-				Dmeson.nhitsdc=kdcrec_.NHIT;
-
-				Dmeson.nhitst1 = tHits(t1);
-				Dmeson.nhitst2 = tHits(t2);
-
-				Dmeson.nhitsvdt1 = tHitsVD(t1);
-				Dmeson.nhitsvdt2 = tHitsVD(t2);
-
-				Dmeson.nhitsxyt1 = tHitsXY(t1);
-				Dmeson.nhitszt1 = tHits(t1)-tHitsXY(t1);
-
-				Dmeson.nhitsxyt2 = tHitsXY(t2);
-				Dmeson.nhitszt2 = tHits(t2)-tHitsXY(t2);
-
-				Dmeson.nvect1 = tVectors(t1);
-				Dmeson.nvecxyt1 = tVectorsXY(t1);
-				Dmeson.nveczt1 = tVectorsZ(t1);
-
-				Dmeson.nvect2 = tVectors(t2);
-				Dmeson.nvecxyt2 = tVectorsXY(t2);
-				Dmeson.nveczt2 = tVectorsZ(t2);
-
-				Dmeson.ncls=semc.emc_ncls;
-				Dmeson.nlkr=emcRec->lkrClusters.size();
-				Dmeson.ncsi=emcRec->csiClusters.size();
-				Dmeson.emcenergy=0;
-				Dmeson.lkrenergy=0;
-				Dmeson.csienergy=0;
-
-				for(int c=0; c<semc.emc_ncls; c++) {
-				    Dmeson.emcenergy+=semc.emc_energy[c];
-				    if( semc.emc_type[c]==1 )
-					Dmeson.lkrenergy+=semc.emc_energy[c];
-				    else if( semc.emc_type[c]==2 )
-					Dmeson.csienergy+=semc.emc_energy[c];
-				}
-
-				float energy_on_track1=0;
-				int cl_tr1=0;
-				for(int c1=0; c1<semc.dc_emc_ncls[t1]; c1++)                     //dc_emc_ncls[NDCH_TRK] - number clusters for track
+				if( ((Mpart[t1]>493.0 && Mpart[t1]<494.0) && tCharge(t1)==-1 ) && ((Mpart[t2]>139.0 && Mpart[t2]<140.0) && tCharge(t2)==1) )  //condition for part1: K-(pi-), part2: pi+(K+)    (D0->K-pi+)
 				{
-				    cl_tr1=semc.dc_emc_cls[t1][c1]-1;                           //dc_emc_cls[NDCH_TRK][NEMC_CLS]-1 - number of clusters on track
-				    energy_on_track1+=semc.emc_energy[cl_tr1];
-				}
-				float energy_on_track2=0;
-				int cl_tr2=0;
-				for(int c2=0; c2<semc.dc_emc_ncls[t2]; c2++)                     //dc_emc_ncls[NDCH_TRK] - number clusters for track
-				{
-				    cl_tr2=semc.dc_emc_cls[t2][c2]-1;                           //dc_emc_cls[NDCH_TRK][NEMC_CLS]-1 - number of clusters on track
-				    energy_on_track2+=semc.emc_energy[cl_tr2];
-				}
-				Dmeson.e1 = energy_on_track1;
-				Dmeson.e2 = energy_on_track2;
-				if (progpar.verbose) cout<<"Dmeson.e1="<<Dmeson.e1<<"\t"<<"Dmeson.e2="<<Dmeson.e2<<endl;
+				    double xx1=tX0IP(t1)*tX0IP(t1);
+				    double yy1=tY0IP(t1)*tY0IP(t1);
+				    double rr1=sqrt(xx1+yy1);
+				    double xx2=tX0IP(t2)*tX0IP(t2);
+				    double yy2=tY0IP(t2)*tY0IP(t2);
+				    double rr2=sqrt(xx2+yy2);
 
-				Dmeson.ecls1=0.;
-				Dmeson.ncls1=0;
-				Dmeson.ecls2=0.;
-				Dmeson.ncls2=0;
+				    if ( fabs(tZ0IP(t1))>30. ) continue;
+				    if ( fabs(tZ0IP(t2))>30. ) continue;
+				    if ( rr1>8 ) continue;
+				    if ( rr2>8 ) continue;
 
-				for (int cl=0; cl<semc.emc_ncls; cl++) {
+				    if( tPt(t1)<=progpar.min_momentum || tPt(t1)>=progpar.max_momentum )  continue;
+				    if( tCh2(t1)>progpar.max_tchi2 )  continue;
+				    if( tHits(t1)<progpar.min_Nhits )  continue;
 
-				    if (fabs(semc.emc_theta[cl]-ktrrec_.TETRAK[t1]) < THETA_CL_CUT &&
-					fabs(clust_dist(t1, cl)) < DIST_CL_CUT) {
-					Dmeson.ecls1 += semc.emc_energy[cl];
-					Dmeson.tcls1 = semc.emc_theta[cl]-ktrrec_.TETRAK[t1];
-					Dmeson.pcls1 = clust_dist(t1, cl);
-					Dmeson.ncls1++;
+				    if( tPt(t2)<=progpar.min_momentum || tPt(t2)>=progpar.max_momentum )  continue;
+				    if( tCh2(t2)>progpar.max_tchi2 )  continue;
+				    if( tHits(t2)<progpar.min_Nhits )  continue;
+
+				    double theta1 = ktrrec_.TETRAK[t1]/180.*PI;
+				    double phi1 = ktrrec_.FITRAK[t1]/180.*PI;
+				    double theta2 = ktrrec_.TETRAK[t2]/180.*PI;
+				    double phi2 = ktrrec_.FITRAK[t2]/180.*PI;
+
+				    double px1 = Ppart[t1]*sin(theta1)*cos(phi1);
+				    double py1 = Ppart[t1]*sin(theta1)*sin(phi1);
+				    double pz1 = Ppart[t1]*cos(theta1);
+
+				    double px2 = Ppart[t2]*sin(theta2)*cos(phi2);
+				    double py2 = Ppart[t2]*sin(theta2)*sin(phi2);
+				    double pz2 = Ppart[t2]*cos(theta2);
+
+				    double mbc = ebeam*ebeam - pow(px1+px2,2) - pow(py1+py2,2) - pow(pz1+pz2,2);
+
+				    if (mbc>0) mbc = sqrt(mbc); else mbc = 0;
+
+                                    if (mbc<1700.) continue;
+
+				    double mk = 493.68;
+				    double mpi = 139.57;
+
+				    //double de = (sqrt(mpi*mpi + tP(t1)*tP(t1)) + sqrt(mk*mk + tP(t2)*tP(t2)) + sqrt(mpi*mpi + tP(t2)*tP(t2)) + sqrt(mk*mk + tP(t1)*tP(t1)))/2. - ebeam;
+				    //double de = (sqrt(mpi*mpi + tP(tr1)*tP(tr1)) + sqrt(mk*mk + tP(tr2)*tP(tr2)) + sqrt(mpi*mpi + tP(tr2)*tP(tr2)) + sqrt(mk*mk + tP(tr1)*tP(tr1)))/2. - ebeam;
+				    double p1pi = pcorr(ktrrec_.PTRAK[t1],1);
+				    double p1ki = pcorr(ktrrec_.PTRAK[t1],2);
+				    double p2pi = pcorr(ktrrec_.PTRAK[t2],1);
+				    double p2ki = pcorr(ktrrec_.PTRAK[t2],2);
+
+				    double de = (sqrt(mk*mk + p1ki*p1ki) + sqrt(mpi*mpi + p1pi*p1pi) +sqrt(mk*mk + p2ki*p2ki) + sqrt(mpi*mpi + p2pi*p2pi))/2. - ebeam;
+
+                                    if (fabs(de)>300.) continue;
+
+				    minhHchi2=hHChi2(ih);
+
+				    double dp = Ppart[t1]-Ppart[t2];
+
+				    comb++;
+				    Dmeson.ncomb = comb;
+
+				    Dmeson.rr1 = rr1;
+				    Dmeson.rr2 = rr2;
+				    Dmeson.zip1 = tZ0IP(t1);
+				    Dmeson.zip2 = tZ0IP(t2);
+
+				    if (progpar.verbose) cout<<"Raw event="<<kedrraw_.Header.Number<<"\t"<<"Ebeam="<<WTotal/2<<"\t"<<"t1="<<t1<<"\t"<<"t2="<<t2<<"\t"<<"tCharge(t1)="<<tCharge(t1)<<"\t"<<"tCharge(t2)="<<tCharge(t2)<<endl;
+				    if (progpar.verbose) cout<<"p(t1)="<<tP(t1)<<"\t"<<"p(t2)="<<tP(t2)<<"\t"<<"tHits(t1)="<<tHits(t1)<<"\t"<<"tHits(t2)="<<tHits(t2)<<"\t"<<"tCh2(t1)="<<tCh2(t1)<<"\t"<<"tCh2(t2)="<<tCh2(t2)<<endl;
+				    if (progpar.verbose) cout<<"ktrrec_.PTRAK[t1]="<<ktrrec_.PTRAK[t1]<<"\t"<<"ktrrec_.PTRAK[t2]="<<ktrrec_.PTRAK[t2]<<"\t"<<endl;
+
+				    Dmeson.p1 = tP(t1);
+				    Dmeson.p2 = tP(t2);
+				    Dmeson.pt1 = tPt(t1);
+				    Dmeson.pt2 = tPt(t2);
+
+				    Dmeson.chi2t1 = tCh2(t1);
+				    Dmeson.chi2t2 = tCh2(t2);
+
+				    Dmeson.vrtntrk = eTracksAll;
+				    Dmeson.vrtnip = eTracksIP;
+				    Dmeson.vrtnbeam = eTracksBeam;
+
+				    //for (eTracksAll=2)
+				    Dmeson.theta2t=acos(CThe2t)*180./M_PI;
+				    Dmeson.phi2t=acos(CPhi2t)*180./M_PI;
+
+				    Dmeson.thetat1 = tTeta(t1);
+				    Dmeson.thetat2 = tTeta(t2);
+
+				    Dmeson.phit1 = ktrrec_.FITRAK[t1]+(ktrrec_.FITRAK[t1]<0?360:0);;
+				    Dmeson.phit2 = ktrrec_.FITRAK[t2]+(ktrrec_.FITRAK[t2]<0?360:0);;
+
+				    Dmeson.nhitsvd=kvdrec_.NHITVD;
+				    Dmeson.nhitsdc=kdcrec_.NHIT;
+
+				    Dmeson.nhitst1 = tHits(t1);
+				    Dmeson.nhitst2 = tHits(t2);
+
+				    Dmeson.nhitsvdt1 = tHitsVD(t1);
+				    Dmeson.nhitsvdt2 = tHitsVD(t2);
+
+				    Dmeson.nhitsxyt1 = tHitsXY(t1);
+				    Dmeson.nhitszt1 = tHits(t1)-tHitsXY(t1);
+
+				    Dmeson.nhitsxyt2 = tHitsXY(t2);
+				    Dmeson.nhitszt2 = tHits(t2)-tHitsXY(t2);
+
+				    Dmeson.nvect1 = tVectors(t1);
+				    Dmeson.nvecxyt1 = tVectorsXY(t1);
+				    Dmeson.nveczt1 = tVectorsZ(t1);
+
+				    Dmeson.nvect2 = tVectors(t2);
+				    Dmeson.nvecxyt2 = tVectorsXY(t2);
+				    Dmeson.nveczt2 = tVectorsZ(t2);
+
+				    Dmeson.ncls=semc.emc_ncls;
+				    Dmeson.nlkr=emcRec->lkrClusters.size();
+				    Dmeson.ncsi=emcRec->csiClusters.size();
+				    Dmeson.emcenergy=0;
+				    Dmeson.lkrenergy=0;
+				    Dmeson.csienergy=0;
+
+				    for(int c=0; c<semc.emc_ncls; c++) {
+					Dmeson.emcenergy+=semc.emc_energy[c];
+					if( semc.emc_type[c]==1 )
+					    Dmeson.lkrenergy+=semc.emc_energy[c];
+					else if( semc.emc_type[c]==2 )
+					    Dmeson.csienergy+=semc.emc_energy[c];
 				    }
 
-				    if (fabs(semc.emc_theta[cl]-ktrrec_.TETRAK[t2]) < THETA_CL_CUT &&
-					fabs(clust_dist(t2, cl)) < DIST_CL_CUT) {
-					Dmeson.ecls2 += semc.emc_energy[cl];
-					Dmeson.tcls2 = semc.emc_theta[cl]-ktrrec_.TETRAK[t2];
-					Dmeson.pcls2 = clust_dist(t2, cl);
-					Dmeson.ncls2++;
+				    float energy_on_track1=0;
+				    int cl_tr1=0;
+				    for(int c1=0; c1<semc.dc_emc_ncls[t1]; c1++)                     //dc_emc_ncls[NDCH_TRK] - number clusters for track
+				    {
+					cl_tr1=semc.dc_emc_cls[t1][c1]-1;                           //dc_emc_cls[NDCH_TRK][NEMC_CLS]-1 - number of clusters on track
+					energy_on_track1+=semc.emc_energy[cl_tr1];
 				    }
+				    float energy_on_track2=0;
+				    int cl_tr2=0;
+				    for(int c2=0; c2<semc.dc_emc_ncls[t2]; c2++)                     //dc_emc_ncls[NDCH_TRK] - number clusters for track
+				    {
+					cl_tr2=semc.dc_emc_cls[t2][c2]-1;                           //dc_emc_cls[NDCH_TRK][NEMC_CLS]-1 - number of clusters on track
+					energy_on_track2+=semc.emc_energy[cl_tr2];
+				    }
+				    Dmeson.e1 = energy_on_track1;
+				    Dmeson.e2 = energy_on_track2;
+				    if (progpar.verbose) cout<<"Dmeson.e1="<<Dmeson.e1<<"\t"<<"Dmeson.e2="<<Dmeson.e2<<endl;
+
+				    Dmeson.ecls1=0.;
+				    Dmeson.ncls1=0;
+				    Dmeson.ecls2=0.;
+				    Dmeson.ncls2=0;
+
+				    for (int cl=0; cl<semc.emc_ncls; cl++) {
+
+					if (fabs(semc.emc_theta[cl]-ktrrec_.TETRAK[t1]) < THETA_CL_CUT &&
+					    fabs(clust_dist(t1, cl)) < DIST_CL_CUT) {
+					    Dmeson.ecls1 += semc.emc_energy[cl];
+					    Dmeson.tcls1 = semc.emc_theta[cl]-ktrrec_.TETRAK[t1];
+					    Dmeson.pcls1 = clust_dist(t1, cl);
+					    Dmeson.ncls1++;
+					}
+
+					if (fabs(semc.emc_theta[cl]-ktrrec_.TETRAK[t2]) < THETA_CL_CUT &&
+					    fabs(clust_dist(t2, cl)) < DIST_CL_CUT) {
+					    Dmeson.ecls2 += semc.emc_energy[cl];
+					    Dmeson.tcls2 = semc.emc_theta[cl]-ktrrec_.TETRAK[t2];
+					    Dmeson.pcls2 = clust_dist(t2, cl);
+					    Dmeson.ncls2++;
+					}
+				    }
+
+				    if (progpar.verbose) cout<<"Selected hyp:"<<"\t"<<"hHChi2="<<hHChi2(ih)<<"\t"<<"minhHChi2(ih)="<<minhHchi2<<endl;
+				    if (progpar.verbose) cout<<"Mpart1="<<Mpart[t1]<<"\t"<<"Ppart1="<<Ppart[t1]<<"\t"<<"Mpart2="<<Mpart[t2]<<"\t"<<"Ppart2="<<Ppart[t2]<<endl;
+				    if (progpar.verbose) cout<<"mbc="<<mbc<<"\t"<<"de="<<de<<"\t"<<"dp="<<dp<<endl;
+
+                                    if (progpar.verbose) cout<<"t1="<<t1<<"\t"<<"t2="<<t2<<"\t"<<"tr1="<<tr1<<"\t"<<"tr2="<<tr2<<endl;
+
+				    Dmeson.fchi2=minhHchi2;
+
+				    Dmeson.Mpart1=Mpart[t1];
+				    Dmeson.Ppart1=Ppart[t1];
+
+				    Dmeson.Mpart2=Mpart[t2];
+				    Dmeson.Ppart2=Ppart[t2];
+
+				    Dmeson.mbc=mbc;
+				    Dmeson.de=de;
+				    Dmeson.dp=dp;
+
+				    Dmeson.rEv = kedrraw_.Header.Number;
+				    Dmeson.Run = kedrraw_.Header.RunNumber;
+				    Dmeson.Ebeam=WTotal/2;
+
+				    int mu_hits = mu_next_event_good();
+				    Dmeson.munhits = mu_hits;
+				    int mu_hit;
+				    int mu_layer_hits[3] = {0, 0, 0};         //hits in each layer of mu system  - all 3 layer
+
+				    for (mu_hit = 0; mu_hit < mu_hits; mu_hit++) {
+					int layer = mu_hit_layer(mu_hit);
+					if (layer >= 1 && layer <= 3) mu_layer_hits[layer-1]++;
+				    }
+
+				    Dmeson.mulayerhits1 = mu_layer_hits[0];
+				    Dmeson.mulayerhits2 = mu_layer_hits[1];
+				    Dmeson.mulayerhits3 = mu_layer_hits[2];
+
+				    double y1 = cos(kscBhit_.number_B[t1][0]/32.*3.14159265);
+				    double y2 = cos(kscBhit_.number_B[t2][0]/32.*3.14159265);
+
+				    if (y1 > y2) {
+					Dmeson.tofc1 = kscBhit_.number_B[t1][0];
+					Dmeson.ttof1 = kscBhit_.time_B_ns[t1][0];
+					Dmeson.tofc2 = kscBhit_.number_B[t2][0];
+					Dmeson.ttof2 = kscBhit_.time_B_ns[t2][0];
+				    } else {
+					Dmeson.tofc1 = kscBhit_.number_B[t2][0];
+					Dmeson.ttof1 = kscBhit_.time_B_ns[t2][0];
+					Dmeson.tofc2 = kscBhit_.number_B[t1][0];
+					Dmeson.ttof2 = kscBhit_.time_B_ns[t1][0];
+				    }
+
+				    atc_to_track(t1);
+				    if (progpar.verbose) cout<<"t1="<<t1<<"\t"<<"atctrackinfo.ncnt="<<atctrackinfo.ncnt<<endl;
+				    float totalNpe1=0;
+				    int cnt;
+				    Dmeson.natccrosst1=atctrackinfo.ncnt;
+				    for(int i=0; i<atctrackinfo.ncnt; i++)
+				    {
+					Dmeson.atcCNTt1[i]=atctrackinfo.cnt[i];
+					cnt=atctrackinfo.cnt[i];
+					Dmeson.atcNpet1[i]=atctrackinfo.npe[cnt];
+
+					Dmeson.tlent1[i]=atctrackinfo.tlen[cnt];
+					Dmeson.wlshitt1[i]=atctrackinfo.wlshit[cnt];
+					Dmeson.nearwlst1[i]=atctrackinfo.nearwls[cnt];
+
+					Dmeson.aerogel_REGIONt1[i]=atctrackinfo.aerogel_REGION[cnt];
+					Dmeson.aerogel_REGION0t1[i]=atctrackinfo.aerogel_REGION0[cnt];
+					Dmeson.aerogel_REGION5t1[i]=atctrackinfo.aerogel_REGION5[cnt];
+					Dmeson.aerogel_REGION20t1[i]=atctrackinfo.aerogel_REGION20[cnt];
+
+					Dmeson.single_aerogel_REGIONt1[i]=atctrackinfo.single_aerogel_REGION[cnt];
+					Dmeson.single_aerogel_REGION0t1[i]=atctrackinfo.single_aerogel_REGION0[cnt];
+					Dmeson.single_aerogel_REGION5t1[i]=atctrackinfo.single_aerogel_REGION5[cnt];
+					Dmeson.single_aerogel_REGION20t1[i]=atctrackinfo.single_aerogel_REGION20[cnt];
+
+					if (progpar.verbose) cout<<"atc cnt="<<Dmeson.atcCNTt1[i]<<"\t"<<"npe="<<Dmeson.atcNpet1[i]<<endl;
+					totalNpe1 += atctrackinfo.npe[cnt];
+				    }
+				    if (progpar.verbose) cout<<"t1="<<t1<<"\t"<<"Total ATC Npe="<<totalNpe1<<endl;
+				    Dmeson.atcTotalNpet1=totalNpe1;
+
+				    atc_to_track(t2);
+				    float totalNpe2=0;
+				    Dmeson.natccrosst2=atctrackinfo.ncnt;
+				    if (progpar.verbose) cout<<"t2="<<t2<<"\t"<<"atctrackinfo.ncnt="<<atctrackinfo.ncnt<<endl;
+				    for(int i=0; i<atctrackinfo.ncnt; i++)
+				    {
+					Dmeson.atcCNTt2[i]=atctrackinfo.cnt[i];
+					cnt=atctrackinfo.cnt[i];
+					Dmeson.atcNpet2[i]=atctrackinfo.npe[cnt];
+
+					Dmeson.tlent2[i]=atctrackinfo.tlen[cnt];
+					Dmeson.wlshitt2[i]=atctrackinfo.wlshit[cnt];
+					Dmeson.nearwlst2[i]=atctrackinfo.nearwls[cnt];
+
+					Dmeson.aerogel_REGIONt2[i]=atctrackinfo.aerogel_REGION[cnt];
+					Dmeson.aerogel_REGION0t2[i]=atctrackinfo.aerogel_REGION0[cnt];
+					Dmeson.aerogel_REGION5t2[i]=atctrackinfo.aerogel_REGION5[cnt];
+					Dmeson.aerogel_REGION20t2[i]=atctrackinfo.aerogel_REGION20[cnt];
+
+					Dmeson.single_aerogel_REGIONt2[i]=atctrackinfo.single_aerogel_REGION[cnt];
+					Dmeson.single_aerogel_REGION0t2[i]=atctrackinfo.single_aerogel_REGION0[cnt];
+					Dmeson.single_aerogel_REGION5t2[i]=atctrackinfo.single_aerogel_REGION5[cnt];
+					Dmeson.single_aerogel_REGION20t2[i]=atctrackinfo.single_aerogel_REGION20[cnt];
+
+					if (progpar.verbose) cout<<"atc cnt="<<Dmeson.atcCNTt2[i]<<"\t"<<"npe="<<Dmeson.atcNpet2[i]<<endl;
+					totalNpe2 += atctrackinfo.npe[cnt];
+				    }
+				    if (progpar.verbose) cout<<"t2="<<t2<<"\t"<<"Total ATC Npe="<<totalNpe2<<endl;
+				    Dmeson.atcTotalNpet2=totalNpe2;
+
 				}
-
-				double theta1 = ktrrec_.TETRAK[t1]/180.*PI;
-				double phi1 = ktrrec_.FITRAK[t1]/180.*PI;
-				double theta2 = ktrrec_.TETRAK[t2]/180.*PI;
-				double phi2 = ktrrec_.FITRAK[t2]/180.*PI;
-
-				double px1 = Ppart[t1]*sin(theta1)*cos(phi1);
-				double py1 = Ppart[t1]*sin(theta1)*sin(phi1);
-				double pz1 = Ppart[t1]*cos(theta1);
-
-				double px2 = Ppart[t2]*sin(theta2)*cos(phi2);
-				double py2 = Ppart[t2]*sin(theta2)*sin(phi2);
-				double pz2 = Ppart[t2]*cos(theta2);
-
-				double mbc = ebeam*ebeam - pow(px1+px2,2) - pow(py1+py2,2) - pow(pz1+pz2,2);
-
-				if (mbc>0) mbc = sqrt(mbc); else mbc = 0;
-
-				double mk = 493.68;
-				double mpi = 139.57;
-
-				//double de = sqrt(mk*mk + Ppart[t1]*Ppart[t1]) + sqrt(mpi*mpi + Ppart[t2]*Ppart[t2]) - ebeam;
-				double de = (sqrt(mpi*mpi + tP(t1)*tP(t1)) + sqrt(mk*mk + tP(t2)*tP(t2)) + sqrt(mpi*mpi + tP(t2)*tP(t2)) + sqrt(mk*mk + tP(t1)*tP(t1)))/2. - ebeam;
-
-				double dp = Ppart[t1]-Ppart[t2];
-
-				if (progpar.verbose) cout<<"Selected hyp:"<<"\t"<<"minhHChi2(ih)="<<minhHchi2<<endl;
-				if (progpar.verbose) cout<<"Mpart1="<<Mpart[t1]<<"\t"<<"Ppart1="<<Ppart[t1]<<"\t"<<"Mpart2="<<Mpart[t2]<<"\t"<<"Ppart2="<<Ppart[t2]<<endl;
-				if (progpar.verbose) cout<<"mbc="<<mbc<<"\t"<<"de="<<de<<"\t"<<"dp="<<dp<<endl;
-
-				Dmeson.fchi2=minhHchi2;
-
-				Dmeson.Mpart1=Mpart[t1];
-				Dmeson.Ppart1=Ppart[t1];
-
-				Dmeson.Mpart2=Mpart[t2];
-				Dmeson.Ppart2=Ppart[t2];
-
-				Dmeson.mbc=mbc;
-				Dmeson.de=de;
-				Dmeson.dp=dp;
-
-				Dmeson.rEv = kedrraw_.Header.Number;
-				Dmeson.Run = kedrraw_.Header.RunNumber;
-				Dmeson.Ebeam=WTotal/2;
-
-				int mu_hits = mu_next_event_good();
-				Dmeson.munhits = mu_hits;
-				int mu_hit;
-				int mu_layer_hits[3] = {0, 0, 0};         //hits in each layer of mu system  - all 3 layer
-
-				for (mu_hit = 0; mu_hit < mu_hits; mu_hit++) {
-				    int layer = mu_hit_layer(mu_hit);
-				    if (layer >= 1 && layer <= 3) mu_layer_hits[layer-1]++;
-				}
-
-				Dmeson.mulayerhits1 = mu_layer_hits[0];
-				Dmeson.mulayerhits2 = mu_layer_hits[1];
-				Dmeson.mulayerhits3 = mu_layer_hits[2];
-
-				double y1 = cos(kscBhit_.number_B[t1][0]/32.*3.14159265);
-				double y2 = cos(kscBhit_.number_B[t2][0]/32.*3.14159265);
-
-				if (y1 > y2) {
-				    Dmeson.tofc1 = kscBhit_.number_B[t1][0];
-				    Dmeson.ttof1 = kscBhit_.time_B_ns[t1][0];
-				    Dmeson.tofc2 = kscBhit_.number_B[t2][0];
-				    Dmeson.ttof2 = kscBhit_.time_B_ns[t2][0];
-				} else {
-				    Dmeson.tofc1 = kscBhit_.number_B[t2][0];
-				    Dmeson.ttof1 = kscBhit_.time_B_ns[t2][0];
-				    Dmeson.tofc2 = kscBhit_.number_B[t1][0];
-				    Dmeson.ttof2 = kscBhit_.time_B_ns[t1][0];
-				}
-
-				atc_to_track(t1);
-				if (progpar.verbose) cout<<"t1="<<t1<<"\t"<<"atctrackinfo.ncnt="<<atctrackinfo.ncnt<<endl;
-				float totalNpe1=0;
-				int cnt;
-				Dmeson.natccrosst1=atctrackinfo.ncnt;
-				for(int i=0; i<atctrackinfo.ncnt; i++)
-				{
-				    Dmeson.atcCNTt1[i]=atctrackinfo.cnt[i];
-				    cnt=atctrackinfo.cnt[i];
-				    Dmeson.atcNpet1[i]=atctrackinfo.npe[cnt];
-
-				    Dmeson.tlent1[i]=atctrackinfo.tlen[cnt];
-				    Dmeson.wlshitt1[i]=atctrackinfo.wlshit[cnt];
-				    Dmeson.nearwlst1[i]=atctrackinfo.nearwls[cnt];
-
-				    Dmeson.aerogel_REGIONt1[i]=atctrackinfo.aerogel_REGION[cnt];
-				    Dmeson.aerogel_REGION0t1[i]=atctrackinfo.aerogel_REGION0[cnt];
-				    Dmeson.aerogel_REGION5t1[i]=atctrackinfo.aerogel_REGION5[cnt];
-				    Dmeson.aerogel_REGION20t1[i]=atctrackinfo.aerogel_REGION20[cnt];
-
-				    Dmeson.single_aerogel_REGIONt1[i]=atctrackinfo.single_aerogel_REGION[cnt];
-				    Dmeson.single_aerogel_REGION0t1[i]=atctrackinfo.single_aerogel_REGION0[cnt];
-				    Dmeson.single_aerogel_REGION5t1[i]=atctrackinfo.single_aerogel_REGION5[cnt];
-				    Dmeson.single_aerogel_REGION20t1[i]=atctrackinfo.single_aerogel_REGION20[cnt];
-
-				    if (progpar.verbose) cout<<"atc cnt="<<Dmeson.atcCNTt1[i]<<"\t"<<"npe="<<Dmeson.atcNpet1[i]<<endl;
-				    totalNpe1 += atctrackinfo.npe[cnt];
-				}
-				if (progpar.verbose) cout<<"t1="<<t1<<"\t"<<"Total ATC Npe="<<totalNpe1<<endl;
-				Dmeson.atcTotalNpet1=totalNpe1;
-
-				atc_to_track(t2);
-				float totalNpe2=0;
-				Dmeson.natccrosst2=atctrackinfo.ncnt;
-				if (progpar.verbose) cout<<"t2="<<t2<<"\t"<<"atctrackinfo.ncnt="<<atctrackinfo.ncnt<<endl;
-				for(int i=0; i<atctrackinfo.ncnt; i++)
-				{
-				    Dmeson.atcCNTt2[i]=atctrackinfo.cnt[i];
-				    cnt=atctrackinfo.cnt[i];
-				    Dmeson.atcNpet2[i]=atctrackinfo.npe[cnt];
-
-				    Dmeson.tlent2[i]=atctrackinfo.tlen[cnt];
-				    Dmeson.wlshitt2[i]=atctrackinfo.wlshit[cnt];
-				    Dmeson.nearwlst2[i]=atctrackinfo.nearwls[cnt];
-
-				    Dmeson.aerogel_REGIONt2[i]=atctrackinfo.aerogel_REGION[cnt];
-				    Dmeson.aerogel_REGION0t2[i]=atctrackinfo.aerogel_REGION0[cnt];
-				    Dmeson.aerogel_REGION5t2[i]=atctrackinfo.aerogel_REGION5[cnt];
-				    Dmeson.aerogel_REGION20t2[i]=atctrackinfo.aerogel_REGION20[cnt];
-
-				    Dmeson.single_aerogel_REGIONt2[i]=atctrackinfo.single_aerogel_REGION[cnt];
-				    Dmeson.single_aerogel_REGION0t2[i]=atctrackinfo.single_aerogel_REGION0[cnt];
-				    Dmeson.single_aerogel_REGION5t2[i]=atctrackinfo.single_aerogel_REGION5[cnt];
-				    Dmeson.single_aerogel_REGION20t2[i]=atctrackinfo.single_aerogel_REGION20[cnt];
-
-				    if (progpar.verbose) cout<<"atc cnt="<<Dmeson.atcCNTt2[i]<<"\t"<<"npe="<<Dmeson.atcNpet2[i]<<endl;
-				    totalNpe2 += atctrackinfo.npe[cnt];
-				}
-				if (progpar.verbose) cout<<"t2="<<t2<<"\t"<<"Total ATC Npe="<<totalNpe2<<endl;
-				Dmeson.atcTotalNpet2=totalNpe2;
-
-				eventTree->Fill();
 			    }
 			}
 		    }
@@ -740,7 +792,11 @@ int analyse_event()
 	    }
 	}
     }
-
+    if (comb>0)
+    {
+	eventTree->Fill();
+	if (progpar.verbose) cout<<"eventTree fill ....."<<endl;
+    }
 
     if(eNumber%1000==0) cout<<"Ev:"<<eNumber<<endl;
     //==================================================================
@@ -877,10 +933,15 @@ int main(int argc, char* argv[])
 	kf_install_signal_handler(1);
 
         kdcswitches_.kNoiseReject=3;      //Cut for DC noise  (0 - not cut, 1 - standart, 2 - soft, 3 - hard)
+	//kdcswitches_.kEmcPatch=1;
+	kdcswitches_.KemcAllowed=0;
 	//kdcswitches_.KemcAllowed=-1;      //off use strips for track reconstruction
+	//kdcpar1_.DeleteTracksGhost=0;
+        //kdcswitches_.kVDRtAlt=1;
+
 	//kdcswitches_.KtofAllowed=0;       //use of TOF for track search
 	//kdcswitches_.kIPalternative = 1;  //alternative track candidate with IP (on)
-	kdcswitches_.kCosmInSigRuns = 0;  //search for cosmic in signal runs (on)
+	//kdcswitches_.kCosmInSigRuns = 0;  //search for cosmic in signal runs (on)
 
         kf_MCCalibRunNumber(progpar.simOn,progpar.MCCalibRunNumber,progpar.MCCalibRunNumberL,progpar.NsimRate,progpar.Scale,progpar.Ascale,progpar.Zscale);
 

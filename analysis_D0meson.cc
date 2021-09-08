@@ -332,17 +332,26 @@ int mu_event_rejection()
 double pcorr(double p, int type) {
     double ms, dedx, k;
 
-    if (type==1) {
-	ms = 148.71;
-	dedx = 1.32;
+    if (type==1) {    //pion
+	ms = 149.484;
+	dedx = 1.30782;
 	k = 0.;
-    } else if (type == 2) {
-	ms = 573.35;
-	dedx = 0.9021;
+    }
+    else if(type==2)  //kaon
+    {
+	ms = 502.997;
+	dedx = 1.28546;
 	k = 0.;
-    } else {
+    }
+    else if(type==3)  //muon
+    {
+	ms = 138.315;
+	dedx = 1.06861;
+	k = 0.;
+    }
+    else{                //electron
 	ms = 0.;
-	dedx = 1.57;
+	dedx = 1.57548;
 	k = 0.748772e-2;
     }
 
@@ -367,8 +376,20 @@ void kine_fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t ifla
     double mk = 493.68;
     double mpi = 139.57;
 
-    double p1i = (pcorr(tP(dcand_t1),1)+pcorr(tP(dcand_t1),2))/2.;
-    double p2i = (pcorr(tP(dcand_t2),1)+pcorr(tP(dcand_t2),2))/2.;
+    double p1i;
+    double p2i;
+    if( idATC==1 ){
+	p1i = pcorr(tP(dcand_t1),1);
+	p2i = pcorr(tP(dcand_t2),2);
+    }
+    if( idATC==2 ){
+	p1i = pcorr(tP(dcand_t1),2);
+	p2i = pcorr(tP(dcand_t2),1);
+    }
+    else{
+	p1i = (pcorr(tP(dcand_t1),1)+pcorr(tP(dcand_t1),2))/2.;
+	p2i = (pcorr(tP(dcand_t2),1)+pcorr(tP(dcand_t2),2))/2.;
+    }
 
     double sp1 = sqrt(ktrrec_h_.FitTrack[dcand_t1][fitSigCC]/
 		      pow(ktrrec_h_.FitTrack[dcand_t1][fitC],2)+
@@ -381,22 +402,22 @@ void kine_fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t ifla
 		      pow(tan(ktrrec_.TETRAK[dcand_t2]/180.*PI),2))*p2i;
 
     double de;
-
-    if(idATC==1){
-        de = (sqrt(mpi*mpi+pp1*pp1) + sqrt(mk*mk + pp2*pp2))/2. - ebeam;
+    if( idATC==1 ){
+        de = sqrt(mpi*mpi+pp1*pp1) + sqrt(mk*mk + pp2*pp2) - ebeam;
     }
-    if(idATC==2){
-        de = (sqrt(mpi*mpi+pp2*pp2) + sqrt(mk*mk + pp1*pp1))/2. - ebeam;
+    if( idATC==2 ){
+        de = sqrt(mpi*mpi+pp2*pp2) + sqrt(mk*mk + pp1*pp1) - ebeam;
     }
     else{
         de = (sqrt(mk*mk + pp1*pp1) + sqrt(mpi*mpi+pp1*pp1) +
 		 sqrt(mk*mk + pp2*pp2) + sqrt(mpi*mpi+pp2*pp2))/2. - ebeam;
     }
 
-    double chi2 = pow((pp1-p1i)/sp1,2) + pow((pp2-p2i)/sp2,2) + pow(de/0.1,2);
-    //double chi2 = pow((pp1-p1i)/sp1,2) + pow((pp2-p2i)/sp2,2) + pow(de,2);
+    //double chi2 = pow((pp1-p1i)/sp1,2) + pow((pp2-p2i)/sp2,2) + pow(de/0.01,2);
+    //double chi2 = pow((pp1-p1i)/sp1,2) + pow((pp2-p2i)/sp2,2) + pow(de/0.1,2);
+    double chi2 = pow((pp1-p1i)/sp1,2) + pow((pp2-p2i)/sp2,2) + pow(de,2);
 
-    if (progpar.verbose==2) printf("  p1i=%lf, p2i=%lf, p1=%lf, p2=%lf, de=%lf, sp1=%lf, sp2=%lf, chi2=%lf\n",p1i, p2i, pp1, pp2, de, sp1, sp2, chi2);
+    if (progpar.verbose>=2) cout<<"idATC="<<idATC<<"\t"<<"p1i="<<p1i<<"\t"<<"p2i="<<p2i<<"\t"<<"pp1="<<pp1<<"\t"<<"pp2="<<pp2<<"\t"<<"de="<<de<<"\t"<<"sp1="<<sp1<<"\t"<<"sp2="<<sp2<<"\t"<<"chi2="<<chi2<<endl;
 
     f = chi2;
 }
@@ -455,8 +476,21 @@ void kine_fit(int ip1, int ip2, double* mbc, double* de, double* dp, double* pre
     double pp1, pp2;
     *fchi2 = 0;
 
-    double p1i = (pcorr(tP(dcand_t1),1)+pcorr(tP(dcand_t1),2))/2.;
-    double p2i = (pcorr(tP(dcand_t2),1)+pcorr(tP(dcand_t2),2))/2.;
+    double p1i;
+    double p2i;
+    if( idATC==1 && pcorr(tP(dcand_t1),1)>450. && pcorr(tP(dcand_t1),1)<1500. && pcorr(tP(dcand_t2),2)>450. && pcorr(tP(dcand_t2),2)<1500. ){
+	p1i = pcorr(tP(dcand_t1),1);   //pion
+	p2i = pcorr(tP(dcand_t2),2);   //kaon
+    }
+    if( idATC==2 && pcorr(tP(dcand_t1),2)>450. && pcorr(tP(dcand_t1),2)<1500. && pcorr(tP(dcand_t2),1)>450. && pcorr(tP(dcand_t2),1)<1500. ){
+	p1i = pcorr(tP(dcand_t1),2);   //kaon
+	p2i = pcorr(tP(dcand_t2),1);   //pion
+    }
+    else{
+        idATC=0;
+	p1i = (pcorr(tP(dcand_t1),1)+pcorr(tP(dcand_t1),2))/2.;
+	p2i = (pcorr(tP(dcand_t2),1)+pcorr(tP(dcand_t2),2))/2.;
+    }
 
     if (enable) {
 
@@ -475,6 +509,8 @@ void kine_fit(int ip1, int ip2, double* mbc, double* de, double* dp, double* pre
 	double upperLimit = 0.0;
 	dMinuit->mnparm(0,"p1", p1i, 0.5, lowerLimit, upperLimit, iflag);    //set the parameters used in the fit
 	dMinuit->mnparm(1,"p2", p2i, 0.5, lowerLimit, upperLimit, iflag);
+	//dMinuit->mnparm(0,"p1", 1500., 0.5, lowerLimit, upperLimit, iflag);    //set the parameters used in the fit
+	//dMinuit->mnparm(1,"p2", 1500., 0.5, lowerLimit, upperLimit, iflag);
 	//dMinuit->mnexcm("CALL FCN",arglist,1,iflag);                        //call the user defined function, to calculate the value FCN, and print the result out to the screen.
 	arglist[0] = 5000;  //maximum number of function calls after which the calculation will be stopped even if it has not yet converged.
 	arglist[1] = 1.;   //The optional argument [tolerance] specifies required tolerance on the function value at the minimum. The default tolerance is 0.1, and the minimization will stop when the estimated vertical distance to the minimum (EDM) is less than 0.001*[tolerance]*UP (see [SET ERRordef]).
@@ -573,15 +609,23 @@ void kine_fit(int ip1, int ip2, double* mbc, double* de, double* dp, double* pre
     if (*mbc>0) *mbc = sqrt(*mbc); else *mbc = 0;
 
     double p1pi = pcorr(ktrrec_.PTRAK[dcand_t1],1);
-    double p2pi = pcorr(ktrrec_.PTRAK[dcand_t2],1);
     double p1ki = pcorr(ktrrec_.PTRAK[dcand_t1],2);
+    double p2pi = pcorr(ktrrec_.PTRAK[dcand_t2],1);
     double p2ki = pcorr(ktrrec_.PTRAK[dcand_t2],2);
 
-    *de = (sqrt(mk*mk + p1ki*p1ki) + sqrt(mpi*mpi + p1pi*p1pi) +
-	   sqrt(mk*mk + p2ki*p2ki) + sqrt(mpi*mpi + p2pi*p2pi))/2. - ebeam;
+    //*de = (sqrt(mk*mk + p1ki*p1ki) + sqrt(mpi*mpi + p1pi*p1pi) +
+    //	   sqrt(mk*mk + p2ki*p2ki) + sqrt(mpi*mpi + p2pi*p2pi))/2. - ebeam;
 
-    //*de = (sqrt(mpi*mpi + p1i*p1i) + sqrt(mk*mk + p2i*p2i) +
-	//   sqrt(mpi*mpi + p2i*p2i) + sqrt(mk*mk + p1i*p1i))/2. - ebeam;
+    if( idATC==1 ){
+        *de = sqrt(mpi*mpi+p1pi*p1pi) + sqrt(mk*mk + p2ki*p2ki) - ebeam;         //piK
+    }
+    if( idATC==2 ){
+        *de = sqrt(mk*mk + p1ki*p1ki) + sqrt(mpi*mpi+p2pi*p2pi) - ebeam;         //Kpi
+    }
+    else{
+	*de = (sqrt(mk*mk + p1ki*p1ki) + sqrt(mpi*mpi + p1pi*p1pi) +
+	       sqrt(mk*mk + p2ki*p2ki) + sqrt(mpi*mpi + p2pi*p2pi))/2. - ebeam;
+    }
 
     *dp = pp1-pp2;
     *prec1 = pp1;
@@ -772,6 +816,12 @@ int analyse_event()
 		Dmeson.nhitsxyt2 = tHitsXY(t2);
 		Dmeson.nhitszt2 = tHits(t2)-tHitsXY(t2);
 
+		if (progpar.verbose) cout<<"t1: nHits = "<<Dmeson.nhitszt1<<"\t"<<"HitXtStatus = "<<kdcrec_.HitXtStatus[Dmeson.nhitst1]<<endl;
+		if (progpar.verbose) cout<<"t2: nHits = "<<Dmeson.nhitszt2<<"\t"<<"HitXtStatus = "<<kdcrec_.HitXtStatus[Dmeson.nhitst2]<<endl;
+
+                //Dmeson.HitXtStatust1 = kdcrec_.HitXtStatus[Dmeson.nhitst1];
+                //Dmeson.HitXtStatust2 = kdcrec_.HitXtStatus[Dmeson.nhitst2];
+
 		Dmeson.nvect1 = tVectors(t1);
 		Dmeson.nvecxyt1 = tVectorsXY(t1);
 		Dmeson.nveczt1 = tVectorsZ(t1);
@@ -949,8 +999,8 @@ int analyse_event()
 
 		double npetrh=0.5;
 
-		if( (good_region_t1>=1 && Dmeson.atcTotalNpet1>npetrh) && (good_region_t2>=1 && Dmeson.atcTotalNpet2<=npetrh) ){ idATC=1;}  //piK
-		if( (good_region_t1>=1 && Dmeson.atcTotalNpet1<=npetrh) && (good_region_t2>=1 && Dmeson.atcTotalNpet2>npetrh) ){ idATC=2;}  //Kpi
+		if( pcorr(tP(t1),1)>450. && pcorr(tP(t1),1)<1500. && pcorr(tP(t2),2)>450. && pcorr(tP(t2),2)<1500. && (good_region_t1>=1 && Dmeson.atcTotalNpet1>npetrh) && (good_region_t2>=1 && Dmeson.atcTotalNpet2<=npetrh) ){ idATC=1;}  //pi - t1, K - t2
+		if( pcorr(tP(t1),2)>450. && pcorr(tP(t1),2)<1500. && pcorr(tP(t2),1)>450. && pcorr(tP(t2),1)<1500. && (good_region_t1>=1 && Dmeson.atcTotalNpet1<=npetrh) && (good_region_t2>=1 && Dmeson.atcTotalNpet2>npetrh) ){ idATC=2;}  //K - t1, pi -t2
 
 		double mbc, de, dp, prec1, prec2, fchi2;
 
@@ -1093,7 +1143,7 @@ int main(int argc, char* argv[])
 			  ":aerogel_REGIONt1[20]:aerogel_REGION0t1[20]:aerogel_REGION5t1[20]:aerogel_REGION20t1[20]:single_aerogel_REGIONt1[20]"
 			  ":single_aerogel_REGION0t1[20]:single_aerogel_REGION5t1[20]:single_aerogel_REGION20t1[20]:aerogel_REGIONt2[20]:aerogel_REGION0t2[20]:aerogel_REGION5t2[20]"
 			  ":aerogel_REGION20t2[20]:single_aerogel_REGIONt2[20]:single_aerogel_REGION0t2[20]:single_aerogel_REGION5t2[20]:single_aerogel_REGION20t2[20]"
-                          ":wlshitt1[20]:nearwlst1[20]:wlshitt2[20]:nearwlst2[20]"
+			  ":wlshitt1[20]:nearwlst1[20]:wlshitt2[20]:nearwlst2[20]"
 			  ":mbc/F:de:dp:prec1:prec2:fchi2:Ebeam:rEv:p1:p2:pt1:pt2:chi2t1:chi2t2:theta2t:phi2t:thetat1:thetat2:phit1:phit2:e1"
 			  ":e2:d1:d2:rr1:rr2:zip1:zip2:ecls1:ecls2:tcls1:tcls2:pcls1:pcls2:emcenergy:lkrenergy:csienergy:enn:eno:tofc1:ttof1:tofc2:ttof2:atcNpet1[20]:atcTotalNpet1"
 			  ":atcNpet2[20]:atcTotalNpet2:tlent1[20]:tlent2[20]");

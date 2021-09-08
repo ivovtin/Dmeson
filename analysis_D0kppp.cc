@@ -191,11 +191,13 @@ typedef struct {
     single_aerogel_REGION5t1[20],single_aerogel_REGION20t1[20],aerogel_REGIONt2[20],aerogel_REGION0t2[20],aerogel_REGION5t2[20],aerogel_REGION20t2[20],single_aerogel_REGIONt2[20],
     single_aerogel_REGION0t2[20],single_aerogel_REGION5t2[20],single_aerogel_REGION20t2[20],aerogel_REGIONt3[20],aerogel_REGION0t3[20],aerogel_REGION5t3[20],aerogel_REGION20t3[20],single_aerogel_REGIONt3[20],
     single_aerogel_REGION0t3[20],single_aerogel_REGION5t3[20],single_aerogel_REGION20t3[20],aerogel_REGIONt4[20],aerogel_REGION0t4[20],aerogel_REGION5t4[20],aerogel_REGION20t4[20],single_aerogel_REGIONt4[20],
-    single_aerogel_REGION0t4[20],single_aerogel_REGION5t4[20],single_aerogel_REGION20t4[20],wlshitt1[20],nearwlst1[20],wlshitt2[20],nearwlst2[20],wlshitt3[20],nearwlst3[20],wlshitt4[20],nearwlst4[20];
-    Float_t mbc,de,prec1,prec2,prec3,prec4,fchi2,Ebeam,rEv,p1,p2,p3,p4,pt1,pt2,pt3,pt4,thetat1,thetat2,thetat3,thetat4,phit1,phit2,phit3,phit4,chi2t1,chi2t2,chi2t3,chi2t4,e1,e2,e3,e4,rr1,rr2,rr3,rr4,zip1,zip2,zip3,zip4,
+    single_aerogel_REGION0t4[20],single_aerogel_REGION5t4[20],single_aerogel_REGION20t4[20],wlshitt1[20],nearwlst1[20],wlshitt2[20],nearwlst2[20],wlshitt3[20],nearwlst3[20],wlshitt4[20],nearwlst4[20],
+    kft1,kft2,kft3,kft4; 
+   Float_t mbc,de,prec1,prec2,prec3,prec4,fchi2,Ebeam,rEv,p1,p2,p3,p4,pt1,pt2,pt3,pt4,thetat1,thetat2,thetat3,thetat4,phit1,phit2,phit3,phit4,chi2t1,chi2t2,chi2t3,chi2t4,e1,e2,e3,e4,rr1,rr2,rr3,rr4,zip1,zip2,zip3,zip4,
 	ecls1,ecls2,ecls3,ecls4,tcls1,tcls2,tcls3,tcls4,pcls1,pcls2,pcls3,pcls4,emcenergy,lkrenergy,csienergy,enn,eno,timet1,betat1,lengtht1,timet2,betat2,lengtht2,timet3,betat3,lengtht3,timet4,betat4,lengtht4,
     atcNpet1[20],atcTotalNpet1,atcNpet2[20],atcTotalNpet2,atcNpet3[20],atcTotalNpet3,atcNpet4[20],atcTotalNpet4,tlent1[20],tlent2[20],tlent3[20],tlent4[20],
-    dedxt1,dedxt2,dedxt3,dedxt4,probKt1,probKt2,probKt3,probKt4,resdKt1,resdKt2,resdKt3,resdKt4,probpit1,probpit2,probpit3,probpit4,resdpit1,resdpit2,resdpit3,resdpit4;
+    dedxt1,dedxt2,dedxt3,dedxt4,probKt1,probKt2,probKt3,probKt4,resdKt1,resdKt2,resdKt3,resdKt4,probpit1,probpit2,probpit3,probpit4,resdpit1,resdpit2,resdpit3,resdpit4,
+    r_track_intersect12, r_track_intersect13, r_track_intersect14, r_track_intersect23, r_track_intersect24, r_track_intersect34;
 
 } DMESON;
 
@@ -666,6 +668,85 @@ void others(int t1, int t2, int t3, int t4, int* num, double *en) {
     //  printf("numo=%d\n", *num);
 }
 
+
+int intersect(double vdrad, double x0, double y0, double trad,
+              double *phi1, double *phi2) {
+
+  double tdist = sqrt(x0*x0 + y0*y0);
+  double tang;
+  double dang;
+  double frac, num, denum;
+
+  if (fabs(x0) > 1e-10) {
+    tang=atan(y0/x0);
+  } else {
+    tang=PI/2.;
+  }
+  if (x0<0) tang+=PI;
+  tang = (tang/2./PI-floor(tang/2./PI))*2.*PI;
+
+  num = vdrad*vdrad + tdist*tdist - trad*trad;
+  denum = 2.*vdrad*tdist;
+
+//  printf("x0=%f y0=%f trad=%f vdrad=%f tang=%f tdist=%f num=%f denum=%f\n",
+//         x0, y0, trad, vdrad, tang, tdist, num, denum);
+
+  if (denum > 1e-10) {
+    frac = num/denum;
+    if (frac > -1. && frac < 1.) {
+      dang = acos(frac);
+      *phi1 = tang + dang;
+      *phi2 = tang - dang;
+      return (1);
+    }
+  }
+  return (0);
+}
+
+
+// Coordinates of intersection of two tracks in (x,y) plane.
+// Return distance from intersection point to detector axis
+double track_intersect(int t1, int t2, double *x, double *y) {
+  double x1   = tXc(t1);
+  double y1   = tYc(t1);
+  double rad1 = tRc(t1);
+  double ph01 = tPh0(t1);
+  double x2   = tXc(t2);
+  double y2   = tYc(t2);
+  double rad2 = tRc(t2);
+  double ph02 = tPh0(t2);
+  double vdrad = rad2;
+  double x0 = x1-x2;
+  double y0 = y1-y2;
+  double phi1, phi2;
+  if (intersect(vdrad, x0, y0, rad1, &phi1, &phi2)) {
+    double ix1 = x2 + rad2*cos(phi1);
+    double iy1 = y2 + rad2*sin(phi1);
+    double ix2 = x2 + rad2*cos(phi2);
+    double iy2 = y2 + rad2*sin(phi2);
+//    printf("  %f %f\n",ix1,iy1);
+//    printf("  %f %f\n",ix2,iy2);
+    double r1 = sqrt(ix1*ix1 + iy1*iy1);
+    double r2 = sqrt(ix2*ix2 + iy2*iy2);
+    double phi, rmin;
+    if (r1<r2) {
+      rmin = r1;
+      phi = phi1+PI;
+      *x = ix1;
+      *y = iy1;
+    } else {
+      rmin = r2;
+      phi = phi2+PI;
+      *x = ix2;
+      *y = iy2;
+    }
+    return (rmin);
+  }
+//  getchar();
+  return (-1.);
+}
+
+
 int analyse_event()
 {
     float EMinPhot=progpar.min_cluster_energy;
@@ -715,6 +796,17 @@ int analyse_event()
 				if ( rr2>8. ) continue;
 				if ( rr3>8. ) continue;
 				if ( rr4>8. ) continue;
+
+                                double ix, iy;
+                                Dmeson.r_track_intersect12 = track_intersect(t1,t2,&ix, &iy);
+                                Dmeson.r_track_intersect13 = track_intersect(t1,t3,&ix, &iy);
+                                Dmeson.r_track_intersect14 = track_intersect(t1,t4,&ix, &iy);
+
+                                Dmeson.r_track_intersect23 = track_intersect(t2,t3,&ix, &iy);
+                                Dmeson.r_track_intersect24 = track_intersect(t2,t4,&ix, &iy);
+
+                                Dmeson.r_track_intersect34 = track_intersect(t3,t4,&ix, &iy);
+
 
 				if (progpar.verbose) cout<<"rr1="<<rr1<<"\t"<<"fabs(tZ0IP(t1))="<<fabs(tZ0IP(t1))<<endl;
 				if (progpar.verbose) cout<<"rr2="<<rr2<<"\t"<<"fabs(tZ0IP(t2))="<<fabs(tZ0IP(t2))<<endl;
@@ -1189,7 +1281,13 @@ int analyse_event()
 				if (progpar.verbose) cout<<"Pion "<<"probt1="<<dcinfo.p[t1][2]<<"\t"<<"probt2="<<dcinfo.p[t2][2]<<"\t"<<"probt3="<<dcinfo.p[t3][2]<<"\t"<<"probt4="<<dcinfo.p[t4][2]<<endl;
 				if (progpar.verbose) cout<<"Kaon "<<"probt1="<<dcinfo.p[t1][3]<<"\t"<<"probt2="<<dcinfo.p[t2][3]<<"\t"<<"probt3="<<dcinfo.p[t3][3]<<"\t"<<"probt4="<<dcinfo.p[t4][3]<<endl;
 
-				
+                                Dmeson.kft1 = mctracks_cb_.kf[t1]; 
+                                Dmeson.kft2 = mctracks_cb_.kf[t2]; 
+                                Dmeson.kft3 = mctracks_cb_.kf[t3]; 
+                                Dmeson.kft4 = mctracks_cb_.kf[t4]; 
+                                
+                                if (progpar.verbose) cout<<"kft1="<<Dmeson.kft1<<"\t"<<"kft2="<<Dmeson.kft2<<"\t"<<"kft3="<<Dmeson.kft3<<"\t"<<"kft4="<<Dmeson.kft4<<"\t"<<endl;
+	
  				eventTree->Fill();
 			    }
 			}
@@ -1328,11 +1426,13 @@ int main(int argc, char* argv[])
 			  ":aerogel_REGIONt3[20]:aerogel_REGION0t3[20]:aerogel_REGION5t3[20]:aerogel_REGION20t3[20]:single_aerogel_REGIONt3[20]:single_aerogel_REGION0t3[20]"
 			  ":single_aerogel_REGION5t3[20]:single_aerogel_REGION20t3[20]:aerogel_REGIONt4[20]:aerogel_REGION0t4[20]:aerogel_REGION5t4[20]:aerogel_REGION20t4[20]:single_aerogel_REGIONt4[20]"
 			  ":single_aerogel_REGION0t4[20]:single_aerogel_REGION5t4[20]:single_aerogel_REGION20t4[20]:wlshitt1[20]:nearwlst1[20]:wlshitt2[20]:nearwlst2[20]:wlshitt3[20]:nearwlst3[20]:wlshitt4[20]:nearwlst4[20]"
+                          ":kft1:kft2:kft3:kft4" 
 			  ":mbc/F:de:prec1:prec2:prec3:prec4:fchi2:Ebeam:rEv:P1:P2:P3:P4:Pt1:Pt2:Pt3:Pt4:thetat1:thetat2:thetat3:thetat4:phit1:phit2:phit3:phit4:chi2t1:chi2t2:chi2t3:chi2t4:e1"
 			  ":e2:e3:e4:rr1:rr2:rr3:rr4:Zip1:Zip2:Zip3:Zip4:ecls1:ecls2:ecls3:ecls4:tcls1:tcls2:tcls3:tcls4:pcls1"
 			  ":pcls2:pcls3:pcls4:emcenergy:lkrenergy:csienergy:enn:eno:timet1:betat1:lengtht1:timet2:betat2:lengtht2:timet3:betat3:lengtht3:timet4:betat4:lengtht4:atcNpet1[20]:atcTotalNpet1"
 			  ":atcNpet2[20]:atcTotalNpet2:atcNpet3[20]:atcTotalNpet3:atcNpet4[20]:atcTotalNpet4:tlent1[20]:tlent2[20]:tlent3[20]:tlent4[20]"
                           ":dedxt1:dedxt2:dedxt3:dedxt4:probKt1:probKt2:probKt3:probKt4:resdKt1:resdKt2:resdKt3:resdKt4:probpit1:probpit2:probpit3:probpit4:resdpit1:resdpit2:resdpit3:resdpit4"
+                          ":r_track_intersect12:r_track_intersect13:r_track_intersect14:r_track_intersect23:r_track_intersect24:r_track_intersect34"
 			 );
 	//----------------- Configure kframework -----------------//
 	//Set kframework signal handling
