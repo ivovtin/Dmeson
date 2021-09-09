@@ -76,6 +76,7 @@ int main(int argc, char** argv) {
     TH1F* hsy[2];
     TH1F* hsz[2];
     TProfile* pr[2];
+    TProfile* prtime[2];
 
     for(int key=0; key<=1; key++)
     {
@@ -103,6 +104,9 @@ int main(int argc, char** argv) {
 
         if(key==0) pr[key]=new TProfile("Energy_Run","Energy_Run",693,23206.,26248.,1880.,1890);
         if(key!=0) pr[key]=new TProfile("Energy_Run_2004","Energy_Run_2004",482,4100.,4709.,1880.,1890);
+
+	if(key==0) prtime[key]=new TProfile("Energy_Time","Energy_Time",3042,1454284800,1514592000,1880.,1890);
+        if(key!=0) prtime[key]=new TProfile("Energy_Time_2004","Energy_Time_2004",3042,1099176021,1104086421,1880.,1890);
 
 	int run;
 	string line;
@@ -217,6 +221,7 @@ int main(int argc, char** argv) {
 		herrEn[key]->Fill(err_beam_energy);
 
 		pr[key]->Fill(run,beam_energy);
+		prtime[key]->Fill(runTime_begin,beam_energy);
 
 	    //}
 	    }
@@ -306,7 +311,6 @@ int main(int argc, char** argv) {
     pr[0]->GetYaxis()->SetTitle("E_{beam}, MeV");
     pr[0]->SetTitle("");
     pr[0]->Draw();
-    //cc4->Update();
     cc4->SaveAs("/spool/users/ovtin/outDmeson/demo/Run_Ebeam_2016.png");
     cc4->SaveAs("/spool/users/ovtin/outDmeson/demo/Run_Ebeam_2016.eps");
 
@@ -331,9 +335,60 @@ int main(int argc, char** argv) {
     pr[1]->GetYaxis()->SetTitle("E_{beam}, MeV");
     pr[1]->SetTitle("");
     pr[1]->Draw();
-    //cc5->Update();
     cc5->SaveAs("/spool/users/ovtin/outDmeson/demo/Run_Ebeam_2004.png");
     cc5->SaveAs("/spool/users/ovtin/outDmeson/demo/Run_Ebeam_2004.eps");
+
+    TCanvas *cc6 = new TCanvas();
+    cc6->cd();
+    prtime[0]->SetMarkerStyle(20);
+    prtime[0]->SetMarkerSize(0.5);
+    prtime[0]->SetMarkerColor(kRed);
+    prtime[0]->SetLineWidth(2);
+    prtime[0]->SetLineColor(kRed);
+    prtime[0]->GetXaxis()->SetTimeDisplay(1);
+    prtime[0]->GetXaxis()->SetTimeFormat("%d/%m/%y%F1970-01-01 00:00:00");
+    prtime[0]->GetXaxis()->SetTitleSize(0.05);
+    prtime[0]->GetXaxis()->SetTitleOffset(1.0);
+    prtime[0]->GetXaxis()->SetLabelSize(0.05);
+    prtime[0]->GetXaxis()->SetNdivisions(205);
+    prtime[0]->GetYaxis()->SetRangeUser(1882., 1890.);
+    prtime[0]->GetYaxis()->SetTitleSize(0.05);
+    prtime[0]->GetYaxis()->SetTitleOffset(1.00);
+    prtime[0]->GetYaxis()->SetLabelSize(0.05);
+    prtime[0]->GetYaxis()->SetNdivisions(205);
+    prtime[0]->GetYaxis()->SetDecimals();
+    prtime[0]->GetXaxis()->SetTitle("Time(d/m/y)");
+    prtime[0]->GetYaxis()->SetTitle("E_{beam}, MeV");
+    prtime[0]->SetTitle("");
+    prtime[0]->Draw();
+    cc6->SaveAs("/spool/users/ovtin/outDmeson/demo/Time_Ebeam_2016.png");
+    cc6->SaveAs("/spool/users/ovtin/outDmeson/demo/Time_Ebeam_2016.eps");
+
+    TCanvas *cc7 = new TCanvas();
+    cc7->cd();
+    prtime[1]->SetMarkerStyle(20);
+    prtime[1]->SetMarkerSize(0.5);
+    prtime[1]->SetMarkerColor(kBlue);
+    prtime[1]->SetLineWidth(2);
+    prtime[1]->SetLineColor(kBlue);
+    prtime[1]->GetXaxis()->SetTimeDisplay(1);
+    prtime[1]->GetXaxis()->SetTimeFormat("%d/%m/%y%F1970-01-01 00:00:00");
+    prtime[1]->GetXaxis()->SetTitleSize(0.05);
+    prtime[1]->GetXaxis()->SetTitleOffset(1.0);
+    prtime[1]->GetXaxis()->SetLabelSize(0.05);
+    prtime[1]->GetXaxis()->SetNdivisions(205);
+    prtime[1]->GetYaxis()->SetRangeUser(1882., 1890.);
+    prtime[1]->GetYaxis()->SetTitleSize(0.05);
+    prtime[1]->GetYaxis()->SetTitleOffset(1.00);
+    prtime[1]->GetYaxis()->SetLabelSize(0.05);
+    prtime[1]->GetYaxis()->SetNdivisions(205);
+    prtime[1]->GetYaxis()->SetDecimals();
+    prtime[1]->GetXaxis()->SetTitle("Time(d/m/y)");
+    prtime[1]->GetYaxis()->SetTitle("E_{beam}, MeV");
+    prtime[1]->SetTitle("");
+    prtime[1]->Draw();
+    cc7->SaveAs("/spool/users/ovtin/outDmeson/demo/Time_Ebeam_2004.png");
+    cc7->SaveAs("/spool/users/ovtin/outDmeson/demo/Time_Ebeam_2004.eps");
 
     return 0;
 }
