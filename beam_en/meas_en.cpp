@@ -75,6 +75,7 @@ int main(int argc, char** argv) {
     TH1F* hsx[2];
     TH1F* hsy[2];
     TH1F* hsz[2];
+    TProfile* pr[2];
 
     for(int key=0; key<=1; key++)
     {
@@ -99,6 +100,9 @@ int main(int argc, char** argv) {
 	hsx[key] = new TH1F("sx","sx",100,-0.05,0.1);
 	hsy[key] = new TH1F("sy","sy",100,-0.05,0.1);
 	hsz[key] = new TH1F("sz","sz",100,0.0,1.0);
+
+        if(key==0) pr[key]=new TProfile("Energy_Run","Energy_Run",693,23206.,26248.,1880.,1890);
+        if(key!=0) pr[key]=new TProfile("Energy_Run_2004","Energy_Run_2004",482,4100.,4709.,1880.,1890);
 
 	int run;
 	string line;
@@ -211,6 +215,9 @@ int main(int argc, char** argv) {
 	    { */
 		hEn[key]->Fill(beam_energy);
 		herrEn[key]->Fill(err_beam_energy);
+
+		pr[key]->Fill(run,beam_energy);
+
 	    //}
 	    }
 	}
@@ -276,6 +283,57 @@ int main(int argc, char** argv) {
     leg2->Draw("same");
     cc3->SaveAs("/spool/users/ovtin/outDmeson/demo/herrEn.png");
     cc3->SaveAs("/spool/users/ovtin/outDmeson/demo/herrEn.eps");
+
+    gStyle->SetOptStat(0);
+    TCanvas *cc4 = new TCanvas();
+    cc4->cd();
+    pr[0]->SetMarkerStyle(20);
+    pr[0]->SetMarkerSize(0.5);
+    pr[0]->SetMarkerColor(kRed);
+    pr[0]->SetLineWidth(2);
+    pr[0]->SetLineColor(kRed);
+    pr[0]->GetXaxis()->SetTitleSize(0.05);
+    pr[0]->GetXaxis()->SetTitleOffset(1.0);
+    pr[0]->GetXaxis()->SetLabelSize(0.05);
+    pr[0]->GetXaxis()->SetNdivisions(510);
+    pr[0]->GetYaxis()->SetRangeUser(1882., 1890.);
+    pr[0]->GetYaxis()->SetTitleSize(0.05);
+    pr[0]->GetYaxis()->SetTitleOffset(1.00);
+    pr[0]->GetYaxis()->SetLabelSize(0.05);
+    pr[0]->GetYaxis()->SetNdivisions(205);
+    pr[0]->GetYaxis()->SetDecimals();
+    pr[0]->GetXaxis()->SetTitle("Run");
+    pr[0]->GetYaxis()->SetTitle("E_{beam}, MeV");
+    pr[0]->SetTitle("");
+    pr[0]->Draw();
+    //cc4->Update();
+    cc4->SaveAs("/spool/users/ovtin/outDmeson/demo/Run_Ebeam_2016.png");
+    cc4->SaveAs("/spool/users/ovtin/outDmeson/demo/Run_Ebeam_2016.eps");
+
+    TCanvas *cc5 = new TCanvas();
+    cc5->cd();
+    pr[1]->SetMarkerStyle(20);
+    pr[1]->SetMarkerSize(0.5);
+    pr[1]->SetMarkerColor(kBlue);
+    pr[1]->SetLineWidth(2);
+    pr[1]->SetLineColor(kBlue);
+    pr[1]->GetXaxis()->SetTitleSize(0.05);
+    pr[1]->GetXaxis()->SetTitleOffset(1.0);
+    pr[1]->GetXaxis()->SetLabelSize(0.05);
+    pr[1]->GetXaxis()->SetNdivisions(510);
+    pr[1]->GetYaxis()->SetRangeUser(1882., 1890.);
+    pr[1]->GetYaxis()->SetTitleSize(0.05);
+    pr[1]->GetYaxis()->SetTitleOffset(1.00);
+    pr[1]->GetYaxis()->SetLabelSize(0.05);
+    pr[1]->GetYaxis()->SetNdivisions(205);
+    pr[1]->GetYaxis()->SetDecimals();
+    pr[1]->GetXaxis()->SetTitle("Run");
+    pr[1]->GetYaxis()->SetTitle("E_{beam}, MeV");
+    pr[1]->SetTitle("");
+    pr[1]->Draw();
+    //cc5->Update();
+    cc5->SaveAs("/spool/users/ovtin/outDmeson/demo/Run_Ebeam_2004.png");
+    cc5->SaveAs("/spool/users/ovtin/outDmeson/demo/Run_Ebeam_2004.eps");
 
     return 0;
 }
