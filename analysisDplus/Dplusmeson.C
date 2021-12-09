@@ -87,7 +87,7 @@ int main(int argc, char* argv[])
     int ntrk=3;
     int max_munhits=2;
     float min_p=100.; //MeV
-    float max_p=1000.; //MeV
+    float max_p=2000.; //MeV
     float min_Mbc=1700.;
     float max_Mbc=1900.;
     float min_dE=-300.;
@@ -122,7 +122,7 @@ int main(int argc, char* argv[])
     //===========
 
     float tof1,dtof1;
-    double deCut1, deCut2;
+    double deCut1=-70, deCut2=70;
     double mbcCut1, mbcCut2;
 
     time_t runTime_begin;
@@ -136,13 +136,9 @@ int main(int argc, char* argv[])
     TString fout_result=dir_out + "/" + "fout_result.dat";
     TString fout_result_atc;
     TString list_badruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/badruns";
-    //TString out_pref = "KemcAllowedOn_kNoiseReject3_1.0";
-    //TString out_pref = "KemcAllowedOn_kNoiseReject3_1.0170_tofOff";
-    //TString out_pref = "KemcAllowedOn_kNoiseReject3_1.0170";
-    TString out_pref = "KemcAllowedOn_kNoiseReject3_1.0180";
+    TString out_pref = "KemcAllowedOn_kNoiseReject3_1.0150_test";
     if( key==0 ){
         min_Mbc2=1790.; max_Mbc2=1900.;
-	deCut1=-70; deCut2=70;
 	mbcCut1=1860, mbcCut2=1880;
 	fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data_%d.root",key).Data();
 	KEDR = "/home/ovtin/public_html/outDmeson/Dplus/dataPcorr_" + out_pref + "_ATC/";
@@ -152,7 +148,6 @@ int main(int argc, char* argv[])
     else if (key==4)
     {
         min_Mbc2=1790.; max_Mbc2=1900.;
-	deCut1=-70; deCut2=70;
 	mbcCut1=1860, mbcCut2=1880;
 	fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data2004_%d.root",key).Data();
         //KEDR = "/home/ovtin/public_html/outDmeson/Dplus/data2004/";
@@ -164,28 +159,27 @@ int main(int argc, char* argv[])
     else if (key==1)
     {
         min_Mbc2=1850.; max_Mbc2=1890.;
-	min_dE=-200.; max_dE=200.;
-	deCut1=-200; deCut2=200;
 	mbcCut1=1850, mbcCut2=1890;
 	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_sig_%d.root",key).Data();
+        out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_dedx_tof";
 	KEDR = "/home/ovtin/public_html/outDmeson/Dplus/simulation_Sig_" + out_pref + "_ATC/";
         fout_result=dir_out + "/" + "kpp_signal_" + out_pref + ".dat";
         fout_result_atc=dir_out + "/" + "kpp_signal_" + out_pref + "_ATC.dat";
     }
     else if (key==2)
     {
-	deCut1=-300; deCut2=300;
 	mbcCut1=1700, mbcCut2=1900;
 	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_BG_continium.root",key).Data();
+        out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_dedx_tof";
 	KEDR = "/home/ovtin/public_html/outDmeson/Dplus/simulation_Bkg_continium_" + out_pref + "_ATC/";
         fout_result=dir_out + "/" + "kpp_uds_" + out_pref + ".dat";
         fout_result_atc=dir_out + "/" + "kpp_uds_" + out_pref + "_ATC.dat";
     }
     else if (key==3)
     {
-	deCut1=-300; deCut2=300;
 	mbcCut1=1700, mbcCut2=1900;
 	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_BG_eetoDD_%d.root",key).Data();
+        out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0";
 	KEDR = "/home/ovtin/public_html/outDmeson/Dplus/simulation_Bkg_eetodd_" + out_pref + "_ATC/";
         fout_result=dir_out + "/" + "kpp_dbck_" + out_pref + ".dat";
         fout_result_atc=dir_out + "/" + "kpp_dbck_" + out_pref + "_ATC.dat";
@@ -310,6 +304,17 @@ int main(int argc, char* argv[])
 
     TH1F* hATCcnt=new TH1F("CNT","CNT ATC",160,0.0,159.0);
     TH1F* hATCnpe=new TH1F("Nph.e.","Nph.e. ATC",100,0.0,30.0);
+    TProfile* pr1=new TProfile("#K","#K npe/Momentum",120,0,1200,0,50);
+    TProfile* pr2=new TProfile("#pi","#pi npe/Momentum",120,0,1200,0,50);
+
+    TH1F* hdedx=new TH1F("dedx","dedx",100,0.0,200.0);
+    TH1F* hprobKt1=new TH1F("probKt1","probKt1",100,0.0,1.0);
+    TH1F* hprobKt2=new TH1F("probKt2","probKt2",100,0.0,1.0);
+    TH1F* hprobKt3=new TH1F("probKt3","probKt3",100,0.0,1.0);
+    TH1F* hprobpit1=new TH1F("probpit1","probpit1",100,0.0,1.0);
+    TH1F* hprobpit2=new TH1F("probpit2","probpit2",100,0.0,1.0);
+    TH1F* hprobpit3=new TH1F("probpit3","probpit3",100,0.0,1.0);
+    TH1F* hresd=new TH1F("resd","resd",150,0.0,1500.0);
 
     TTree *forFit = new TTree("forFit","forFit");
     Float_t forFitMbc, forFitdE, forFitdP;
@@ -506,36 +511,12 @@ int main(int argc, char* argv[])
                */
 	  )
 	{
+            if( key==1 && Dmeson.charge1>0 ) continue;
+
 	    hDncomb->Fill(Dmeson.ncomb);
 	    hRun->Fill(Dmeson.Run);
             hTime->Fill(runTime_begin);
 	    hEbeam->Fill(Dmeson.Ebeam);
-
-	    //tof = sqrt(494.*494. + p*p)/p*tlen/30.    time=len/v       beta=v/c    v=beta*c   beta=sqrt(1-(mc^2)^2/E^2)  E^2=(mc^2)^2+(pc)^2
-	    tof1=sqrt(494.*494. + Dmeson.p1*Dmeson.p1)/Dmeson.p1*Dmeson.lengtht1/30.;
-
-	    float tofk_corr;
-	    tofk_corr = Dmeson.timet1;
-
-	    if (tofk_corr==0) continue;
-	    //if (Dmeson.timet1==0 || Dmeson.timet2==0 || Dmeson.timet3==0) continue;
-
-	    if (tofk_corr<1.) tofk_corr = tofk_corr+5.5;
-	    if (tofk_corr<1.) tofk_corr = tofk_corr+5.5;
-	    if (tofk_corr<1.) tofk_corr = tofk_corr+5.5;
-	    if (tofk_corr>6.5) tofk_corr = tofk_corr-5.5;
-	    if (tofk_corr>6.5) tofk_corr = tofk_corr-5.5;
-	    if (tofk_corr>6.5) tofk_corr = tofk_corr-5.5;
-
-	    dtof1=(tofk_corr-tof1);
-            if( ftof==1 && dtof1<-tofCut ) continue;
-	    if( ftof==1 && dtof1>1000. ) continue;
-
-            if( fabs(Dmeson.thetat1/180.*PI-PI/2.)>0.9 ) continue;
-
-	    if( Dmeson.lengtht1 < 80. && Dmeson.p1>800. ) {
-		htimeresk->Fill(tofk_corr/Dmeson.lengtht1*72.);
-	    }
 
 	    if(verbose) cout<<"<<<<<<<<<<<<<<<<<<<<<<<<<<< Next event >>>>>>>>>>>>>>>>>>>>>>>>>>>>"<<endl;
 	    if(verbose) cout<<"run="<<Dmeson.Run<<"\t"<<"event="<<Dmeson.rEv<<endl;
@@ -552,11 +533,6 @@ int main(int argc, char* argv[])
 	    htimetof->Fill(Dmeson.timet3);
 	    hbeta->Fill(Dmeson.betat3);
 	    hlength->Fill(Dmeson.lengtht3);
-
-	    hdtof1->Fill(dtof1);
-	    if ( Dmeson.betat1>0 ) h2betaP->Fill(Dmeson.p1, 1/Dmeson.betat1);
-	    if ( Dmeson.betat2>0 ) h2betaP->Fill(Dmeson.p2, 1/Dmeson.betat2);
-	    if ( Dmeson.betat3>0 ) h2betaP->Fill(Dmeson.p3, 1/Dmeson.betat3);
 
 	    if ( verbose )
 	    {
@@ -667,6 +643,106 @@ int main(int argc, char* argv[])
 
 	    hfchi2->Fill(Dmeson.fchi2);
 
+	    //fill for dedx
+            if(Dmeson.prec1<450.){
+		hdedx->Fill(Dmeson.dedxt1);
+		if(Dmeson.probKt1>0.) hprobKt1->Fill(Dmeson.probKt1);
+		if(Dmeson.probpit1>0.) hprobpit1->Fill(Dmeson.probpit1);
+		hresd->Fill(Dmeson.resdKt1);
+                cout<<"probKt1="<<Dmeson.probKt1<<"\t"<<"Dmeson.probpit1="<<Dmeson.probpit1<<endl;
+	    }
+	    if(Dmeson.prec2<450.){
+		hdedx->Fill(Dmeson.dedxt2);
+        	if(Dmeson.probKt2>0.) hprobKt2->Fill(Dmeson.probKt2);
+        	if(Dmeson.probpit2>0.) hprobpit2->Fill(Dmeson.probpit2);
+        	hresd->Fill(Dmeson.resdKt2);
+	    }
+	    if(Dmeson.prec3<450.){
+		hdedx->Fill(Dmeson.dedxt3);
+		if(Dmeson.probKt3>0.) hprobKt3->Fill(Dmeson.probKt3);
+		if(Dmeson.probpit3>0.) hprobpit3->Fill(Dmeson.probpit3);
+		hresd->Fill(Dmeson.resdKt3);
+	    }
+
+	    //=============== for ATC identification ================================
+
+	    if( verbose==1 ) cout<<"natccrosst1="<<Dmeson.natccrosst1<<endl;
+	    int good_region_t1=0;
+	    for(int i=0; i<Dmeson.natccrosst1; i++)
+	    {
+		if( verbose==1 ) cout<<"atcCNTt1="<<Dmeson.atcCNTt1[i]<<"\t"<<"atcNpet1="<<Dmeson.atcNpet1[i]<<endl;
+		if( verbose==1 ) cout<<"single_aerogel_REGION0t1="<<Dmeson.single_aerogel_REGION0t1[i]<<endl;
+		if( verbose==1 ) cout<<"wlshitt1="<<Dmeson.wlshitt1[i]<<endl;
+		hATCcnt->Fill(Dmeson.atcCNTt1[i]);
+		//if( Dmeson.single_aerogel_REGION0t1[i]==1 ) good_region_t1++;
+                if( Dmeson.wlshitt1[i]!=1 ) good_region_t1++;
+	    }
+	    if( verbose==1 ) cout<<"atcTotalNpet1="<<Dmeson.atcTotalNpet1<<endl;
+            hATCnpe->Fill(Dmeson.atcTotalNpet1);
+
+	    if( verbose==1 ) cout<<"natccrosst2="<<Dmeson.natccrosst2<<endl;
+	    int good_region_t2=0;
+	    for(int i=0; i<Dmeson.natccrosst2; i++)
+	    {
+		if( verbose==1 ) cout<<"atcCNTt2="<<Dmeson.atcCNTt2[i]<<"\t"<<"atcNpet2="<<Dmeson.atcNpet2[i]<<endl;
+		if( verbose==1 ) cout<<"single_aerogel_REGION0t2="<<Dmeson.single_aerogel_REGION0t2[i]<<endl;
+		if( verbose==1 ) cout<<"wlshitt2="<<Dmeson.wlshitt2[i]<<endl;
+		hATCcnt->Fill(Dmeson.atcCNTt2[i]);
+		//if( Dmeson.single_aerogel_REGION0t2[i]==1 ) good_region_t2++;
+                if( Dmeson.wlshitt2[i]!=1 ) good_region_t2++;
+	    }
+	    if( verbose==1 ) cout<<"atcTotalNpet2="<<Dmeson.atcTotalNpet2<<endl;
+            hATCnpe->Fill(Dmeson.atcTotalNpet2);
+
+	    if( verbose==1 ) cout<<"natccrosst3="<<Dmeson.natccrosst3<<endl;
+	    int good_region_t3=0;
+	    for(int i=0; i<Dmeson.natccrosst3; i++)
+	    {
+		if( verbose==1 ) cout<<"atcCNTt3="<<Dmeson.atcCNTt3[i]<<"\t"<<"atcNpet3="<<Dmeson.atcNpet3[i]<<endl;
+		if( verbose==1 ) cout<<"single_aerogel_REGION0t3="<<Dmeson.single_aerogel_REGION0t3[i]<<endl;
+		if( verbose==1 ) cout<<"wlshitt3="<<Dmeson.wlshitt3[i]<<endl;
+		hATCcnt->Fill(Dmeson.atcCNTt3[i]);
+		//if( Dmeson.single_aerogel_REGION0t3[i]==1 ) good_region_t3++;
+                if( Dmeson.wlshitt3[i]!=1 ) good_region_t3++;
+	    }
+	    if( verbose==1 ) cout<<"atcTotalNpet3="<<Dmeson.atcTotalNpet3<<endl;
+            hATCnpe->Fill(Dmeson.atcTotalNpet3);
+
+	    //=========================================================================
+            //==================TOF identification=====================================
+
+	    //tof = sqrt(494.*494. + p*p)/p*tlen/30.    time=len/v       beta=v/c    v=beta*c   beta=sqrt(1-(mc^2)^2/E^2)  E^2=(mc^2)^2+(pc)^2
+	    tof1=sqrt(494.*494. + Dmeson.p1*Dmeson.p1)/Dmeson.p1*Dmeson.lengtht1/30.;
+
+	    float tofk_corr;
+	    tofk_corr = Dmeson.timet1;
+
+	    if( fabs(Dmeson.thetat1/180.*PI-PI/2.)>0.9 ) continue;
+
+	    if( tofk_corr==0 ) continue;
+	    //if (Dmeson.timet1==0 || Dmeson.timet2==0 || Dmeson.timet3==0) continue;
+
+	    if (tofk_corr<1.) tofk_corr = tofk_corr+5.5;
+	    if (tofk_corr<1.) tofk_corr = tofk_corr+5.5;
+	    if (tofk_corr<1.) tofk_corr = tofk_corr+5.5;
+	    if (tofk_corr>6.5) tofk_corr = tofk_corr-5.5;
+	    if (tofk_corr>6.5) tofk_corr = tofk_corr-5.5;
+	    if (tofk_corr>6.5) tofk_corr = tofk_corr-5.5;
+
+	    dtof1=(tofk_corr-tof1);
+
+	    hdtof1->Fill(dtof1);
+	    if ( Dmeson.betat1>0 ) h2betaP->Fill(Dmeson.p1, 1/Dmeson.betat1);
+	    if ( Dmeson.betat2>0 ) h2betaP->Fill(Dmeson.p2, 1/Dmeson.betat2);
+	    if ( Dmeson.betat3>0 ) h2betaP->Fill(Dmeson.p3, 1/Dmeson.betat3);
+
+            if( ftof==1 && dtof1<-tofCut ) continue;
+	    if( ftof==1 && dtof1>1000. ) continue;
+
+	    if( Dmeson.lengtht1 < 80. && Dmeson.p1>800. ) {
+		htimeresk->Fill(tofk_corr/Dmeson.lengtht1*72.);
+	    }
+
             //fill de
 	    if( Dmeson.mbc>=mbcCut1 && Dmeson.mbc<=mbcCut2 )
 	    {
@@ -720,49 +796,24 @@ int main(int argc, char* argv[])
 
 	    if(verbose) cout<<"Dmeson.mbc="<<Dmeson.mbc<<"\t"<<"Dmeson.de="<<Dmeson.de<<"\t"<<endl;
 
+
 	    //=============== ATC identification ================================
+	    double npetrh=0.5;
+	    double Pcut1=450.;
+	    double Pcut2=1500.;
 
-	    if( verbose==1 ) cout<<"natccrosst1="<<Dmeson.natccrosst1<<endl;
-	    int good_region_t1=0;
-	    for(int i=0; i<Dmeson.natccrosst1; i++)
-	    {
-		if( verbose==1 ) cout<<"atcCNTt1="<<Dmeson.atcCNTt1[i]<<"\t"<<"atcNpet1="<<Dmeson.atcNpet1[i]<<endl;
-		if( verbose==1 ) cout<<"single_aerogel_REGION0t1="<<Dmeson.single_aerogel_REGION0t1[i]<<endl;
-		if( verbose==1 ) cout<<"wlshitt1="<<Dmeson.wlshitt1[i]<<endl;
-		hATCcnt->Fill(Dmeson.atcCNTt1[i]);
-		if( Dmeson.single_aerogel_REGION0t1[i]==1 ) good_region_t1++;
-	    }
-	    if( verbose==1 ) cout<<"atcTotalNpet1="<<Dmeson.atcTotalNpet1<<endl;
-            hATCnpe->Fill(Dmeson.atcTotalNpet1);
+	    //ATC suppression - if not Kaon
+	    if( (Dmeson.prec1>Pcut1 && Dmeson.prec1<Pcut2 && good_region_t1>=1 && Dmeson.atcTotalNpet1>npetrh) ) continue;
 
-	    if( verbose==1 ) cout<<"natccrosst2="<<Dmeson.natccrosst2<<endl;
-	    int good_region_t2=0;
-	    for(int i=0; i<Dmeson.natccrosst2; i++)
-	    {
-		if( verbose==1 ) cout<<"atcCNTt2="<<Dmeson.atcCNTt2[i]<<"\t"<<"atcNpet2="<<Dmeson.atcNpet2[i]<<endl;
-		if( verbose==1 ) cout<<"single_aerogel_REGION0t2="<<Dmeson.single_aerogel_REGION0t2[i]<<endl;
-		if( verbose==1 ) cout<<"wlshitt2="<<Dmeson.wlshitt2[i]<<endl;
-		hATCcnt->Fill(Dmeson.atcCNTt2[i]);
-		if( Dmeson.single_aerogel_REGION0t2[i]==1 ) good_region_t2++;
-	    }
-	    if( verbose==1 ) cout<<"atcTotalNpet2="<<Dmeson.atcTotalNpet2<<endl;
-            hATCnpe->Fill(Dmeson.atcTotalNpet2);
+            //if not pions
+	    if( (Dmeson.prec2>Pcut1 && Dmeson.prec2<Pcut2 && good_region_t2>=1 && Dmeson.atcTotalNpet2<npetrh) ) continue;
+	    if( (Dmeson.prec3>Pcut1 && Dmeson.prec3<Pcut2 && good_region_t3>=1 && Dmeson.atcTotalNpet3<npetrh) ) continue;
 
-	    if( verbose==1 ) cout<<"natccrosst3="<<Dmeson.natccrosst3<<endl;
-	    int good_region_t3=0;
-	    for(int i=0; i<Dmeson.natccrosst3; i++)
-	    {
-		if( verbose==1 ) cout<<"atcCNTt3="<<Dmeson.atcCNTt3[i]<<"\t"<<"atcNpet3="<<Dmeson.atcNpet3[i]<<endl;
-		if( verbose==1 ) cout<<"single_aerogel_REGION0t3="<<Dmeson.single_aerogel_REGION0t3[i]<<endl;
-		if( verbose==1 ) cout<<"wlshitt3="<<Dmeson.wlshitt3[i]<<endl;
-		hATCcnt->Fill(Dmeson.atcCNTt3[i]);
-		if( Dmeson.single_aerogel_REGION0t3[i]==1 ) good_region_t3++;
-	    }
-	    if( verbose==1 ) cout<<"atcTotalNpet3="<<Dmeson.atcTotalNpet3<<endl;
-            hATCnpe->Fill(Dmeson.atcTotalNpet3);
 
-            //ATC suppression - if not Kaon
-	    if( (Dmeson.prec1>450. && good_region_t1>=1 && Dmeson.atcTotalNpet1>0.1) ) continue;
+	    pr1->Fill(Dmeson.prec1, Dmeson.atcTotalNpet1);
+	    pr2->Fill(Dmeson.prec2, Dmeson.atcTotalNpet2);
+	    pr2->Fill(Dmeson.prec3, Dmeson.atcTotalNpet3);
+
 
 	    if( Dmeson.de>=min_dE && Dmeson.de<=max_dE  &&  Dmeson.mbc>=min_Mbc && Dmeson.mbc<=max_Mbc )
 	    {
@@ -910,8 +961,14 @@ int main(int argc, char* argv[])
     htimetof->Draw(); cc1->SaveAs(KEDR + "time_tof" + format2); cc1->SaveAs(KEDR + "time_tof" + format3);
     hbeta->Draw(); cc1->SaveAs(KEDR + "beta" + format2); cc1->SaveAs(KEDR + "beta" + format3);
     hlength->Draw(); cc1->SaveAs(KEDR + "length" + format2); cc1->SaveAs(KEDR + "length" + format3);
+
+    h2betaP->GetXaxis()->SetTitle("P (MeV/c)");
+    h2betaP->GetYaxis()->SetTitle("1/#beta");
     h2betaP->Draw(); cc1->SaveAs(KEDR + "betatoP" + format2); cc1->SaveAs(KEDR + "betatoP" + format3);
+
+    hdtof1->GetXaxis()->SetTitle("#DeltaTOF (ns)");
     hdtof1->Draw(); cc1->SaveAs(KEDR + "dtof1" + format2); cc1->SaveAs(KEDR + "dtof1" + format3);
+
     htimeresk->GetXaxis()->SetTitle("TOF (ns)");
     htimeresk->Fit("gaus","","",2.,4.);
     htimeresk->Draw(); cc1->SaveAs(KEDR + "timeresk" + format2); cc1->SaveAs(KEDR + "timeresk" + format3);
@@ -992,6 +1049,24 @@ int main(int argc, char* argv[])
 
     hATCcnt->Draw(); cc1->SaveAs(KEDR+"ATCcnt.png");
     hATCnpe->Draw(); cc1->SaveAs(KEDR+"ATCnpe.png");
+    pr2->SetXTitle("P, MeV/c");
+    pr2->SetYTitle("N_{ph.e.}");
+    pr2->SetMaximum(12.0);
+    pr2->Draw("prof");
+    pr1->SetXTitle("P, MeV/c");
+    pr1->SetYTitle("N_{ph.e.}");
+    pr1->SetLineColor(kRed);
+    pr1->Draw("same");
+    cc1->SaveAs(KEDR+"ATC_npe_p.png");
+
+    hdedx->Draw();  cc1->SaveAs(KEDR+"dedx.png");
+    hprobKt1->Draw();  cc1->SaveAs(KEDR+"probKt1.png");
+    hprobKt2->Draw();  cc1->SaveAs(KEDR+"probKt2.png");
+    hprobKt3->Draw();  cc1->SaveAs(KEDR+"probKt3.png");
+    hprobpit1->Draw();  cc1->SaveAs(KEDR+"probpit1.png");
+    hprobpit2->Draw();  cc1->SaveAs(KEDR+"probpit2.png");
+    hprobpit3->Draw();  cc1->SaveAs(KEDR+"probpit3.png");
+    hresd->Draw();  cc1->SaveAs(KEDR+"resd.png");
 
     fout->Write();
     fout->Close();

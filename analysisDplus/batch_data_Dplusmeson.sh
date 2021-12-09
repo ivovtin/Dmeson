@@ -23,15 +23,15 @@
 # --             Queue list                --
 ##$ -soft
 ##$ -hard
-#$ -l time=24:00:00
+##$ -l time=24:00:00
 #$ -q remote
 ##$ -q extralong
 ##$ -q 6h
 ##$ -q day
 #
 # -- Send mail at submission and completion of script --
-##$ -m beas
-##$ -M ovtin.ivan@gmail.com
+#$ -m beas
+#$ -M ovtin.ivan@gmail.com
 
 ##$ -t 1-482
 #$ -t 1-693
@@ -42,15 +42,20 @@ myrand=$[1000+$i]
 #Signal
 inruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/runDmeson"$i
 ##outfile="/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0210_kNoiseReject3_atc_KemcAllowediOn/psi3770_to_D0meson_"$i".root"
-outfile="/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0150_kNoiseReject3_atc_KemcAllowediOn/psi3770_to_D0meson_"$i".root"
+##outfile="/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0150_kNoiseReject3_atc_KemcAllowediOn/psi3770_to_D0meson_"$i".root"
+outfile="/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0150_kNoiseReject3_atc_KemcAllowedOn_dedx_tof/psi3770_to_D0meson_"$i".root"
+##outfile="/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0125_kNoiseReject3_atc_KemcAllowediOn/psi3770_to_D0meson_"$i".root"
+##outfile="/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0165_kNoiseReject3_atc_KemcAllowediOn/psi3770_to_D0meson_"$i".root"
+##outfile="/store/users/ovtin/outDmeson/Dplus/psi3770_to_D0meson_"$i".root"
+#outfile="/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0110_kNoiseReject3_atc_KemcAllowediOn_v2/psi3770_to_D0meson_"$i".root"
 ##inruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/runDmeson"$i
 ##outfile="/spool/users/ovtin/outDmeson/Dplus/dataPcorr2004/psi3770_to_D0meson_"$i".root"
 ##outfile="/spool/users/ovtin/outDmeson/Dplus/dataPcorr2004_1.0250/psi3770_to_D0meson_"$i".root"
 mintracks=3
-maxtracks=25
+maxtracks=20
 minbeamtracks=0
 minIPtracks=0
-maxIPtracks=25
+maxIPtracks=20
 minPt=0
 maxPt=2000
 minClusterEnergy=0
@@ -62,23 +67,16 @@ minClustersCsI=0
 maxtchi2=10000
 minNhits=0
 kinefit=1
-##pSF=1.0270   ##data 2004
 ##pSF=1.0280   ##data 2004
-#pSF=1.0295   ##data 2004
-##pSF=1.0310   ##data 2004
-##pSF=1.0325   ##data 2004
-##pSF=1.0340   ##data 2004
-##pSF=1.0360   ##data 2004
-##pSF=1.0250   ##data 2004
-##pSF=1.0155   ##data 2016-17
-##pSF=1.0170   ##data 2016-17
-##pSF=1.0180   ##data 2016-17
 ##pSF=1.0210   ##data 2016-17
 pSF=1.0150   ##data 2016-17
+##pSF=1.0135   ##data 2016-17
+##pSF=1.0125   ##data 2016-17
+##pSF=1.0165   ##data 2016-17
+##pSF=1.0110   ##data 2016-17
 #pSF=1.0   ##data 2016-17
 ##verbose=1
 
-##$HOME/development/Dmeson/analysis_Dplusmeson -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile -f $kinefit $inruns
 $HOME/development/Dmeson/analysis_Dplusmeson -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile -f $kinefit $inruns -y $pSF
 
 status=$?

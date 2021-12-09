@@ -1107,11 +1107,8 @@ int analyse_event()
 		if (progpar.verbose) cout<<"Pion "<<"probt1="<<dcinfo.p[t1][2]<<"\t"<<"probt2="<<dcinfo.p[t2][2]<<endl;
 		if (progpar.verbose) cout<<"Kaon "<<"probt1="<<dcinfo.p[t1][3]<<"\t"<<"probt2="<<dcinfo.p[t2][3]<<endl;
 
-
                 Dmeson.kft1 = kedrrun_cb_.Header.RunType != 64 ? 0 : mctracks_cb_.kf[t1];
 		Dmeson.kft2 = kedrrun_cb_.Header.RunType != 64 ? 0 : mctracks_cb_.kf[t2];
-
-                Dmeson.timet1 = kedrrun_cb_.Header.RunType != 64 ? kscBhit_.time_B_ns[t1][0] : tof1;
 
                 if (progpar.verbose) cout<<"kft1="<<Dmeson.kft1<<"\t"<<"kft2="<<Dmeson.kft2<<"\t"<<endl;
 

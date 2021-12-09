@@ -16,16 +16,15 @@
 # -------------------------------------------
 # --             Queue list                --
 ##$ -soft
-#$ -l time=24:00:00
-##$ -q remote
+##$ -l time=24:00:00
+#$ -q remote
 ##$ -q extralong
 ##$ -q 6h
-#$ -q day
-#$ -m beas
-#$ -M ovtin.ivan@gmail.com
+##$ -q day
+##$ -m beas
+##$ -M ovtin.ivan@gmail.com
 
 #$ -t 1-5
-##$ -t 2-5
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]
@@ -33,8 +32,6 @@ myrand=$[1000+$i]
 #start the job
 ##$HOME/3.0.0/bin/ks < $HOME/development/Dmeson/simulation/simD0/mccards/mc.cards.ee_to_DD_"$i" > /dev/null
 $HOME/development/bin/ks < $HOME/development/Dmeson/simulation/simD0/mccards/mc.cards.ee_to_DD_"$i"
-##/home/poluektv/kedr/release/bin/ks < /home/ovtin/development/Dmeson/simulation/simD0/mccards/mc.cards.ee_to_DD_test"$i"
-##$HOME/development/bin/ks < $HOME/development/Dmeson/simulation/simD0/mccards/mc.cards.ee_to_DD_test"$i"
 ##$HOME/3.0.0/bin/ks < $HOME/development/Dmeson/simulation/simD0/mccards/mc.cards.ee_to_qq_3 > /dev/null
 status=$?
 if [ $status != 0 ]; then

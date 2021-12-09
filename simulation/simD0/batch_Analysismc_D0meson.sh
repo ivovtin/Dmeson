@@ -35,7 +35,6 @@
 
 ##for Signal
 #$ -t 1-114
-##$ -t 1-1
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]
@@ -45,7 +44,7 @@ simOn=1
 outfile="/store/users/ovtin/outDmeson/simulation/outsimD0/Signal/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_dedx_tof/psi3770_to_simD0mesonSignal_"$i".root"
 ##mintracks=3
 mintracks=2
-maxtracks=20
+maxtracks=15
 minbeamtracks=0
 minIPtracks=0
 maxIPtracks=15

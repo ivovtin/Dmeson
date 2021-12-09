@@ -16,8 +16,8 @@
 #$ -v PATH=$PATH:$HOME/release/KdRunFastMon,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/alexbarn/release/lib,KDBHOST=localhost
 # -------------------------------------------
 # --             Queue list                --
-#$ -soft
-#$ -l time=24:00:00
+##$ -soft
+##$ -l time=24:00:00
 #$ -q remote
 ##$ -q extralong
 ##$ -q 6h
@@ -31,7 +31,7 @@ i=${SGE_TASK_ID}
 myrand=$[1000+$i]
 
 #start the job
-$HOME/development/bin/ks < $HOME/development/Dmeson/simulation/simDplus/BG_eetoDD/mccards/mc.cards.ee_to_DD_"$i" > /dev/null
+$HOME/development/bin/ks < $HOME/development/Dmeson/simulation/simDplus/BG_eetoDD/mccards/mc.cards.ee_to_DD_"$i"
 status=$?
 if [ $status != 0 ]; then
   echo "Program exited with status $status"

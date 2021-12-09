@@ -5,6 +5,7 @@
 #include <string>
 #include <list>
 #include <algorithm>    // std::min_element, std::max_element
+#include <getopt.h>
 
 #include <stdio.h>
 #include <math.h>
@@ -13,7 +14,7 @@
 #include "ReadNat/rr_def.h"
 #include "ReadNat/re_def.h"
 #include "ReadNat/ss_def.h"
-#include "ReadNat/read_nat_c.h"
+#include "ReadNat/mc_def.h"
 #include "VDDCRec/ktracks.h"
 #include "VDDCRec/mtofhits.h"
 #include "VDDCRec/ToFTrack.hh"
@@ -25,6 +26,8 @@
 #include "KrMu/mu_system.h"
 #include "KrMu/mu_event.h"
 
+#include "TROOT.h"
+#include "TSystem.h"
 #include "TTree.h"
 #include "TFolder.h"
 #include "TH1.h"
@@ -42,6 +45,7 @@
 #include "KaFramework/mubr.h"
 #include "KrAtc/AtcHit.hh"
 
+#include "VDDCRec/kdcswitches.h"
 #include "VDDCRec/kdcvd.h"
 #include "VDDCRec/kvd.h"
 #include "VDDCRec/kdcpar.h"
@@ -51,7 +55,6 @@
 #include "VDDCRec/ktrkhits.h"
 #include "VDDCRec/ktrkfpar.h"
 #include "VDDCRec/kglobparam.h"
-#include "VDDCRec/kdcswitches.h"
 #include "VDDCRec/mctracks.h"
 #include "ReadNat/mcdc_def.h"
 #include "ReadNat/dcrawhitspar.h"
@@ -66,10 +69,14 @@
 #include "KrKRec/KFitOutMultiCPi0Gamma.h"
 #include "KrKRec/RecKFitMultiCPi0Gamma.hh"
 
+#include "KrdEdxPId/KrdEdxPId.hh"
+
 #include "KcSys/fortran.h"
 
 //#include <minuit.h>
+//#include <kernlib.h>
 //#include <hbook.h>
+#include "TVirtualFitter.h"
 #include "TMinuit.h"
 #include "TRandom3.h"
 
@@ -137,7 +144,7 @@ struct ProgramParameters {
 //=======================================================================================================================================
 
 //set selection conditions
-static const struct ProgramParameters def_progpar={false,2,6,1,1,6,100,2000,15,45,2,8,0,0,200,15,"/store/users/ovtin/out.root",0,23682,23943,50,1.,1.,1.,0,0,0,1.0,false,false,0};
+static const struct ProgramParameters def_progpar={false,2,6,1,1,6,100,2000,15,45,2,8,0,0,200,15,"/store/users/ovtin/out.root",0,23682,23943,50,1.,1.,1.,0,0,0,1.0,0,false,0};
 
 static struct ProgramParameters progpar(def_progpar);
 
@@ -187,13 +194,29 @@ typedef struct {
     mulayerhits2,mulayerhits3,Run,natccrosst1,atcCNTt1[20],natccrosst2,atcCNTt2[20],natccrosst3,atcCNTt3[20],aerogel_REGIONt1[20],aerogel_REGION0t1[20],aerogel_REGION5t1[20],aerogel_REGION20t1[20],single_aerogel_REGIONt1[20],single_aerogel_REGION0t1[20],
     single_aerogel_REGION5t1[20],single_aerogel_REGION20t1[20],aerogel_REGIONt2[20],aerogel_REGION0t2[20],aerogel_REGION5t2[20],aerogel_REGION20t2[20],single_aerogel_REGIONt2[20],
     single_aerogel_REGION0t2[20],single_aerogel_REGION5t2[20],single_aerogel_REGION20t2[20],aerogel_REGIONt3[20],aerogel_REGION0t3[20],aerogel_REGION5t3[20],aerogel_REGION20t3[20],single_aerogel_REGIONt3[20],
-    single_aerogel_REGION0t3[20],single_aerogel_REGION5t3[20],single_aerogel_REGION20t3[20],wlshitt1[20],nearwlst1[20],wlshitt2[20],nearwlst2[20],wlshitt3[20],nearwlst3[20];
+    single_aerogel_REGION0t3[20],single_aerogel_REGION5t3[20],single_aerogel_REGION20t3[20],wlshitt1[20],nearwlst1[20],wlshitt2[20],nearwlst2[20],wlshitt3[20],nearwlst3[20],
+    kft1,kft2,kft3;
     Float_t mbc,de,prec1,prec2,prec3,fchi2,Ebeam,rEv,p1,p2,p3,pt1,pt2,pt3,thetat1,thetat2,thetat3,phit1,phit2,phit3,chi2t1,chi2t2,chi2t3,e1,e2,e3,rr1,rr2,rr3,zip1,zip2,zip3,
 	ecls1,ecls2,ecls3,tcls1,tcls2,tcls3,pcls1,pcls2,pcls3,emcenergy,lkrenergy,csienergy,timet1,betat1,lengtht1,timet2,betat2,lengtht2,timet3,betat3,lengtht3,
-        atcNpet1[20],atcTotalNpet1,atcNpet2[20],atcTotalNpet2,atcNpet3[20],atcTotalNpet3,tlent1[20],tlent2[20],tlent3[20];
+        atcNpet1[20],atcTotalNpet1,atcNpet2[20],atcTotalNpet2,atcNpet3[20],atcTotalNpet3,tlent1[20],tlent2[20],tlent3[20],
+        dedxt1,dedxt2,dedxt3,probpit1,probpit2,probpit3,resdpit1,resdpit2,resdpit3,probKt1,probKt2,probKt3,resdKt1,resdKt2,resdKt3;
 } DMESON;
 
 static DMESON Dmeson;
+
+static const char* DmesonBranchList="vrtntrk/I:vrtnip:vrtnbeam:charge1:charge2:charge3:nhitsdc:nhitst1:nhitst2:nhitst3:nhitsvd:nhitsvdt1:nhitsvdt2:nhitsvdt3"
+			  ":nhitsxyt1:nhitszt1:nhitsxyt2:nhitszt2:nhitsxyt3:nhitszt3:nvect1:nvecxyt1:nveczt1:nvect2:nvecxyt2:nveczt2:nvect3:nvecxyt3"
+			  ":nveczt3:ncomb:ncls1:ncls2:ncls3:ncls:nlkr:ncsi:munhits:mulayerhits1:mulayerhits2:mulayerhits3:Run:natccrosst1:atcCNTt1[20]:natccrosst2:atcCNTt2[20]"
+			  ":natccrosst3:atcCNTt3[20]:aerogel_REGIONt1[20]:aerogel_REGION0t1[20]:aerogel_REGION5t1[20]:aerogel_REGION20t1[20]:single_aerogel_REGIONt1[20]"
+                          ":single_aerogel_REGION0t1[20]:single_aerogel_REGION5t1[20]:single_aerogel_REGION20t1[20]:aerogel_REGIONt2[20]:aerogel_REGION0t2[20]:aerogel_REGION5t2[20]"
+			  ":aerogel_REGION20t2[20]:single_aerogel_REGIONt2[20]:single_aerogel_REGION0t2[20]:single_aerogel_REGION5t2[20]:single_aerogel_REGION20t2[20]"
+			  ":aerogel_REGIONt3[20]:aerogel_REGION0t3[20]:aerogel_REGION5t3[20]:aerogel_REGION20t3[20]:single_aerogel_REGIONt3[20]:single_aerogel_REGION0t3[20]"
+			  ":single_aerogel_REGION5t3[20]:single_aerogel_REGION20t3[20]:wlshitt1[20]:nearwlst1[20]:wlshitt2[20]:nearwlst2[20]:wlshitt3[20]:nearwlst3[20]:kft1:kft2:kft3"
+			  ":mbc/F:de:prec1:prec2:prec3:fchi2:Ebeam:rEv:P1:P2:P3:Pt1:Pt2:Pt3:thetat1:thetat2:thetat3:phit1:phit2:phit3:chi2t1:chi2t2:chi2t3:e1"
+	                  ":e2:e3:rr1:rr2:rr3:Zip1:Zip2:Zip3:ecls1:ecls2:ecls3:tcls1:tcls2:tcls3:pcls1:pcls2:pcls3:emcenergy:lkrenergy:csienergy"
+	                  ":timet1:betat1:lengtht1:timet2:betat2:lengtht2:timet3:betat3:lengtht3:atcNpet1[20]:atcTotalNpet1"
+	                  ":atcNpet2[20]:atcTotalNpet2:atcNpet3[20]:atcTotalNpet3:tlent1[20]:tlent2[20]:tlent3[20]"
+	                  ":dedxt1:dedxt2:dedxt3:probpit1:probpit2:probpit3:resdpit1:resdpit2:resdpit3:probKt1:probKt2:probKt3:resdKt1:resdKt2:resdKt3";
 
 double mk = 493.68;
 double mpi = 139.57;
@@ -202,9 +225,6 @@ int dcand_t1;
 int dcand_t2;
 int dcand_t3;
 double ebeam;
-
-int listtr[6],lclpi0[8],lclg[5];
-int minElementIndex;
 
 //Rejection prior to reconstruction helps to save CPU time
 extern "C" void kemc_energy_(float Ecsi[2],float *Elkr);
@@ -349,17 +369,26 @@ int match_dir(int mc, int rec) {
 double pcorr(double p, int type) {
     double ms, dedx, k;
 
-    if (type==1) {
-	ms = 148.71;
-	dedx = 1.32;
+    if (type==1) {    //pion
+	ms = 149.484;
+	dedx = 1.30782;
 	k = 0.;
-    } else if (type == 2) {
-	ms = 573.35;
-	dedx = 0.9021;
+    }
+    else if(type==2)  //kaon
+    {
+	ms = 502.997;
+	dedx = 1.28546;
 	k = 0.;
-    } else {
+    }
+    else if(type==3)  //muon
+    {
+	ms = 138.315;
+	dedx = 1.06861;
+	k = 0.;
+    }
+    else{                //electron
 	ms = 0.;
-	dedx = 1.57;
+	dedx = 1.57548;
 	k = 0.748772e-2;
     }
 
@@ -464,6 +493,7 @@ void kine_fit(int ip1, int ip2, int ip3, double* mbc, double* de, double* prec1,
     *fchi2 = 0;
 
     if (enable) {
+        /*
 	TMinuit *dMinuit = new TMinuit(2); //initialise Minuit with a maximum of 2 parameters to minimise
 	dMinuit->SetFCN(kine_fcn);         //set the function to minimise
 	dMinuit->SetPrintLevel(progpar.verbose-1); //set print out level for Minuit
@@ -471,12 +501,10 @@ void kine_fit(int ip1, int ip2, int ip3, double* mbc, double* de, double* prec1,
 	arglist[0]=1;
 	Int_t iflag=0;
 	dMinuit->mnexcm("SET ERR",arglist,2,iflag);    //Interprets command
-	//gMinuit->mninit(1,1,1);
 	double lowerLimit = 0.0;
 	double upperLimit = 0.0;
 	dMinuit->mnparm(0,"p1", p2i, 0.5, lowerLimit, upperLimit, iflag);    //set the parameters used in the fit
 	dMinuit->mnparm(1,"p2", p3i, 0.5, lowerLimit, upperLimit, iflag);
-	//dMinuit->mnexcm("CALL FCN",arglist,1,iflag);                        //call the user defined function, to calculate the value FCN, and print the result out to the screen.
 	arglist[0] = 5000;  //maximum number of function calls after which the calculation will be stopped even if it has not yet converged.
 	arglist[1] = 1.; //The optional argument [tolerance] specifies required tolerance on the function value at the minimum. The default tolerance is 0.1, and the minimization will stop when the estimated vertical distance to the minimum (EDM) is less than 0.001*[tolerance]*UP (see [SET ERRordef]).
 	dMinuit->mnexcm("MIGRAD",arglist,2,iflag);                          //run the minimisation Using MIGRAD
@@ -485,9 +513,9 @@ void kine_fit(int ip1, int ip2, int ip3, double* mbc, double* de, double* prec1,
 	TString para0,para1;
 	int ivar;
 
-	gMinuit->mnpout(0,para0,val[0],err[0],bnd1[0],bnd2[0],ivar);
+	dMinuit->mnpout(0,para0,val[0],err[0],bnd1[0],bnd2[0],ivar);
 	pp1 = val[0];
-	gMinuit->mnpout(1,para1,val[1],err[1],bnd1[1],bnd2[1],ivar);
+	dMinuit->mnpout(1,para1,val[1],err[1],bnd1[1],bnd2[1],ivar);
 	pp2 = val[1];
 
 	double ek = ebeam - sqrt(mpi*mpi+pp1*pp1) - sqrt(mpi*mpi+pp2*pp2);
@@ -500,7 +528,39 @@ void kine_fit(int ip1, int ip2, int ip3, double* mbc, double* de, double* prec1,
 	Double_t fmin;
 	Double_t edm,errdef;
 	Int_t nvpar,nparx,icstat;
-	gMinuit->mnstat(fmin,edm,errdef,nvpar,nparx,icstat);
+	dMinuit->mnstat(fmin,edm,errdef,nvpar,nparx,icstat);
+	*fchi2 = fmin;
+	if (progpar.verbose) printf(" Minimal function value: %8.3lf  \n",fmin);
+        */
+
+	TVirtualFitter *minuit = TVirtualFitter::Fitter(0, 1);
+	minuit->SetFCN(kine_fcn);   //set the function to minimise
+	Double_t arglist[2];
+	// set print level
+	arglist[0] = progpar.verbose-1;
+	minuit->ExecuteCommand("SET PRINT",arglist,2); // disable printout
+	arglist[0]=1;
+	minuit->ExecuteCommand("SET ERR",arglist,1);
+	double lowerLimit = 0.0;
+	double upperLimit = 0.0;
+	minuit->SetParameter(0, "p1", p2i, 0.5, lowerLimit, upperLimit);
+	minuit->SetParameter(1, "p2" , p3i, 0.5, lowerLimit, upperLimit);
+	arglist[0] = 5000;  //maximum number of function calls after which the calculation will be stopped even if it has not yet converged.
+	arglist[1] = 1.; //The optional argument [tolerance] specifies required tolerance on the function value at the minimum. The default tolerance is 0.1, and the minimization will stop when the estimated vertical distance to the minimum (EDM) is less than 0.001*[tolerance]*UP (see [SET ERRordef]).
+        minuit->ExecuteCommand("MIGRAD", arglist, 2);
+	pp1 = minuit->GetParameter(0);
+	pp2 = minuit->GetParameter(1);
+
+	double ek = ebeam - sqrt(mpi*mpi+pp1*pp1) - sqrt(mpi*mpi+pp2*pp2);
+	if (ek < mk) pk = 0.;
+	else
+	    pk = sqrt(ek*ek-mk*mk);
+
+	if (progpar.verbose) printf("  pp1=%lf, pp2=%lf\n",pp1, pp2);
+	Double_t fmin;
+	Double_t edm,errdef;
+	Int_t nvpar,nparx;
+	minuit->GetStats(fmin,edm,errdef,nvpar,nparx);
 	*fchi2 = fmin;
 	if (progpar.verbose) printf(" Minimal function value: %8.3lf  \n",fmin);
 
@@ -512,7 +572,7 @@ void kine_fit(int ip1, int ip2, int ip3, double* mbc, double* de, double* prec1,
 
     if (progpar.verbose) {
 	printf("Kinematic fitter: \n");
-	printf("  Input: p1=%lf, p2=%lf, pk=%lf\n", p1i, p2i, p3i);
+	printf("  Input: p1=%lf, p2=%lf, pk=%lf\n", p2i, p3i, p1i);
 	printf("  Out:   p1=%lf, p2=%lf, pk=%lf\n", pp1, pp2, pk);
     }
 
@@ -601,6 +661,8 @@ int analyse_event()
 		    //condition for part1: K-, part2: pi+,  part3: pi+    (D+->K-pi+pi+)
 		    if ((tCharge(t1) == -1 && tCharge(t2) ==  1 && tCharge(t3) ==  1) || (tCharge(t1) ==  1 && tCharge(t2) == -1 && tCharge(t3) == -1))
 		    {
+			memset(&Dmeson,0,sizeof(DMESON));
+
 			double xx1=tX0IP(t1)*tX0IP(t1);
 			double yy1=tY0IP(t1)*tY0IP(t1);
 			double rr1=sqrt(xx1+yy1);
@@ -805,6 +867,37 @@ int analyse_event()
 			Dmeson.prec2 = prec2;
 			Dmeson.prec3 = prec3;
 
+                        //DC identification
+			Dmeson.dedxt1 = dcinfo.dedx[t1];
+			Dmeson.dedxt2 = dcinfo.dedx[t2];
+			Dmeson.dedxt3 = dcinfo.dedx[t3];
+
+			Dmeson.probpit1 = dcinfo.p[t1][2];
+			Dmeson.probpit2 = dcinfo.p[t2][2];
+			Dmeson.probpit3 = dcinfo.p[t3][2];
+			Dmeson.resdpit1 = dcinfo.d[t1][2];
+			Dmeson.resdpit2 = dcinfo.d[t2][2];
+			Dmeson.resdpit3 = dcinfo.d[t3][2];
+
+			Dmeson.probKt1 = dcinfo.p[t1][3];
+			Dmeson.probKt2 = dcinfo.p[t2][3];
+			Dmeson.probKt3 = dcinfo.p[t3][3];
+			Dmeson.resdKt1 = dcinfo.d[t1][3];
+			Dmeson.resdKt2 = dcinfo.d[t2][3];
+			Dmeson.resdKt3 = dcinfo.d[t3][3];
+
+			if (progpar.verbose) cout<<"dcinfo.st[t1]="<<dcinfo.st[t1]<<"\t"<<"dcinfo.st[t2]="<<dcinfo.st[t2]<<"\t"<<"dcinfo.st[t3]="<<dcinfo.st[t3]<<endl;
+			if (progpar.verbose) cout<<"dcinfo.bhypo[t1]="<<dcinfo.bhypo[t1]<<"\t"<<"dcinfo.bhypo[t2]="<<dcinfo.bhypo[t2]<<"\t"<<"dcinfo.bhypo[t3]="<<dcinfo.bhypo[t3]<<endl;
+			if (progpar.verbose) cout<<"dedxt1="<<Dmeson.dedxt1<<"\t"<<"dedxt2="<<Dmeson.dedxt2<<"\t"<<"dedxt3="<<Dmeson.dedxt3<<endl;
+			if (progpar.verbose) cout<<"Pion "<<"probt1="<<dcinfo.p[t1][2]<<"\t"<<"probt2="<<dcinfo.p[t2][2]<<"\t"<<"probt3="<<dcinfo.p[t3][2]<<endl;
+			if (progpar.verbose) cout<<"Kaon "<<"probt1="<<dcinfo.p[t1][3]<<"\t"<<"probt2="<<dcinfo.p[t2][3]<<"\t"<<"probt3="<<dcinfo.p[t3][3]<<endl;
+
+			Dmeson.kft1 = kedrrun_cb_.Header.RunType != 64 ? 0 : mctracks_cb_.kf[t1];
+			Dmeson.kft2 = kedrrun_cb_.Header.RunType != 64 ? 0 : mctracks_cb_.kf[t2];
+			Dmeson.kft3 = kedrrun_cb_.Header.RunType != 64 ? 0 : mctracks_cb_.kf[t3];
+
+			if (progpar.verbose) cout<<"kft1="<<Dmeson.kft1<<"\t"<<"kft2="<<Dmeson.kft2<<"\t"<<"kft3="<<Dmeson.kft3<<endl;
+
 			double tof = 0;
 
 			if ( kedrrun_cb_.Header.RunType == 64 ) {
@@ -1002,7 +1095,7 @@ void Usage(int status)
 	        <<"  -q min_Nhits   Nininum number hits on track (default to "<<def_progpar.min_Nhits<<")\n"
 	        <<"  -o RootFile    Output ROOT file name (default to "<<def_progpar.rootfile<<")\n"
             	<<"  -D simOn       Data or Simulation (default to "<<def_progpar.simOn<<")\n"
-            	<<"  -v MCCalibRunNumber    MCCalibRunNumber (default to "<<def_progpar.MCCalibRunNumber<<")\n"
+            	<<"  -v MCCalibRunNumber    First MCCalibRunNumber (default to "<<def_progpar.MCCalibRunNumber<<")\n"
             	<<"  -m MCCalibRunNumberL   Last MCCalibRunNumberL (default to "<<def_progpar.MCCalibRunNumberL<<")\n"
             	<<"  -M NsimRate    Rate for ksimreal (default to "<<def_progpar.NsimRate<<")\n"
             	<<"  -S Scale       kdcscalesysterr(scale) (default to "<<def_progpar.Scale<<")\n"
@@ -1079,7 +1172,7 @@ int main(int argc, char* argv[])
 	cout<<" Writing output trees to "<<progpar.rootfile<<endl;
 
 
-//----------------- Initialize ROOT file and trees -----------------//
+	//----------------- Initialize ROOT file and trees -----------------//
 	TFile *fout=0;
 	//Create root file if exclusive event processing is not set
 	if( !progpar.process_only )
@@ -1087,18 +1180,7 @@ int main(int argc, char* argv[])
 
 	eventTree = new TTree("et","Event tree");
 	eventTree->SetAutoSave(500000000);  // autosave when 0.5 Gbyte written
-	eventTree->Branch("Dmeson",&Dmeson,"vrtntrk/I:vrtnip:vrtnbeam:charge1:charge2:charge3:nhitsdc:nhitst1:nhitst2:nhitst3:nhitsvd:nhitsvdt1:nhitsvdt2:nhitsvdt3"
-			  ":nhitsxyt1:nhitszt1:nhitsxyt2:nhitszt2:nhitsxyt3:nhitszt3:nvect1:nvecxyt1:nveczt1:nvect2:nvecxyt2:nveczt2:nvect3:nvecxyt3"
-			  ":nveczt3:ncomb:ncls1:ncls2:ncls3:ncls:nlkr:ncsi:munhits:mulayerhits1:mulayerhits2:mulayerhits3:Run:natccrosst1:atcCNTt1[20]:natccrosst2:atcCNTt2[20]"
-			  ":natccrosst3:atcCNTt3[20]:aerogel_REGIONt1[20]:aerogel_REGION0t1[20]:aerogel_REGION5t1[20]:aerogel_REGION20t1[20]:single_aerogel_REGIONt1[20]"
-                          ":single_aerogel_REGION0t1[20]:single_aerogel_REGION5t1[20]:single_aerogel_REGION20t1[20]:aerogel_REGIONt2[20]:aerogel_REGION0t2[20]:aerogel_REGION5t2[20]"
-			  ":aerogel_REGION20t2[20]:single_aerogel_REGIONt2[20]:single_aerogel_REGION0t2[20]:single_aerogel_REGION5t2[20]:single_aerogel_REGION20t2[20]"
-			  ":aerogel_REGIONt3[20]:aerogel_REGION0t3[20]:aerogel_REGION5t3[20]:aerogel_REGION20t3[20]:single_aerogel_REGIONt3[20]:single_aerogel_REGION0t3[20]"
-			  ":single_aerogel_REGION5t3[20]:single_aerogel_REGION20t3[20]:wlshitt1[20]:nearwlst1[20]:wlshitt2[20]:nearwlst2[20]:wlshitt3[20]:nearwlst3[20]"
-			  ":mbc/F:de:prec1:prec2:prec3:fchi2:Ebeam:rEv:P1:P2:P3:Pt1:Pt2:Pt3:thetat1:thetat2:thetat3:phit1:phit2:phit3:chi2t1:chi2t2:chi2t3:e1"
-			  ":e2:e3:rr1:rr2:rr3:Zip1:Zip2:Zip3:ecls1:ecls2:ecls3:tcls1:tcls2:tcls3:pcls1"
-			  ":pcls2:pcls3:emcenergy:lkrenergy:csienergy:timet1:betat1:lengtht1:timet2:betat2:lengtht2:timet3:betat3:lengtht3:atcNpet1[20]:atcTotalNpet1"
-			  ":atcNpet2[20]:atcTotalNpet2:atcNpet3[20]:atcTotalNpet3:tlent1[20]:tlent2[20]:tlent3[20]");
+	eventTree->Branch("Dmeson",&Dmeson,DmesonBranchList);
 	//----------------- Configure kframework -----------------//
 	//Set kframework signal handling
 	kf_install_signal_handler(1);
@@ -1117,7 +1199,6 @@ int main(int argc, char* argv[])
 	kf_add_cut(KF_PRE_SEL,CutEvents,"Cut events");
 	kf_add_cut(KF_PRE_SEL,CutLongDcRecord,"DC event length >1940 words");
 	kf_add_cut(KF_PRE_SEL,CutLongVdRecord,"VD event length >156 words");
-
 	sprintf(buf,"momentum <= %5.fMeV/c",progpar.min_momentum);
 	kf_add_cut(KF_VDDC_SEL,MinMomentumCut,buf);
 	sprintf(buf,"momentum >= %5.fMeV/c",progpar.max_momentum);
@@ -1157,8 +1238,8 @@ int main(int argc, char* argv[])
 	kf_register_selection(KF_MU_SEL,mu_event_rejection);
 
 	//Set automatic cosmic run determination
-	kf_cosmic(-1);  //auto
-//	kf_cosmic(0);  //beam
+	//kf_cosmic(-1);  //auto
+	kf_cosmic(0);  //beam
 
 	kf_modify_header(1);     //Modify header flag. REDE energy read from DB will be written to header
 
@@ -1172,18 +1253,12 @@ int main(int argc, char* argv[])
 	//Set exclusive event processing
 	kf_process_only(progpar.process_only);
 
-	TBenchmark *benchmark=new TBenchmark;
-	cout<<" Starting benchmark test"<<endl;
-	benchmark->Start("test");
-
 	//Call analysis job
 	if (progpar.verbose) cout<<"NEvents="<<progpar.NEvents<<"\t"<<"argv[optind]="<<argv[optind]<<"\t"<<"&argv[optind]="<<&argv[optind]<<"\t"<<"argc-optind="<<argc-optind<<endl;               //argv[optind]:/space/runs/daq021949.nat.bz2
-	kf_process(argc-optind,&argv[optind],progpar.NEvents);             //установка ограничения на число обрабатываемых событий
-
-	benchmark->Show("test");
+	kf_process(argc-optind,&argv[optind],progpar.NEvents);
 
 	if( fout ) {
-		fout->Write();         //пишем данные в файл и закрываем его
+		fout->Write();
 		fout->Close();
 	}
 

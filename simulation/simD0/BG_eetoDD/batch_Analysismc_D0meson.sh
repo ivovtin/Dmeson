@@ -34,14 +34,14 @@
 ##$ -M ovtin.ivan@gmail.com
 
 ##$ -t 1-221
-#$ -t 201-221
+#$ -t 101-221
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]
 
 #BG ee_to_DD
 simOn=1
-outfile="/store/users/ovtin/outDmeson/simulation/outsimD0/Bkg_eetoDD/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp1_ATC_S1.0_A6.0_Z0.0_dedx_tof/psi3770_to_simD0mesonBkg_eetoDD_"$i".root"
+outfile="/store/users/ovtin/outDmeson/simulation/outsimD0/Bkg_eetoDD/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_dedx_tof/psi3770_to_simD0mesonBkg_eetoDD_"$i".root"
 mintracks=3
 maxtracks=15
 minbeamtracks=0

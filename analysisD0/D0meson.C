@@ -66,39 +66,6 @@ void get_run_lumi(int run, double *en, double *en_err, double *lum, int *t) {
     kd_db_close(conn);
 }
 
-double msf = 1.;        //default
-
-double pcorr(double p, int type)
-{
-    double ms, dedx, k;
-
-    if (type==1) {    //pion
-	ms = 148.71;
-	dedx = 1.3223;
-	k = 0.;
-    }
-    else if(type==2)  //kaon
-    {
-	ms = 573.35;
-	dedx = 0.9021;
-	k = 0.;
-    }
-    else{                //electron
-	ms = 0.;
-	dedx = 1.57;
-	k = 0.748772e-2;
-    }
-    double gamma = sqrt(ms*ms+p*p)/ms;
-
-    double beta = sqrt(1.-1./gamma/gamma);
-
-    double pc = p+1.*dedx/pow(beta,3) + k*p;
-
-    pc = pc*fabs(msf);
-
-    return fabs(pc);
-}
-
 int main(int argc, char* argv[])
 {
     progname=argv[0];
@@ -164,26 +131,15 @@ int main(int argc, char* argv[])
     TString fout_result;
     TString dir_out="results";
     TString list_badruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/badruns";
-    //TString list_checkruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/runs_ecor1815.000-1818.000";
     if( key==0 ){           //exp 2016-17
 	min_Mbc2=1800;
 	//deCut1=-150; deCut2=150;
 	deCut1=-100; deCut2=100;
 	mbcCut1=1855, mbcCut2=1875;
 	fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data_%d.root",key).Data();
-
-        msf = 1.0155;
-
-	/*
-	KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_KemcAllowedOn_kNoiseReject3_ATC_1.0155/";
-	fout_result_atc=dir_out + "/" + "kp_exp_2016-17_KemcAllowedOn_kNoiseReject3_ATC_1.0155.dat";
-	fout_result=dir_out + "/" + "kp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0155.dat";
-        */
-
-	KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_test/";
-	fout_result_atc=dir_out + "/" + "kp_exp_2016-17_test_atc.dat";
-	fout_result=dir_out + "/" + "kp_exp_2016-17_test.dat";
-
+	KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_KemcAllowedOn_kNoiseReject3_1.0140_test5/";
+	fout_result_atc=dir_out + "/" + "kp_exp_2016-17_KemcAllowedOn_kNoiseReject3_atc_1.0140_test5.dat";
+	fout_result=dir_out + "/" + "kp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0140_test5.dat";
     }
     else if (key==4)        //exp 2004
     {
@@ -203,32 +159,27 @@ int main(int argc, char* argv[])
 	deCut1=-100; deCut2=100;
 	mbcCut1=1855, mbcCut2=1875;
 	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_sig_%d.root",key).Data();
-	KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Sig_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_test/";
-	fout_result_atc=dir_out + "/" + "kp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0.dat";
-	fout_result=dir_out + "/" + "kp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0.dat";
-        /*
-	KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Sig_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0/";
-	fout_result_atc=dir_out + "/" + "kp_signal_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0.dat";
-	fout_result=dir_out + "/" + "kp_signal_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0.dat";
-        */
+	KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Sig_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_dedx_tof/";
+	fout_result_atc=dir_out + "/" + "kp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_dedx_tof.dat";
+	fout_result=dir_out + "/" + "kp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_dedx_tof.dat";
     }
     else if (key==2)        //uds
     {
 	deCut1=-300; deCut2=300;
 	mbcCut1=1700, mbcCut2=1900;
 	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_BG_continium_%d.root",key).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_continium_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_test/";
-	fout_result_atc=dir_out + "/" + "kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0.dat";
-	fout_result=dir_out + "/" + "kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0.dat";
+        KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_continium_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_dedx_tof/";
+	fout_result_atc=dir_out + "/" + "kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_dedx_tof.dat";
+	fout_result=dir_out + "/" + "kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_dedx_tof.dat";
     }
     else if (key==3)        //ddBG
     {
 	deCut1=-300; deCut2=300;
 	mbcCut1=1700, mbcCut2=1900;
 	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_BG_eetoDD_%d.root",key).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_eetodd_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_test/";
-	fout_result_atc=dir_out + "/" + "kp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0.dat";
-	fout_result=dir_out + "/" + "kp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0.dat";
+        KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_eetodd_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_dedx_tof/";
+	fout_result_atc=dir_out + "/" + "kp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_dedx_tof.dat";
+	fout_result=dir_out + "/" + "kp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_dedx_tof.dat";
     }
 
     gSystem->Exec("mkdir " + KEDR);
@@ -330,9 +281,14 @@ int main(int argc, char* argv[])
     TH1F* heno=new TH1F("eno","Energy of others cls",100,0.,2500.);
 
     TH1F* htofc1=new TH1F("htofc1","htofc1",100,-2.,38.);
-    TH1F* httof1=new TH1F("httof1","httof1",100,-15.,15.);
     TH1F* htofc2=new TH1F("htofc2","htofc2",100,-2.,38.);
-    TH1F* httof2=new TH1F("httof2","httof2",100,-15.,15.);
+    TH1F* htimetof=new TH1F("TOF time","TOF time",140,-40.,100.);
+    TH1F* hbeta=new TH1F("beta","beta",50,0.,4.);
+    TH1F* hlength=new TH1F("length","length",160,0.,160.);
+    TH2D *h2betaP=new TH2D("P:1/#beta", "P:1/#beta", 1700,0,1700,100,0,3.0);
+
+    TH1D *hdtof1_K=new TH1D("dtof1_K", "dtof1_K",100,-10.,10);
+    TH1D *hdtof2_K=new TH1D("dtof2_K", "dtof2_K",100,-10.,10);
 
     TH1F* hMUnhits=new TH1F("munhits","mu.nhits",15,-0.5,15.5);
     TH1F* hMUnhits1=new TH1F("munhits","mu.nhits",15,-0.5,15.5);
@@ -341,6 +297,13 @@ int main(int argc, char* argv[])
 
     TH1F* hATCcnt=new TH1F("CNT","CNT ATC",160,0.0,159.0);
     TH1F* hATCnpe=new TH1F("Nph.e.","Nph.e. ATC",100,0.0,30.0);
+
+    TH1F* hdedx=new TH1F("dedx","dedx",150,0.0,1500.0);
+    TH1F* hprobKt1=new TH1F("probKt1","probKt1",100,0.0,1.0);
+    TH1F* hprobKt2=new TH1F("probKt2","probKt2",100,0.0,1.0);
+    TH1F* hprobpit1=new TH1F("probpit1","probpit1",100,0.0,1.0);
+    TH1F* hprobpit2=new TH1F("probpit2","probpit2",100,0.0,1.0);
+    TH1F* hresd=new TH1F("resd","resd",150,0.0,1500.0);
 
     TTree *forFit = new TTree("forFit","forFit");
     Float_t forFitMbc, forFitdE, forFitdP;
@@ -414,6 +377,7 @@ int main(int argc, char* argv[])
 	tt->GetEntry(k);
 
 	if( runprev!=Dmeson.Run
+	   //&& Dmeson.Run<25000
            /*
 	   && (Dmeson.Run!=23307 && Dmeson.Run!=23313 && Dmeson.Run!=23342 && Dmeson.Run!=23353 && Dmeson.Run!=23423
 	       && Dmeson.Run!=23429 && Dmeson.Run!=23466 && Dmeson.Run!=23467 && Dmeson.Run!=23470 && Dmeson.Run!=23562
@@ -507,7 +471,7 @@ int main(int argc, char* argv[])
                || Dmeson.Run==26129 || Dmeson.Run==26131 || Dmeson.Run==26132 || Dmeson.Run==26133 || Dmeson.Run==26134
                || Dmeson.Run==26147 || Dmeson.Run==26148 || Dmeson.Run==26150 || Dmeson.Run==26151
 	       )   //noise >=8%
-              */
+               */
 	  )
 	{
 	    //cout<<"Dmeson.run="<<Dmeson.Run<<endl;
@@ -562,7 +526,7 @@ int main(int argc, char* argv[])
 
 	if(
 	   Dmeson.vrtntrk>=ntrk
-           //&& Dmeson.de>=min_dE && Dmeson.de<=max_dE  &&  Dmeson.mbc>=min_Mbc && Dmeson.mbc<=max_Mbc
+           && Dmeson.de>=min_dE && Dmeson.de<=max_dE  &&  Dmeson.mbc>=min_Mbc && Dmeson.mbc<=max_Mbc
 	   && Dmeson.chi2t1<max_chi2 && Dmeson.chi2t2<max_chi2
 	   && Dmeson.nhitst1>=min_nhits && Dmeson.nhitst2>=min_nhits
 	   && Dmeson.nhitst1<=max_nhits && Dmeson.nhitst2<=max_nhits
@@ -570,9 +534,19 @@ int main(int argc, char* argv[])
 	   && fabs(Dmeson.zip1)<zCut && fabs(Dmeson.zip2)<zCut
 	   && Dmeson.ecls1<eclsCut && Dmeson.ecls2<eclsCut
 	   && (Dmeson.mulayerhits2+Dmeson.mulayerhits3)<=max_munhits
-	   //&& ((Dmeson.Run>=23275 && Dmeson.Run<=23402) || (Dmeson.Run>=23431 && Dmeson.Run<=23472) || (Dmeson.Run>=23523 && Dmeson.Run<=23798) || (Dmeson.Run>=23839 && Dmeson.Run<=23862)) //!!!!
-	   //&& (Dmeson.Run>24000)
+           //&& Dmeson.munhits<=2
 	   && Dmeson.pt1>min_pt && Dmeson.pt1<max_pt && Dmeson.pt2>min_pt && Dmeson.pt2<max_pt
+           /*
+	   && (Dmeson.Run<23455 || Dmeson.Run>23463)  //w/o MU, problems with MU
+           && Dmeson.Run!=23559
+	   && (Dmeson.Run<23809 || Dmeson.Run>23838)  //problems with MU
+	   && (Dmeson.Run<23942 || Dmeson.Run>24835)
+           */
+           //&& ((Dmeson.Run>=23455 && Dmeson.Run<=23463) || Dmeson.Run==23559 || (Dmeson.Run>=23809 && Dmeson.Run<=23838) || (Dmeson.Run>=23942 && Dmeson.Run<24835) )
+           //&& ((Dmeson.Run>=23455 && Dmeson.Run<=23463) || Dmeson.Run==23559 || (Dmeson.Run>=23809 && Dmeson.Run<=23838))
+           //&& (Dmeson.Run>=23942 && Dmeson.Run<24835)
+	   //&& ((Dmeson.Run>=23275 && Dmeson.Run<=23402) || (Dmeson.Run>=23431 && Dmeson.Run<=23472) || (Dmeson.Run>=23523 && Dmeson.Run<=23798) || (Dmeson.Run>=23839 && Dmeson.Run<=23862)) //!!!!
+	   //&& (Dmeson.Run<25000)
            /*
 	   && (Dmeson.Run<23478 || Dmeson.Run>23524)  //7 layer DC with problems
            && (Dmeson.Run<23746 || Dmeson.Run>23808)  //7+6 layer DC with problems
@@ -585,9 +559,7 @@ int main(int argc, char* argv[])
            //&& Dmeson.Ebeam<=1886.80
            //&& ( Dmeson.Ebeam>1887.20 && Dmeson.Ebeam<1887.40 )
            //&& Dmeson.Ebeam>1887.4  //better
-	   //&& (Dmeson.Run<23809 || Dmeson.Run>23838)
 	   //&& (Dmeson.Run>23600 && Dmeson.Run<23800)
-	   //&& (Dmeson.Run>23942 && Dmeson.Run<24835)
 	   //&& (Dmeson.Run<23495 || Dmeson.Run>23642)
 	   //&& (Dmeson.Run<24629 || Dmeson.Run>24647)
 	   //&& (Dmeson.Run>=23495 && Dmeson.Run<=23642)
@@ -596,6 +568,7 @@ int main(int argc, char* argv[])
 	   //&& (Dmeson.Run>=23556 && Dmeson.Run<=23567)
 	   //&& (Dmeson.Run>=23211 && Dmeson.Run<=23567)   //>1822.0
 	   //&& (Dmeson.Run>=23211 && Dmeson.Run<=23567)   //>1822.0
+	   */
            /*
 	   && (Dmeson.Run!=23307 && Dmeson.Run!=23313 && Dmeson.Run!=23342 && Dmeson.Run!=23353 && Dmeson.Run!=23423
 	       && Dmeson.Run!=23429 && Dmeson.Run!=23466 && Dmeson.Run!=23467 && Dmeson.Run!=23470 && Dmeson.Run!=23562
@@ -796,11 +769,71 @@ int main(int argc, char* argv[])
 	    heno->Fill(Dmeson.eno);
 
             htofc1->Fill(Dmeson.tofc1);
-            httof1->Fill(Dmeson.ttof1);
+	    htimetof->Fill(Dmeson.timet1);
+	    hbeta->Fill(Dmeson.betat1);
+	    hlength->Fill(Dmeson.lengtht1);
+
             htofc2->Fill(Dmeson.tofc2);
-            httof2->Fill(Dmeson.ttof2);
+	    htimetof->Fill(Dmeson.timet2);
+	    hbeta->Fill(Dmeson.betat2);
+	    hlength->Fill(Dmeson.lengtht2);
+
+            if ( Dmeson.betat1>0 ) h2betaP->Fill(Dmeson.p1, 1/Dmeson.betat1);
+	    if ( Dmeson.betat2>0 ) h2betaP->Fill(Dmeson.p2, 1/Dmeson.betat2);
 
 	    hfchi2->Fill(Dmeson.fchi2);
+
+            //fill for dedx
+            hdedx->Fill(Dmeson.dedxt1);
+            hdedx->Fill(Dmeson.dedxt2);
+
+            if(Dmeson.probKt1>0.) hprobKt1->Fill(Dmeson.probKt1);
+            if(Dmeson.probKt2>0.) hprobKt2->Fill(Dmeson.probKt2);
+
+            if(Dmeson.probpit1>0.) hprobpit1->Fill(Dmeson.probpit1);
+            if(Dmeson.probpit2>0.) hprobpit2->Fill(Dmeson.probpit2);
+
+            hresd->Fill(Dmeson.resdKt1);
+	    hresd->Fill(Dmeson.resdKt2);
+
+            float tof1_K,dtof1_K;
+
+	    //tof1_K=sqrt(494.*494. + Dmeson.p1*Dmeson.p1)/Dmeson.p1*Dmeson.lengtht1/30.;
+	    tof1_K=sqrt(494.*494. + Dmeson.prec1*Dmeson.prec1)/Dmeson.prec1*Dmeson.lengtht1/30.;
+
+	    float tofk_corr1_K;
+	    tofk_corr1_K = Dmeson.timet1;
+
+            if (tofk_corr1_K<1.) tofk_corr1_K = tofk_corr1_K+5.5;
+	    if (tofk_corr1_K<1.) tofk_corr1_K = tofk_corr1_K+5.5;
+	    if (tofk_corr1_K<1.) tofk_corr1_K = tofk_corr1_K+5.5;
+	    if (tofk_corr1_K>6.5) tofk_corr1_K = tofk_corr1_K-5.5;
+	    if (tofk_corr1_K>6.5) tofk_corr1_K = tofk_corr1_K-5.5;
+	    if (tofk_corr1_K>6.5) tofk_corr1_K = tofk_corr1_K-5.5;
+
+	    dtof1_K=(tofk_corr1_K-tof1_K);
+
+	    float tof2_K,dtof2_K;
+
+	    //tof2_K=sqrt(494.*494. + Dmeson.p2*Dmeson.p2)/Dmeson.p2*Dmeson.lengtht2/30.;
+	    tof2_K=sqrt(494.*494. + Dmeson.prec2*Dmeson.prec2)/Dmeson.prec2*Dmeson.lengtht2/30.;
+
+	    float tofk_corr2_K;
+	    tofk_corr2_K = Dmeson.timet2;
+
+            if (tofk_corr2_K<1.) tofk_corr2_K = tofk_corr2_K+5.5;
+	    if (tofk_corr2_K<1.) tofk_corr2_K = tofk_corr2_K+5.5;
+	    if (tofk_corr2_K<1.) tofk_corr2_K = tofk_corr2_K+5.5;
+	    if (tofk_corr2_K>6.5) tofk_corr2_K = tofk_corr2_K-5.5;
+	    if (tofk_corr2_K>6.5) tofk_corr2_K = tofk_corr2_K-5.5;
+	    if (tofk_corr2_K>6.5) tofk_corr2_K = tofk_corr2_K-5.5;
+
+	    dtof2_K=(tofk_corr2_K-tof2_K);
+
+            if( dtof1_K>1.2 && dtof2_K>1.2 ) continue;
+
+            hdtof1_K->Fill(dtof1_K);
+            hdtof2_K->Fill(dtof2_K);
 
 	    //fill dE
 	    if( Dmeson.mbc>=mbcCut1 && Dmeson.mbc<=mbcCut2 && Dmeson.de>=min_dE && Dmeson.de<=max_dE )
@@ -825,7 +858,6 @@ int main(int argc, char* argv[])
 		    hMUnhits2->Fill(Dmeson.mulayerhits2);
 		    hMUnhits3->Fill(Dmeson.mulayerhits3);
 		}
-
                 /*
 		if( Dmeson.mbc>=1855 && Dmeson.mbc<=1870 ){
 		    cout<<"<<<<<<<<<<<<<<<<<<<<<<<<<<< Next combination >>>>>>>>>>>>>>>>>>>>>>>>>>>>"<<endl;
@@ -913,60 +945,47 @@ int main(int argc, char* argv[])
 	    if( verbose==1 ) cout<<"good_region_t2="<<good_region_t2<<endl;
             hATCnpe->Fill(Dmeson.atcTotalNpet2);
 
-            //very hard suppression
-	    //if( (Dmeson.p1>600. && Dmeson.atcTotalNpet1<=0.1) && (Dmeson.p2>600. && Dmeson.atcTotalNpet2<=0.1) ) continue;
-	    //if( (Dmeson.p1>600. && Dmeson.atcTotalNpet1>0.1) && (Dmeson.p2>600. && Dmeson.atcTotalNpet2>0.1) ) continue;
-
             double npetrh=0.5;
 	    double Pcut1=450.;
             double Pcut2=1500.;
 	    double mk = 493.68;
 	    double mpi = 139.57;
 
-	    //soft suppression
-	    if( (Dmeson.prec1>Pcut1 && Dmeson.prec1<Pcut2 && good_region_t1>=1 && Dmeson.atcTotalNpet1<=npetrh) && (Dmeson.prec2>Pcut1 && Dmeson.prec2<Pcut2 && good_region_t2>=1 && Dmeson.atcTotalNpet2<=npetrh) ) continue;   //KK
-	    if( (Dmeson.prec1>Pcut1 && Dmeson.prec1<Pcut2 && good_region_t1>=1 && Dmeson.atcTotalNpet1>npetrh) && (Dmeson.prec2>Pcut1 && Dmeson.prec2<Pcut2 && good_region_t2>=1 && Dmeson.atcTotalNpet2>npetrh) ) continue;     //pipi
-
             double ppi=Dmeson.p1;
             double pk=Dmeson.p2;
 
-	    int id=0;
-	    if( (Dmeson.prec1>Pcut1 && Dmeson.prec1<Pcut2 && good_region_t1>=1 && Dmeson.atcTotalNpet1>npetrh) && (Dmeson.prec2>Pcut1 && Dmeson.prec2<Pcut2 && good_region_t2>=1 && Dmeson.atcTotalNpet2<=npetrh) ){ ppi=Dmeson.p1; pk=Dmeson.p2;  id=1;}  //piK
-	    if( (Dmeson.prec1>Pcut1 && Dmeson.prec1<Pcut2 && good_region_t1>=1 && Dmeson.atcTotalNpet1<=npetrh) && (Dmeson.prec2>Pcut1 && Dmeson.prec2<Pcut2 && good_region_t2>=1 && Dmeson.atcTotalNpet2>npetrh) ){ pk=Dmeson.p1;  ppi=Dmeson.p2; id=1;}  //Kpi
+	    //ATC suppression
+	    if( (Dmeson.prec1>Pcut1 && Dmeson.prec1<Pcut2 && good_region_t1>=1 && Dmeson.atcTotalNpet1<=npetrh) && (Dmeson.prec2>Pcut1 && Dmeson.prec2<Pcut2 && good_region_t2>=1 && Dmeson.atcTotalNpet2<=npetrh) ) continue;   //KK
+	    if( (Dmeson.prec1>Pcut1 && Dmeson.prec1<Pcut2 && good_region_t1>=1 && Dmeson.atcTotalNpet1>npetrh) && (Dmeson.prec2>Pcut1 && Dmeson.prec2<Pcut2 && good_region_t2>=1 && Dmeson.atcTotalNpet2>npetrh) ) continue;     //pipi
+	    //if( (Dmeson.prec1>Pcut1 && Dmeson.prec1<Pcut2 && good_region_t1>=1 && Dmeson.atcTotalNpet1>npetrh) && (Dmeson.prec2>Pcut1 && Dmeson.prec2<Pcut2 && good_region_t2>=1 && Dmeson.atcTotalNpet2<=npetrh) ) continue;    //pi-K+
 
-	    double deATC=Dmeson.de;
-	    //if(id==1) deATC = (sqrt(mpi*mpi + ppi*ppi) + sqrt(mk*mk + pk*pk)) - Dmeson.Ebeam;
-            if(id==1) deATC = (sqrt(mpi*mpi + pcorr(ppi,1)*pcorr(ppi,1)) + sqrt(mk*mk + pcorr(pk,2)*pcorr(pk,2))) - Dmeson.Ebeam;
-
-	    if( verbose==1 ) cout<<"atc id ="<<id<<"\t"<<"de="<<Dmeson.de<<"\t"<<"deATC="<<deATC<<endl;
-
-	    if( deATC>=min_dE && deATC<=max_dE  &&  Dmeson.mbc>=min_Mbc && Dmeson.mbc<=max_Mbc )
+	    if( Dmeson.de>=min_dE && Dmeson.de<=max_dE  &&  Dmeson.mbc>=min_Mbc && Dmeson.mbc<=max_Mbc )
 	    {
 		if ( verbose==2 )
 		{
-		    if (deATC>=deCut1 && deATC<=deCut2 &&  Dmeson.mbc>=min_Mbc && Dmeson.mbc<=max_Mbc )
+		    if (Dmeson.de>=deCut1 && Dmeson.de<=deCut2 &&  Dmeson.mbc>=min_Mbc && Dmeson.mbc<=max_Mbc )
 		    {
-			cout<<Dmeson.Run<<"\t"<<Dmeson.rEv<<"\t"<<Dmeson.mbc<<"\t"<<deATC<<"\t"<<Dmeson.dp<<endl;
+			cout<<Dmeson.Run<<"\t"<<Dmeson.rEv<<"\t"<<Dmeson.mbc<<"\t"<<Dmeson.de<<"\t"<<Dmeson.dp<<endl;
 		    }
 		}
-		ResultATC<< Dmeson.mbc <<"\t"<< deATC <<"\t"<< Dmeson.dp <<endl;
+		ResultATC<< Dmeson.mbc <<"\t"<< Dmeson.de <<"\t"<< Dmeson.dp <<endl;
 	    }
 
 	    //fill dE
-	    if( Dmeson.mbc>=mbcCut1 && Dmeson.mbc<=mbcCut2 && deATC>=min_dE && deATC<=max_dE )
+	    if( Dmeson.mbc>=mbcCut1 && Dmeson.mbc<=mbcCut2 && Dmeson.de>=min_dE && Dmeson.de<=max_dE )
 	    {
-		hdE_ATC->Fill(deATC);
+		hdE_ATC->Fill(Dmeson.de);
 	    }
 
             //fill Mbc
-	    if( deATC>=deCut1 && deATC<=deCut2 &&  Dmeson.mbc>=min_Mbc2 && Dmeson.mbc<=max_Mbc )
+	    if( Dmeson.de>=deCut1 && Dmeson.de<=deCut2 &&  Dmeson.mbc>=min_Mbc2 && Dmeson.mbc<=max_Mbc )
 	    {
 		hmbc_ATC->Fill(Dmeson.mbc);
 	    }
 
-	    if( Dmeson.mbc>=min_Mbc && Dmeson.mbc<=max_Mbc && deATC>=min_dE && deATC<=max_dE )
+	    if( Dmeson.mbc>=min_Mbc && Dmeson.mbc<=max_Mbc && Dmeson.de>=min_dE && Dmeson.de<=max_dE )
 	    {
-		h2MbcdE_ATC->Fill(Dmeson.mbc, deATC);
+		h2MbcdE_ATC->Fill(Dmeson.mbc, Dmeson.de);
 		h2MbcdP_ATC->Fill(Dmeson.dp, Dmeson.mbc);
 	    }
 
@@ -1180,9 +1199,20 @@ int main(int argc, char* argv[])
     hphi->Draw(); cc1->SaveAs(KEDR+"phi.png");
 
     htofc1->Draw(); cc1->SaveAs(KEDR+"htofc1.png");
-    httof1->Draw(); cc1->SaveAs(KEDR+"httof1.png");
     htofc2->Draw(); cc1->SaveAs(KEDR+"htofc2.png");
-    httof2->Draw(); cc1->SaveAs(KEDR+"httof2.png");
+
+    htimetof->Draw(); cc1->SaveAs(KEDR + "time_tof" + format2); cc1->SaveAs(KEDR + "time_tof" + format3);
+    hbeta->Draw(); cc1->SaveAs(KEDR + "beta" + format2); cc1->SaveAs(KEDR + "beta" + format3);
+    hlength->Draw(); cc1->SaveAs(KEDR + "length" + format2); cc1->SaveAs(KEDR + "length" + format3);
+
+    h2betaP->GetXaxis()->SetTitle("P (MeV/c)");
+    h2betaP->GetYaxis()->SetTitle("1/#beta");
+    h2betaP->Draw(); cc1->SaveAs(KEDR + "betatoP" + format2); cc1->SaveAs(KEDR + "betatoP" + format3);
+
+    hdtof1_K->GetXaxis()->SetTitle("#DeltaTOF (ns)");
+    hdtof1_K->Draw(); cc1->SaveAs(KEDR + "dtof1_K" + format2); cc1->SaveAs(KEDR + "dtof1_K" + format3);
+    hdtof2_K->GetXaxis()->SetTitle("#DeltaTOF (ns)");
+    hdtof2_K->Draw(); cc1->SaveAs(KEDR + "dtof2_K" + format2); cc1->SaveAs(KEDR + "dtof2_K" + format3);
 
     hMUnhits->Draw(); cc1->SaveAs(KEDR+"munhits.png");
     hMUnhits1->Draw(); cc1->SaveAs(KEDR+"munhits1.png");
@@ -1197,7 +1227,13 @@ int main(int argc, char* argv[])
     hATCcnt->Draw(); cc1->SaveAs(KEDR+"ATCcnt.png");
     hATCnpe->Draw(); cc1->SaveAs(KEDR+"ATCnpe.png");
 
+    hdedx->Draw();  cc1->SaveAs(KEDR+"dedx.png");
+    hprobKt1->Draw();  cc1->SaveAs(KEDR+"probKt1.png");
+    hprobKt2->Draw();  cc1->SaveAs(KEDR+"probKt2.png");
+    hprobpit1->Draw();  cc1->SaveAs(KEDR+"probpit1.png");
+    hprobpit2->Draw();  cc1->SaveAs(KEDR+"probpit2.png");
+    hresd->Draw();  cc1->SaveAs(KEDR+"resd.png");
+
     fout->Write();
     fout->Close();
-
 }
