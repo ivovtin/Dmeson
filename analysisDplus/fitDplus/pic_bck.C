@@ -8,14 +8,20 @@
   gStyle->SetHistLineWidth(2);
   gStyle->SetHistLineColor(4);
 
-  TString KEDR="/spool/users/ovtin/outDmeson/Dplus/results/fitsDplus/";
-  //TString KEDR="/spool/users/ovtin/outDmeson/Dplus/results/fitsDplus/forTest/";
+  //TString KEDR="/store/users/ovtin/outDmeson/Dplus/results/fitsDplus/";
+  TString KEDR="/store/users/ovtin/outDmeson/Dplus/results/fitsDplus/forTest/";
 
-  TString type = "tof";
+  TString data_file = "kpp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_tof_atc_ATC.dat";
+  TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_tof_atcPthr600";
+  TString gen_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_tof_atcPthr600";
+
+  //TString type = "tof_S1.0_A6.0_Z0.0";
+  //TString type = "dedx_tof_atc_S1.0_A6.0_Z0.0";
+  TString type = "tof_atcPthr600_S1.0_A6.0_Z0.0";
 
   TNtuple nt("nt","NTuple","mbc:de:dp");
 
-  FILE* file = fopen(TString("dat/kpp_uds.dat").Data(),"r");
+  FILE* file = fopen(TString("dat/" + dat_dirname + "/" + data_file).Data(),"r");
   while (!feof(file)) {
     double mbc,de,dp;
     if (fscanf(file,"%lf %lf %lf", &mbc,&de,&dp) == 3) {
@@ -27,7 +33,7 @@
 
   TNtuple nt2("nt2","NTuple","mbc:de:dp");
 
-  file = fopen(TString("gen/bck.gen").Data(),"r");
+  file = fopen(TString("gen/" + gen_dirname + "/bck_S1.0_A6.0_Z0.0.gen").Data(),"r");
   while (!feof(file)) {
     double mbc,de,dp;
     if (fscanf(file,"%lf %lf %lf", &mbc,&de,&dp) == 3) {
@@ -115,6 +121,6 @@
   de7.GetXaxis()->SetTitle("#Delta E (MeV)");
   de8.Draw("same");
 
-  c.Print(KEDR+"uds"+type+".eps");
-  c.Print(KEDR+"uds"+type+".png");
+  c.Print(KEDR+"uds_"+type+".eps");
+  c.Print(KEDR+"uds_"+type+".png");
 }

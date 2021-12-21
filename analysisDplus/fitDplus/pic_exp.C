@@ -31,16 +31,19 @@
   gStyle->SetHistLineWidth(3);
   gStyle->SetHatchesLineWidth(3);
 
-
-  char *infile;
   int mbcmax;
   double rmax;
+  TString prefOutfile;
+  TString dat_dirname;
+  TString dataFile;
+  TString gen_dirname;
+  TString infile;
   TString outfile1;
   TString outfile2;
   TString outfile3;
-  char *exp_sig;
-  char *exp_bck;
-  char *exp_dbck;
+  TString exp_sig;
+  TString exp_bck;
+  TString exp_dbck;
 
   int key = 2016;
 
@@ -65,33 +68,44 @@
   }
   else{
       if (atc ){
-	  infile = "dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0150_ATC.dat";
-	  //infile = "dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0150_ntrphe1.5_ATC.dat";
-	  mbcmax = 70;
-	  rmax = 70.;
+          dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_tof_atcPthr600";
+          dataFile = "kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0150_tof_atc_ATC.dat";
+          gen_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_tof_atcPthr600_test";
+	  prefOutfile = "KemcAllowedOn_kNoiseReject3_1.0150_tof_atcPthr600_test";
 
-	  outfile1 = "kpp_exp_mbc_KemcAllowedOn_kNoiseReject3_1.0150_atc";
-	  outfile2 = "kpp_exp_de_KemcAllowedOn_kNoiseReject3_1.0150_atc";
-	  outfile3 = "kpp_exp_mbcde_KemcAllowedOn_kNoiseReject3_1.0150_atc";
-          /*
-	  outfile1 = "kpp_exp_mbc_KemcAllowedOn_kNoiseReject3_1.0150_atc_ntrphe1.0";
-	  outfile2 = "kpp_exp_de_KemcAllowedOn_kNoiseReject3_1.0150_atc_ntrphe1.0";
-	  outfile3 = "kpp_exp_mbcde_KemcAllowedOn_kNoiseReject3_1.0150_atc_ntrphe1.0";
-          */
-	  exp_sig = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/exp_sig_S1.0_A6.0_Z0.0.gen";
-	  exp_bck = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/exp_bck_S1.0_A6.0_Z0.0.gen";
-	  exp_dbck = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/exp_dbck_S1.0_A6.0_Z0.0.gen";
+	  //mbcmax = 50;
+	  //rmax = 50.;
+	  mbcmax = 90;
+	  rmax = 90.;
+
+	  infile = "dat/" + dat_dirname + "/" + dataFile;
+
+	  outfile1 = "kpp_exp_mbc_" + prefOutfile;
+	  outfile2 = "kpp_exp_de_" + prefOutfile;
+	  outfile3 = "kpp_exp_mbcde_" + prefOutfile;
+
+	  exp_sig = "gen/" + gen_dirname + "/exp_sig_S1.0_A6.0_Z0.0.gen";
+	  exp_bck = "gen/" + gen_dirname + "/exp_bck_S1.0_A6.0_Z0.0.gen";
+	  exp_dbck = "gen/" + gen_dirname + "/exp_dbck_S1.0_A6.0_Z0.0.gen";
       }
       else{
-	  infile = "dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0150.dat";
+          dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0";
+          dataFile = "kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0150.dat";
+          gen_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0";
+          prefOutfile = "KemcAllowedOn_kNoiseReject3_1.0150";
+
 	  mbcmax = 120;
 	  rmax = 120.;
-	  outfile1 = "kpp_exp_mbc_KemcAllowedOn_kNoiseReject3_1.0150";
-	  outfile2 = "kpp_exp_de_KemcAllowedOn_kNoiseReject3_1.0150";
-	  outfile3 = "kpp_exp_mbcde_KemcAllowedOn_kNoiseReject3_1.0150";
-	  exp_sig = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/exp_sig_S1.0_A6.0_Z0.0.gen";
-	  exp_bck = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/exp_bck_S1.0_A6.0_Z0.0.gen";
-	  exp_dbck = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/exp_dbck_S1.0_A6.0_Z0.0.gen";
+
+	  infile = "dat/" + dat_dirname + "/" + dataFile;
+
+	  outfile1 = "kpp_exp_mbc_" + prefOutfile;
+	  outfile2 = "kpp_exp_de_" + prefOutfile;
+	  outfile3 = "kpp_exp_mbcde_" + prefOutfile;
+
+	  exp_sig = "gen/" + gen_dirname + "/exp_sig_S1.0_A6.0_Z0.0.gen";
+	  exp_bck = "gen/" + gen_dirname + "/exp_bck_S1.0_A6.0_Z0.0.gen";
+	  exp_dbck = "gen/" + gen_dirname + "/exp_dbck_S1.0_A6.0_Z0.0.gen";
       }
   }
 
