@@ -1,0 +1,1564 @@
+   ------------------------------------------------------------------
+  | Welcome to ROOT 6.24/04                        https://root.cern |
+  | (c) 1995-2021, The ROOT Team; conception: R. Brun, F. Rademakers |
+  | Built for linuxx8664gcc on Aug 25 2021, 12:59:28                 |
+  | From tags/v6-24-04@v6-24-04                                      |
+  | With c++ (GCC) 4.8.5 20150623 (Red Hat 4.8.5-44)                 |
+  | Try '.help', '.demo', '.license', '.credits', '.quit'/'.q'       |
+   ------------------------------------------------------------------
+
+
+Processing ./TMVAMulticlass.C("BDTG")...
+
+==> Start TMVAMulticlass
+==>  signal->GetEntries()=205629
+==>  background1->GetEntries()=636544
+==>  background2->GetEntries()=876556
+******************************************************************************
+*Chain   :signal    : /home/ovtin/development/Dmeson/analysisD0/MVA/infiles/signal_all_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0.root *
+******************************************************************************
+******************************************************************************
+*Tree    :et        : Event tree                                             *
+*Entries :   205629 : Total =       507423346 bytes  File  Size =   74105547 *
+*        :          : Tree compression factor =   6.85                       *
+******************************************************************************
+*Br    0 :Dmeson    : vrtntrk/I:vrtnip:vrtnbeam:nhitsdc:nhitst1:nhitst2:     *
+*         | nhitsvd:nhitsvdt1:nhitsvdt2:nhitsxyt1:nhitszt1:nhitsxyt2:        *
+*         | nhitszt2:nvect1:nvecxyt1:nveczt1:nvect2:nvecxyt2:nveczt2:ncomb:  *
+*         | ncls1:ncls2:ncls:nlkr:ncsi:munhits:mulayerhits1:mulayerhits2:    *
+*         | mulayerhits3:Run:numn:numo:natccrosst1:atcCNTt1[20]:natccrosst2: *
+*         | atcCNTt2[20]:aerogel_REGIONt1[20]:aerogel_REGION0t1[20]:         *
+*         | aerogel_REGION5t1[20]:aerogel_REGION20t1[20]:                    *
+*         | single_aerogel_REGIONt1[20]:single_aerogel_REGION0t1[20]:        *
+*         | single_aerogel_REGION5t1[20]:single_aerogel_REGION20t1[20]:      *
+*         | aerogel_REGIONt2[20]:aerogel_REGION0t2[20]:aerogel_REGION5t2[20]:*
+*         | aerogel_REGION20t2[20]:single_aerogel_REGIONt2[20]:              *
+*         | single_aerogel_REGION0t2[20]:single_aerogel_REGION5t2[20]:       *
+*         | single_aerogel_REGION20t2[20]:wlshitt1[20]:nearwlst1[20]:        *
+*         | wlshitt2[20]:nearwlst2[20]:kft1:kft2:mbc/F:de:dp:prec1:prec2:    *
+*         | fchi2:Ebeam:rEv:p1:p2:pt1:pt2:chi2t1:chi2t2:theta2t:phi2t:       *
+*         | thetat1:thetat2:phit1:phit2:e1:e2:d1:d2:rr1:rr2:zip1:zip2:ecls1: *
+*         | ecls2:tcls1:tcls2:pcls1:pcls2:emcenergy:lkrenergy:csienergy:enn: *
+*         | eno:tofc1:timet1:betat1:lengtht1:tofc2:timet2:betat2:lengtht2:   *
+*         | atcNpet1[20]:atcTotalNpet1:atcNpet2[20]:atcTotalNpet2:tlent1[20]:*
+*         | tlent2[20]:dedxt1:dedxt2:probpit1:probpit2:resdpit1:resdpit2:    *
+*         | probKt1:probKt2:resdKt1:resdKt2                                  *
+*Entries :   205629 : Total  Size=  507422521 bytes  File Size  =   73977009 *
+*Baskets :    17186 : Basket Size=      32000 bytes  Compression=   6.85     *
+*............................................................................*
+******************************************************************************
+*Chain   :background1 : /home/ovtin/development/Dmeson/analysisD0/MVA/infiles/uds.root *
+******************************************************************************
+******************************************************************************
+*Tree    :et        : Event tree                                             *
+*Entries :   636544 : Total =      1570738507 bytes  File  Size =  188298821 *
+*        :          : Tree compression factor =   8.35                       *
+******************************************************************************
+*Br    0 :Dmeson    : vrtntrk/I:vrtnip:vrtnbeam:nhitsdc:nhitst1:nhitst2:     *
+*         | nhitsvd:nhitsvdt1:nhitsvdt2:nhitsxyt1:nhitszt1:nhitsxyt2:        *
+*         | nhitszt2:nvect1:nvecxyt1:nveczt1:nvect2:nvecxyt2:nveczt2:ncomb:  *
+*         | ncls1:ncls2:ncls:nlkr:ncsi:munhits:mulayerhits1:mulayerhits2:    *
+*         | mulayerhits3:Run:numn:numo:natccrosst1:atcCNTt1[20]:natccrosst2: *
+*         | atcCNTt2[20]:aerogel_REGIONt1[20]:aerogel_REGION0t1[20]:         *
+*         | aerogel_REGION5t1[20]:aerogel_REGION20t1[20]:                    *
+*         | single_aerogel_REGIONt1[20]:single_aerogel_REGION0t1[20]:        *
+*         | single_aerogel_REGION5t1[20]:single_aerogel_REGION20t1[20]:      *
+*         | aerogel_REGIONt2[20]:aerogel_REGION0t2[20]:aerogel_REGION5t2[20]:*
+*         | aerogel_REGION20t2[20]:single_aerogel_REGIONt2[20]:              *
+*         | single_aerogel_REGION0t2[20]:single_aerogel_REGION5t2[20]:       *
+*         | single_aerogel_REGION20t2[20]:wlshitt1[20]:nearwlst1[20]:        *
+*         | wlshitt2[20]:nearwlst2[20]:kft1:kft2:mbc/F:de:dp:prec1:prec2:    *
+*         | fchi2:Ebeam:rEv:p1:p2:pt1:pt2:chi2t1:chi2t2:theta2t:phi2t:       *
+*         | thetat1:thetat2:phit1:phit2:e1:e2:d1:d2:rr1:rr2:zip1:zip2:ecls1: *
+*         | ecls2:tcls1:tcls2:pcls1:pcls2:emcenergy:lkrenergy:csienergy:enn: *
+*         | eno:tofc1:timet1:betat1:lengtht1:tofc2:timet2:betat2:lengtht2:   *
+*         | atcNpet1[20]:atcTotalNpet1:atcNpet2[20]:atcTotalNpet2:tlent1[20]:*
+*         | tlent2[20]:dedxt1:dedxt2:probpit1:probpit2:resdpit1:resdpit2:    *
+*         | probKt1:probKt2:resdKt1:resdKt2                                  *
+*Entries :   636544 : Total  Size= 1570737682 bytes  File Size  =  187920797 *
+*Baskets :    53057 : Basket Size=      32000 bytes  Compression=   8.35     *
+*............................................................................*
+******************************************************************************
+*Chain   :background2 : /home/ovtin/development/Dmeson/analysisD0/MVA/infiles/dbck.root *
+******************************************************************************
+******************************************************************************
+*Tree    :et        : Event tree                                             *
+*Entries :   876556 : Total =      2162988391 bytes  File  Size =  254185299 *
+*        :          : Tree compression factor =   8.52                       *
+******************************************************************************
+*Br    0 :Dmeson    : vrtntrk/I:vrtnip:vrtnbeam:nhitsdc:nhitst1:nhitst2:     *
+*         | nhitsvd:nhitsvdt1:nhitsvdt2:nhitsxyt1:nhitszt1:nhitsxyt2:        *
+*         | nhitszt2:nvect1:nvecxyt1:nveczt1:nvect2:nvecxyt2:nveczt2:ncomb:  *
+*         | ncls1:ncls2:ncls:nlkr:ncsi:munhits:mulayerhits1:mulayerhits2:    *
+*         | mulayerhits3:Run:numn:numo:natccrosst1:atcCNTt1[20]:natccrosst2: *
+*         | atcCNTt2[20]:aerogel_REGIONt1[20]:aerogel_REGION0t1[20]:         *
+*         | aerogel_REGION5t1[20]:aerogel_REGION20t1[20]:                    *
+*         | single_aerogel_REGIONt1[20]:single_aerogel_REGION0t1[20]:        *
+*         | single_aerogel_REGION5t1[20]:single_aerogel_REGION20t1[20]:      *
+*         | aerogel_REGIONt2[20]:aerogel_REGION0t2[20]:aerogel_REGION5t2[20]:*
+*         | aerogel_REGION20t2[20]:single_aerogel_REGIONt2[20]:              *
+*         | single_aerogel_REGION0t2[20]:single_aerogel_REGION5t2[20]:       *
+*         | single_aerogel_REGION20t2[20]:wlshitt1[20]:nearwlst1[20]:        *
+*         | wlshitt2[20]:nearwlst2[20]:kft1:kft2:mbc/F:de:dp:prec1:prec2:    *
+*         | fchi2:Ebeam:rEv:p1:p2:pt1:pt2:chi2t1:chi2t2:theta2t:phi2t:       *
+*         | thetat1:thetat2:phit1:phit2:e1:e2:d1:d2:rr1:rr2:zip1:zip2:ecls1: *
+*         | ecls2:tcls1:tcls2:pcls1:pcls2:emcenergy:lkrenergy:csienergy:enn: *
+*         | eno:tofc1:timet1:betat1:lengtht1:tofc2:timet2:betat2:lengtht2:   *
+*         | atcNpet1[20]:atcTotalNpet1:atcNpet2[20]:atcTotalNpet2:tlent1[20]:*
+*         | tlent2[20]:dedxt1:dedxt2:probpit1:probpit2:resdpit1:resdpit2:    *
+*         | probKt1:probKt2:resdKt1:resdKt2                                  *
+*Entries :876556 : Total  Size= 2162987566 bytes  File Size  = 253666996 *
+*Baskets :    73061 : Basket Size=      32000 bytes  Compression=   8.52     *
+*............................................................................*
+DataSetInfo              : [dataset] : Added class "Signal"
+                         : Add Tree signal of type Signal with 205629 events
+DataSetInfo              : [dataset] : Added class "bg1"
+                         : Add Tree background1  of type bg1 with 636544 events
+DataSetInfo              : [dataset] : Added class "bg2"
+                         : Add Tree background2  of type bg2 with 876556 events
+                         : Dataset[dataset] : Class index : 0  name : Signal
+                         : Dataset[dataset] : Class index : 1  name : bg1
+                         : Dataset[dataset] : Class index : 2  name : bg2
+Factory                  : Booking method: [1mBDTG[0m
+                         : 
+                         : the option NegWeightTreatment=InverseBoostNegWeights does not exist for BoostType=Grad
+                         : --> change to new default NegWeightTreatment=Pray
+                         : Building event vectors for type 2 Signal
+                         : Dataset[dataset] :  create input formulas for tree et
+                         : Dataset[dataset] :  create input formulas for tree et
+                         : Building event vectors for type 2 bg1
+                         : Dataset[dataset] :  create input formulas for tree et
+                         : Dataset[dataset] :  create input formulas for tree et
+                         : Building event vectors for type 2 bg2
+                         : Dataset[dataset] :  create input formulas for tree et
+                         : Dataset[dataset] :  create input formulas for tree et
+DataSetFactory           : [dataset] : Number of events in input trees
+                         : Dataset[dataset] :     Signal requirement: "Dmeson.vrtntrk>=3 && Dmeson.de>=-300. && Dmeson.de<=300. && Dmeson.mbc>=1700. && Dmeson.mbc<=1900. && Dmeson.pt1>100. && Dmeson.pt1<2000. && Dmeson.pt2>100. && Dmeson.pt2<2000. && Dmeson.chi2t1<1000. && Dmeson.chi2t2<1000. && Dmeson.nhitst1>23. && Dmeson.nhitst2>23. && Dmeson.nhitst1<=1000. && Dmeson.nhitst2<=1000. && Dmeson.rr1<0.1 && Dmeson.rr2<0.1 && Dmeson.zip1>-12. && Dmeson.zip1<12. && Dmeson.zip2>-12. && Dmeson.zip2<12. && Dmeson.ecls1<1000. && Dmeson.ecls2<1000. && (Dmeson.mulayerhits2+Dmeson.mulayerhits3)<=1"
+                         : Dataset[dataset] :     Signal      -- number of events passed: 15806  / sum of weights: 15806
+                         : Dataset[dataset] :     Signal      -- efficiency             : 0.0768666
+                         : Dataset[dataset] :     bg1    requirement: "Dmeson.vrtntrk>=3 && Dmeson.de>=-300. && Dmeson.de<=300. && Dmeson.mbc>=1700. && Dmeson.mbc<=1900. && Dmeson.pt1>100. && Dmeson.pt1<2000. && Dmeson.pt2>100. && Dmeson.pt2<2000. && Dmeson.chi2t1<1000. && Dmeson.chi2t2<1000. && Dmeson.nhitst1>23. && Dmeson.nhitst2>23. && Dmeson.nhitst1<=1000. && Dmeson.nhitst2<=1000. && Dmeson.rr1<0.1 && Dmeson.rr2<0.1 && Dmeson.zip1>-12. && Dmeson.zip1<12. && Dmeson.zip2>-12. && Dmeson.zip2<12. && Dmeson.ecls1<1000. && Dmeson.ecls2<1000. && (Dmeson.mulayerhits2+Dmeson.mulayerhits3)<=1"
+                         : Dataset[dataset] :     bg1         -- number of events passed: 16046  / sum of weights: 16046
+                         : Dataset[dataset] :     bg1         -- efficiency             : 0.025208
+                         : Dataset[dataset] :     bg2    requirement: "Dmeson.vrtntrk>=3 && Dmeson.de>=-300. && Dmeson.de<=300. && Dmeson.mbc>=1700. && Dmeson.mbc<=1900. && Dmeson.pt1>100. && Dmeson.pt1<2000. && Dmeson.pt2>100. && Dmeson.pt2<2000. && Dmeson.chi2t1<1000. && Dmeson.chi2t2<1000. && Dmeson.nhitst1>23. && Dmeson.nhitst2>23. && Dmeson.nhitst1<=1000. && Dmeson.nhitst2<=1000. && Dmeson.rr1<0.1 && Dmeson.rr2<0.1 && Dmeson.zip1>-12. && Dmeson.zip1<12. && Dmeson.zip2>-12. && Dmeson.zip2<12. && Dmeson.ecls1<1000. && Dmeson.ecls2<1000. && (Dmeson.mulayerhits2+Dmeson.mulayerhits3)<=1"
+                         : Dataset[dataset] :     bg2         -- number of events passed: 14444  / sum of weights: 14444
+                         : Dataset[dataset] :     bg2         -- efficiency             : 0.0164781
+                         : Dataset[dataset] :  you have opted for interpreting the requested number of training/testing events
+                         :  to be the number of events AFTER your preselection cuts
+                         : 
+                         : Dataset[dataset] :  you have opted for interpreting the requested number of training/testing events
+                         :  to be the number of events AFTER your preselection cuts
+                         : 
+                         : Dataset[dataset] :  you have opted for interpreting the requested number of training/testing events
+                         :  to be the number of events AFTER your preselection cuts
+                         : 
+                         : Number of training and testing events
+                         : ---------------------------------------------------------------------------
+                         : Signal -- training events            : 7903
+                         : Signal -- testing events             : 7903
+                         : Signal -- training and testing events: 15806
+                         : Dataset[dataset] : Signal -- due to the preselection a scaling factor has been applied to the numbers of requested events: 0.0768666
+                         : bg1    -- training events            : 8023
+                         : bg1    -- testing events             : 8023
+                         : bg1    -- training and testing events: 16046
+                         : Dataset[dataset] : bg1    -- due to the preselection a scaling factor has been applied to the numbers of requested events: 0.025208
+                         : bg2    -- training events            : 7222
+                         : bg2    -- testing events             : 7222
+                         : bg2    -- training and testing events: 14444
+                         : Dataset[dataset] : bg2    -- due to the preselection a scaling factor has been applied to the numbers of requested events: 0.0164781
+                         : 
+DataSetInfo              : Correlation matrix (Signal):
+                         : ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                         :                    p1      p2     pt1     pt2 vrtntrk  vrtnip nhitsvd nhitst1 nhitst2 nhitsxyt1 nhitsxyt2 nhitszt1 nhitszt2    ncls    nlkr    ncsi emcenergy lkrenergy csienergy munhits mulayerhits1 mulayerhits2 mulayerhits3 thetat1 thetat2   phit1   phit2  chi2t1  chi2t2     rr1     rr2    zip1    zip2
+                         :           p1:  +1.000  -0.659  +0.697  -0.478  -0.018  -0.010  -0.028  +0.017  -0.048    +0.010    -0.037   +0.020   -0.045  -0.002  -0.009  +0.008    -0.046    -0.028    +0.006  -0.031       -0.031       -0.005       +0.014  -0.001  -0.003  +0.006  -0.019  +0.025  -0.028  -0.016  +0.024  -0.013  +0.012
+                         :           p2:  -0.659  +1.000  -0.482  +0.673  +0.012  +0.005  +0.018  -0.039  +0.030    -0.023    +0.023   -0.044   +0.028  -0.001  -0.006  +0.004    +0.028    +0.014    +0.001  +0.008       +0.007       +0.009       +0.011  -0.001  -0.001  +0.012  +0.012  -0.009  +0.004  +0.034  -0.017  +0.008  +0.020
+                         :          pt1:  +0.697  -0.482  +1.000  +0.066  +0.001  -0.004  -0.106  +0.298  +0.168    +0.241    +0.138   +0.269   +0.146  -0.032  +0.028  -0.067    +0.045    +0.037    -0.019  +0.018       +0.018       -0.005       +0.018  +0.012  -0.011  -0.005  -0.005  +0.067  +0.011  -0.031  -0.007  -0.007  +0.008
+                         :          pt2:  -0.478  +0.673  +0.066  +1.000  +0.021  -0.003  -0.079  +0.183  +0.325    +0.156    +0.260   +0.156   +0.292  -0.023  +0.039  -0.070    +0.100    +0.070    -0.024  +0.054       +0.053       +0.008       +0.014  +0.002  -0.002  +0.002  +0.010  +0.031  +0.051  +0.007  -0.037  +0.005  +0.010
+                         :      vrtntrk:  -0.018  +0.012  +0.001  +0.021  +1.000  +0.355  +0.160  +0.008  +0.012    +0.013    +0.020   -0.001   -0.001  -0.023  +0.146  -0.192    +0.075    +0.180    -0.200  +0.020       +0.018       +0.052       -0.009  +0.011  -0.005  +0.008  +0.010  +0.017  +0.000  +0.004  -0.001  +0.021  +0.019
+                         :       vrtnip:  -0.010  +0.005  -0.004  -0.003  +0.355  +1.000  +0.429  +0.083  +0.036    +0.057    +0.019   +0.085   +0.045  +0.032  +0.018  +0.015    +0.039    +0.021    -0.001  +0.020       +0.019       +0.032       +0.004  +0.012  -0.005  +0.005  +0.010  +0.001  -0.025  +0.001  -0.009  +0.014  +0.008
+                         :      nhitsvd:  -0.028  +0.018  -0.106  -0.079  +0.160  +0.429  +1.000  +0.032  +0.001    +0.032    +0.004   +0.021   -0.002  -0.009  -0.099  +0.102    -0.025    -0.069    +0.079  -0.001       -0.001       +0.002       -0.001  +0.006  -0.007  +0.024  +0.017  +0.028  +0.018  -0.007  -0.005  +0.012  +0.009
+                         :      nhitst1:  +0.017  -0.039  +0.298  +0.183  +0.008  +0.083  +0.032  +1.000  +0.193    +0.870    +0.149   +0.830   +0.179  -0.038  -0.002  -0.042    +0.099    +0.058    -0.009  +0.013       +0.014       -0.013       -0.019  -0.022  +0.023  -0.073  +0.074  +0.170  -0.018  -0.004  +0.006  +0.013  +0.016
+                         :      nhitst2:  -0.048  +0.030  +0.168  +0.325  +0.012  +0.036  +0.001  +0.193  +1.000    +0.164    +0.865   +0.164   +0.825  -0.022  +0.027  -0.054    +0.104    +0.060    -0.009  +0.028       +0.028       +0.009       -0.008  +0.017  -0.025  +0.073  -0.103  -0.024  +0.133  +0.016  -0.022  +0.006  +0.012
+                         :    nhitsxyt1:  +0.010  -0.023  +0.241  +0.156  +0.013  +0.057  +0.032  +0.870  +0.164    +1.000    +0.137   +0.446   +0.141  -0.032  +0.004  -0.041    +0.081    +0.054    -0.016  +0.009       +0.009       -0.008       -0.026  -0.013  +0.016  -0.147  +0.050  +0.185  -0.029  -0.008  +0.002  +0.010  +0.024
+                         :    nhitsxyt2:  -0.037  +0.023  +0.138  +0.260  +0.020  +0.019  +0.004  +0.149  +0.865    +0.137    +1.000   +0.115   +0.430  -0.025  +0.022  -0.053    +0.090    +0.061    -0.020  +0.028       +0.028       +0.010       -0.008  +0.007  -0.014  +0.052  -0.153  -0.039  +0.163  +0.022  -0.032  +0.006  +0.007
+                         :     nhitszt1:  +0.020  -0.044  +0.269  +0.156  -0.001  +0.085  +0.021  +0.830  +0.164    +0.446    +0.115   +1.000   +0.166  -0.034  -0.008  -0.030    +0.089    +0.045    +0.002  +0.014       +0.014       -0.014       -0.004  -0.025  +0.024  +0.034  +0.078  +0.099  -0.000  +0.001  +0.009  +0.012  +0.001
+                         :     nhitszt2:  -0.045  +0.028  +0.146  +0.292  -0.001  +0.045  -0.002  +0.179  +0.825    +0.141    +0.430   +0.166   +1.000  -0.012  +0.024  -0.039    +0.086    +0.040    +0.007  +0.019       +0.019       +0.006       -0.005  +0.023  -0.030  +0.072  -0.012  +0.001  +0.055  +0.004  -0.003  +0.004  +0.013
+                         :         ncls:  -0.002  -0.001  -0.032  -0.023  -0.023  +0.032  -0.009  -0.038  -0.022    -0.032    -0.025   -0.034   -0.012  +1.000  +0.607  +0.455    +0.003    -0.205    +0.293  -0.029       -0.029       +0.001       -0.007  -0.002  +0.001  -0.012  +0.001  +0.000  -0.005  -0.032  +0.011  +0.004  +0.002
+                         :         nlkr:  -0.009  -0.006  +0.028  +0.039  +0.146  +0.018  -0.099  -0.002  +0.027    +0.004    +0.022   -0.008   +0.024  +0.607  +1.000  -0.425    +0.351    +0.509    -0.462  -0.005       -0.004       +0.009       -0.015  +0.005  -0.007  -0.015  +0.003  -0.001  +0.015  -0.009  +0.008  +0.009  +0.008
+                         :         ncsi:  +0.008  +0.004  -0.067  -0.070  -0.192  +0.015  +0.102  -0.042  -0.054    -0.041    -0.053   -0.030   -0.039  +0.455  -0.425  +1.000    -0.393    -0.810    +0.856  -0.029       -0.029       -0.008       +0.001  -0.006  +0.007  +0.002  -0.003  +0.003  -0.022  -0.026  +0.005  -0.007  -0.007
+                         :    emcenergy:  -0.046  +0.028  +0.045  +0.100  +0.075  +0.039  -0.025  +0.099  +0.104    +0.081    +0.090   +0.089   +0.086  +0.003  +0.351  -0.393    +1.000    +0.742    -0.310  -0.002       -0.002       +0.005       -0.003  -0.017  +0.015  -0.012  +0.002  +0.040  +0.041  +0.025  +0.010  +0.016  +0.016
+                         :    lkrenergy:  -0.028  +0.014  +0.037  +0.070  +0.180  +0.021  -0.069  +0.058  +0.060    +0.054    +0.061   +0.045   +0.040  -0.205  +0.509  -0.810    +0.742    +1.000    -0.867  +0.015       +0.015       +0.008       -0.003  -0.002  -0.001  -0.007  +0.004  +0.016  +0.033  +0.026  +0.005  +0.015  +0.014
+                         :    csienergy:  +0.006  +0.001  -0.019  -0.024  -0.200  -0.001  +0.079  -0.009  -0.009    -0.016    -0.020   +0.002   +0.007  +0.293  -0.462  +0.856    -0.310    -0.867    +1.000  -0.023       -0.023       -0.007       +0.003  -0.009  +0.013  +0.001  -0.004  +0.007  -0.016  -0.019  -0.000  -0.009  -0.008
+                         :      munhits:  -0.031  +0.008  +0.018  +0.054  +0.020  +0.020  -0.001  +0.013  +0.028    +0.009    +0.028   +0.014   +0.019  -0.029  -0.005  -0.029    -0.002    +0.015    -0.023  +1.000       +0.999       +0.024       +0.024  -0.011  +0.016  -0.002  -0.004  -0.013  -0.015  +0.009  -0.014  +0.004  +0.013
+                         : mulayerhits1:  -0.031  +0.007  +0.018  +0.053  +0.018  +0.019  -0.001  +0.014  +0.028    +0.009    +0.028   +0.014   +0.019  -0.029  -0.004  -0.029    -0.002    +0.015    -0.023  +0.999       +1.000       -0.002       -0.002  -0.011  +0.016  -0.002  -0.004  -0.013  -0.015  +0.009  -0.014  +0.004  +0.013
+                         : mulayerhits2:  -0.005  +0.009  -0.005  +0.008  +0.052  +0.032  +0.002  -0.013  +0.009    -0.008    +0.010   -0.014   +0.006  +0.001  +0.009  -0.008    +0.005    +0.008    -0.007  +0.024       -0.002       +1.000       -0.000  +0.012  -0.009  -0.012  +0.005  -0.004  -0.002  +0.006  +0.018  +0.006  +0.005
+                         : mulayerhits3:  +0.014  +0.011  +0.018  +0.014  -0.009  +0.004  -0.001  -0.019  -0.008    -0.026    -0.008   -0.004   -0.005  -0.007  -0.015  +0.001    -0.003    -0.003    +0.003  +0.024       -0.002       -0.000       +1.000  -0.003  +0.005  +0.009  -0.013  -0.006  -0.002  +0.014  -0.007  -0.002  +0.006
+                         :      thetat1:  -0.001  -0.001  +0.012  +0.002  +0.011  +0.012  +0.006  -0.022  +0.017    -0.013    +0.007   -0.025   +0.023  -0.002  +0.005  -0.006    -0.017    -0.002    -0.009  -0.011       -0.011       +0.012       -0.003  +1.000  -0.938  -0.007  +0.014  -0.008  -0.001  -0.026  +0.006  +0.024  -0.017
+                         :      thetat2:  -0.003  -0.001  -0.011  -0.002  -0.005  -0.005  -0.007  +0.023  -0.025    +0.016    -0.014   +0.024   -0.030  +0.001  -0.007  +0.007    +0.015    -0.001    +0.013  +0.016       +0.016       -0.009       +0.005  -0.938  +1.000  -0.001  -0.007  +0.006  -0.007  +0.023  -0.009  +0.008  +0.037
+                         :        phit1:  +0.006  +0.012  -0.005  +0.002  +0.008  +0.005  +0.024  -0.073  +0.073    -0.147    +0.052   +0.034   +0.072  -0.012  -0.015  +0.002    -0.012    -0.007    +0.001  -0.002       -0.002       -0.012       +0.009  -0.007  -0.001  +1.000  -0.500  -0.045  +0.049  +0.024  -0.033  +0.002  -0.013
+                         :        phit2:  -0.019  +0.012  -0.005  +0.010  +0.010  +0.010  +0.017  +0.074  -0.103    +0.050    -0.153   +0.078   -0.012  +0.001  +0.003  -0.003    +0.002    +0.004    -0.004  -0.004       -0.004       +0.005       -0.013  +0.014  -0.007  -0.500  +1.000  +0.011  -0.075  -0.039  +0.060  -0.004  -0.002
+                         :       chi2t1:  +0.025  -0.009  +0.067  +0.031  +0.017  +0.001  +0.028  +0.170  -0.024    +0.185    -0.039   +0.099   +0.001  +0.000  -0.001  +0.003    +0.040    +0.016    +0.007  -0.013       -0.013       -0.004       -0.006  -0.008  +0.006  -0.045  +0.011  +1.000  +0.088  +0.124  -0.002  +0.004  -0.006
+                         :       chi2t2:  -0.028  +0.004  +0.011  +0.051  +0.000  -0.025  +0.018  -0.018  +0.133    -0.029    +0.163   -0.000   +0.055  -0.005  +0.015  -0.022    +0.041    +0.033    -0.016  -0.015       -0.015       -0.002       -0.002  -0.001  -0.007  +0.049  -0.075  +0.088  +1.000  +0.011  +0.135  +0.011  +0.006
+                         :          rr1:  -0.016  +0.034  -0.031  +0.007  +0.004  +0.001  -0.007  -0.004  +0.016    -0.008    +0.022   +0.001   +0.004  -0.032  -0.009  -0.026    +0.025    +0.026    -0.019  +0.009       +0.009       +0.006       +0.014  -0.026  +0.023  +0.024  -0.039  +0.124  +0.011  +1.000  +0.002  -0.013  -0.005
+                         :          rr2:  +0.024  -0.017  -0.007  -0.037  -0.001  -0.009  -0.005  +0.006  -0.022    +0.002    -0.032   +0.009   -0.003  +0.011  +0.008  +0.005    +0.010    +0.005    -0.000  -0.014       -0.014       +0.018       -0.007  +0.006  -0.009  -0.033  +0.060  -0.002  +0.135  +0.002  +1.000  +0.008  +0.009
+                         :         zip1:  -0.013  +0.008  -0.007  +0.005  +0.021  +0.014  +0.012  +0.013  +0.006    +0.010    +0.006   +0.012   +0.004  +0.004  +0.009  -0.007    +0.016    +0.015    -0.009  +0.004       +0.004       +0.006       -0.002  +0.024  +0.008  +0.002  -0.004  +0.004  +0.011  -0.013  +0.008  +1.000  +0.770
+                         :         zip2:  +0.012  +0.020  +0.008  +0.010  +0.019  +0.008  +0.009  +0.016  +0.012    +0.024    +0.007   +0.001   +0.013  +0.002  +0.008  -0.007    +0.016    +0.014    -0.008  +0.013       +0.013       +0.005       +0.006  -0.017  +0.037  -0.013  -0.002  -0.006  +0.006  -0.005  +0.009  +0.770  +1.000
+                         : ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (0, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (1, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (2, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (3, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (4, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (5, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (6, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (7, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (8, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (9, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (10, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (11, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (12, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (13, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (14, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (15, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (16, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (17, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (18, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (19, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (20, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (21, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 0) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 1) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 2) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 3) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 4) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 5) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 6) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 7) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 8) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 9) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 10) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 11) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 12) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 13) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 14) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 15) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 16) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 17) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 18) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 19) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 20) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 21) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 23) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 24) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 25) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 26) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 27) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 28) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 29) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 30) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 31) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 32) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (23, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (24, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (25, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (26, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (27, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (28, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (29, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (30, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (31, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (32, 22) = 0
+DataSetInfo              : Correlation matrix (bg1):
+                         : ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                         :                    p1      p2     pt1     pt2 vrtntrk  vrtnip nhitsvd nhitst1 nhitst2 nhitsxyt1 nhitsxyt2 nhitszt1 nhitszt2    ncls    nlkr    ncsi emcenergy lkrenergy csienergy munhits mulayerhits1 mulayerhits2 mulayerhits3 thetat1 thetat2   phit1   phit2  chi2t1  chi2t2     rr1     rr2    zip1    zip2
+                         :           p1:  +1.000  -0.631  +0.852  -0.521  -0.066  -0.042  -0.058  +0.042  -0.009    +0.024    +0.010   +0.049   -0.026  -0.066  -0.052  -0.033    -0.053    -0.037    -0.027  +0.012       +0.010       +0.026       +0.000  -0.037  +0.032  +0.002  -0.001  -0.026  +0.010  -0.076  +0.034  -0.015  -0.013
+                         :           p2:  -0.631  +1.000  -0.538  +0.838  -0.047  -0.062  -0.028  -0.024  +0.032    -0.006    +0.011   -0.037   +0.046  -0.060  -0.053  -0.019    -0.062    -0.046    -0.026  +0.025       +0.025       +0.000       +0.000  +0.034  -0.030  -0.007  -0.005  +0.024  +0.006  +0.059  -0.060  -0.000  +0.004
+                         :          pt1:  +0.852  -0.538  +1.000  -0.344  -0.034  -0.019  -0.091  +0.284  +0.085    +0.230    +0.090   +0.260   +0.056  -0.087  -0.016  -0.138    -0.000    +0.057    -0.120  +0.043       +0.041       +0.025       +0.000  +0.002  +0.007  -0.001  -0.008  +0.013  +0.028  -0.082  +0.013  -0.010  -0.013
+                         :          pt2:  -0.521  +0.838  -0.344  +1.000  -0.028  -0.050  -0.073  +0.076  +0.294    +0.081    +0.235   +0.050   +0.275  -0.084  -0.016  -0.126    +0.003    +0.055    -0.109  +0.062       +0.062       +0.009       +0.000  +0.029  -0.021  -0.006  -0.007  +0.039  +0.053  +0.032  -0.077  +0.000  -0.008
+                         :      vrtntrk:  -0.066  -0.047  -0.034  -0.028  +1.000  +0.684  +0.547  +0.007  -0.024    +0.030    -0.006   -0.020   -0.037  +0.087  +0.114  -0.044    -0.164    -0.098    -0.116  -0.030       -0.029       -0.012       +0.000  +0.001  +0.003  -0.021  +0.017  +0.028  +0.029  +0.002  +0.010  -0.002  +0.001
+                         :       vrtnip:  -0.042  -0.062  -0.019  -0.050  +0.684  +1.000  +0.401  +0.004  -0.008    +0.019    +0.007   -0.012   -0.022  +0.077  +0.097  -0.027    -0.122    -0.073    -0.086  -0.014       -0.013       -0.017       +0.000  -0.014  +0.013  -0.000  +0.003  -0.008  -0.001  -0.011  +0.005  -0.000  +0.007
+                         :      nhitsvd:  -0.058  -0.028  -0.091  -0.073  +0.547  +0.401  +1.000  -0.044  -0.060    -0.024    -0.033   -0.052   -0.072  +0.059  +0.012  +0.083    -0.150    -0.148    +0.017  -0.024       -0.023       -0.015       +0.000  +0.005  -0.004  +0.019  +0.037  -0.003  +0.022  +0.010  +0.024  +0.013  +0.011
+                         :      nhitst1:  +0.042  -0.024  +0.284  +0.076  +0.007  +0.004  -0.044  +1.000  +0.130    +0.871    +0.098   +0.851   +0.129  -0.063  +0.008  -0.141    +0.054    +0.102    -0.107  +0.028       +0.027       +0.019       +0.000  +0.018  -0.026  -0.110  +0.088  +0.175  +0.017  -0.015  +0.016  +0.001  +0.005
+                         :      nhitst2:  -0.009  +0.032  +0.085  +0.294  -0.024  -0.008  -0.060  +0.130  +1.000    +0.108    +0.874   +0.116   +0.852  -0.084  -0.006  -0.149    +0.063    +0.111    -0.109  +0.030       +0.030       +0.012       +0.000  +0.017  -0.016  +0.091  -0.138  +0.001  +0.193  -0.013  -0.037  +0.006  -0.012
+                         :    nhitsxyt1:  +0.024  -0.006  +0.230  +0.081  +0.030  +0.019  -0.024  +0.871  +0.108    +1.000    +0.074   +0.482   +0.115  -0.058  +0.006  -0.127    +0.045    +0.087    -0.094  +0.013       +0.012       +0.019       +0.000  +0.013  -0.021  -0.165  +0.088  +0.203  +0.029  -0.006  +0.025  +0.002  -0.003
+                         :    nhitsxyt2:  +0.010  +0.011  +0.090  +0.235  -0.006  +0.007  -0.033  +0.098  +0.874    +0.074    +1.000   +0.095   +0.491  -0.061  +0.002  -0.120    +0.046    +0.087    -0.091  +0.020       +0.019       +0.018       +0.000  +0.010  -0.004  +0.090  -0.157  +0.014  +0.233  -0.011  -0.042  +0.009  -0.008
+                         :     nhitszt1:  +0.049  -0.037  +0.260  +0.050  -0.020  -0.012  -0.052  +0.851  +0.116    +0.482    +0.095   +1.000   +0.106  -0.050  +0.008  -0.115    +0.048    +0.088    -0.090  +0.036       +0.035       +0.013       +0.000  +0.018  -0.024  -0.020  +0.063  +0.094  -0.001  -0.021  +0.002  -0.001  +0.011
+                         :     nhitszt2:  -0.026  +0.046  +0.056  +0.275  -0.037  -0.022  -0.072  +0.129  +0.852    +0.115    +0.491   +0.106   +1.000  -0.085  -0.012  -0.138    +0.063    +0.105    -0.097  +0.033       +0.033       +0.001       +0.000  +0.019  -0.026  +0.066  -0.079  -0.013  +0.094  -0.011  -0.021  +0.002  -0.013
+                         :         ncls:  -0.066  -0.060  -0.087  -0.084  +0.087  +0.077  +0.059  -0.063  -0.084    -0.058    -0.061   -0.050   -0.085  +1.000  +0.841  +0.406    +0.343    +0.217    +0.216  -0.030       -0.028       -0.027       +0.000  +0.001  -0.003  -0.005  +0.014  -0.016  +0.003  +0.006  +0.008  +0.008  +0.013
+                         :         nlkr:  -0.052  -0.053  -0.016  -0.016  +0.114  +0.097  +0.012  +0.008  -0.006    +0.006    +0.002   +0.008   -0.012  +0.841  +1.000  -0.139    +0.362    +0.433    -0.199  -0.016       -0.015       -0.020       +0.000  -0.002  +0.002  -0.010  +0.010  -0.000  +0.023  +0.000  +0.011  +0.001  +0.010
+                         :         ncsi:  -0.033  -0.019  -0.138  -0.126  -0.044  -0.027  +0.083  -0.141  -0.149    -0.127    -0.120   -0.115   -0.138  +0.406  -0.139  +1.000    +0.015    -0.343    +0.750  -0.024       -0.023       -0.014       +0.000  +0.003  -0.011  +0.010  +0.008  -0.032  -0.030  +0.008  -0.007  +0.014  +0.008
+                         :    emcenergy:  -0.053  -0.062  -0.000  +0.003  -0.164  -0.122  -0.150  +0.054  +0.063    +0.045    +0.046   +0.048   +0.063  +0.343  +0.362  +0.015    +1.000    +0.881    +0.110  -0.025       -0.025       -0.009       +0.000  -0.019  +0.013  +0.014  +0.004  +0.029  +0.017  +0.015  +0.012  +0.014  +0.001
+                         :    lkrenergy:  -0.037  -0.046  +0.057  +0.055  -0.098  -0.073  -0.148  +0.102  +0.111    +0.087    +0.087   +0.088   +0.105  +0.217  +0.433  -0.343    +0.881    +1.000    -0.374  -0.009       -0.009       -0.004       +0.000  -0.017  +0.018  +0.007  +0.002  +0.037  +0.028  +0.013  +0.009  +0.009  -0.000
+                         :    csienergy:  -0.027  -0.026  -0.120  -0.109  -0.116  -0.086  +0.017  -0.107  -0.109    -0.094    -0.091   -0.090   -0.097  +0.216  -0.199  +0.750    +0.110    -0.374    +1.000  -0.030       -0.030       -0.009       +0.000  -0.001  -0.010  +0.013  +0.003  -0.019  -0.026  +0.002  +0.004  +0.009  +0.003
+                         :      munhits:  +0.012  +0.025  +0.043  +0.062  -0.030  -0.014  -0.024  +0.028  +0.030    +0.013    +0.020   +0.036   +0.033  -0.030  -0.016  -0.024    -0.025    -0.009    -0.030  +1.000       +0.998       +0.143       +0.000  +0.020  -0.019  +0.032  -0.014  -0.018  +0.006  +0.008  -0.012  -0.004  +0.005
+                         : mulayerhits1:  +0.010  +0.025  +0.041  +0.062  -0.029  -0.013  -0.023  +0.027  +0.030    +0.012    +0.019   +0.035   +0.033  -0.028  -0.015  -0.023    -0.025    -0.009    -0.030  +0.998       +1.000       +0.075       +0.000  +0.020  -0.019  +0.032  -0.014  -0.018  +0.006  +0.007  -0.013  -0.003  +0.006
+                         : mulayerhits2:  +0.026  +0.000  +0.025  +0.009  -0.012  -0.017  -0.015  +0.019  +0.012    +0.019    +0.018   +0.013   +0.001  -0.027  -0.020  -0.014    -0.009    -0.004    -0.009  +0.143       +0.075       +1.000       +0.000  +0.009  -0.001  -0.003  -0.006  -0.008  +0.001  +0.011  +0.001  -0.010  -0.005
+                         : mulayerhits3:  +0.000  +0.000  +0.000  +0.000  +0.000  +0.000  +0.000  +0.000  +0.000    +0.000    +0.000   +0.000   +0.000  +0.000  +0.000  +0.000    +0.000    +0.000    +0.000  +0.000       +0.000       +0.000       +1.000  +0.000  +0.000  +0.000  +0.000  +0.000  +0.000  +0.000  +0.000  +0.000  +0.000
+                         :      thetat1:  -0.037  +0.034  +0.002  +0.029  +0.001  -0.014  +0.005  +0.018  +0.017    +0.013    +0.010   +0.018   +0.019  +0.001  -0.002  +0.003    -0.019    -0.017    -0.001  +0.020       +0.020       +0.009       +0.000  +1.000  -0.753  -0.002  -0.002  -0.012  -0.001  +0.032  -0.005  +0.016  -0.016
+                         :      thetat2:  +0.032  -0.030  +0.007  -0.021  +0.003  +0.013  -0.004  -0.026  -0.016    -0.021    -0.004   -0.024   -0.026  -0.003  +0.002  -0.011    +0.013    +0.018    -0.010  -0.019       -0.019       -0.001       +0.000  -0.753  +1.000  +0.004  +0.005  -0.000  +0.013  -0.024  +0.006  +0.004  +0.039
+                         :        phit1:  +0.002  -0.007  -0.001  -0.006  -0.021  -0.000  +0.019  -0.110  +0.091    -0.165    +0.090   -0.020   +0.066  -0.005  -0.010  +0.010    +0.014    +0.007    +0.013  +0.032       +0.032       -0.003       +0.000  -0.002  +0.004  +1.000  -0.475  -0.062  +0.058  +0.028  -0.033  +0.004  +0.008
+                         :        phit2:  -0.001  -0.005  -0.008  -0.007  +0.017  +0.003  +0.037  +0.088  -0.138    +0.088    -0.157   +0.063   -0.079  +0.014  +0.010  +0.008    +0.004    +0.002    +0.003  -0.014       -0.014       -0.006       +0.000  -0.002  +0.005  -0.475  +1.000  +0.018  -0.077  -0.022  +0.053  -0.004  +0.010
+                         :       chi2t1:  -0.026  +0.024  +0.013  +0.039  +0.028  -0.008  -0.003  +0.175  +0.001    +0.203    +0.014   +0.094   -0.013  -0.016  -0.000  -0.032    +0.029    +0.037    -0.019  -0.018       -0.018       -0.008       +0.000  -0.012  -0.000  -0.062  +0.018  +1.000  +0.053  +0.118  +0.024  +0.002  +0.002
+                         :       chi2t2:  +0.010  +0.006  +0.028  +0.053  +0.029  -0.001  +0.022  +0.017  +0.193    +0.029    +0.233   -0.001   +0.094  +0.003  +0.023  -0.030    +0.017    +0.028    -0.026  +0.006       +0.006       +0.001       +0.000  -0.001  +0.013  +0.058  -0.077  +0.053  +1.000  +0.008  +0.120  -0.010  -0.015
+                         :          rr1:  -0.076  +0.059  -0.082  +0.032  +0.002  -0.011  +0.010  -0.015  -0.013    -0.006    -0.011   -0.021   -0.011  +0.006  +0.000  +0.008    +0.015    +0.013    +0.002  +0.008       +0.007       +0.011       +0.000  +0.032  -0.024  +0.028  -0.022  +0.118  +0.008  +1.000  +0.011  +0.003  +0.010
+                         :          rr2:  +0.034  -0.060  +0.013  -0.077  +0.010  +0.005  +0.024  +0.016  -0.037    +0.025    -0.042   +0.002   -0.021  +0.008  +0.011  -0.007    +0.012    +0.009    +0.004  -0.012       -0.013       +0.001       +0.000  -0.005  +0.006  -0.033  +0.053  +0.024  +0.120  +0.011  +1.000  -0.008  +0.003
+                         :         zip1:  -0.015  -0.000  -0.010  +0.000  -0.002  -0.000  +0.013  +0.001  +0.006    +0.002    +0.009   -0.001   +0.002  +0.008  +0.001  +0.014    +0.014    +0.009    +0.009  -0.004       -0.003       -0.010       +0.000  +0.016  +0.004  +0.004  -0.004  +0.002  -0.010  +0.003  -0.008  +1.000  +0.772
+                         :         zip2:  -0.013  +0.004  -0.013  -0.008  +0.001  +0.007  +0.011  +0.005  -0.012    -0.003    -0.008   +0.011   -0.013  +0.013  +0.010  +0.008    +0.001    -0.000    +0.003  +0.005       +0.006       -0.005       +0.000  -0.016  +0.039  +0.008  +0.010  +0.002  -0.015  +0.010  +0.003  +0.772  +1.000
+                         : ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (0, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (1, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (2, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (3, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (4, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (5, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (6, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (7, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (8, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (9, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (10, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (11, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (12, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (13, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (14, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (15, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (16, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (17, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (18, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (19, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (20, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (21, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 0) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 1) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 2) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 3) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 4) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 5) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 6) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 7) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 8) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 9) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 10) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 11) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 12) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 13) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 14) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 15) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 16) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 17) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 18) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 19) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 20) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 21) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 23) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 24) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 25) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 26) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 27) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 28) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 29) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 30) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 31) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (22, 32) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (23, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (24, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (25, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (26, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (27, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (28, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (29, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (30, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (31, 22) = 0
+<WARNING>                : Dataset[Default] : <GetCorrelationMatrix> Zero variances for variables (32, 22) = 0
+DataSetInfo              : Correlation matrix (bg2):
+                         : ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                         :                    p1      p2     pt1     pt2 vrtntrk  vrtnip nhitsvd nhitst1 nhitst2 nhitsxyt1 nhitsxyt2 nhitszt1 nhitszt2    ncls    nlkr    ncsi emcenergy lkrenergy csienergy munhits mulayerhits1 mulayerhits2 mulayerhits3 thetat1 thetat2   phit1   phit2  chi2t1  chi2t2     rr1     rr2    zip1    zip2
+                         :           p1:  +1.000  -0.645  +0.749  -0.505  +0.009  -0.001  -0.002  -0.001  -0.044    -0.014    -0.039   +0.013   -0.035  -0.053  -0.054  -0.007    -0.004    -0.000    -0.006  +0.017       +0.018       -0.019       +0.000  +0.013  -0.008  +0.012  -0.023  +0.004  +0.018  -0.027  +0.022  -0.004  +0.011
+                         :           p2:  -0.645  +1.000  -0.520  +0.739  -0.037  -0.034  -0.034  -0.039  +0.004    -0.021    +0.008   -0.046   -0.001  -0.049  -0.030  -0.042    -0.064    -0.043    -0.033  +0.030       +0.030       +0.015       +0.000  -0.021  +0.021  -0.002  +0.030  +0.013  +0.003  +0.043  +0.003  +0.002  -0.015
+                         :          pt1:  +0.749  -0.520  +1.000  -0.170  +0.015  +0.005  -0.059  +0.311  +0.102    +0.247    +0.083   +0.285   +0.092  -0.080  -0.018  -0.118    +0.057    +0.105    -0.112  +0.048       +0.049       -0.020       +0.000  +0.018  -0.013  +0.009  -0.015  +0.054  +0.042  -0.051  -0.011  +0.001  +0.007
+                         :          pt2:  -0.505  +0.739  -0.170  +1.000  -0.033  -0.037  -0.099  +0.121  +0.298    +0.109    +0.245   +0.097   +0.265  -0.086  -0.010  -0.145    +0.020    +0.080    -0.129  +0.052       +0.052       -0.020       +0.000  -0.016  +0.008  +0.007  +0.026  +0.049  +0.053  +0.025  -0.036  -0.012  -0.010
+                         :      vrtntrk:  +0.009  -0.037  +0.015  -0.033  +1.000  +0.629  +0.518  -0.020  -0.036    +0.004    -0.005   -0.040   -0.058  +0.096  +0.115  -0.019    -0.165    -0.106    -0.092  +0.003       +0.003       +0.005       +0.000  +0.001  +0.003  -0.022  +0.004  +0.008  +0.038  -0.000  +0.005  +0.000  +0.001
+                         :       vrtnip:  -0.001  -0.034  +0.005  -0.037  +0.629  +1.000  +0.357  +0.005  +0.006    +0.019    +0.012   -0.012   -0.002  +0.053  +0.070  -0.023    -0.108    -0.063    -0.075  -0.004       -0.004       +0.014       +0.000  -0.009  -0.002  -0.021  +0.002  -0.018  +0.016  -0.005  +0.015  +0.017  +0.007
+                         :      nhitsvd:  -0.002  -0.034  -0.059  -0.099  +0.518  +0.357  +1.000  -0.027  -0.039    -0.004    -0.010   -0.043   -0.058  +0.086  +0.040  +0.092    -0.142    -0.148    +0.040  -0.027       -0.027       +0.007       +0.000  +0.019  -0.018  +0.008  +0.023  +0.003  +0.024  -0.016  +0.005  +0.024  +0.010
+                         :      nhitst1:  -0.001  -0.039  +0.311  +0.121  -0.020  +0.005  -0.027  +1.000  +0.171    +0.867    +0.140   +0.840   +0.153  -0.070  -0.014  -0.109    +0.109    +0.146    -0.100  +0.053       +0.053       +0.001       +0.000  -0.009  -0.001  -0.075  +0.071  +0.166  -0.002  -0.021  +0.000  +0.009  -0.005
+                         :      nhitst2:  -0.044  +0.004  +0.102  +0.298  -0.036  +0.006  -0.039  +0.171  +1.000    +0.137    +0.869   +0.155   +0.837  -0.047  +0.015  -0.114    +0.122    +0.161    -0.106  +0.016       +0.017       -0.034       +0.000  +0.018  -0.025  +0.104  -0.134  -0.018  +0.166  +0.023  -0.049  +0.006  +0.006
+                         :    nhitsxyt1:  -0.014  -0.021  +0.247  +0.109  +0.004  +0.019  -0.004  +0.867  +0.137    +1.000    +0.117   +0.457   +0.117  -0.061  -0.015  -0.089    +0.080    +0.112    -0.084  +0.050       +0.050       -0.000       +0.000  -0.008  +0.003  -0.140  +0.067  +0.199  -0.015  -0.024  +0.003  +0.016  +0.001
+                         :    nhitsxyt2:  -0.039  +0.008  +0.083  +0.245  -0.005  +0.012  -0.010  +0.140  +0.869    +0.117    +1.000   +0.122   +0.457  -0.039  +0.010  -0.090    +0.091    +0.126    -0.091  +0.002       +0.003       -0.029       +0.000  +0.020  -0.023  +0.107  -0.177  -0.022  +0.195  +0.025  -0.043  +0.002  +0.004
+                         :     nhitszt1:  +0.013  -0.046  +0.285  +0.097  -0.040  -0.012  -0.043  +0.840  +0.155    +0.457    +0.122   +1.000   +0.144  -0.059  -0.008  -0.097    +0.107    +0.138    -0.087  +0.041       +0.041       +0.002       +0.000  -0.008  -0.004  +0.019  +0.053  +0.079  +0.013  -0.012  -0.003  -0.002  -0.009
+                         :     nhitszt2:  -0.035  -0.001  +0.092  +0.265  -0.058  -0.002  -0.058  +0.153  +0.837    +0.117    +0.457   +0.144   +1.000  -0.042  +0.016  -0.105    +0.119    +0.151    -0.089  +0.026       +0.027       -0.030       +0.000  +0.010  -0.020  +0.068  -0.046  -0.008  +0.083  +0.014  -0.041  +0.008  +0.006
+                         :         ncls:  -0.053  -0.049  -0.080  -0.086  +0.096  +0.053  +0.086  -0.070  -0.047    -0.061    -0.039   -0.059   -0.042  +1.000  +0.843  +0.416    +0.280    +0.151    +0.219  -0.045       -0.046       +0.021       +0.000  +0.003  -0.005  +0.011  -0.013  +0.008  +0.013  -0.002  +0.005  -0.016  -0.014
+                         :         nlkr:  -0.054  -0.030  -0.018  -0.010  +0.115  +0.070  +0.040  -0.014  +0.015    -0.015    +0.010   -0.008   +0.016  +0.843  +1.000  -0.129    +0.320    +0.390    -0.210  -0.022       -0.023       +0.017       +0.000  -0.005  -0.002  +0.002  -0.003  +0.018  +0.024  -0.013  +0.003  -0.002  -0.005
+                         :         ncsi:  -0.007  -0.042  -0.118  -0.145  -0.019  -0.023  +0.092  -0.109  -0.114    -0.089    -0.090   -0.097   -0.105  +0.416  -0.129  +1.000    -0.023    -0.385    +0.771  -0.049       -0.049       +0.011       +0.000  +0.012  -0.005  +0.015  -0.019  -0.015  -0.016  +0.017  +0.005  -0.028  -0.021
+                         :    emcenergy:  -0.004  -0.064  +0.057  +0.020  -0.165  -0.108  -0.142  +0.109  +0.122    +0.080    +0.091   +0.107   +0.119  +0.280  +0.320  -0.023    +1.000    +0.882    +0.056  -0.034       -0.034       -0.005       +0.000  -0.016  +0.019  +0.000  +0.014  +0.042  +0.027  +0.017  -0.001  -0.010  -0.001
+                         :    lkrenergy:  -0.000  -0.043  +0.105  +0.080  -0.106  -0.063  -0.148  +0.146  +0.161    +0.112    +0.126   +0.138   +0.151  +0.151  +0.390  -0.385    +0.882    +1.000    -0.421  -0.012       -0.012       -0.008       +0.000  -0.020  +0.020  -0.005  +0.020  +0.041  +0.037  +0.007  -0.005  +0.006  +0.008
+                         :    csienergy:  -0.006  -0.033  -0.112  -0.129  -0.092  -0.075  +0.040  -0.100  -0.106    -0.084    -0.091   -0.087   -0.089  +0.219  -0.210  +0.771    +0.056    -0.421    +1.000  -0.040       -0.040       +0.007       +0.000  +0.012  -0.007  +0.012  -0.014  -0.007  -0.027  +0.016  +0.008  -0.031  -0.019
+                         :      munhits:  +0.017  +0.030  +0.048  +0.052  +0.003  -0.004  -0.027  +0.053  +0.016    +0.050    +0.002   +0.041   +0.026  -0.045  -0.022  -0.049    -0.034    -0.012    -0.040  +1.000       +1.000       +0.023       +0.000  -0.001  +0.001  -0.009  +0.021  +0.009  -0.011  +0.005  -0.004  +0.013  -0.000
+                         : mulayerhits1:  +0.018  +0.030  +0.049  +0.052  +0.003  -0.004  -0.027  +0.053  +0.017    +0.050    +0.003   +0.041   +0.027  -0.046  -0.023  -0.049    -0.034    -0.012    -0.040  +1.000       +1.000       -0.002       +0.000  -0.001  +0.001  -0.009  +0.021  +0.009  -0.010  +0.005  -0.004  +0.013  +0.000
+                         : mulayerhits2:  -0.019  +0.015  -0.020  -0.020  +0.005  +0.014  +0.007  +0.001  -0.034    -0.000    -0.029   +0.002   -0.030  +0.021  +0.017  +0.011    -0.005    -0.008    +0.007  +0.023       -0.002       +1.000       +0.000  +0.017  -0.026  +0.017  -0.003  -0.007  -0.006  +0.010  -0.015  -0.025  -0.017
+                         : mulayerhits3:  +0.000  +0.000  +0.000  +0.000  +0.000  +0.000  +0.000  +0.000  +0.000    +0.000    +0.000   +0.000   +0.000  +0.000  +0.000  +0.000    +0.000    +0.000    +0.000  +0.000       +0.000       +0.000       +1.000  +0.000  +0.000  +0.000  +0.000  +0.000  +0.000  +0.000  +0.000  +0.000  +0.000
+                         :      thetat1:  +0.013  -0.021  +0.018  -0.016  +0.001  -0.009  +0.019  -0.009  +0.018    -0.008    +0.020   -0.008   +0.010  +0.003  -0.005  +0.012    -0.016    -0.020    +0.012  -0.001       -0.001       +0.017       +0.000  +1.000  -0.826  +0.018  -0.011  -0.005  +0.024  +0.003  -0.004  +0.050  -0.021
+                         :      thetat2:  -0.008  +0.021  -0.013  +0.008  +0.003  -0.002  -0.018  -0.001  -0.025    +0.003    -0.023   -0.004   -0.020  -0.005  -0.002  -0.005    +0.019    +0.020    -0.007  +0.001       +0.001       -0.026       +0.000  -0.826  +1.000  -0.022  +0.013  -0.001  -0.022  +0.001  -0.001  -0.018  +0.053
+                         :        phit1:  +0.012  -0.002  +0.009  +0.007  -0.022  -0.021  +0.008  -0.075  +0.104    -0.140    +0.107   +0.019   +0.068  +0.011  +0.002  +0.015    +0.000    -0.005    +0.012  -0.009       -0.009       +0.017       +0.000  +0.018  -0.022  +1.000  -0.494  -0.041  +0.053  +0.025  -0.034  +0.001  +0.011
+                         :        phit2:  -0.023  +0.030  -0.015  +0.026  +0.004  +0.002  +0.023  +0.071  -0.134    +0.067    -0.177   +0.053   -0.046  -0.013  -0.003  -0.019    +0.014    +0.020    -0.014  +0.021       +0.021       -0.003       +0.000  -0.011  +0.013  -0.494  +1.000  +0.009  -0.074  -0.039  +0.055  -0.006  -0.013
+                         :       chi2t1:  +0.004  +0.013  +0.054  +0.049  +0.008  -0.018  +0.003  +0.166  -0.018    +0.199    -0.022   +0.079   -0.008  +0.008  +0.018  -0.015    +0.042    +0.041    -0.007  +0.009       +0.009       -0.007       +0.000  -0.005  -0.001  -0.041  +0.009  +1.000  +0.051  +0.135  +0.010  -0.006  +0.000
+                         :       chi2t2:  +0.018  +0.003  +0.042  +0.053  +0.038  +0.016  +0.024  -0.002  +0.166    -0.015    +0.195   +0.013   +0.083  +0.013  +0.024  -0.016    +0.027    +0.037    -0.027  -0.011       -0.010       -0.006       +0.000  +0.024  -0.022  +0.053  -0.074  +0.051  +1.000  +0.013  +0.128  -0.009  -0.013
+                         :          rr1:  -0.027  +0.043  -0.051  +0.025  -0.000  -0.005  -0.016  -0.021  +0.023    -0.024    +0.025   -0.012   +0.014  -0.002  -0.013  +0.017    +0.017    +0.007    +0.016  +0.005       +0.005       +0.010       +0.000  +0.003  +0.001  +0.025  -0.039  +0.135  +0.013  +1.000  -0.004  +0.001  -0.002
+                         :          rr2:  +0.022  +0.003  -0.011  -0.036  +0.005  +0.015  +0.005  +0.000  -0.049    +0.003    -0.043   -0.003   -0.041  +0.005  +0.003  +0.005    -0.001    -0.005    +0.008  -0.004       -0.004       -0.015       +0.000  -0.004  -0.001  -0.034  +0.055  +0.010  +0.128  -0.004  +1.000  +0.010  +0.002
+                         :         zip1:  -0.004  +0.002  +0.001  -0.012  +0.000  +0.017  +0.024  +0.009  +0.006    +0.016    +0.002   -0.002   +0.008  -0.016  -0.002  -0.028    -0.010    +0.006    -0.031  +0.013       +0.013       -0.025       +0.000  +0.050  -0.018  +0.001  -0.006  -0.006  -0.009  +0.001  +0.010  +1.000  +0.749
+                         :         zip2:  +0.011  -0.015  +0.007  -0.010  +0.001  +0.007  +0.010  -0.005  +0.006    +0.001    +0.004   -0.009   +0.006  -0.014  -0.005  -0.021    -0.001    +0.008    -0.019  -0.000       +0.000       -0.017       +0.000  -0.021  +0.053  +0.011  -0.013  +0.000  -0.013  -0.002  +0.002  +0.749  +1.000
+                         : ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+DataSetFactory           : [dataset] :  
+                         : 
+Factory                  : [1mTrain all methods[0m
+Factory                  : [dataset] : Create Transformation "I" with events from all classes.
+                         : 
+                         : Transformation, Variable selection : 
+                         : Input : variable 'p1' <---> Output : variable 'p1'
+                         : Input : variable 'p2' <---> Output : variable 'p2'
+                         : Input : variable 'pt1' <---> Output : variable 'pt1'
+                         : Input : variable 'pt2' <---> Output : variable 'pt2'
+                         : Input : variable 'vrtntrk' <---> Output : variable 'vrtntrk'
+                         : Input : variable 'vrtnip' <---> Output : variable 'vrtnip'
+                         : Input : variable 'nhitsvd' <---> Output : variable 'nhitsvd'
+                         : Input : variable 'nhitst1' <---> Output : variable 'nhitst1'
+                         : Input : variable 'nhitst2' <---> Output : variable 'nhitst2'
+                         : Input : variable 'nhitsxyt1' <---> Output : variable 'nhitsxyt1'
+                         : Input : variable 'nhitsxyt2' <---> Output : variable 'nhitsxyt2'
+                         : Input : variable 'nhitszt1' <---> Output : variable 'nhitszt1'
+                         : Input : variable 'nhitszt2' <---> Output : variable 'nhitszt2'
+                         : Input : variable 'ncls' <---> Output : variable 'ncls'
+                         : Input : variable 'nlkr' <---> Output : variable 'nlkr'
+                         : Input : variable 'ncsi' <---> Output : variable 'ncsi'
+                         : Input : variable 'emcenergy' <---> Output : variable 'emcenergy'
+                         : Input : variable 'lkrenergy' <---> Output : variable 'lkrenergy'
+                         : Input : variable 'csienergy' <---> Output : variable 'csienergy'
+                         : Input : variable 'munhits' <---> Output : variable 'munhits'
+                         : Input : variable 'mulayerhits1' <---> Output : variable 'mulayerhits1'
+                         : Input : variable 'mulayerhits2' <---> Output : variable 'mulayerhits2'
+                         : Input : variable 'mulayerhits3' <---> Output : variable 'mulayerhits3'
+                         : Input : variable 'thetat1' <---> Output : variable 'thetat1'
+                         : Input : variable 'thetat2' <---> Output : variable 'thetat2'
+                         : Input : variable 'phit1' <---> Output : variable 'phit1'
+                         : Input : variable 'phit2' <---> Output : variable 'phit2'
+                         : Input : variable 'chi2t1' <---> Output : variable 'chi2t1'
+                         : Input : variable 'chi2t2' <---> Output : variable 'chi2t2'
+                         : Input : variable 'rr1' <---> Output : variable 'rr1'
+                         : Input : variable 'rr2' <---> Output : variable 'rr2'
+                         : Input : variable 'zip1' <---> Output : variable 'zip1'
+                         : Input : variable 'zip2' <---> Output : variable 'zip2'
+Factory                  : [dataset] : Create Transformation "D" with events from all classes.
+                         : 
+                         : Transformation, Variable selection : 
+                         : Input : variable 'p1' <---> Output : variable 'p1'
+                         : Input : variable 'p2' <---> Output : variable 'p2'
+                         : Input : variable 'pt1' <---> Output : variable 'pt1'
+                         : Input : variable 'pt2' <---> Output : variable 'pt2'
+                         : Input : variable 'vrtntrk' <---> Output : variable 'vrtntrk'
+                         : Input : variable 'vrtnip' <---> Output : variable 'vrtnip'
+                         : Input : variable 'nhitsvd' <---> Output : variable 'nhitsvd'
+                         : Input : variable 'nhitst1' <---> Output : variable 'nhitst1'
+                         : Input : variable 'nhitst2' <---> Output : variable 'nhitst2'
+                         : Input : variable 'nhitsxyt1' <---> Output : variable 'nhitsxyt1'
+                         : Input : variable 'nhitsxyt2' <---> Output : variable 'nhitsxyt2'
+                         : Input : variable 'nhitszt1' <---> Output : variable 'nhitszt1'
+                         : Input : variable 'nhitszt2' <---> Output : variable 'nhitszt2'
+                         : Input : variable 'ncls' <---> Output : variable 'ncls'
+                         : Input : variable 'nlkr' <---> Output : variable 'nlkr'
+                         : Input : variable 'ncsi' <---> Output : variable 'ncsi'
+                         : Input : variable 'emcenergy' <---> Output : variable 'emcenergy'
+                         : Input : variable 'lkrenergy' <---> Output : variable 'lkrenergy'
+                         : Input : variable 'csienergy' <---> Output : variable 'csienergy'
+                         : Input : variable 'munhits' <---> Output : variable 'munhits'
+                         : Input : variable 'mulayerhits1' <---> Output : variable 'mulayerhits1'
+                         : Input : variable 'mulayerhits2' <---> Output : variable 'mulayerhits2'
+                         : Input : variable 'mulayerhits3' <---> Output : variable 'mulayerhits3'
+                         : Input : variable 'thetat1' <---> Output : variable 'thetat1'
+                         : Input : variable 'thetat2' <---> Output : variable 'thetat2'
+                         : Input : variable 'phit1' <---> Output : variable 'phit1'
+                         : Input : variable 'phit2' <---> Output : variable 'phit2'
+                         : Input : variable 'chi2t1' <---> Output : variable 'chi2t1'
+                         : Input : variable 'chi2t2' <---> Output : variable 'chi2t2'
+                         : Input : variable 'rr1' <---> Output : variable 'rr1'
+                         : Input : variable 'rr2' <---> Output : variable 'rr2'
+                         : Input : variable 'zip1' <---> Output : variable 'zip1'
+                         : Input : variable 'zip2' <---> Output : variable 'zip2'
+Factory                  : [dataset] : Create Transformation "P" with events from all classes.
+                         : 
+                         : Transformation, Variable selection : 
+                         : Input : variable 'p1' <---> Output : variable 'p1'
+                         : Input : variable 'p2' <---> Output : variable 'p2'
+                         : Input : variable 'pt1' <---> Output : variable 'pt1'
+                         : Input : variable 'pt2' <---> Output : variable 'pt2'
+                         : Input : variable 'vrtntrk' <---> Output : variable 'vrtntrk'
+                         : Input : variable 'vrtnip' <---> Output : variable 'vrtnip'
+                         : Input : variable 'nhitsvd' <---> Output : variable 'nhitsvd'
+                         : Input : variable 'nhitst1' <---> Output : variable 'nhitst1'
+                         : Input : variable 'nhitst2' <---> Output : variable 'nhitst2'
+                         : Input : variable 'nhitsxyt1' <---> Output : variable 'nhitsxyt1'
+                         : Input : variable 'nhitsxyt2' <---> Output : variable 'nhitsxyt2'
+                         : Input : variable 'nhitszt1' <---> Output : variable 'nhitszt1'
+                         : Input : variable 'nhitszt2' <---> Output : variable 'nhitszt2'
+                         : Input : variable 'ncls' <---> Output : variable 'ncls'
+                         : Input : variable 'nlkr' <---> Output : variable 'nlkr'
+                         : Input : variable 'ncsi' <---> Output : variable 'ncsi'
+                         : Input : variable 'emcenergy' <---> Output : variable 'emcenergy'
+                         : Input : variable 'lkrenergy' <---> Output : variable 'lkrenergy'
+                         : Input : variable 'csienergy' <---> Output : variable 'csienergy'
+                         : Input : variable 'munhits' <---> Output : variable 'munhits'
+                         : Input : variable 'mulayerhits1' <---> Output : variable 'mulayerhits1'
+                         : Input : variable 'mulayerhits2' <---> Output : variable 'mulayerhits2'
+                         : Input : variable 'mulayerhits3' <---> Output : variable 'mulayerhits3'
+                         : Input : variable 'thetat1' <---> Output : variable 'thetat1'
+                         : Input : variable 'thetat2' <---> Output : variable 'thetat2'
+                         : Input : variable 'phit1' <---> Output : variable 'phit1'
+                         : Input : variable 'phit2' <---> Output : variable 'phit2'
+                         : Input : variable 'chi2t1' <---> Output : variable 'chi2t1'
+                         : Input : variable 'chi2t2' <---> Output : variable 'chi2t2'
+                         : Input : variable 'rr1' <---> Output : variable 'rr1'
+                         : Input : variable 'rr2' <---> Output : variable 'rr2'
+                         : Input : variable 'zip1' <---> Output : variable 'zip1'
+                         : Input : variable 'zip2' <---> Output : variable 'zip2'
+Factory                  : [dataset] : Create Transformation "G" with events from all classes.
+                         : 
+                         : Transformation, Variable selection : 
+                         : Input : variable 'p1' <---> Output : variable 'p1'
+                         : Input : variable 'p2' <---> Output : variable 'p2'
+                         : Input : variable 'pt1' <---> Output : variable 'pt1'
+                         : Input : variable 'pt2' <---> Output : variable 'pt2'
+                         : Input : variable 'vrtntrk' <---> Output : variable 'vrtntrk'
+                         : Input : variable 'vrtnip' <---> Output : variable 'vrtnip'
+                         : Input : variable 'nhitsvd' <---> Output : variable 'nhitsvd'
+                         : Input : variable 'nhitst1' <---> Output : variable 'nhitst1'
+                         : Input : variable 'nhitst2' <---> Output : variable 'nhitst2'
+                         : Input : variable 'nhitsxyt1' <---> Output : variable 'nhitsxyt1'
+                         : Input : variable 'nhitsxyt2' <---> Output : variable 'nhitsxyt2'
+                         : Input : variable 'nhitszt1' <---> Output : variable 'nhitszt1'
+                         : Input : variable 'nhitszt2' <---> Output : variable 'nhitszt2'
+                         : Input : variable 'ncls' <---> Output : variable 'ncls'
+                         : Input : variable 'nlkr' <---> Output : variable 'nlkr'
+                         : Input : variable 'ncsi' <---> Output : variable 'ncsi'
+                         : Input : variable 'emcenergy' <---> Output : variable 'emcenergy'
+                         : Input : variable 'lkrenergy' <---> Output : variable 'lkrenergy'
+                         : Input : variable 'csienergy' <---> Output : variable 'csienergy'
+                         : Input : variable 'munhits' <---> Output : variable 'munhits'
+                         : Input : variable 'mulayerhits1' <---> Output : variable 'mulayerhits1'
+                         : Input : variable 'mulayerhits2' <---> Output : variable 'mulayerhits2'
+                         : Input : variable 'mulayerhits3' <---> Output : variable 'mulayerhits3'
+                         : Input : variable 'thetat1' <---> Output : variable 'thetat1'
+                         : Input : variable 'thetat2' <---> Output : variable 'thetat2'
+                         : Input : variable 'phit1' <---> Output : variable 'phit1'
+                         : Input : variable 'phit2' <---> Output : variable 'phit2'
+                         : Input : variable 'chi2t1' <---> Output : variable 'chi2t1'
+                         : Input : variable 'chi2t2' <---> Output : variable 'chi2t2'
+                         : Input : variable 'rr1' <---> Output : variable 'rr1'
+                         : Input : variable 'rr2' <---> Output : variable 'rr2'
+                         : Input : variable 'zip1' <---> Output : variable 'zip1'
+                         : Input : variable 'zip2' <---> Output : variable 'zip2'
+Factory                  : [dataset] : Create Transformation "D" with events from all classes.
+                         : 
+                         : Transformation, Variable selection : 
+                         : Input : variable 'p1' <---> Output : variable 'p1'
+                         : Input : variable 'p2' <---> Output : variable 'p2'
+                         : Input : variable 'pt1' <---> Output : variable 'pt1'
+                         : Input : variable 'pt2' <---> Output : variable 'pt2'
+                         : Input : variable 'vrtntrk' <---> Output : variable 'vrtntrk'
+                         : Input : variable 'vrtnip' <---> Output : variable 'vrtnip'
+                         : Input : variable 'nhitsvd' <---> Output : variable 'nhitsvd'
+                         : Input : variable 'nhitst1' <---> Output : variable 'nhitst1'
+                         : Input : variable 'nhitst2' <---> Output : variable 'nhitst2'
+                         : Input : variable 'nhitsxyt1' <---> Output : variable 'nhitsxyt1'
+                         : Input : variable 'nhitsxyt2' <---> Output : variable 'nhitsxyt2'
+                         : Input : variable 'nhitszt1' <---> Output : variable 'nhitszt1'
+                         : Input : variable 'nhitszt2' <---> Output : variable 'nhitszt2'
+                         : Input : variable 'ncls' <---> Output : variable 'ncls'
+                         : Input : variable 'nlkr' <---> Output : variable 'nlkr'
+                         : Input : variable 'ncsi' <---> Output : variable 'ncsi'
+                         : Input : variable 'emcenergy' <---> Output : variable 'emcenergy'
+                         : Input : variable 'lkrenergy' <---> Output : variable 'lkrenergy'
+                         : Input : variable 'csienergy' <---> Output : variable 'csienergy'
+                         : Input : variable 'munhits' <---> Output : variable 'munhits'
+                         : Input : variable 'mulayerhits1' <---> Output : variable 'mulayerhits1'
+                         : Input : variable 'mulayerhits2' <---> Output : variable 'mulayerhits2'
+                         : Input : variable 'mulayerhits3' <---> Output : variable 'mulayerhits3'
+                         : Input : variable 'thetat1' <---> Output : variable 'thetat1'
+                         : Input : variable 'thetat2' <---> Output : variable 'thetat2'
+                         : Input : variable 'phit1' <---> Output : variable 'phit1'
+                         : Input : variable 'phit2' <---> Output : variable 'phit2'
+                         : Input : variable 'chi2t1' <---> Output : variable 'chi2t1'
+                         : Input : variable 'chi2t2' <---> Output : variable 'chi2t2'
+                         : Input : variable 'rr1' <---> Output : variable 'rr1'
+                         : Input : variable 'rr2' <---> Output : variable 'rr2'
+                         : Input : variable 'zip1' <---> Output : variable 'zip1'
+                         : Input : variable 'zip2' <---> Output : variable 'zip2'
+<WARNING>                : Variable "mulayerhits3" has zero, negative, or NaN RMS^2: 0 ==> set to zero. Please check the variable content
+<WARNING>                : Variable "mulayerhits3" has zero, negative, or NaN RMS^2: 0 ==> set to zero. Please check the variable content
+TFHandler_Factory        :     Variable            Mean            RMS    [        Min            Max ]
+                         : -------------------------------------------------------------------------------
+                         :           p1:        831.12        162.64   [        403.88        1534.9 ]
+                         :           p2:        831.84        157.38   [        383.97        1560.6 ]
+                         :          pt1:        732.26        176.31   [        198.15        1473.6 ]
+                         :          pt2:        732.00        171.41   [        202.58        1517.5 ]
+                         :      vrtntrk:        4.1749        1.0848   [        3.0000        11.000 ]
+                         :       vrtnip:        3.4965        1.0839   [        1.0000        9.0000 ]
+                         :      nhitsvd:        26.704        11.177   [        2.0000        118.00 ]
+                         :      nhitst1:        42.155        6.1870   [        24.000        57.000 ]
+                         :      nhitst2:        42.314        6.1482   [        24.000        56.000 ]
+                         :    nhitsxyt1:        23.861        3.7794   [        10.000        33.000 ]
+                         :    nhitsxyt2:        23.907        3.7661   [        10.000        33.000 ]
+                         :     nhitszt1:        18.294        3.4525   [        2.0000        24.000 ]
+                         :     nhitszt2:        18.407        3.4232   [        4.0000        24.000 ]
+                         :         ncls:        6.7159        1.9035   [        1.0000        17.000 ]
+                         :         nlkr:        5.6811        1.7750   [        0.0000        16.000 ]
+                         :         ncsi:        1.0031        1.1175   [        0.0000        7.0000 ]
+                         :    emcenergy:        1796.1        480.76   [        36.360        4073.0 ]
+                         :    lkrenergy:        1602.5        561.61   [        0.0000        4021.1 ]
+                         :    csienergy:        193.59        312.01   [        0.0000        1880.0 ]
+                         :      munhits:      0.081519       0.48044   [        0.0000        11.000 ]
+                         : mulayerhits1:      0.080914       0.47875   [        0.0000        11.000 ]
+                         : mulayerhits2:    0.00056160      0.023692   [        0.0000        1.0000 ]
+                         : mulayerhits3:    4.3200e-05     0.0065725   [        0.0000        1.0000 ]
+                         :      thetat1:        89.514        28.560   [        22.653        157.37 ]
+                         :      thetat2:        90.270        28.648   [        21.611        156.63 ]
+                         :        phit1:        180.13        104.09   [      0.016527        359.98 ]
+                         :        phit2:        178.92        102.75   [    0.00046816        360.00 ]
+                         :       chi2t1:        19.819        16.539   [       0.39548        276.44 ]
+                         :       chi2t2:        18.490        15.560   [       0.34945        373.29 ]
+                         :          rr1:      0.036243      0.025671   [    4.7418e-06      0.099996 ]
+                         :          rr2:      0.035626      0.025466   [    2.3418e-06      0.099987 ]
+                         :         zip1:      0.010453        2.6230   [       -11.928        11.978 ]
+                         :         zip2:     0.0015047        2.5504   [       -11.799        11.878 ]
+                         : -------------------------------------------------------------------------------
+                         : [32m
+                         : <PlotVariables> Will not produce scatter plots ==> 
+                         : |  The number of 33 input variables and 0 target values would require 528 two-dimensional
+                         : |  histograms, which would occupy the computer's memory. Note that this
+                         : |  suppression does not have any consequences for your analysis, other
+                         : |  than not disposing of these scatter plots. You can modify the maximum
+                         : |  number of input variables allowed to generate scatter plots in your
+                         : |  script via the command line:
+                         : |  "(TMVA::gConfig().GetVariablePlotting()).fMaxNumOfAllowedVariablesForScatterPlots = <some int>;"[0m
+                         : 
+                         : Some more output
+                         : Preparing the Decorrelation transformation...
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : Variable "p1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "p1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "p1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "p1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "p2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "p2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "p2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "p2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "pt1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "pt1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "pt1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "pt1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "pt2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "pt2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "pt2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "pt2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "vrtntrk" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "vrtntrk" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "vrtntrk" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "vrtntrk" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "vrtnip" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "vrtnip" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "vrtnip" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "vrtnip" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitsvd" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitsvd" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitsvd" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitsvd" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitst1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitst1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitst1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitst1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitst2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitst2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitst2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitst2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitsxyt1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitsxyt1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitsxyt1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitsxyt1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitsxyt2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitsxyt2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitsxyt2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitsxyt2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitszt1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitszt1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitszt1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitszt1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitszt2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitszt2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitszt2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitszt2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "ncls" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "ncls" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "ncls" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "ncls" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nlkr" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nlkr" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nlkr" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nlkr" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "ncsi" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "ncsi" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "ncsi" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "ncsi" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "emcenergy" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "emcenergy" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "emcenergy" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "emcenergy" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "lkrenergy" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "lkrenergy" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "lkrenergy" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "lkrenergy" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "csienergy" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "csienergy" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "csienergy" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "csienergy" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "munhits" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "munhits" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "munhits" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "munhits" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "mulayerhits1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "mulayerhits1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "mulayerhits1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "mulayerhits1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "mulayerhits2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "mulayerhits2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "mulayerhits2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "mulayerhits2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "mulayerhits3" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "mulayerhits3" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "mulayerhits3" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "mulayerhits3" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "thetat1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "thetat1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "thetat1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "thetat1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "thetat2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "thetat2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "thetat2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "thetat2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "phit1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "phit1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "phit1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "phit1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "phit2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "phit2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "phit2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "phit2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "chi2t1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "chi2t1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "chi2t1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "chi2t1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "chi2t2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "chi2t2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "chi2t2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "chi2t2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "rr1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "rr1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "rr1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "rr1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "rr2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "rr2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "rr2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "rr2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "zip1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "zip1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "zip1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "zip1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "zip2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "zip2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "zip2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "zip2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+TFHandler_Factory        :     Variable            Mean            RMS    [        Min            Max ]
+                         : -------------------------------------------------------------------------------
+                         :           p1:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :           p2:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :          pt1:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :          pt2:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :      vrtntrk:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :       vrtnip:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :      nhitsvd:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :      nhitst1:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :      nhitst2:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :    nhitsxyt1:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :    nhitsxyt2:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :     nhitszt1:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :     nhitszt2:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :         ncls:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :         nlkr:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :         ncsi:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :    emcenergy:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :    lkrenergy:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :    csienergy:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :      munhits:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         : mulayerhits1:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         : mulayerhits2:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         : mulayerhits3:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :      thetat1:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :      thetat2:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :        phit1:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :        phit2:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :       chi2t1:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :       chi2t2:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :          rr1:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :          rr2:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :         zip1:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :         zip2:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         : -------------------------------------------------------------------------------
+                         : [32m
+                         : <PlotVariables> Will not produce scatter plots ==> 
+                         : |  The number of 33 input variables and 0 target values would require 528 two-dimensional
+                         : |  histograms, which would occupy the computer's memory. Note that this
+                         : |  suppression does not have any consequences for your analysis, other
+                         : |  than not disposing of these scatter plots. You can modify the maximum
+                         : |  number of input variables allowed to generate scatter plots in your
+                         : |  script via the command line:
+                         : |  "(TMVA::gConfig().GetVariablePlotting()).fMaxNumOfAllowedVariablesForScatterPlots = <some int>;"[0m
+                         : 
+                         : Some more output
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+                         : Preparing the Principle Component (PCA) transformation...
+TFHandler_Factory        :     Variable            Mean            RMS    [        Min            Max ]
+                         : -------------------------------------------------------------------------------
+                         :           p1:    1.1119e-07        716.52   [       -2296.5        3268.5 ]
+                         :           p2:   -2.7924e-08        362.91   [       -2097.1        644.73 ]
+                         :          pt1:   -1.1359e-08        265.13   [       -1038.8        1057.2 ]
+                         :          pt2:   -8.3554e-09        175.32   [       -574.84        543.06 ]
+                         :      vrtntrk:   -1.2195e-08        126.23   [       -195.98        194.48 ]
+                         :       vrtnip:   -1.8490e-08        81.930   [       -157.28        382.50 ]
+                         :      nhitsvd:   -6.2763e-09        73.858   [       -189.76        217.50 ]
+                         :      nhitst1:   -1.0225e-08        52.544   [       -280.38        318.49 ]
+                         :      nhitst2:   -6.8513e-09        38.695   [       -88.548        97.118 ]
+                         :    nhitsxyt1:    3.6217e-09        16.722   [       -25.621        229.15 ]
+                         :    nhitsxyt2:   -5.1572e-10        15.292   [       -324.18        112.55 ]
+                         :     nhitszt1:   -1.1070e-10        11.596   [       -38.876        39.001 ]
+                         :     nhitszt2:    5.2432e-11        10.378   [       -31.522        89.825 ]
+                         :         ncls:   -2.4996e-09        6.9753   [       -30.614        21.905 ]
+                         :         nlkr:   -3.2814e-10        6.1777   [       -27.383        28.661 ]
+                         :         ncsi:    5.3332e-10        3.4307   [       -13.690        13.304 ]
+                         :    emcenergy:    4.3774e-10        2.9642   [      -0.57716        307.61 ]
+                         :    lkrenergy:    2.8246e-10        2.5933   [       -11.079        15.865 ]
+                         :    csienergy:   -3.0459e-10        2.5806   [       -12.303        10.739 ]
+                         :      munhits:    1.2027e-10        2.3805   [       -7.5088        14.163 ]
+                         : mulayerhits1:    8.6972e-11        1.2527   [       -10.390        11.761 ]
+                         : mulayerhits2:   -1.1348e-10        1.0583   [       -5.2428        6.2939 ]
+                         : mulayerhits3:    1.6947e-10       0.81173   [       -4.6299        3.3713 ]
+                         :      thetat1:   -6.6441e-11       0.67532   [      -0.45649        15.507 ]
+                         :      thetat2:   -1.2545e-10       0.61749   [      -0.90009        4.4817 ]
+                         :        phit1:   -1.0466e-11       0.11057   [       -1.6942       0.62162 ]
+                         :        phit2:   -3.7696e-12      0.029062   [     -0.047317        1.2217 ]
+                         :       chi2t1:   -2.6088e-12      0.025381   [     -0.065888      0.078485 ]
+                         :       chi2t2:   -1.5958e-12      0.025092   [     -0.096241      0.072613 ]
+                         :          rr1:    2.0586e-12     0.0075470   [       -1.1414      0.031658 ]
+                         :          rr2:    7.5852e-14    1.3658e-12   [   -1.3397e-11    1.9772e-10 ]
+                         :         zip1:   -3.2406e-13    8.6825e-12   [   -4.4221e-11    1.0104e-09 ]
+                         :         zip2:    5.7902e-14    3.4021e-11   [   -2.6949e-11    5.0899e-09 ]
+                         : -------------------------------------------------------------------------------
+                         : [32m
+                         : <PlotVariables> Will not produce scatter plots ==> 
+                         : |  The number of 33 input variables and 0 target values would require 528 two-dimensional
+                         : |  histograms, which would occupy the computer's memory. Note that this
+                         : |  suppression does not have any consequences for your analysis, other
+                         : |  than not disposing of these scatter plots. You can modify the maximum
+                         : |  number of input variables allowed to generate scatter plots in your
+                         : |  script via the command line:
+                         : |  "(TMVA::gConfig().GetVariablePlotting()).fMaxNumOfAllowedVariablesForScatterPlots = <some int>;"[0m
+                         : 
+                         : Some more output
+                         : Preparing the Gaussian transformation...
+Error in <TH1F::Smooth>: Smooth only supported for histograms with >= 3 bins. Nbins = 2
+Error in <TH1F::Smooth>: Smooth only supported for histograms with >= 3 bins. Nbins = 2
+Error in <TH1F::Smooth>: Smooth only supported for histograms with >= 3 bins. Nbins = 2
+Error in <TH1F::Smooth>: Smooth only supported for histograms with >= 3 bins. Nbins = 2
+Error in <TH1F::Smooth>: Smooth only supported for histograms with >= 3 bins. Nbins = 2
+Error in <TH1F::Smooth>: Smooth only supported for histograms with >= 3 bins. Nbins = 2
+                         : Preparing the Decorrelation transformation...
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : <GetSQRootMatrix> error in matrix diagonalization; printed S and B
+<WARNING>                : Variable "p1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "p1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "p1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "p1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "p2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "p2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "p2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "p2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "pt1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "pt1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "pt1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "pt1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "pt2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "pt2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "pt2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "pt2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "vrtntrk" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "vrtntrk" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "vrtntrk" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "vrtntrk" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "vrtnip" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "vrtnip" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "vrtnip" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "vrtnip" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitsvd" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitsvd" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitsvd" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitsvd" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitst1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitst1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitst1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitst1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitst2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitst2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitst2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitst2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitsxyt1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitsxyt1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitsxyt1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitsxyt1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitsxyt2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitsxyt2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitsxyt2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitsxyt2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitszt1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitszt1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitszt1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitszt1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitszt2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitszt2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitszt2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nhitszt2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "ncls" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "ncls" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "ncls" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "ncls" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nlkr" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nlkr" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nlkr" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "nlkr" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "ncsi" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "ncsi" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "ncsi" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "ncsi" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "emcenergy" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "emcenergy" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "emcenergy" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "emcenergy" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "lkrenergy" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "lkrenergy" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "lkrenergy" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "lkrenergy" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "csienergy" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "csienergy" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "csienergy" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "csienergy" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "munhits" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "munhits" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "munhits" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "munhits" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "mulayerhits1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "mulayerhits1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "mulayerhits1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "mulayerhits1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "mulayerhits2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "mulayerhits2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "mulayerhits2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "mulayerhits2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "mulayerhits3" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "mulayerhits3" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "mulayerhits3" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "mulayerhits3" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "thetat1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "thetat1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "thetat1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "thetat1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "thetat2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "thetat2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "thetat2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "thetat2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "phit1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "phit1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "phit1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "phit1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "phit2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "phit2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "phit2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "phit2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "chi2t1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "chi2t1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "chi2t1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "chi2t1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "chi2t2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "chi2t2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "chi2t2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "chi2t2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "rr1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "rr1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "rr1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "rr1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "rr2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "rr2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "rr2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "rr2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "zip1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "zip1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "zip1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "zip1" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "zip2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "zip2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "zip2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+<WARNING>                : Variable "zip2" has zero, negative, or NaN RMS^2: -nan ==> set to zero. Please check the variable content
+TFHandler_Factory        :     Variable            Mean            RMS    [        Min            Max ]
+                         : -------------------------------------------------------------------------------
+                         :           p1:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :           p2:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :          pt1:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :          pt2:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :      vrtntrk:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :       vrtnip:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :      nhitsvd:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :      nhitst1:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :      nhitst2:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :    nhitsxyt1:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :    nhitsxyt2:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :     nhitszt1:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :     nhitszt2:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :         ncls:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :         nlkr:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :         ncsi:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :    emcenergy:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :    lkrenergy:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :    csienergy:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :      munhits:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         : mulayerhits1:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         : mulayerhits2:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         : mulayerhits3:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :      thetat1:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :      thetat2:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :        phit1:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :        phit2:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :       chi2t1:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :       chi2t2:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :          rr1:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :          rr2:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :         zip1:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         :         zip2:          -nan        0.0000   [   1.7977e+308  -1.7977e+308 ]
+                         : -------------------------------------------------------------------------------
+                         : [32m
+                         : <PlotVariables> Will not produce scatter plots ==> 
+                         : |  The number of 33 input variables and 0 target values would require 528 two-dimensional
+                         : |  histograms, which would occupy the computer's memory. Note that this
+                         : |  suppression does not have any consequences for your analysis, other
+                         : |  than not disposing of these scatter plots. You can modify the maximum
+                         : |  number of input variables allowed to generate scatter plots in your
+                         : |  script via the command line:
+                         : |  "(TMVA::gConfig().GetVariablePlotting()).fMaxNumOfAllowedVariablesForScatterPlots = <some int>;"[0m
+                         : 
+                         : Some more output
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+                         : Ranking input variables (method unspecific)...
+Factory                  : Train method: BDTG for Multiclass classification
+                         : 
+                         : Training 1500 Decision Trees ... patience please
+0%, time left: unknown
+6%, time left: 229 sec
+12%, time left: 216 sec
+18%, time left: 201 sec
+25%, time left: 187 sec
+31%, time left: 173 sec
+37%, time left: 157 sec
+43%, time left: 141 sec
+50%, time left: 125 sec
+56%, time left: 109 sec
+62%, time left: 94 sec
+68%, time left: 78 sec
+75%, time left: 63 sec
+81%, time left: 47 sec
+87%, time left: 31 sec
+93%, time left: 15 sec
+                         : Elapsed time for training with 23148 events: 255 sec         
+                         : Dataset[dataset] : Create results for training
+                         : Dataset[dataset] : Multiclass evaluation of BDTG on training sample
+0%, time left: unknown
+6%, time left: 55 sec
+12%, time left: 52 sec
+18%, time left: 49 sec
+25%, time left: 45 sec
+31%, time left: 41 sec
+37%, time left: 37 sec
+43%, time left: 33 sec
+50%, time left: 29 sec
+56%, time left: 26 sec
+62%, time left: 22 sec
+68%, time left: 18 sec
+75%, time left: 15 sec
+81%, time left: 11 sec
+87%, time left: 7 sec
+93%, time left: 3 sec
+                         : Dataset[dataset] : Elapsed time for evaluation of 23148 events: 60 sec       
+                         : Creating multiclass response histograms...
+                         : Creating multiclass performance histograms...
+                         : Creating xml weight file: [0;36mdataset/weights/TMVAMulticlass_BDTG.weights.xml[0m
+                         : Creating standalone class: [0;36mdataset/weights/TMVAMulticlass_BDTG.class.C[0m
+Factory                  : Training finished
+                         : 
+                         : Ranking input variables (method specific)...
+BDTG                     : Ranking result (top variable is best ranked)
+                         : ----------------------------------------------
+                         : Rank : Variable     : Variable Importance
+                         : ----------------------------------------------
+                         :    1 : emcenergy    : 5.667e-02
+                         :    2 : lkrenergy    : 4.501e-02
+                         :    3 : csienergy    : 4.441e-02
+                         :    4 : nhitsvd      : 4.374e-02
+                         :    5 : p1           : 4.281e-02
+                         :    6 : p2           : 4.051e-02
+                         :    7 : rr2          : 3.937e-02
+                         :    8 : thetat2      : 3.901e-02
+                         :    9 : rr1          : 3.799e-02
+                         :   10 : thetat1      : 3.779e-02
+                         :   11 : phit2        : 3.710e-02
+                         :   12 : phit1        : 3.665e-02
+                         :   13 : nhitst2      : 3.614e-02
+                         :   14 : nhitst1      : 3.352e-02
+                         :   15 : nhitsxyt2    : 3.300e-02
+                         :   16 : pt1          : 3.259e-02
+                         :   17 : pt2          : 3.254e-02
+                         :   18 : nhitszt1     : 3.161e-02
+                         :   19 : nlkr         : 2.950e-02
+                         :   20 : nhitszt2     : 2.949e-02
+                         :   21 : zip1         : 2.945e-02
+                         :   22 : nhitsxyt1    : 2.935e-02
+                         :   23 : vrtnip       : 2.752e-02
+                         :   24 : chi2t1       : 2.741e-02
+                         :   25 : zip2         : 2.725e-02
+                         :   26 : ncls         : 2.701e-02
+                         :   27 : chi2t2       : 2.500e-02
+                         :   28 : vrtntrk      : 2.441e-02
+                         :   29 : ncsi         : 2.313e-02
+                         :   30 : munhits      : 0.000e+00
+                         :   31 : mulayerhits1 : 0.000e+00
+                         :   32 : mulayerhits2 : 0.000e+00
+                         :   33 : mulayerhits3 : 0.000e+00
+                         : ----------------------------------------------
+Factory                  : === Destroy and recreate all methods via weight files for testing ===
+                         : 
+                         : Reading weight file: [0;36mdataset/weights/TMVAMulticlass_BDTG.weights.xml[0m
+Factory                  : [1mTest all methods[0m
+Factory                  : Test method: BDTG for Multiclass classification performance
+                         : 
+                         : Dataset[dataset] : Create results for testing
+                         : Dataset[dataset] : Multiclass evaluation of BDTG on testing sample
+0%, time left: unknown
+6%, time left: 41 sec
+12%, time left: 38 sec
+18%, time left: 36 sec
+25%, time left: 34 sec
+31%, time left: 31 sec
+37%, time left: 28 sec
+43%, time left: 25 sec
+50%, time left: 22 sec
+56%, time left: 19 sec
+62%, time left: 17 sec
+68%, time left: 14 sec
+75%, time left: 11 sec
+81%, time left: 8 sec
+87%, time left: 5 sec
+93%, time left: 2 sec
+                         : Dataset[dataset] : Elapsed time for evaluation of 23148 events: 46 sec       
+                         : Creating multiclass response histograms...
+                         : Creating multiclass performance histograms...
+Factory                  : [1mEvaluate all methods[0m
+                         : Evaluate multiclass classification method: BDTG
+                         : Creating multiclass response histograms...
+                         : Creating multiclass performance histograms...
+                         : Creating multiclass response histograms...
+                         : Creating multiclass performance histograms...
+<WARNING>                : Variable "mulayerhits2" has zero, negative, or NaN RMS^2: 0 ==> set to zero. Please check the variable content
+<WARNING>                : Variable "mulayerhits3" has zero, negative, or NaN RMS^2: 0 ==> set to zero. Please check the variable content
+<WARNING>                : Variable "mulayerhits3" has zero, negative, or NaN RMS^2: 0 ==> set to zero. Please check the variable content
+<WARNING>                : Variable "mulayerhits3" has zero, negative, or NaN RMS^2: 0 ==> set to zero. Please check the variable content
+<WARNING>                : Variable "mulayerhits3" has zero, negative, or NaN RMS^2: 0 ==> set to zero. Please check the variable content
+TFHandler_BDTG           :     Variable            Mean            RMS    [        Min            Max ]
+                         : -------------------------------------------------------------------------------
+                         :           p1:        830.96        162.87   [        397.74        1531.3 ]
+                         :           p2:        829.90        156.68   [        383.41        1516.0 ]
+                         :          pt1:        731.28        176.92   [        234.80        1499.9 ]
+                         :          pt2:        729.09        171.86   [        210.19        1508.4 ]
+                         :      vrtntrk:        4.1729        1.0915   [        3.0000        12.000 ]
+                         :       vrtnip:        3.4978        1.0981   [        0.0000        9.0000 ]
+                         :      nhitsvd:        26.722        11.225   [        3.0000        130.00 ]
+                         :      nhitst1:        42.148        6.1920   [        24.000        57.000 ]
+                         :      nhitst2:        42.203        6.1772   [        24.000        57.000 ]
+                         :    nhitsxyt1:        23.858        3.7938   [        8.0000        33.000 ]
+                         :    nhitsxyt2:        23.834        3.8057   [        7.0000        33.000 ]
+                         :     nhitszt1:        18.290        3.4171   [        4.0000        24.000 ]
+                         :     nhitszt2:        18.369        3.4251   [        4.0000        24.000 ]
+                         :         ncls:        6.7145        1.9079   [        0.0000        17.000 ]
+                         :         nlkr:        5.6773        1.7812   [        0.0000        14.000 ]
+                         :         ncsi:        1.0042        1.1257   [        0.0000        7.0000 ]
+                         :    emcenergy:        1797.0        483.29   [        0.0000        4032.6 ]
+                         :    lkrenergy:        1602.6        564.13   [        0.0000        4032.6 ]
+                         :    csienergy:        194.30        318.22   [        0.0000        2205.2 ]
+                         :      munhits:      0.083593       0.48537   [        0.0000        13.000 ]
+                         : mulayerhits1:      0.083420       0.48486   [        0.0000        13.000 ]
+                         : mulayerhits2:    0.00017280      0.013144   [        0.0000        1.0000 ]
+                         : mulayerhits3:        0.0000        0.0000   [        0.0000        0.0000 ]
+                         :      thetat1:        89.855        28.692   [        24.062        154.74 ]
+                         :      thetat2:        89.785        28.843   [        23.900        155.94 ]
+                         :        phit1:        179.33        104.04   [      0.022366        359.98 ]
+                         :        phit2:        180.05        103.06   [     0.0037234        359.99 ]
+                         :       chi2t1:        19.750        16.609   [       0.35343        302.58 ]
+                         :       chi2t2:        18.335        14.771   [       0.30246        306.38 ]
+                         :          rr1:      0.036631      0.025799   [    4.9302e-06      0.099994 ]
+                         :          rr2:      0.035265      0.025114   [    5.5003e-07      0.099985 ]
+                         :         zip1:     -0.023877        2.6099   [       -11.997        11.938 ]
+                         :         zip2:     -0.022268        2.5458   [       -11.949        11.980 ]
+                         : -------------------------------------------------------------------------------
+                         : [32m
+                         : <PlotVariables> Will not produce scatter plots ==> 
+                         : |  The number of 33 input variables and 0 target values would require 528 two-dimensional
+                         : |  histograms, which would occupy the computer's memory. Note that this
+                         : |  suppression does not have any consequences for your analysis, other
+                         : |  than not disposing of these scatter plots. You can modify the maximum
+                         : |  number of input variables allowed to generate scatter plots in your
+                         : |  script via the command line:
+                         : |  "(TMVA::gConfig().GetVariablePlotting()).fMaxNumOfAllowedVariablesForScatterPlots = <some int>;"[0m
+                         : 
+                         : Some more output
+                         : 
+                         : 1-vs-rest performance metrics per class
+                         : -------------------------------------------------------------------------------------------------------
+                         : 
+                         : Considers the listed class as signal and the other classes
+                         : as background, reporting the resulting binary performance.
+                         : A score of 0.820 (0.850) means 0.820 was acheived on the
+                         : test set and 0.850 on the training set.
+                         : 
+                         : Dataset        MVA Method     ROC AUC        Sig eff@B=0.01 Sig eff@B=0.10 Sig eff@B=0.30 
+                         : Name:          / Class:       test  (train)  test  (train)  test  (train)  test  (train)  
+                         : 
+                         : dataset        BDTG           
+                         : ------------------------------
+                         :                Signal         0.992 (0.998)  0.846 (0.962)  0.986 (0.998)  0.998 (1.000)  
+                         :                bg1            0.899 (0.928)  0.368 (0.407)  0.692 (0.766)  0.881 (0.936)  
+                         :                bg2            0.915 (0.930)  0.147 (0.232)  0.692 (0.762)  0.963 (0.972)  
+                         : 
+                         : -------------------------------------------------------------------------------------------------------
+                         : 
+                         : 
+                         : Confusion matrices for all methods
+                         : -------------------------------------------------------------------------------------------------------
+                         : 
+                         : Does a binary comparison between the two classes given by a 
+                         : particular row-column combination. In each case, the class 
+                         : given by the row is considered signal while the class given 
+                         : by the column index is considered background.
+                         : 
+                         : === Showing confusion matrix for method : BDTG           
+                         : (Signal Efficiency for Background Efficiency 0.01%)
+                         : ---------------------------------------------------
+                         :                 Signal         bg1            bg2           
+                         :                  test (train)   test (train)   test (train) 
+                         :  Signal         -              0.949 (0.804)  0.978 (0.903) 
+                         :  bg1            0.782 (0.533)  -              0.319 (0.306) 
+                         :  bg2            0.904 (0.749)  0.140 (0.079)  -             
+                         : 
+                         : (Signal Efficiency for Background Efficiency 0.10%)
+                         : ---------------------------------------------------
+                         :                 Signal         bg1            bg2           
+                         :                  test (train)   test (train)   test (train) 
+                         :  Signal         -              0.997 (0.980)  0.999 (0.990) 
+                         :  bg1            0.991 (0.934)  -              0.657 (0.607) 
+                         :  bg2            0.990 (0.984)  0.564 (0.485)  -             
+                         : 
+                         : (Signal Efficiency for Background Efficiency 0.30%)
+                         : ---------------------------------------------------
+                         :                 Signal         bg1            bg2           
+                         :                  test (train)   test (train)   test (train) 
+                         :  Signal         -              1.000 (0.997)  1.000 (0.999) 
+                         :  bg1            0.999 (0.995)  -              0.827 (0.777) 
+                         :  bg2            1.000 (0.999)  0.874 (0.846)  -             
+                         : 
+                         : -------------------------------------------------------------------------------------------------------
+                         : 
+Dataset:dataset          : Created tree 'TestTree' with 23148 events
+                         : 
+Dataset:dataset          : Created tree 'TrainTree' with 23148 events
+                         : 
+Factory                  : [1mThank you for using TMVA![0m
+                         : [1mFor citation information, please visit: http://tmva.sf.net/citeTMVA.html[0m
+==> Wrote root file: TMVAMulticlass.root
+==> TMVAMulticlass is done!
+Job finished\n
