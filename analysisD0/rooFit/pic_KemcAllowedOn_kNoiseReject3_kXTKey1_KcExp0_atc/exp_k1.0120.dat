@@ -1,0 +1,857 @@
+
+Processing fit_unbin_exp.C...
+
+[1mRooFit v3.60 -- Developed by Wouter Verkerke and David Kirkby[0m 
+                Copyright (C) 2000-2013 NIKHEF, University of California & Stanford University
+                All rights reserved, please read http://roofit.sourceforge.net/license.txt
+
+Reading file /home/ovtin/development/Dmeson/analysisD0/rooFit/par/init/exp_init.par
+par(0)=1865.370000 +- 0.250000
+par(1)=-1.900000 +- 1.000000
+par(2)=1000.000000 +- 10.000000
+par(3)=500.000000 +- 1.000000
+par(4)=350.000000 +- 0.000000
+Reading file /home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc/sig_ATC_S1.0_A6.0_Z0.0.par
+par(0)=1864.458187 +- 0.587978
+par(1)=1.186449 +- 0.280045
+par(2)=0.000436 +- 0.420735
+par(3)=0.784178 +- 0.015884
+par(4)=2.950614 +- 0.024881
+par(5)=62.234624 +- 0.109129
+par(6)=1888.750000 +- 0.000000
+par(7)=7.885127 +- 0.183476
+par(8)=23.380229 +- 0.030752
+par(9)=1.927472 +- 0.000013
+par(10)=0.248109 +- 0.210362
+par(11)=8.830507 +- 0.000011
+par(12)=134.377820 +- 24.525669
+par(13)=-0.004385 +- 0.000000
+par(14)=-0.002134 +- 0.022749
+par(15)=53.172629 +- 0.111759
+par(16)=15.621349 +- 0.385031
+par(17)=1.018277 +- 0.910994
+par(18)=1888.750000 +- 0.000000
+par(19)=-0.922126 +- 2.492539
+par(20)=-8.268351 +- 7.091692
+par(21)=63.557904 +- 19.765834
+par(22)=148.377055 +- 4.117186
+par(23)=1874.233370 +- 0.105807
+par(24)=4.137247 +- 0.086930
+par(25)=3.149512 +- 3.908603
+par(26)=-33.407443 +- 9.133416
+par(27)=64.725594 +- 26.458141
+par(28)=0.000000 +- 0.000000
+par(29)=0.000000 +- 0.000000
+RooSigPdf::sig_model[ mbc=mbc de=de dp=dp mbc_mean=sig_mbc_mean de_mean=sig_de_mean mbcde_corr=sig_mbcde_corr mbc_sigma0_l=sig_mbc_sigma0_l mbc_sigma0_r=sig_mbc_sigma0_r de_sigma=sig_de_sigma ebeam=sig_ebeam bck=sig_bck mbc_sigma2=sig_mbc_sigma2 mbcw_shift=sig_mbcw_shift mbcw_frac=sig_mbcw_frac mbcw_sigma=sig_mbcw_sigma dew_sigma=sig_dew_sigma mbcdew_corr=sig_mbcdew_corr dpcurv=sig_dpcurv mbc_sigma4=sig_mbc_sigma4 dbck_alpha_mbc=sig_dbck_alpha_mbc dbck_alpha_de=sig_dbck_alpha_de dbck_ebeam=sig_dbck_ebeam dbck_dpcurv=sig_dbck_dpcurv dbck_de_mean=sig_dbck_de_mean dbck_de_width=sig_dbck_de_width dbck_de_frac=sig_dbck_de_frac dbck_mbc_mean=sig_dbck_mbc_mean dbck_mbc_sigma0=sig_dbck_mbc_sigma0 dbck_mbc_sigma1=sig_dbck_mbc_sigma1 dbck_de_mean1=sig_dbck_de_mean1 dbck_de_width1=sig_dbck_de_width1 dbck_de_frac1=sig_dbck_de_frac1 dbck_de_frac2=sig_dbck_de_frac2 ] = 1.88027e-05
+Reading file /home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc/dbck_sim_ATC_S1.0_A6.0_Z0.0.par
+par(0)=17.117251 +- 0.000037
+par(1)=10.249113 +- 0.000050
+par(2)=1888.750000 +- 0.000000
+par(3)=3.591799 +- 0.000012
+par(4)=-188.105204 +- 0.000173
+par(5)=68.855518 +- 0.000093
+par(6)=-12.497629 +- 0.000733
+par(7)=1864.590389 +- 0.192230
+par(8)=17.989411 +- 0.001823
+par(9)=-13.459485 +- 0.000022
+par(10)=271.840983 +- 0.000384
+par(11)=79.668217 +- 0.000099
+par(12)=-0.030581 +- 0.000007
+par(13)=8.001484 +- 0.000025
+par(14)=11.505487 +- 0.000033
+par(15)=-42.669089 +- 0.000092
+RoodbckPdf::dbck_model[ mbc=mbc ebeam=dbck_ebeam alpha_mbc=dbck_alpha_mbc alpha_de=dbck_alpha_de de=de dpcurv=dbck_dpcurv dp=dp de_mean=dbck_de_mean de_width=dbck_de_width de_frac=dbck_de_frac mbc_mean=dbck_mbc_mean mbc_sigma0=dbck_mbc_sigma0 mbc_sigma1=dbck_mbc_sigma1 de_mean1=dbck_de_mean1 de_width1=dbck_de_width1 de_frac1=dbck_de_frac1 de_frac2=dbck_de_frac2 mbc_shift=dbck_mbc_shift mbc_sigma2=dbck_mbc_sigma2 ] = 0.219119
+Reading file /home/ovtin/development/Dmeson/analysisD0/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc/bck_uds_ATC_S1.0_A6.0_Z0.0.par
+par(0)=8.511603 +- 0.087599
+par(1)=1.061799 +- 0.001859
+par(2)=1888.750000 +- 0.000000
+par(3)=0.039169 +- 0.000767
+RooudsPdf::uds_model[ mbc=mbc ebeam=uds_ebeam alpha_mbc=uds_alpha_mbc alpha_de=uds_alpha_de de=de dpcurv=uds_dpcurv dp=dp ] = 0.457899
+ndata=1521
+[#1] INFO:Minization -- p.d.f. provides expected number of events, including extended term in likelihood.
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(uds_model_Int[de,dp,mbc]) using numeric integrator RooAdaptiveIntegratorND to calculate Int(mbc,de,dp)
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(dbck_model_Int[de,dp,mbc]) using numeric integrator RooAdaptiveIntegratorND to calculate Int(mbc,de,dp)
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(sig_model_Int[de,dp,mbc]) using numeric integrator RooAdaptiveIntegratorND to calculate Int(mbc,de,dp)
+[#1] INFO:Minization -- RooMinimizer::optimizeConst: activating const optimization
+[#1] INFO:Minization --  The following expressions will be evaluated in cache-and-track mode: (uds_model,dbck_model,sig_model)
+[#1] INFO:Minization -- RooMinimizerFcn::synchronize: set of constant parameters changed, rerunning const optimizer
+[#1] INFO:Minization --  The following expressions will be evaluated in cache-and-track mode: (uds_model,dbck_model,sig_model)
+ **********
+ **    1 **SET PRINT           1
+ **********
+ **********
+ **    2 **SET NOGRAD
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+     1 Bck          1.00000e+03  5.00000e+02    0.00000e+00  3.00000e+04
+     2 DBck         5.00000e+02  2.50000e+02    0.00000e+00  1.00000e+04
+     3 Sig          3.50000e+02  1.00000e+02    0.00000e+00  1.00000e+03
+     4 dbck_alpha_de   1.02491e+01  1.02491e+00     no limits
+ **********
+ **    3 **FIX           4
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+     5 dbck_alpha_mbc   1.71173e+01  1.71173e+00     no limits
+ **********
+ **    4 **FIX           5
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+     6 dbck_de_frac  -1.24976e+01  1.24976e+00     no limits
+ **********
+ **    5 **FIX           6
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+     7 dbck_de_frac1  -3.05810e-02  3.05810e-03     no limits
+ **********
+ **    6 **FIX           7
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+     8 dbck_de_frac2   8.00148e+00  8.00148e-01     no limits
+ **********
+ **    7 **FIX           8
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+     9 dbck_de_mean  -1.88105e+02  1.88105e+01     no limits
+ **********
+ **    8 **FIX           9
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    10 dbck_de_mean1   2.71841e+02  2.71841e+01     no limits
+ **********
+ **    9 **FIX          10
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    11 dbck_de_width   6.88555e+01  6.88555e+00     no limits
+ **********
+ **   10 **FIX          11
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    12 dbck_de_width1   7.96682e+01  7.96682e+00     no limits
+ **********
+ **   11 **FIX          12
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    13 dbck_dpcurv   3.59180e+00  3.59180e-01     no limits
+ **********
+ **   12 **FIX          13
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    14 dbck_ebeam   1.88875e+03  1.88875e+02     no limits
+ **********
+ **   13 **FIX          14
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    15 dbck_mbc_mean   1.86459e+03  1.86459e+02     no limits
+ **********
+ **   14 **FIX          15
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    16 dbck_mbc_shift   1.15055e+01  1.15055e+00     no limits
+ **********
+ **   15 **FIX          16
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    17 dbck_mbc_sigma0   1.79894e+01  1.79894e+00     no limits
+ **********
+ **   16 **FIX          17
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    18 dbck_mbc_sigma1  -1.34595e+01  1.34595e+00     no limits
+ **********
+ **   17 **FIX          18
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    19 dbck_mbc_sigma2  -4.26691e+01  4.26691e+00     no limits
+ **********
+ **   18 **FIX          19
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    20 sig_bck      7.88513e+00  7.88513e-01     no limits
+ **********
+ **   19 **FIX          20
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    21 sig_dbck_alpha_de   1.01828e+00  1.01828e-01     no limits
+ **********
+ **   20 **FIX          21
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    22 sig_dbck_alpha_mbc   1.56213e+01  1.56213e+00     no limits
+ **********
+ **   21 **FIX          22
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    23 sig_dbck_de_frac   1.48377e+02  1.48377e+01     no limits
+ **********
+ **   22 **FIX          23
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    24 sig_dbck_de_frac1   0.00000e+00  constant
+    25 sig_dbck_de_frac2   0.00000e+00  constant
+    26 sig_dbck_de_mean  -8.26835e+00  8.26835e-01     no limits
+ **********
+ **   23 **FIX          26
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    27 sig_dbck_de_mean1  -3.34074e+01  3.34074e+00     no limits
+ **********
+ **   24 **FIX          27
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    28 sig_dbck_de_width   6.35579e+01  6.35579e+00     no limits
+ **********
+ **   25 **FIX          28
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    29 sig_dbck_de_width1   6.47256e+01  6.47256e+00     no limits
+ **********
+ **   26 **FIX          29
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    30 sig_dbck_dpcurv  -9.22126e-01  9.22126e-02     no limits
+ **********
+ **   27 **FIX          30
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    31 sig_dbck_ebeam   1.88875e+03  1.88875e+02     no limits
+ **********
+ **   28 **FIX          31
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    32 sig_dbck_mbc_mean   1.87423e+03  1.87423e+02     no limits
+ **********
+ **   29 **FIX          32
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    33 sig_dbck_mbc_sigma0   4.13725e+00  4.13725e-01     no limits
+ **********
+ **   30 **FIX          33
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    34 sig_dbck_mbc_sigma1   3.14951e+00  3.14951e-01     no limits
+ **********
+ **   31 **FIX          34
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    35 sig_de_mean  -1.90000e+00  2.00000e+00   -1.00000e+01  1.00000e+01
+    36 sig_de_sigma   6.22346e+01  6.22346e+00     no limits
+ **********
+ **   32 **FIX          36
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    37 sig_dew_sigma   1.34378e+02  1.34378e+01     no limits
+ **********
+ **   33 **FIX          37
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    38 sig_dpcurv  -2.13400e-03  2.13400e-04     no limits
+ **********
+ **   34 **FIX          38
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    39 sig_ebeam    1.88875e+03  1.88875e+02     no limits
+ **********
+ **   35 **FIX          39
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    40 sig_mbc_mean   1.86537e+03  2.00000e+00    1.85537e+03  1.87537e+03
+    41 sig_mbc_sigma0_l   7.84178e-01  7.84178e-02     no limits
+ **********
+ **   36 **FIX          41
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    42 sig_mbc_sigma0_r   2.95061e+00  2.95061e-01     no limits
+ **********
+ **   37 **FIX          42
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    43 sig_mbc_sigma2   2.33802e+01  2.33802e+00     no limits
+ **********
+ **   38 **FIX          43
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    44 sig_mbc_sigma4   5.31726e+01  5.31726e+00     no limits
+ **********
+ **   39 **FIX          44
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    45 sig_mbcde_corr   4.36000e-04  4.36000e-05     no limits
+ **********
+ **   40 **FIX          45
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    46 sig_mbcdew_corr  -4.38500e-03  4.38500e-04     no limits
+ **********
+ **   41 **FIX          46
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    47 sig_mbcw_frac   2.48109e-01  2.48109e-02     no limits
+ **********
+ **   42 **FIX          47
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    48 sig_mbcw_shift   1.92747e+00  1.92747e-01     no limits
+ **********
+ **   43 **FIX          48
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    49 sig_mbcw_sigma   8.83051e+00  8.83051e-01     no limits
+ **********
+ **   44 **FIX          49
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    50 uds_alpha_de   1.06180e+00  1.06180e-01     no limits
+ **********
+ **   45 **FIX          50
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    51 uds_alpha_mbc   8.51160e+00  8.51160e-01     no limits
+ **********
+ **   46 **FIX          51
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    52 uds_dpcurv   3.91690e-02  3.91690e-03     no limits
+ **********
+ **   47 **FIX          52
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    53 uds_ebeam    1.88875e+03  1.88875e+02     no limits
+ **********
+ **   48 **FIX          53
+ **********
+ **********
+ **   49 **SET ERR         0.5
+ **********
+ **********
+ **   50 **SET PRINT           1
+ **********
+ **********
+ **   51 **SET STR           1
+ **********
+ NOW USING STRATEGY  1: TRY TO BALANCE SPEED AGAINST RELIABILITY
+ **********
+ **   52 **MIGRAD    2.65e+04           1
+ **********
+ FIRST CALL TO USER FUNCTION AT NEW START POINT, WITH IFLAG=4.
+ START MIGRAD MINIMIZATION.  STRATEGY  1.  CONVERGENCE WHEN EDM .LT. 1.00e-03
+ FCN=18063.6 FROM MIGRAD    STATUS=INITIATE       20 CALLS          21 TOTAL
+                     EDM= unknown      STRATEGY= 1      NO ERROR MATRIX       
+  EXT PARAMETER               CURRENT GUESS       STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Bck          1.00000e+03   5.00000e+02   9.60526e-02   7.87383e+02
+   2  DBck         5.00000e+02   2.50000e+02   1.18625e-01   2.78346e+02
+   3  Sig          3.50000e+02   1.00000e+02   2.11716e-01   1.62071e+02
+   4  dbck_alpha_de   1.02491e+01     fixed    
+   5  dbck_alpha_mbc   1.71173e+01     fixed    
+   6  dbck_de_frac  -1.24976e+01     fixed    
+   7  dbck_de_frac1  -3.05810e-02     fixed    
+   8  dbck_de_frac2   8.00148e+00     fixed    
+   9  dbck_de_mean  -1.88105e+02     fixed    
+  10  dbck_de_mean1   2.71841e+02     fixed    
+  11  dbck_de_width   6.88555e+01     fixed    
+  12  dbck_de_width1   7.96682e+01     fixed    
+  13  dbck_dpcurv   3.59180e+00     fixed    
+  14  dbck_ebeam   1.88875e+03     fixed    
+  15  dbck_mbc_mean   1.86459e+03     fixed    
+  16  dbck_mbc_shift   1.15055e+01     fixed    
+  17  dbck_mbc_sigma0   1.79894e+01     fixed    
+  18  dbck_mbc_sigma1  -1.34595e+01     fixed    
+  19  dbck_mbc_sigma2  -4.26691e+01     fixed    
+  20  sig_bck      7.88513e+00     fixed    
+  21  sig_dbck_alpha_de   1.01828e+00     fixed    
+  22  sig_dbck_alpha_mbc   1.56213e+01     fixed    
+  23  sig_dbck_de_frac   1.48377e+02     fixed    
+  24  sig_dbck_de_frac1   0.00000e+00   constant   
+  25  sig_dbck_de_frac2   0.00000e+00   constant   
+  26  sig_dbck_de_mean  -8.26835e+00     fixed    
+  27  sig_dbck_de_mean1  -3.34074e+01     fixed    
+  28  sig_dbck_de_width   6.35579e+01     fixed    
+  29  sig_dbck_de_width1   6.47256e+01     fixed    
+  30  sig_dbck_dpcurv  -9.22126e-01     fixed    
+  31  sig_dbck_ebeam   1.88875e+03     fixed    
+  32  sig_dbck_mbc_mean   1.87423e+03     fixed    
+  33  sig_dbck_mbc_sigma0   4.13725e+00     fixed    
+  34  sig_dbck_mbc_sigma1   3.14951e+00     fixed    
+  35  sig_de_mean  -1.90000e+00   2.00000e+00   2.05316e-01   1.96068e-01
+  36  sig_de_sigma   6.22346e+01     fixed    
+  37  sig_dew_sigma   1.34378e+02     fixed    
+  38  sig_dpcurv  -2.13400e-03     fixed    
+  39  sig_ebeam    1.88875e+03     fixed    
+  40  sig_mbc_mean   1.86537e+03   2.00000e+00   2.01358e-01   1.44076e+02
+  41  sig_mbc_sigma0_l   7.84178e-01     fixed    
+  42  sig_mbc_sigma0_r   2.95061e+00     fixed    
+  43  sig_mbc_sigma2   2.33802e+01     fixed    
+  44  sig_mbc_sigma4   5.31726e+01     fixed    
+  45  sig_mbcde_corr   4.36000e-04     fixed    
+  46  sig_mbcdew_corr  -4.38500e-03     fixed    
+  47  sig_mbcw_frac   2.48109e-01     fixed    
+  48  sig_mbcw_shift   1.92747e+00     fixed    
+  49  sig_mbcw_sigma   8.83051e+00     fixed    
+  50  uds_alpha_de   1.06180e+00     fixed    
+  51  uds_alpha_mbc   8.51160e+00     fixed    
+  52  uds_dpcurv   3.91690e-02     fixed    
+  53  uds_ebeam    1.88875e+03     fixed    
+                               ERR DEF= 0.5
+RooMinimizerFcn: Minimized function has error status.
+Returning maximum FCN so far (18068.9) to force MIGRAD to back out of this region. Error log follows.
+Parameter values: 	Bck=854.34	DBck=452.209	Sig=213.339	dbck_alpha_de=10.2491	dbck_alpha_mbc=17.1173	dbck_de_frac=-12.4976	dbck_de_frac1=-0.030581	dbck_de_frac2=8.00148	dbck_de_mean=-188.105	dbck_de_mean1=271.841	dbck_de_width=68.8555	dbck_de_width1=79.6682	dbck_dpcurv=3.5918	dbck_ebeam=1888.75	dbck_mbc_mean=1864.59	dbck_mbc_shift=11.5055	dbck_mbc_sigma0=17.9894	dbck_mbc_sigma1=-13.4595	dbck_mbc_sigma2=-42.6691	sig_bck=7.88513	sig_dbck_alpha_de=1.01828	sig_dbck_alpha_mbc=15.6213	sig_dbck_de_frac=148.377	sig_dbck_de_frac1=0	sig_dbck_de_frac2=0	sig_dbck_de_mean=-8.26835	sig_dbck_de_mean1=-33.4074	sig_dbck_de_width=63.5579	sig_dbck_de_width1=64.7256	sig_dbck_dpcurv=-0.922126	sig_dbck_ebeam=1888.75	sig_dbck_mbc_mean=1874.23	sig_dbck_mbc_sigma0=4.13725	sig_dbck_mbc_sigma1=3.14951	sig_de_mean=-1.40749	sig_de_sigma=62.2346	sig_dew_sigma=134.378	sig_dpcurv=-0.002134	sig_ebeam=1888.75	sig_mbc_mean=1864.55	sig_mbc_sigma0_l=0.784178	sig_mbc_sigma0_r=2.95061	sig_mbc_sigma2=23.3802	sig_mbc_sigma4=53.1726	sig_mbcde_corr=0.000436	sig_mbcdew_corr=-0.004385	sig_mbcw_frac=0.248109	sig_mbcw_shift=1.92747	sig_mbcw_sigma=8.83051	uds_alpha_de=1.0618	uds_alpha_mbc=8.5116	uds_dpcurv=0.039169	uds_ebeam=1888.75
+RooNLLVar::nll_exp_model_data[ paramSet=(Bck,DBck,Sig,dbck_alpha_de,dbck_alpha_mbc,dbck_de_frac,dbck_de_frac1,dbck_de_frac2,dbck_de_mean,dbck_de_mean1,dbck_de_width,dbck_de_width1,dbck_dpcurv,dbck_ebeam,dbck_mbc_mean,dbck_mbc_shift,dbck_mbc_sigma0,dbck_mbc_sigma1,dbck_mbc_sigma2,sig_bck,sig_dbck_alpha_de,sig_dbck_alpha_mbc,sig_dbck_de_frac,sig_dbck_de_frac1,sig_dbck_de_frac2,sig_dbck_de_mean,sig_dbck_de_mean1,sig_dbck_de_width,sig_dbck_de_width1,sig_dbck_dpcurv,sig_dbck_ebeam,sig_dbck_mbc_mean,sig_dbck_mbc_sigma0,sig_dbck_mbc_sigma1,sig_de_mean,sig_de_sigma,sig_dew_sigma,sig_dpcurv,sig_ebeam,sig_mbc_mean,sig_mbc_sigma0_l,sig_mbc_sigma0_r,sig_mbc_sigma2,sig_mbc_sigma4,sig_mbcde_corr,sig_mbcdew_corr,sig_mbcw_frac,sig_mbcw_shift,sig_mbcw_sigma,uds_alpha_de,uds_alpha_mbc,uds_dpcurv,uds_ebeam) ]
+     function value is NAN @ paramSet=(Bck = 854.34,DBck = 452.209,Sig = 213.339,dbck_alpha_de = 10.2491,dbck_alpha_mbc = 17.1173,dbck_de_frac = -12.4976,dbck_de_frac1 = -0.030581,dbck_de_frac2 = 8.00148,dbck_de_mean = -188.105,dbck_de_mean1 = 271.841,dbck_de_width = 68.8555,dbck_de_width1 = 79.6682,dbck_dpcurv = 3.5918,dbck_ebeam = 1888.75,dbck_mbc_mean = 1864.59,dbck_mbc_shift = 11.5055,dbck_mbc_sigma0 = 17.9894,dbck_mbc_sigma1 = -13.4595,dbck_mbc_sigma2 = -42.6691,sig_bck = 7.88513,sig_dbck_alpha_de = 1.01828,sig_dbck_alpha_mbc = 15.6213,sig_dbck_de_frac = 148.377,sig_dbck_de_frac1 = 0,sig_dbck_de_frac2 = 0,sig_dbck_de_mean = -8.26835,sig_dbck_de_mean1 = -33.4074,sig_dbck_de_width = 63.5579,sig_dbck_de_width1 = 64.7256,sig_dbck_dpcurv = -0.922126,sig_dbck_ebeam = 1888.75,sig_dbck_mbc_mean = 1874.23,sig_dbck_mbc_sigma0 = 4.13725,sig_dbck_mbc_sigma1 = 3.14951,sig_de_mean = -1.40749,sig_de_sigma = 62.2346,sig_dew_sigma = 134.378,sig_dpcurv = -0.002134,sig_ebeam = 1888.75,sig_mbc_mean = 1864.55,sig_mbc_sigma0_l = 0.784178,sig_mbc_sigma0_r = 2.95061,sig_mbc_sigma2 = 23.3802,sig_mbc_sigma4 = 53.1726,sig_mbcde_corr = 0.000436,sig_mbcdew_corr = -0.004385,sig_mbcw_frac = 0.248109,sig_mbcw_shift = 1.92747,sig_mbcw_sigma = 8.83051,uds_alpha_de = 1.0618,uds_alpha_mbc = 8.5116,uds_dpcurv = 0.039169,uds_ebeam = 1888.75)
+RooAddPdf::exp_model[ Bck * uds_model + DBck * dbck_model + Sig * sig_model ]
+     p.d.f value is Not-a-Number @ !refCoefNorm=(), !pdfs=(uds_model = 1.14208/7.52998e+07,dbck_model = 13.8383/2.64768e+08,sig_model = 0.0153258/0), !coefficients=(Bck = 854.34,DBck = 452.209,Sig = 213.339)
+     getLogVal() top-level p.d.f evaluates to NaN @ !refCoefNorm=(), !pdfs=(uds_model = 1.14208/7.52998e+07,dbck_model = 13.8383/2.64768e+08,sig_model = 0.0153258/0), !coefficients=(Bck = 854.34,DBck = 452.209,Sig = 213.339)
+     p.d.f value is Not-a-Number @ !refCoefNorm=(), !pdfs=(uds_model = 0.869859/7.52998e+07,dbck_model = 5.63978/2.64768e+08,sig_model = 0.0252795/0), !coefficients=(Bck = 854.34,DBck = 452.209,Sig = 213.339)
+     getLogVal() top-level p.d.f evaluates to NaN @ !refCoefNorm=(), !pdfs=(uds_model = 0.869859/7.52998e+07,dbck_model = 5.63978/2.64768e+08,sig_model = 0.0252795/0), !coefficients=(Bck = 854.34,DBck = 452.209,Sig = 213.339)
+     p.d.f value is Not-a-Number @ !refCoefNorm=(), !pdfs=(uds_model = 0.429923/7.52998e+07,dbck_model = 0.069056/2.64768e+08,sig_model = 1.718e-05/0), !coefficients=(Bck = 854.34,DBck = 452.209,Sig = 213.339)
+     getLogVal() top-level p.d.f evaluates to NaN @ !refCoefNorm=(), !pdfs=(uds_model = 0.429923/7.52998e+07,dbck_model = 0.069056/2.64768e+08,sig_model = 1.718e-05/0), !coefficients=(Bck = 854.34,DBck = 452.209,Sig = 213.339)
+     p.d.f value is Not-a-Number @ !refCoefNorm=(), !pdfs=(uds_model = 0.890005/7.52998e+07,dbck_model = 3.26993/2.64768e+08,sig_model = 7.64547e-06/0), !coefficients=(Bck = 854.34,DBck = 452.209,Sig = 213.339)
+     getLogVal() top-level p.d.f evaluates to NaN @ !refCoefNorm=(), !pdfs=(uds_model = 0.890005/7.52998e+07,dbck_model = 3.26993/2.64768e+08,sig_model = 7.64547e-06/0), !coefficients=(Bck = 854.34,DBck = 452.209,Sig = 213.339)
+     p.d.f value is Not-a-Number @ !refCoefNorm=(), !pdfs=(uds_model = 1.06312/7.52998e+07,dbck_model = 23.3181/2.64768e+08,sig_model = 0.00210221/0), !coefficients=(Bck = 854.34,DBck = 452.209,Sig = 213.339)
+     getLogVal() top-level p.d.f evaluates to NaN @ !refCoefNorm=(), !pdfs=(uds_model = 1.06312/7.52998e+07,dbck_model = 23.3181/2.64768e+08,sig_model = 0.00210221/0), !coefficients=(Bck = 854.34,DBck = 452.209,Sig = 213.339)
+     p.d.f value is Not-a-Number @ !refCoefNorm=(), !pdfs=(uds_model = 0.853819/7.52998e+07,dbck_model = 0.879544/2.64768e+08,sig_model = 0.0404979/0), !coefficients=(Bck = 854.34,DBck = 452.209,Sig = 213.339)
+     getLogVal() top-level p.d.f evaluates to NaN @ !refCoefNorm=(), !pdfs=(uds_model = 0.853819/7.52998e+07,dbck_model = 0.879544/2.64768e+08,sig_model = 0.0404979/0), !coefficients=(Bck = 854.34,DBck = 452.209,Sig = 213.339)
+    ... (remaining 2038 messages suppressed)
+RooSigPdf::sig_model[ mbc=mbc de=de dp=dp mbc_mean=sig_mbc_mean de_mean=sig_de_mean mbcde_corr=sig_mbcde_corr mbc_sigma0_l=sig_mbc_sigma0_l mbc_sigma0_r=sig_mbc_sigma0_r de_sigma=sig_de_sigma ebeam=sig_ebeam bck=sig_bck mbc_sigma2=sig_mbc_sigma2 mbcw_shift=sig_mbcw_shift mbcw_frac=sig_mbcw_frac mbcw_sigma=sig_mbcw_sigma dew_sigma=sig_dew_sigma mbcdew_corr=sig_mbcdew_corr dpcurv=sig_dpcurv mbc_sigma4=sig_mbc_sigma4 dbck_alpha_mbc=sig_dbck_alpha_mbc dbck_alpha_de=sig_dbck_alpha_de dbck_ebeam=sig_dbck_ebeam dbck_dpcurv=sig_dbck_dpcurv dbck_de_mean=sig_dbck_de_mean dbck_de_width=sig_dbck_de_width dbck_de_frac=sig_dbck_de_frac dbck_mbc_mean=sig_dbck_mbc_mean dbck_mbc_sigma0=sig_dbck_mbc_sigma0 dbck_mbc_sigma1=sig_dbck_mbc_sigma1 dbck_de_mean1=sig_dbck_de_mean1 dbck_de_width1=sig_dbck_de_width1 dbck_de_frac1=sig_dbck_de_frac1 dbck_de_frac2=sig_dbck_de_frac2 ]
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1835.28, de=de=-258.425, dp=dp=-47.8031, mbc_mean=sig_mbc_mean=1864.55, de_mean=sig_de_mean=-1.40749, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1859.96, de=de=-214.72, dp=dp=279.828, mbc_mean=sig_mbc_mean=1864.55, de_mean=sig_de_mean=-1.40749, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1779.79, de=de=28.4762, dp=dp=-299.799, mbc_mean=sig_mbc_mean=1864.55, de_mean=sig_de_mean=-1.40749, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1864.69, de=de=-73.9307, dp=dp=-214.8, mbc_mean=sig_mbc_mean=1864.55, de_mean=sig_de_mean=-1.40749, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1862.86, de=de=-228.585, dp=dp=206.487, mbc_mean=sig_mbc_mean=1864.55, de_mean=sig_de_mean=-1.40749, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1729.16, de=de=-200.36, dp=dp=-281.331, mbc_mean=sig_mbc_mean=1864.55, de_mean=sig_de_mean=-1.40749, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1731.33, de=de=-278.778, dp=dp=-538.469, mbc_mean=sig_mbc_mean=1864.55, de_mean=sig_de_mean=-1.40749, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1864.4, de=de=-7.25547, dp=dp=-32.5923, mbc_mean=sig_mbc_mean=1864.55, de_mean=sig_de_mean=-1.40749, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1803.31, de=de=-224.334, dp=dp=-554.971, mbc_mean=sig_mbc_mean=1864.55, de_mean=sig_de_mean=-1.40749, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1757.91, de=de=-56.4281, dp=dp=-2.78287, mbc_mean=sig_mbc_mean=1864.55, de_mean=sig_de_mean=-1.40749, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1833.05, de=de=-233.933, dp=dp=357.923, mbc_mean=sig_mbc_mean=1864.55, de_mean=sig_de_mean=-1.40749, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1778.27, de=de=-229.026, dp=dp=-371.721, mbc_mean=sig_mbc_mean=1864.55, de_mean=sig_de_mean=-1.40749, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+    ... (remaining 1511 messages suppressed)
+
+RooMinimizerFcn: Minimized function has error status.
+Returning maximum FCN so far (18068.9) to force MIGRAD to back out of this region. Error log follows.
+Parameter values: 	Bck=854.34	DBck=452.209	Sig=213.339	dbck_alpha_de=10.2491	dbck_alpha_mbc=17.1173	dbck_de_frac=-12.4976	dbck_de_frac1=-0.030581	dbck_de_frac2=8.00148	dbck_de_mean=-188.105	dbck_de_mean1=271.841	dbck_de_width=68.8555	dbck_de_width1=79.6682	dbck_dpcurv=3.5918	dbck_ebeam=1888.75	dbck_mbc_mean=1864.59	dbck_mbc_shift=11.5055	dbck_mbc_sigma0=17.9894	dbck_mbc_sigma1=-13.4595	dbck_mbc_sigma2=-42.6691	sig_bck=7.88513	sig_dbck_alpha_de=1.01828	sig_dbck_alpha_mbc=15.6213	sig_dbck_de_frac=148.377	sig_dbck_de_frac1=0	sig_dbck_de_frac2=0	sig_dbck_de_mean=-8.26835	sig_dbck_de_mean1=-33.4074	sig_dbck_de_width=63.5579	sig_dbck_de_width1=64.7256	sig_dbck_dpcurv=-0.922126	sig_dbck_ebeam=1888.75	sig_dbck_mbc_mean=1874.23	sig_dbck_mbc_sigma0=4.13725	sig_dbck_mbc_sigma1=3.14951	sig_de_mean=-1.40749	sig_de_sigma=62.2346	sig_dew_sigma=134.378	sig_dpcurv=-0.002134	sig_ebeam=1888.75	sig_mbc_mean=1864.53	sig_mbc_sigma0_l=0.784178	sig_mbc_sigma0_r=2.95061	sig_mbc_sigma2=23.3802	sig_mbc_sigma4=53.1726	sig_mbcde_corr=0.000436	sig_mbcdew_corr=-0.004385	sig_mbcw_frac=0.248109	sig_mbcw_shift=1.92747	sig_mbcw_sigma=8.83051	uds_alpha_de=1.0618	uds_alpha_mbc=8.5116	uds_dpcurv=0.039169	uds_ebeam=1888.75
+RooNLLVar::nll_exp_model_data[ paramSet=(Bck,DBck,Sig,dbck_alpha_de,dbck_alpha_mbc,dbck_de_frac,dbck_de_frac1,dbck_de_frac2,dbck_de_mean,dbck_de_mean1,dbck_de_width,dbck_de_width1,dbck_dpcurv,dbck_ebeam,dbck_mbc_mean,dbck_mbc_shift,dbck_mbc_sigma0,dbck_mbc_sigma1,dbck_mbc_sigma2,sig_bck,sig_dbck_alpha_de,sig_dbck_alpha_mbc,sig_dbck_de_frac,sig_dbck_de_frac1,sig_dbck_de_frac2,sig_dbck_de_mean,sig_dbck_de_mean1,sig_dbck_de_width,sig_dbck_de_width1,sig_dbck_dpcurv,sig_dbck_ebeam,sig_dbck_mbc_mean,sig_dbck_mbc_sigma0,sig_dbck_mbc_sigma1,sig_de_mean,sig_de_sigma,sig_dew_sigma,sig_dpcurv,sig_ebeam,sig_mbc_mean,sig_mbc_sigma0_l,sig_mbc_sigma0_r,sig_mbc_sigma2,sig_mbc_sigma4,sig_mbcde_corr,sig_mbcdew_corr,sig_mbcw_frac,sig_mbcw_shift,sig_mbcw_sigma,uds_alpha_de,uds_alpha_mbc,uds_dpcurv,uds_ebeam) ]
+     function value is NAN @ paramSet=(Bck = 854.34,DBck = 452.209,Sig = 213.339,dbck_alpha_de = 10.2491,dbck_alpha_mbc = 17.1173,dbck_de_frac = -12.4976,dbck_de_frac1 = -0.030581,dbck_de_frac2 = 8.00148,dbck_de_mean = -188.105,dbck_de_mean1 = 271.841,dbck_de_width = 68.8555,dbck_de_width1 = 79.6682,dbck_dpcurv = 3.5918,dbck_ebeam = 1888.75,dbck_mbc_mean = 1864.59,dbck_mbc_shift = 11.5055,dbck_mbc_sigma0 = 17.9894,dbck_mbc_sigma1 = -13.4595,dbck_mbc_sigma2 = -42.6691,sig_bck = 7.88513,sig_dbck_alpha_de = 1.01828,sig_dbck_alpha_mbc = 15.6213,sig_dbck_de_frac = 148.377,sig_dbck_de_frac1 = 0,sig_dbck_de_frac2 = 0,sig_dbck_de_mean = -8.26835,sig_dbck_de_mean1 = -33.4074,sig_dbck_de_width = 63.5579,sig_dbck_de_width1 = 64.7256,sig_dbck_dpcurv = -0.922126,sig_dbck_ebeam = 1888.75,sig_dbck_mbc_mean = 1874.23,sig_dbck_mbc_sigma0 = 4.13725,sig_dbck_mbc_sigma1 = 3.14951,sig_de_mean = -1.40749,sig_de_sigma = 62.2346,sig_dew_sigma = 134.378,sig_dpcurv = -0.002134,sig_ebeam = 1888.75,sig_mbc_mean = 1864.53,sig_mbc_sigma0_l = 0.784178,sig_mbc_sigma0_r = 2.95061,sig_mbc_sigma2 = 23.3802,sig_mbc_sigma4 = 53.1726,sig_mbcde_corr = 0.000436,sig_mbcdew_corr = -0.004385,sig_mbcw_frac = 0.248109,sig_mbcw_shift = 1.92747,sig_mbcw_sigma = 8.83051,uds_alpha_de = 1.0618,uds_alpha_mbc = 8.5116,uds_dpcurv = 0.039169,uds_ebeam = 1888.75)
+RooAddPdf::exp_model[ Bck * uds_model + DBck * dbck_model + Sig * sig_model ]
+     p.d.f value is Not-a-Number @ !refCoefNorm=(), !pdfs=(uds_model = 1.14208/7.52998e+07,dbck_model = 13.8383/2.64768e+08,sig_model = 0.0153085/0), !coefficients=(Bck = 854.34,DBck = 452.209,Sig = 213.339)
+     getLogVal() top-level p.d.f evaluates to NaN @ !refCoefNorm=(), !pdfs=(uds_model = 1.14208/7.52998e+07,dbck_model = 13.8383/2.64768e+08,sig_model = 0.0153085/0), !coefficients=(Bck = 854.34,DBck = 452.209,Sig = 213.339)
+     p.d.f value is Not-a-Number @ !refCoefNorm=(), !pdfs=(uds_model = 0.869859/7.52998e+07,dbck_model = 5.63978/2.64768e+08,sig_model = 0.0256745/0), !coefficients=(Bck = 854.34,DBck = 452.209,Sig = 213.339)
+     getLogVal() top-level p.d.f evaluates to NaN @ !refCoefNorm=(), !pdfs=(uds_model = 0.869859/7.52998e+07,dbck_model = 5.63978/2.64768e+08,sig_model = 0.0256745/0), !coefficients=(Bck = 854.34,DBck = 452.209,Sig = 213.339)
+     p.d.f value is Not-a-Number @ !refCoefNorm=(), !pdfs=(uds_model = 0.429923/7.52998e+07,dbck_model = 0.069056/2.64768e+08,sig_model = 1.718e-05/0), !coefficients=(Bck = 854.34,DBck = 452.209,Sig = 213.339)
+     getLogVal() top-level p.d.f evaluates to NaN @ !refCoefNorm=(), !pdfs=(uds_model = 0.429923/7.52998e+07,dbck_model = 0.069056/2.64768e+08,sig_model = 1.718e-05/0), !coefficients=(Bck = 854.34,DBck = 452.209,Sig = 213.339)
+     p.d.f value is Not-a-Number @ !refCoefNorm=(), !pdfs=(uds_model = 0.890005/7.52998e+07,dbck_model = 3.26993/2.64768e+08,sig_model = 7.64547e-06/0), !coefficients=(Bck = 854.34,DBck = 452.209,Sig = 213.339)
+     getLogVal() top-level p.d.f evaluates to NaN @ !refCoefNorm=(), !pdfs=(uds_model = 0.890005/7.52998e+07,dbck_model = 3.26993/2.64768e+08,sig_model = 7.64547e-06/0), !coefficients=(Bck = 854.34,DBck = 452.209,Sig = 213.339)
+     p.d.f value is Not-a-Number @ !refCoefNorm=(), !pdfs=(uds_model = 1.06312/7.52998e+07,dbck_model = 23.3181/2.64768e+08,sig_model = 0.00209934/0), !coefficients=(Bck = 854.34,DBck = 452.209,Sig = 213.339)
+     getLogVal() top-level p.d.f evaluates to NaN @ !refCoefNorm=(), !pdfs=(uds_model = 1.06312/7.52998e+07,dbck_model = 23.3181/2.64768e+08,sig_model = 0.00209934/0), !coefficients=(Bck = 854.34,DBck = 452.209,Sig = 213.339)
+     p.d.f value is Not-a-Number @ !refCoefNorm=(), !pdfs=(uds_model = 0.853819/7.52998e+07,dbck_model = 0.879544/2.64768e+08,sig_model = 0.0401493/0), !coefficients=(Bck = 854.34,DBck = 452.209,Sig = 213.339)
+     getLogVal() top-level p.d.f evaluates to NaN @ !refCoefNorm=(), !pdfs=(uds_model = 0.853819/7.52998e+07,dbck_model = 0.879544/2.64768e+08,sig_model = 0.0401493/0), !coefficients=(Bck = 854.34,DBck = 452.209,Sig = 213.339)
+    ... (remaining 2038 messages suppressed)
+RooSigPdf::sig_model[ mbc=mbc de=de dp=dp mbc_mean=sig_mbc_mean de_mean=sig_de_mean mbcde_corr=sig_mbcde_corr mbc_sigma0_l=sig_mbc_sigma0_l mbc_sigma0_r=sig_mbc_sigma0_r de_sigma=sig_de_sigma ebeam=sig_ebeam bck=sig_bck mbc_sigma2=sig_mbc_sigma2 mbcw_shift=sig_mbcw_shift mbcw_frac=sig_mbcw_frac mbcw_sigma=sig_mbcw_sigma dew_sigma=sig_dew_sigma mbcdew_corr=sig_mbcdew_corr dpcurv=sig_dpcurv mbc_sigma4=sig_mbc_sigma4 dbck_alpha_mbc=sig_dbck_alpha_mbc dbck_alpha_de=sig_dbck_alpha_de dbck_ebeam=sig_dbck_ebeam dbck_dpcurv=sig_dbck_dpcurv dbck_de_mean=sig_dbck_de_mean dbck_de_width=sig_dbck_de_width dbck_de_frac=sig_dbck_de_frac dbck_mbc_mean=sig_dbck_mbc_mean dbck_mbc_sigma0=sig_dbck_mbc_sigma0 dbck_mbc_sigma1=sig_dbck_mbc_sigma1 dbck_de_mean1=sig_dbck_de_mean1 dbck_de_width1=sig_dbck_de_width1 dbck_de_frac1=sig_dbck_de_frac1 dbck_de_frac2=sig_dbck_de_frac2 ]
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1835.28, de=de=-258.425, dp=dp=-47.8031, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40749, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1859.96, de=de=-214.72, dp=dp=279.828, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40749, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1779.79, de=de=28.4762, dp=dp=-299.799, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40749, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1864.69, de=de=-73.9307, dp=dp=-214.8, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40749, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1862.86, de=de=-228.585, dp=dp=206.487, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40749, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1729.16, de=de=-200.36, dp=dp=-281.331, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40749, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1731.33, de=de=-278.778, dp=dp=-538.469, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40749, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1864.4, de=de=-7.25547, dp=dp=-32.5923, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40749, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1803.31, de=de=-224.334, dp=dp=-554.971, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40749, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1757.91, de=de=-56.4281, dp=dp=-2.78287, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40749, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1833.05, de=de=-233.933, dp=dp=357.923, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40749, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1778.27, de=de=-229.026, dp=dp=-371.721, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40749, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+    ... (remaining 1511 messages suppressed)
+
+RooMinimizerFcn: Minimized function has error status.
+Returning maximum FCN so far (18068.9) to force MIGRAD to back out of this region. Error log follows.
+Parameter values: 	Bck=854.527	DBck=452.086	Sig=213.386	dbck_alpha_de=10.2491	dbck_alpha_mbc=17.1173	dbck_de_frac=-12.4976	dbck_de_frac1=-0.030581	dbck_de_frac2=8.00148	dbck_de_mean=-188.105	dbck_de_mean1=271.841	dbck_de_width=68.8555	dbck_de_width1=79.6682	dbck_dpcurv=3.5918	dbck_ebeam=1888.75	dbck_mbc_mean=1864.59	dbck_mbc_shift=11.5055	dbck_mbc_sigma0=17.9894	dbck_mbc_sigma1=-13.4595	dbck_mbc_sigma2=-42.6691	sig_bck=7.88513	sig_dbck_alpha_de=1.01828	sig_dbck_alpha_mbc=15.6213	sig_dbck_de_frac=148.377	sig_dbck_de_frac1=0	sig_dbck_de_frac2=0	sig_dbck_de_mean=-8.26835	sig_dbck_de_mean1=-33.4074	sig_dbck_de_width=63.5579	sig_dbck_de_width1=64.7256	sig_dbck_dpcurv=-0.922126	sig_dbck_ebeam=1888.75	sig_dbck_mbc_mean=1874.23	sig_dbck_mbc_sigma0=4.13725	sig_dbck_mbc_sigma1=3.14951	sig_de_mean=-1.40417	sig_de_sigma=62.2346	sig_dew_sigma=134.378	sig_dpcurv=-0.002134	sig_ebeam=1888.75	sig_mbc_mean=1864.53	sig_mbc_sigma0_l=0.784178	sig_mbc_sigma0_r=2.95061	sig_mbc_sigma2=23.3802	sig_mbc_sigma4=53.1726	sig_mbcde_corr=0.000436	sig_mbcdew_corr=-0.004385	sig_mbcw_frac=0.248109	sig_mbcw_shift=1.92747	sig_mbcw_sigma=8.83051	uds_alpha_de=1.0618	uds_alpha_mbc=8.5116	uds_dpcurv=0.039169	uds_ebeam=1888.75
+RooNLLVar::nll_exp_model_data[ paramSet=(Bck,DBck,Sig,dbck_alpha_de,dbck_alpha_mbc,dbck_de_frac,dbck_de_frac1,dbck_de_frac2,dbck_de_mean,dbck_de_mean1,dbck_de_width,dbck_de_width1,dbck_dpcurv,dbck_ebeam,dbck_mbc_mean,dbck_mbc_shift,dbck_mbc_sigma0,dbck_mbc_sigma1,dbck_mbc_sigma2,sig_bck,sig_dbck_alpha_de,sig_dbck_alpha_mbc,sig_dbck_de_frac,sig_dbck_de_frac1,sig_dbck_de_frac2,sig_dbck_de_mean,sig_dbck_de_mean1,sig_dbck_de_width,sig_dbck_de_width1,sig_dbck_dpcurv,sig_dbck_ebeam,sig_dbck_mbc_mean,sig_dbck_mbc_sigma0,sig_dbck_mbc_sigma1,sig_de_mean,sig_de_sigma,sig_dew_sigma,sig_dpcurv,sig_ebeam,sig_mbc_mean,sig_mbc_sigma0_l,sig_mbc_sigma0_r,sig_mbc_sigma2,sig_mbc_sigma4,sig_mbcde_corr,sig_mbcdew_corr,sig_mbcw_frac,sig_mbcw_shift,sig_mbcw_sigma,uds_alpha_de,uds_alpha_mbc,uds_dpcurv,uds_ebeam) ]
+     function value is NAN @ paramSet=(Bck = 854.527,DBck = 452.086,Sig = 213.386,dbck_alpha_de = 10.2491,dbck_alpha_mbc = 17.1173,dbck_de_frac = -12.4976,dbck_de_frac1 = -0.030581,dbck_de_frac2 = 8.00148,dbck_de_mean = -188.105,dbck_de_mean1 = 271.841,dbck_de_width = 68.8555,dbck_de_width1 = 79.6682,dbck_dpcurv = 3.5918,dbck_ebeam = 1888.75,dbck_mbc_mean = 1864.59,dbck_mbc_shift = 11.5055,dbck_mbc_sigma0 = 17.9894,dbck_mbc_sigma1 = -13.4595,dbck_mbc_sigma2 = -42.6691,sig_bck = 7.88513,sig_dbck_alpha_de = 1.01828,sig_dbck_alpha_mbc = 15.6213,sig_dbck_de_frac = 148.377,sig_dbck_de_frac1 = 0,sig_dbck_de_frac2 = 0,sig_dbck_de_mean = -8.26835,sig_dbck_de_mean1 = -33.4074,sig_dbck_de_width = 63.5579,sig_dbck_de_width1 = 64.7256,sig_dbck_dpcurv = -0.922126,sig_dbck_ebeam = 1888.75,sig_dbck_mbc_mean = 1874.23,sig_dbck_mbc_sigma0 = 4.13725,sig_dbck_mbc_sigma1 = 3.14951,sig_de_mean = -1.40417,sig_de_sigma = 62.2346,sig_dew_sigma = 134.378,sig_dpcurv = -0.002134,sig_ebeam = 1888.75,sig_mbc_mean = 1864.53,sig_mbc_sigma0_l = 0.784178,sig_mbc_sigma0_r = 2.95061,sig_mbc_sigma2 = 23.3802,sig_mbc_sigma4 = 53.1726,sig_mbcde_corr = 0.000436,sig_mbcdew_corr = -0.004385,sig_mbcw_frac = 0.248109,sig_mbcw_shift = 1.92747,sig_mbcw_sigma = 8.83051,uds_alpha_de = 1.0618,uds_alpha_mbc = 8.5116,uds_dpcurv = 0.039169,uds_ebeam = 1888.75)
+RooAddPdf::exp_model[ Bck * uds_model + DBck * dbck_model + Sig * sig_model ]
+     p.d.f value is Not-a-Number @ !refCoefNorm=(), !pdfs=(uds_model = 1.14208/7.52998e+07,dbck_model = 13.8383/2.64768e+08,sig_model = 0.0153042/0), !coefficients=(Bck = 854.527,DBck = 452.086,Sig = 213.386)
+     getLogVal() top-level p.d.f evaluates to NaN @ !refCoefNorm=(), !pdfs=(uds_model = 1.14208/7.52998e+07,dbck_model = 13.8383/2.64768e+08,sig_model = 0.0153042/0), !coefficients=(Bck = 854.527,DBck = 452.086,Sig = 213.386)
+     p.d.f value is Not-a-Number @ !refCoefNorm=(), !pdfs=(uds_model = 0.869859/7.52998e+07,dbck_model = 5.63978/2.64768e+08,sig_model = 0.0257453/0), !coefficients=(Bck = 854.527,DBck = 452.086,Sig = 213.386)
+     getLogVal() top-level p.d.f evaluates to NaN @ !refCoefNorm=(), !pdfs=(uds_model = 0.869859/7.52998e+07,dbck_model = 5.63978/2.64768e+08,sig_model = 0.0257453/0), !coefficients=(Bck = 854.527,DBck = 452.086,Sig = 213.386)
+     p.d.f value is Not-a-Number @ !refCoefNorm=(), !pdfs=(uds_model = 0.429923/7.52998e+07,dbck_model = 0.069056/2.64768e+08,sig_model = 1.718e-05/0), !coefficients=(Bck = 854.527,DBck = 452.086,Sig = 213.386)
+     getLogVal() top-level p.d.f evaluates to NaN @ !refCoefNorm=(), !pdfs=(uds_model = 0.429923/7.52998e+07,dbck_model = 0.069056/2.64768e+08,sig_model = 1.718e-05/0), !coefficients=(Bck = 854.527,DBck = 452.086,Sig = 213.386)
+     p.d.f value is Not-a-Number @ !refCoefNorm=(), !pdfs=(uds_model = 0.890005/7.52998e+07,dbck_model = 3.26993/2.64768e+08,sig_model = 7.64547e-06/0), !coefficients=(Bck = 854.527,DBck = 452.086,Sig = 213.386)
+     getLogVal() top-level p.d.f evaluates to NaN @ !refCoefNorm=(), !pdfs=(uds_model = 0.890005/7.52998e+07,dbck_model = 3.26993/2.64768e+08,sig_model = 7.64547e-06/0), !coefficients=(Bck = 854.527,DBck = 452.086,Sig = 213.386)
+     p.d.f value is Not-a-Number @ !refCoefNorm=(), !pdfs=(uds_model = 1.06312/7.52998e+07,dbck_model = 23.3181/2.64768e+08,sig_model = 0.00209873/0), !coefficients=(Bck = 854.527,DBck = 452.086,Sig = 213.386)
+     getLogVal() top-level p.d.f evaluates to NaN @ !refCoefNorm=(), !pdfs=(uds_model = 1.06312/7.52998e+07,dbck_model = 23.3181/2.64768e+08,sig_model = 0.00209873/0), !coefficients=(Bck = 854.527,DBck = 452.086,Sig = 213.386)
+     p.d.f value is Not-a-Number @ !refCoefNorm=(), !pdfs=(uds_model = 0.853819/7.52998e+07,dbck_model = 0.879544/2.64768e+08,sig_model = 0.0400865/0), !coefficients=(Bck = 854.527,DBck = 452.086,Sig = 213.386)
+     getLogVal() top-level p.d.f evaluates to NaN @ !refCoefNorm=(), !pdfs=(uds_model = 0.853819/7.52998e+07,dbck_model = 0.879544/2.64768e+08,sig_model = 0.0400865/0), !coefficients=(Bck = 854.527,DBck = 452.086,Sig = 213.386)
+    ... (remaining 2038 messages suppressed)
+RooSigPdf::sig_model[ mbc=mbc de=de dp=dp mbc_mean=sig_mbc_mean de_mean=sig_de_mean mbcde_corr=sig_mbcde_corr mbc_sigma0_l=sig_mbc_sigma0_l mbc_sigma0_r=sig_mbc_sigma0_r de_sigma=sig_de_sigma ebeam=sig_ebeam bck=sig_bck mbc_sigma2=sig_mbc_sigma2 mbcw_shift=sig_mbcw_shift mbcw_frac=sig_mbcw_frac mbcw_sigma=sig_mbcw_sigma dew_sigma=sig_dew_sigma mbcdew_corr=sig_mbcdew_corr dpcurv=sig_dpcurv mbc_sigma4=sig_mbc_sigma4 dbck_alpha_mbc=sig_dbck_alpha_mbc dbck_alpha_de=sig_dbck_alpha_de dbck_ebeam=sig_dbck_ebeam dbck_dpcurv=sig_dbck_dpcurv dbck_de_mean=sig_dbck_de_mean dbck_de_width=sig_dbck_de_width dbck_de_frac=sig_dbck_de_frac dbck_mbc_mean=sig_dbck_mbc_mean dbck_mbc_sigma0=sig_dbck_mbc_sigma0 dbck_mbc_sigma1=sig_dbck_mbc_sigma1 dbck_de_mean1=sig_dbck_de_mean1 dbck_de_width1=sig_dbck_de_width1 dbck_de_frac1=sig_dbck_de_frac1 dbck_de_frac2=sig_dbck_de_frac2 ]
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1835.28, de=de=-258.425, dp=dp=-47.8031, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40417, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1859.96, de=de=-214.72, dp=dp=279.828, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40417, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1779.79, de=de=28.4762, dp=dp=-299.799, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40417, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1864.69, de=de=-73.9307, dp=dp=-214.8, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40417, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1862.86, de=de=-228.585, dp=dp=206.487, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40417, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1729.16, de=de=-200.36, dp=dp=-281.331, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40417, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1731.33, de=de=-278.778, dp=dp=-538.469, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40417, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1864.4, de=de=-7.25547, dp=dp=-32.5923, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40417, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1803.31, de=de=-224.334, dp=dp=-554.971, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40417, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1757.91, de=de=-56.4281, dp=dp=-2.78287, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40417, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1833.05, de=de=-233.933, dp=dp=357.923, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40417, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1778.27, de=de=-229.026, dp=dp=-371.721, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40417, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+    ... (remaining 1511 messages suppressed)
+
+RooMinimizerFcn: Minimized function has error status.
+Returning maximum FCN so far (18068.9) to force MIGRAD to back out of this region. Error log follows.
+Parameter values: 	Bck=854.527	DBck=452.086	Sig=213.386	dbck_alpha_de=10.2491	dbck_alpha_mbc=17.1173	dbck_de_frac=-12.4976	dbck_de_frac1=-0.030581	dbck_de_frac2=8.00148	dbck_de_mean=-188.105	dbck_de_mean1=271.841	dbck_de_width=68.8555	dbck_de_width1=79.6682	dbck_dpcurv=3.5918	dbck_ebeam=1888.75	dbck_mbc_mean=1864.59	dbck_mbc_shift=11.5055	dbck_mbc_sigma0=17.9894	dbck_mbc_sigma1=-13.4595	dbck_mbc_sigma2=-42.6691	sig_bck=7.88513	sig_dbck_alpha_de=1.01828	sig_dbck_alpha_mbc=15.6213	sig_dbck_de_frac=148.377	sig_dbck_de_frac1=0	sig_dbck_de_frac2=0	sig_dbck_de_mean=-8.26835	sig_dbck_de_mean1=-33.4074	sig_dbck_de_width=63.5579	sig_dbck_de_width1=64.7256	sig_dbck_dpcurv=-0.922126	sig_dbck_ebeam=1888.75	sig_dbck_mbc_mean=1874.23	sig_dbck_mbc_sigma0=4.13725	sig_dbck_mbc_sigma1=3.14951	sig_de_mean=-1.40417	sig_de_sigma=62.2346	sig_dew_sigma=134.378	sig_dpcurv=-0.002134	sig_ebeam=1888.75	sig_mbc_mean=1864.53	sig_mbc_sigma0_l=0.784178	sig_mbc_sigma0_r=2.95061	sig_mbc_sigma2=23.3802	sig_mbc_sigma4=53.1726	sig_mbcde_corr=0.000436	sig_mbcdew_corr=-0.004385	sig_mbcw_frac=0.248109	sig_mbcw_shift=1.92747	sig_mbcw_sigma=8.83051	uds_alpha_de=1.0618	uds_alpha_mbc=8.5116	uds_dpcurv=0.039169	uds_ebeam=1888.75
+RooNLLVar::nll_exp_model_data[ paramSet=(Bck,DBck,Sig,dbck_alpha_de,dbck_alpha_mbc,dbck_de_frac,dbck_de_frac1,dbck_de_frac2,dbck_de_mean,dbck_de_mean1,dbck_de_width,dbck_de_width1,dbck_dpcurv,dbck_ebeam,dbck_mbc_mean,dbck_mbc_shift,dbck_mbc_sigma0,dbck_mbc_sigma1,dbck_mbc_sigma2,sig_bck,sig_dbck_alpha_de,sig_dbck_alpha_mbc,sig_dbck_de_frac,sig_dbck_de_frac1,sig_dbck_de_frac2,sig_dbck_de_mean,sig_dbck_de_mean1,sig_dbck_de_width,sig_dbck_de_width1,sig_dbck_dpcurv,sig_dbck_ebeam,sig_dbck_mbc_mean,sig_dbck_mbc_sigma0,sig_dbck_mbc_sigma1,sig_de_mean,sig_de_sigma,sig_dew_sigma,sig_dpcurv,sig_ebeam,sig_mbc_mean,sig_mbc_sigma0_l,sig_mbc_sigma0_r,sig_mbc_sigma2,sig_mbc_sigma4,sig_mbcde_corr,sig_mbcdew_corr,sig_mbcw_frac,sig_mbcw_shift,sig_mbcw_sigma,uds_alpha_de,uds_alpha_mbc,uds_dpcurv,uds_ebeam) ]
+     function value is NAN @ paramSet=(Bck = 854.527,DBck = 452.086,Sig = 213.386,dbck_alpha_de = 10.2491,dbck_alpha_mbc = 17.1173,dbck_de_frac = -12.4976,dbck_de_frac1 = -0.030581,dbck_de_frac2 = 8.00148,dbck_de_mean = -188.105,dbck_de_mean1 = 271.841,dbck_de_width = 68.8555,dbck_de_width1 = 79.6682,dbck_dpcurv = 3.5918,dbck_ebeam = 1888.75,dbck_mbc_mean = 1864.59,dbck_mbc_shift = 11.5055,dbck_mbc_sigma0 = 17.9894,dbck_mbc_sigma1 = -13.4595,dbck_mbc_sigma2 = -42.6691,sig_bck = 7.88513,sig_dbck_alpha_de = 1.01828,sig_dbck_alpha_mbc = 15.6213,sig_dbck_de_frac = 148.377,sig_dbck_de_frac1 = 0,sig_dbck_de_frac2 = 0,sig_dbck_de_mean = -8.26835,sig_dbck_de_mean1 = -33.4074,sig_dbck_de_width = 63.5579,sig_dbck_de_width1 = 64.7256,sig_dbck_dpcurv = -0.922126,sig_dbck_ebeam = 1888.75,sig_dbck_mbc_mean = 1874.23,sig_dbck_mbc_sigma0 = 4.13725,sig_dbck_mbc_sigma1 = 3.14951,sig_de_mean = -1.40417,sig_de_sigma = 62.2346,sig_dew_sigma = 134.378,sig_dpcurv = -0.002134,sig_ebeam = 1888.75,sig_mbc_mean = 1864.53,sig_mbc_sigma0_l = 0.784178,sig_mbc_sigma0_r = 2.95061,sig_mbc_sigma2 = 23.3802,sig_mbc_sigma4 = 53.1726,sig_mbcde_corr = 0.000436,sig_mbcdew_corr = -0.004385,sig_mbcw_frac = 0.248109,sig_mbcw_shift = 1.92747,sig_mbcw_sigma = 8.83051,uds_alpha_de = 1.0618,uds_alpha_mbc = 8.5116,uds_dpcurv = 0.039169,uds_ebeam = 1888.75)
+RooAddPdf::exp_model[ Bck * uds_model + DBck * dbck_model + Sig * sig_model ]
+     p.d.f value is Not-a-Number @ !refCoefNorm=(), !pdfs=(uds_model = 1.14208/7.52998e+07,dbck_model = 13.8383/2.64768e+08,sig_model = 0.0153042/0), !coefficients=(Bck = 854.527,DBck = 452.086,Sig = 213.386)
+     getLogVal() top-level p.d.f evaluates to NaN @ !refCoefNorm=(), !pdfs=(uds_model = 1.14208/7.52998e+07,dbck_model = 13.8383/2.64768e+08,sig_model = 0.0153042/0), !coefficients=(Bck = 854.527,DBck = 452.086,Sig = 213.386)
+     p.d.f value is Not-a-Number @ !refCoefNorm=(), !pdfs=(uds_model = 0.869859/7.52998e+07,dbck_model = 5.63978/2.64768e+08,sig_model = 0.0257453/0), !coefficients=(Bck = 854.527,DBck = 452.086,Sig = 213.386)
+     getLogVal() top-level p.d.f evaluates to NaN @ !refCoefNorm=(), !pdfs=(uds_model = 0.869859/7.52998e+07,dbck_model = 5.63978/2.64768e+08,sig_model = 0.0257453/0), !coefficients=(Bck = 854.527,DBck = 452.086,Sig = 213.386)
+     p.d.f value is Not-a-Number @ !refCoefNorm=(), !pdfs=(uds_model = 0.429923/7.52998e+07,dbck_model = 0.069056/2.64768e+08,sig_model = 1.718e-05/0), !coefficients=(Bck = 854.527,DBck = 452.086,Sig = 213.386)
+     getLogVal() top-level p.d.f evaluates to NaN @ !refCoefNorm=(), !pdfs=(uds_model = 0.429923/7.52998e+07,dbck_model = 0.069056/2.64768e+08,sig_model = 1.718e-05/0), !coefficients=(Bck = 854.527,DBck = 452.086,Sig = 213.386)
+     p.d.f value is Not-a-Number @ !refCoefNorm=(), !pdfs=(uds_model = 0.890005/7.52998e+07,dbck_model = 3.26993/2.64768e+08,sig_model = 7.64547e-06/0), !coefficients=(Bck = 854.527,DBck = 452.086,Sig = 213.386)
+     getLogVal() top-level p.d.f evaluates to NaN @ !refCoefNorm=(), !pdfs=(uds_model = 0.890005/7.52998e+07,dbck_model = 3.26993/2.64768e+08,sig_model = 7.64547e-06/0), !coefficients=(Bck = 854.527,DBck = 452.086,Sig = 213.386)
+     p.d.f value is Not-a-Number @ !refCoefNorm=(), !pdfs=(uds_model = 1.06312/7.52998e+07,dbck_model = 23.3181/2.64768e+08,sig_model = 0.00209873/0), !coefficients=(Bck = 854.527,DBck = 452.086,Sig = 213.386)
+     getLogVal() top-level p.d.f evaluates to NaN @ !refCoefNorm=(), !pdfs=(uds_model = 1.06312/7.52998e+07,dbck_model = 23.3181/2.64768e+08,sig_model = 0.00209873/0), !coefficients=(Bck = 854.527,DBck = 452.086,Sig = 213.386)
+     p.d.f value is Not-a-Number @ !refCoefNorm=(), !pdfs=(uds_model = 0.853819/7.52998e+07,dbck_model = 0.879544/2.64768e+08,sig_model = 0.0400865/0), !coefficients=(Bck = 854.527,DBck = 452.086,Sig = 213.386)
+     getLogVal() top-level p.d.f evaluates to NaN @ !refCoefNorm=(), !pdfs=(uds_model = 0.853819/7.52998e+07,dbck_model = 0.879544/2.64768e+08,sig_model = 0.0400865/0), !coefficients=(Bck = 854.527,DBck = 452.086,Sig = 213.386)
+    ... (remaining 2038 messages suppressed)
+RooSigPdf::sig_model[ mbc=mbc de=de dp=dp mbc_mean=sig_mbc_mean de_mean=sig_de_mean mbcde_corr=sig_mbcde_corr mbc_sigma0_l=sig_mbc_sigma0_l mbc_sigma0_r=sig_mbc_sigma0_r de_sigma=sig_de_sigma ebeam=sig_ebeam bck=sig_bck mbc_sigma2=sig_mbc_sigma2 mbcw_shift=sig_mbcw_shift mbcw_frac=sig_mbcw_frac mbcw_sigma=sig_mbcw_sigma dew_sigma=sig_dew_sigma mbcdew_corr=sig_mbcdew_corr dpcurv=sig_dpcurv mbc_sigma4=sig_mbc_sigma4 dbck_alpha_mbc=sig_dbck_alpha_mbc dbck_alpha_de=sig_dbck_alpha_de dbck_ebeam=sig_dbck_ebeam dbck_dpcurv=sig_dbck_dpcurv dbck_de_mean=sig_dbck_de_mean dbck_de_width=sig_dbck_de_width dbck_de_frac=sig_dbck_de_frac dbck_mbc_mean=sig_dbck_mbc_mean dbck_mbc_sigma0=sig_dbck_mbc_sigma0 dbck_mbc_sigma1=sig_dbck_mbc_sigma1 dbck_de_mean1=sig_dbck_de_mean1 dbck_de_width1=sig_dbck_de_width1 dbck_de_frac1=sig_dbck_de_frac1 dbck_de_frac2=sig_dbck_de_frac2 ]
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1835.28, de=de=-258.425, dp=dp=-47.8031, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40417, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1859.96, de=de=-214.72, dp=dp=279.828, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40417, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1779.79, de=de=28.4762, dp=dp=-299.799, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40417, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1864.69, de=de=-73.9307, dp=dp=-214.8, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40417, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1862.86, de=de=-228.585, dp=dp=206.487, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40417, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1729.16, de=de=-200.36, dp=dp=-281.331, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40417, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1731.33, de=de=-278.778, dp=dp=-538.469, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40417, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1864.4, de=de=-7.25547, dp=dp=-32.5923, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40417, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1803.31, de=de=-224.334, dp=dp=-554.971, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40417, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1757.91, de=de=-56.4281, dp=dp=-2.78287, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40417, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1833.05, de=de=-233.933, dp=dp=357.923, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40417, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1778.27, de=de=-229.026, dp=dp=-371.721, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.40417, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+    ... (remaining 1511 messages suppressed)
+
+RooMinimizerFcn: Minimized function has error status.
+Returning maximum FCN so far (18068.9) to force MIGRAD to back out of this region. Error log follows.
+Parameter values: 	Bck=858.052	DBck=453.265	Sig=214.921	dbck_alpha_de=10.2491	dbck_alpha_mbc=17.1173	dbck_de_frac=-12.4976	dbck_de_frac1=-0.030581	dbck_de_frac2=8.00148	dbck_de_mean=-188.105	dbck_de_mean1=271.841	dbck_de_width=68.8555	dbck_de_width1=79.6682	dbck_dpcurv=3.5918	dbck_ebeam=1888.75	dbck_mbc_mean=1864.59	dbck_mbc_shift=11.5055	dbck_mbc_sigma0=17.9894	dbck_mbc_sigma1=-13.4595	dbck_mbc_sigma2=-42.6691	sig_bck=7.88513	sig_dbck_alpha_de=1.01828	sig_dbck_alpha_mbc=15.6213	sig_dbck_de_frac=148.377	sig_dbck_de_frac1=0	sig_dbck_de_frac2=0	sig_dbck_de_mean=-8.26835	sig_dbck_de_mean1=-33.4074	sig_dbck_de_width=63.5579	sig_dbck_de_width1=64.7256	sig_dbck_dpcurv=-0.922126	sig_dbck_ebeam=1888.75	sig_dbck_mbc_mean=1874.23	sig_dbck_mbc_sigma0=4.13725	sig_dbck_mbc_sigma1=3.14951	sig_de_mean=-1.09809	sig_de_sigma=62.2346	sig_dew_sigma=134.378	sig_dpcurv=-0.002134	sig_ebeam=1888.75	sig_mbc_mean=1864.53	sig_mbc_sigma0_l=0.784178	sig_mbc_sigma0_r=2.95061	sig_mbc_sigma2=23.3802	sig_mbc_sigma4=53.1726	sig_mbcde_corr=0.000436	sig_mbcdew_corr=-0.004385	sig_mbcw_frac=0.248109	sig_mbcw_shift=1.92747	sig_mbcw_sigma=8.83051	uds_alpha_de=1.0618	uds_alpha_mbc=8.5116	uds_dpcurv=0.039169	uds_ebeam=1888.75
+RooNLLVar::nll_exp_model_data[ paramSet=(Bck,DBck,Sig,dbck_alpha_de,dbck_alpha_mbc,dbck_de_frac,dbck_de_frac1,dbck_de_frac2,dbck_de_mean,dbck_de_mean1,dbck_de_width,dbck_de_width1,dbck_dpcurv,dbck_ebeam,dbck_mbc_mean,dbck_mbc_shift,dbck_mbc_sigma0,dbck_mbc_sigma1,dbck_mbc_sigma2,sig_bck,sig_dbck_alpha_de,sig_dbck_alpha_mbc,sig_dbck_de_frac,sig_dbck_de_frac1,sig_dbck_de_frac2,sig_dbck_de_mean,sig_dbck_de_mean1,sig_dbck_de_width,sig_dbck_de_width1,sig_dbck_dpcurv,sig_dbck_ebeam,sig_dbck_mbc_mean,sig_dbck_mbc_sigma0,sig_dbck_mbc_sigma1,sig_de_mean,sig_de_sigma,sig_dew_sigma,sig_dpcurv,sig_ebeam,sig_mbc_mean,sig_mbc_sigma0_l,sig_mbc_sigma0_r,sig_mbc_sigma2,sig_mbc_sigma4,sig_mbcde_corr,sig_mbcdew_corr,sig_mbcw_frac,sig_mbcw_shift,sig_mbcw_sigma,uds_alpha_de,uds_alpha_mbc,uds_dpcurv,uds_ebeam) ]
+     function value is NAN @ paramSet=(Bck = 858.052,DBck = 453.265,Sig = 214.921,dbck_alpha_de = 10.2491,dbck_alpha_mbc = 17.1173,dbck_de_frac = -12.4976,dbck_de_frac1 = -0.030581,dbck_de_frac2 = 8.00148,dbck_de_mean = -188.105,dbck_de_mean1 = 271.841,dbck_de_width = 68.8555,dbck_de_width1 = 79.6682,dbck_dpcurv = 3.5918,dbck_ebeam = 1888.75,dbck_mbc_mean = 1864.59,dbck_mbc_shift = 11.5055,dbck_mbc_sigma0 = 17.9894,dbck_mbc_sigma1 = -13.4595,dbck_mbc_sigma2 = -42.6691,sig_bck = 7.88513,sig_dbck_alpha_de = 1.01828,sig_dbck_alpha_mbc = 15.6213,sig_dbck_de_frac = 148.377,sig_dbck_de_frac1 = 0,sig_dbck_de_frac2 = 0,sig_dbck_de_mean = -8.26835,sig_dbck_de_mean1 = -33.4074,sig_dbck_de_width = 63.5579,sig_dbck_de_width1 = 64.7256,sig_dbck_dpcurv = -0.922126,sig_dbck_ebeam = 1888.75,sig_dbck_mbc_mean = 1874.23,sig_dbck_mbc_sigma0 = 4.13725,sig_dbck_mbc_sigma1 = 3.14951,sig_de_mean = -1.09809,sig_de_sigma = 62.2346,sig_dew_sigma = 134.378,sig_dpcurv = -0.002134,sig_ebeam = 1888.75,sig_mbc_mean = 1864.53,sig_mbc_sigma0_l = 0.784178,sig_mbc_sigma0_r = 2.95061,sig_mbc_sigma2 = 23.3802,sig_mbc_sigma4 = 53.1726,sig_mbcde_corr = 0.000436,sig_mbcdew_corr = -0.004385,sig_mbcw_frac = 0.248109,sig_mbcw_shift = 1.92747,sig_mbcw_sigma = 8.83051,uds_alpha_de = 1.0618,uds_alpha_mbc = 8.5116,uds_dpcurv = 0.039169,uds_ebeam = 1888.75)
+RooAddPdf::exp_model[ Bck * uds_model + DBck * dbck_model + Sig * sig_model ]
+     p.d.f value is Not-a-Number @ !refCoefNorm=(), !pdfs=(uds_model = 1.14208/7.52998e+07,dbck_model = 13.8383/2.64768e+08,sig_model = 0.0152046/0), !coefficients=(Bck = 858.052,DBck = 453.265,Sig = 214.921)
+     getLogVal() top-level p.d.f evaluates to NaN @ !refCoefNorm=(), !pdfs=(uds_model = 1.14208/7.52998e+07,dbck_model = 13.8383/2.64768e+08,sig_model = 0.0152046/0), !coefficients=(Bck = 858.052,DBck = 453.265,Sig = 214.921)
+     p.d.f value is Not-a-Number @ !refCoefNorm=(), !pdfs=(uds_model = 0.869859/7.52998e+07,dbck_model = 5.63978/2.64768e+08,sig_model = 0.0254881/0), !coefficients=(Bck = 858.052,DBck = 453.265,Sig = 214.921)
+     getLogVal() top-level p.d.f evaluates to NaN @ !refCoefNorm=(), !pdfs=(uds_model = 0.869859/7.52998e+07,dbck_model = 5.63978/2.64768e+08,sig_model = 0.0254881/0), !coefficients=(Bck = 858.052,DBck = 453.265,Sig = 214.921)
+     p.d.f value is Not-a-Number @ !refCoefNorm=(), !pdfs=(uds_model = 0.429923/7.52998e+07,dbck_model = 0.069056/2.64768e+08,sig_model = 1.718e-05/0), !coefficients=(Bck = 858.052,DBck = 453.265,Sig = 214.921)
+     getLogVal() top-level p.d.f evaluates to NaN @ !refCoefNorm=(), !pdfs=(uds_model = 0.429923/7.52998e+07,dbck_model = 0.069056/2.64768e+08,sig_model = 1.718e-05/0), !coefficients=(Bck = 858.052,DBck = 453.265,Sig = 214.921)
+     p.d.f value is Not-a-Number @ !refCoefNorm=(), !pdfs=(uds_model = 0.890005/7.52998e+07,dbck_model = 3.26993/2.64768e+08,sig_model = 7.64547e-06/0), !coefficients=(Bck = 858.052,DBck = 453.265,Sig = 214.921)
+     getLogVal() top-level p.d.f evaluates to NaN @ !refCoefNorm=(), !pdfs=(uds_model = 0.890005/7.52998e+07,dbck_model = 3.26993/2.64768e+08,sig_model = 7.64547e-06/0), !coefficients=(Bck = 858.052,DBck = 453.265,Sig = 214.921)
+     p.d.f value is Not-a-Number @ !refCoefNorm=(), !pdfs=(uds_model = 1.06312/7.52998e+07,dbck_model = 23.3181/2.64768e+08,sig_model = 0.00209089/0), !coefficients=(Bck = 858.052,DBck = 453.265,Sig = 214.921)
+     getLogVal() top-level p.d.f evaluates to NaN @ !refCoefNorm=(), !pdfs=(uds_model = 1.06312/7.52998e+07,dbck_model = 23.3181/2.64768e+08,sig_model = 0.00209089/0), !coefficients=(Bck = 858.052,DBck = 453.265,Sig = 214.921)
+     p.d.f value is Not-a-Number @ !refCoefNorm=(), !pdfs=(uds_model = 0.853819/7.52998e+07,dbck_model = 0.879544/2.64768e+08,sig_model = 0.0402137/0), !coefficients=(Bck = 858.052,DBck = 453.265,Sig = 214.921)
+     getLogVal() top-level p.d.f evaluates to NaN @ !refCoefNorm=(), !pdfs=(uds_model = 0.853819/7.52998e+07,dbck_model = 0.879544/2.64768e+08,sig_model = 0.0402137/0), !coefficients=(Bck = 858.052,DBck = 453.265,Sig = 214.921)
+    ... (remaining 2038 messages suppressed)
+RooSigPdf::sig_model[ mbc=mbc de=de dp=dp mbc_mean=sig_mbc_mean de_mean=sig_de_mean mbcde_corr=sig_mbcde_corr mbc_sigma0_l=sig_mbc_sigma0_l mbc_sigma0_r=sig_mbc_sigma0_r de_sigma=sig_de_sigma ebeam=sig_ebeam bck=sig_bck mbc_sigma2=sig_mbc_sigma2 mbcw_shift=sig_mbcw_shift mbcw_frac=sig_mbcw_frac mbcw_sigma=sig_mbcw_sigma dew_sigma=sig_dew_sigma mbcdew_corr=sig_mbcdew_corr dpcurv=sig_dpcurv mbc_sigma4=sig_mbc_sigma4 dbck_alpha_mbc=sig_dbck_alpha_mbc dbck_alpha_de=sig_dbck_alpha_de dbck_ebeam=sig_dbck_ebeam dbck_dpcurv=sig_dbck_dpcurv dbck_de_mean=sig_dbck_de_mean dbck_de_width=sig_dbck_de_width dbck_de_frac=sig_dbck_de_frac dbck_mbc_mean=sig_dbck_mbc_mean dbck_mbc_sigma0=sig_dbck_mbc_sigma0 dbck_mbc_sigma1=sig_dbck_mbc_sigma1 dbck_de_mean1=sig_dbck_de_mean1 dbck_de_width1=sig_dbck_de_width1 dbck_de_frac1=sig_dbck_de_frac1 dbck_de_frac2=sig_dbck_de_frac2 ]
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1835.28, de=de=-258.425, dp=dp=-47.8031, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.09809, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1859.96, de=de=-214.72, dp=dp=279.828, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.09809, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1779.79, de=de=28.4762, dp=dp=-299.799, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.09809, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1864.69, de=de=-73.9307, dp=dp=-214.8, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.09809, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1862.86, de=de=-228.585, dp=dp=206.487, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.09809, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1729.16, de=de=-200.36, dp=dp=-281.331, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.09809, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1731.33, de=de=-278.778, dp=dp=-538.469, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.09809, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1864.4, de=de=-7.25547, dp=dp=-32.5923, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.09809, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1803.31, de=de=-224.334, dp=dp=-554.971, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.09809, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1757.91, de=de=-56.4281, dp=dp=-2.78287, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.09809, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1833.05, de=de=-233.933, dp=dp=357.923, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.09809, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+     p.d.f normalization integral is zero or negative: 0.000000 @ mbc=mbc=1778.27, de=de=-229.026, dp=dp=-371.721, mbc_mean=sig_mbc_mean=1864.53, de_mean=sig_de_mean=-1.09809, mbcde_corr=sig_mbcde_corr=0.000436, mbc_sigma0_l=sig_mbc_sigma0_l=0.784178, mbc_sigma0_r=sig_mbc_sigma0_r=2.95061, de_sigma=sig_de_sigma=62.2346, ebeam=sig_ebeam=1888.75, bck=sig_bck=7.88513, mbc_sigma2=sig_mbc_sigma2=23.3802, mbcw_shift=sig_mbcw_shift=1.92747, mbcw_frac=sig_mbcw_frac=0.248109, mbcw_sigma=sig_mbcw_sigma=8.83051, dew_sigma=sig_dew_sigma=134.378, mbcdew_corr=sig_mbcdew_corr=-0.004385, dpcurv=sig_dpcurv=-0.002134, mbc_sigma4=sig_mbc_sigma4=53.1726, dbck_alpha_mbc=sig_dbck_alpha_mbc=15.6213, dbck_alpha_de=sig_dbck_alpha_de=1.01828, dbck_ebeam=sig_dbck_ebeam=1888.75, dbck_dpcurv=sig_dbck_dpcurv=-0.922126, dbck_de_mean=sig_dbck_de_mean=-8.26835, dbck_de_width=sig_dbck_de_width=63.5579, dbck_de_frac=sig_dbck_de_frac=148.377, dbck_mbc_mean=sig_dbck_mbc_mean=1874.23, dbck_mbc_sigma0=sig_dbck_mbc_sigma0=4.13725, dbck_mbc_sigma1=sig_dbck_mbc_sigma1=3.14951, dbck_de_mean1=sig_dbck_de_mean1=-33.4074, dbck_de_width1=sig_dbck_de_width1=64.7256, dbck_de_frac1=sig_dbck_de_frac1=0, dbck_de_frac2=sig_dbck_de_frac2=0
+    ... (remaining 1511 messages suppressed)
+
+ MIGRAD MINIMIZATION HAS CONVERGED.
+ FCN=18016.8 FROM MIGRAD    STATUS=CONVERGED     116 CALLS         117 TOTAL
+                     EDM=6.37501e-05    STRATEGY= 1  ERROR MATRIX UNCERTAINTY   1.6 per cent
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Bck          8.54897e+02   3.68471e+01   7.41736e-05  -1.23844e+00
+   2  DBck         4.52210e+02   2.85425e+01   5.96054e-05  -2.49975e-01
+   3  Sig          2.13547e+02   1.74387e+01   3.93207e-04  -1.53005e-01
+   4  dbck_alpha_de   1.02491e+01     fixed    
+   5  dbck_alpha_mbc   1.71173e+01     fixed    
+   6  dbck_de_frac  -1.24976e+01     fixed    
+   7  dbck_de_frac1  -3.05810e-02     fixed    
+   8  dbck_de_frac2   8.00148e+00     fixed    
+   9  dbck_de_mean  -1.88105e+02     fixed    
+  10  dbck_de_mean1   2.71841e+02     fixed    
+  11  dbck_de_width   6.88555e+01     fixed    
+  12  dbck_de_width1   7.96682e+01     fixed    
+  13  dbck_dpcurv   3.59180e+00     fixed    
+  14  dbck_ebeam   1.88875e+03     fixed    
+  15  dbck_mbc_mean   1.86459e+03     fixed    
+  16  dbck_mbc_shift   1.15055e+01     fixed    
+  17  dbck_mbc_sigma0   1.79894e+01     fixed    
+  18  dbck_mbc_sigma1  -1.34595e+01     fixed    
+  19  dbck_mbc_sigma2  -4.26691e+01     fixed    
+  20  sig_bck      7.88513e+00     fixed    
+  21  sig_dbck_alpha_de   1.01828e+00     fixed    
+  22  sig_dbck_alpha_mbc   1.56213e+01     fixed    
+  23  sig_dbck_de_frac   1.48377e+02     fixed    
+  24  sig_dbck_de_frac1   0.00000e+00   constant   
+  25  sig_dbck_de_frac2   0.00000e+00   constant   
+  26  sig_dbck_de_mean  -8.26835e+00     fixed    
+  27  sig_dbck_de_mean1  -3.34074e+01     fixed    
+  28  sig_dbck_de_width   6.35579e+01     fixed    
+  29  sig_dbck_de_width1   6.47256e+01     fixed    
+  30  sig_dbck_dpcurv  -9.22126e-01     fixed    
+  31  sig_dbck_ebeam   1.88875e+03     fixed    
+  32  sig_dbck_mbc_mean   1.87423e+03     fixed    
+  33  sig_dbck_mbc_sigma0   4.13725e+00     fixed    
+  34  sig_dbck_mbc_sigma1   3.14951e+00     fixed    
+  35  sig_de_mean  -1.37206e+00   5.36878e+00   3.24293e-03  -6.00130e-03
+  36  sig_de_sigma   6.22346e+01     fixed    
+  37  sig_dew_sigma   1.34378e+02     fixed    
+  38  sig_dpcurv  -2.13400e-03     fixed    
+  39  sig_ebeam    1.88875e+03     fixed    
+  40  sig_mbc_mean   1.86453e+03   7.47042e-05   6.41827e-05  -2.57572e+01
+  41  sig_mbc_sigma0_l   7.84178e-01     fixed    
+  42  sig_mbc_sigma0_r   2.95061e+00     fixed    
+  43  sig_mbc_sigma2   2.33802e+01     fixed    
+  44  sig_mbc_sigma4   5.31726e+01     fixed    
+  45  sig_mbcde_corr   4.36000e-04     fixed    
+  46  sig_mbcdew_corr  -4.38500e-03     fixed    
+  47  sig_mbcw_frac   2.48109e-01     fixed    
+  48  sig_mbcw_shift   1.92747e+00     fixed    
+  49  sig_mbcw_sigma   8.83051e+00     fixed    
+  50  uds_alpha_de   1.06180e+00     fixed    
+  51  uds_alpha_mbc   8.51160e+00     fixed    
+  52  uds_dpcurv   3.91690e-02     fixed    
+  53  uds_ebeam    1.88875e+03     fixed    
+                               ERR DEF= 0.5
+ EXTERNAL ERROR MATRIX.    NDIM=  54    NPAR=  5    ERR DEF=0.5
+  1.358e+03 -3.563e+02 -6.261e+01 -5.256e+00 -2.074e-07 
+ -3.563e+02  8.147e+02  2.184e+01  7.591e+00 -2.515e-07 
+ -6.261e+01  2.184e+01  3.043e+02 -4.873e+00 -2.046e-07 
+ -5.256e+00  7.591e+00 -4.873e+00  3.219e+01 -4.648e-09 
+ -2.074e-07 -2.515e-07 -2.046e-07 -4.648e-09  5.581e-09 
+ PARAMETER  CORRELATION COEFFICIENTS  
+       NO.  GLOBAL      1      2      3     35     40
+        1  0.34899   1.000 -0.339 -0.097 -0.025 -0.000
+        2  0.34121  -0.339  1.000  0.044  0.047 -0.000
+        3  0.11113  -0.097  0.044  1.000 -0.049 -0.000
+       35  0.07099  -0.025  0.047 -0.049  1.000 -0.000
+       40  0.00024  -0.000 -0.000 -0.000 -0.000  1.000
+Number of free parameters from FitConfig = 7
+Number of free parameters from Minimizer = 5
+[#1] INFO:Minization -- RooMinimizerFcn::synchronize: set of constant parameters changed, rerunning const optimizer
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(sig_model_Int[de,dp,mbc]) using numeric integrator RooAdaptiveIntegratorND to calculate Int(mbc,de,dp)
+[#0] WARNING:NumericIntegration -- RooAdaptiveIntegratorND::dtor(sig_model) WARNING: Number of suppressed warningings about integral evaluations where target precision was not reached is 1
+[#1] INFO:Minization --  The following expressions will be evaluated in cache-and-track mode: (uds_model,dbck_model,sig_model)
+ **********
+ **   53 **SET ERR         0.5
+ **********
+ **********
+ **   54 **SET PRINT           1
+ **********
+ **********
+ **   55 **HESSE    2.65e+04
+ **********
+ COVARIANCE MATRIX CALCULATED SUCCESSFULLY
+ FCN=18016.8 FROM HESSE     STATUS=OK             35 CALLS         152 TOTAL
+                     EDM=0.0851568    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                INTERNAL      INTERNAL  
+  NO.   NAME      VALUE            ERROR       STEP SIZE       VALUE   
+   1  Bck          8.54897e+02   3.85053e+01   6.31560e-04  -1.23155e+00
+   2  DBck         4.52210e+02   3.21606e+01   1.26924e-03  -1.14222e+00
+   3  Sig          2.13547e+02   1.71848e+01   3.84627e-03  -6.10047e-01
+   4  dbck_alpha_de   1.02491e+01     fixed    
+   5  dbck_alpha_mbc   1.71173e+01     fixed    
+   6  dbck_de_frac  -1.24976e+01     fixed    
+   7  dbck_de_frac1  -3.05810e-02     fixed    
+   8  dbck_de_frac2   8.00148e+00     fixed    
+   9  dbck_de_mean  -1.88105e+02     fixed    
+  10  dbck_de_mean1   2.71841e+02     fixed    
+  11  dbck_de_width   6.88555e+01     fixed    
+  12  dbck_de_width1   7.96682e+01     fixed    
+  13  dbck_dpcurv   3.59180e+00     fixed    
+  14  dbck_ebeam   1.88875e+03     fixed    
+  15  dbck_mbc_mean   1.86459e+03     fixed    
+  16  dbck_mbc_shift   1.15055e+01     fixed    
+  17  dbck_mbc_sigma0   1.79894e+01     fixed    
+  18  dbck_mbc_sigma1  -1.34595e+01     fixed    
+  19  dbck_mbc_sigma2  -4.26691e+01     fixed    
+  20  sig_bck      7.88513e+00     fixed    
+  21  sig_dbck_alpha_de   1.01828e+00     fixed    
+  22  sig_dbck_alpha_mbc   1.56213e+01     fixed    
+  23  sig_dbck_de_frac   1.48377e+02     fixed    
+  24  sig_dbck_de_frac1   0.00000e+00   constant   
+  25  sig_dbck_de_frac2   0.00000e+00   constant   
+  26  sig_dbck_de_mean  -8.26835e+00     fixed    
+  27  sig_dbck_de_mean1  -3.34074e+01     fixed    
+  28  sig_dbck_de_width   6.35579e+01     fixed    
+  29  sig_dbck_de_width1   6.47256e+01     fixed    
+  30  sig_dbck_dpcurv  -9.22126e-01     fixed    
+  31  sig_dbck_ebeam   1.88875e+03     fixed    
+  32  sig_dbck_mbc_mean   1.87423e+03     fixed    
+  33  sig_dbck_mbc_sigma0   4.13725e+00     fixed    
+  34  sig_dbck_mbc_sigma1   3.14951e+00     fixed    
+  35  sig_de_mean  -1.37206e+00   5.40095e+00   5.15575e-02  -1.37640e-01
+  36  sig_de_sigma   6.22346e+01     fixed    
+  37  sig_dew_sigma   1.34378e+02     fixed    
+  38  sig_dpcurv  -2.13400e-03     fixed    
+  39  sig_ebeam    1.88875e+03     fixed    
+  40  sig_mbc_mean   1.86453e+03   9.13915e-03   4.38564e-05  -8.44616e-02
+  41  sig_mbc_sigma0_l   7.84178e-01     fixed    
+  42  sig_mbc_sigma0_r   2.95061e+00     fixed    
+  43  sig_mbc_sigma2   2.33802e+01     fixed    
+  44  sig_mbc_sigma4   5.31726e+01     fixed    
+  45  sig_mbcde_corr   4.36000e-04     fixed    
+  46  sig_mbcdew_corr  -4.38500e-03     fixed    
+  47  sig_mbcw_frac   2.48109e-01     fixed    
+  48  sig_mbcw_shift   1.92747e+00     fixed    
+  49  sig_mbcw_sigma   8.83051e+00     fixed    
+  50  uds_alpha_de   1.06180e+00     fixed    
+  51  uds_alpha_mbc   8.51160e+00     fixed    
+  52  uds_dpcurv   3.91690e-02     fixed    
+  53  uds_ebeam    1.88875e+03     fixed    
+                               ERR DEF= 0.5
+ EXTERNAL ERROR MATRIX.    NDIM=  54    NPAR=  5    ERR DEF=0.5
+  1.483e+03 -5.636e+02 -6.398e+01 -1.033e+01  2.599e-05 
+ -5.636e+02  1.034e+03 -1.787e+01  1.683e+01  2.812e-04 
+ -6.398e+01 -1.787e+01  2.955e+02 -6.503e+00 -3.072e-04 
+ -1.033e+01  1.683e+01 -6.503e+00  3.263e+01  4.515e-04 
+  2.599e-05  2.812e-04 -3.072e-04  4.515e-04  8.352e-05 
+ PARAMETER  CORRELATION COEFFICIENTS  
+       NO.  GLOBAL      1      2      3     35     40
+        1  0.46872   1.000 -0.455 -0.097 -0.047  0.000
+        2  0.46609  -0.455  1.000 -0.032  0.092  0.001
+        3  0.14429  -0.097 -0.032  1.000 -0.066 -0.002
+       35  0.11255  -0.047  0.092 -0.066  1.000  0.009
+       40  0.00877   0.000  0.001 -0.002  0.009  1.000
+[#1] INFO:Minization -- RooMinimizer::optimizeConst: deactivating const optimization
+[#0] WARNING:NumericIntegration -- RooAdaptiveIntegratorND::dtor(uds_model) WARNING: Number of suppressed warningings about integral evaluations where target precision was not reached is 1
+[#0] WARNING:NumericIntegration -- RooAdaptiveIntegratorND::dtor(dbck_model) WARNING: Number of suppressed warningings about integral evaluations where target precision was not reached is 1
+[#0] WARNING:NumericIntegration -- RooAdaptiveIntegratorND::dtor(sig_model) WARNING: Number of suppressed warningings about integral evaluations where target precision was not reached is 82
+
+  RooFitResult: minimized FCN value: 18016.8, estimated distance to minimum: 0.0851568
+                covariance matrix quality: Full, accurate covariance matrix
+                Status : MINIMIZE=0 HESSE=0 
+
+    Floating Parameter  InitialValue    FinalValue +/-  Error     GblCorr.
+  --------------------  ------------  --------------------------  --------
+                   Bck    1.0000e+03    8.5490e+02 +/-  3.85e+01  <none>
+                  DBck    5.0000e+02    4.5221e+02 +/-  3.22e+01  <none>
+                   Sig    3.5000e+02    2.1355e+02 +/-  1.72e+01  <none>
+         dbck_alpha_de    1.0249e+01    1.0249e+01 +/-  0.00e+00  <none>
+        dbck_alpha_mbc    1.7117e+01    1.7117e+01 +/-  0.00e+00  <none>
+          dbck_de_frac   -1.2498e+01   -1.2498e+01 +/-  0.00e+00  <none>
+         dbck_de_frac1   -3.0581e-02   -3.0581e-02 +/-  0.00e+00  <none>
+         dbck_de_frac2    8.0015e+00    8.0015e+00 +/-  0.00e+00  <none>
+          dbck_de_mean   -1.8811e+02   -1.8811e+02 +/-  0.00e+00  <none>
+         dbck_de_mean1    2.7184e+02    2.7184e+02 +/-  0.00e+00  <none>
+         dbck_de_width    6.8856e+01    6.8856e+01 +/-  0.00e+00  <none>
+        dbck_de_width1    7.9668e+01    7.9668e+01 +/-  0.00e+00  <none>
+           dbck_dpcurv    3.5918e+00    3.5918e+00 +/-  0.00e+00  <none>
+            dbck_ebeam    1.8888e+03    1.8888e+03 +/-  0.00e+00  <none>
+         dbck_mbc_mean    1.8646e+03    1.8646e+03 +/-  0.00e+00  <none>
+        dbck_mbc_shift    1.1505e+01    1.1505e+01 +/-  0.00e+00  <none>
+       dbck_mbc_sigma0    1.7989e+01    1.7989e+01 +/-  0.00e+00  <none>
+       dbck_mbc_sigma1   -1.3459e+01   -1.3459e+01 +/-  0.00e+00  <none>
+       dbck_mbc_sigma2   -4.2669e+01   -4.2669e+01 +/-  0.00e+00  <none>
+               sig_bck    7.8851e+00    7.8851e+00 +/-  0.00e+00  <none>
+     sig_dbck_alpha_de    1.0183e+00    1.0183e+00 +/-  0.00e+00  <none>
+    sig_dbck_alpha_mbc    1.5621e+01    1.5621e+01 +/-  0.00e+00  <none>
+      sig_dbck_de_frac    1.4838e+02    1.4838e+02 +/-  0.00e+00  <none>
+     sig_dbck_de_frac1    0.0000e+00    0.0000e+00 +/-  0.00e+00  <none>
+     sig_dbck_de_frac2    0.0000e+00    0.0000e+00 +/-  0.00e+00  <none>
+      sig_dbck_de_mean   -8.2684e+00   -8.2684e+00 +/-  0.00e+00  <none>
+     sig_dbck_de_mean1   -3.3407e+01   -3.3407e+01 +/-  0.00e+00  <none>
+     sig_dbck_de_width    6.3558e+01    6.3558e+01 +/-  0.00e+00  <none>
+    sig_dbck_de_width1    6.4726e+01    6.4726e+01 +/-  0.00e+00  <none>
+       sig_dbck_dpcurv   -9.2213e-01   -9.2213e-01 +/-  0.00e+00  <none>
+        sig_dbck_ebeam    1.8888e+03    1.8888e+03 +/-  0.00e+00  <none>
+     sig_dbck_mbc_mean    1.8742e+03    1.8742e+03 +/-  0.00e+00  <none>
+   sig_dbck_mbc_sigma0    4.1372e+00    4.1372e+00 +/-  0.00e+00  <none>
+   sig_dbck_mbc_sigma1    3.1495e+00    3.1495e+00 +/-  0.00e+00  <none>
+           sig_de_mean   -1.9000e+00   -1.3721e+00 +/-  5.40e+00  <none>
+          sig_de_sigma    6.2235e+01    6.2235e+01 +/-  0.00e+00  <none>
+         sig_dew_sigma    1.3438e+02    1.3438e+02 +/-  0.00e+00  <none>
+            sig_dpcurv   -2.1340e-03   -2.1340e-03 +/-  0.00e+00  <none>
+             sig_ebeam    1.8888e+03    1.8888e+03 +/-  0.00e+00  <none>
+          sig_mbc_mean    1.8654e+03    1.8645e+03 +/-  9.14e-03  <none>
+      sig_mbc_sigma0_l    7.8418e-01    7.8418e-01 +/-  0.00e+00  <none>
+      sig_mbc_sigma0_r    2.9506e+00    2.9506e+00 +/-  0.00e+00  <none>
+        sig_mbc_sigma2    2.3380e+01    2.3380e+01 +/-  0.00e+00  <none>
+        sig_mbc_sigma4    5.3173e+01    5.3173e+01 +/-  0.00e+00  <none>
+        sig_mbcde_corr    4.3600e-04    4.3600e-04 +/-  0.00e+00  <none>
+       sig_mbcdew_corr   -4.3850e-03   -4.3850e-03 +/-  0.00e+00  <none>
+         sig_mbcw_frac    2.4811e-01    2.4811e-01 +/-  0.00e+00  <none>
+        sig_mbcw_shift    1.9275e+00    1.9275e+00 +/-  0.00e+00  <none>
+        sig_mbcw_sigma    8.8305e+00    8.8305e+00 +/-  0.00e+00  <none>
+          uds_alpha_de    1.0618e+00    1.0618e+00 +/-  0.00e+00  <none>
+         uds_alpha_mbc    8.5116e+00    8.5116e+00 +/-  0.00e+00  <none>
+            uds_dpcurv    3.9169e-02    3.9169e-02 +/-  0.00e+00  <none>
+             uds_ebeam    1.8888e+03    1.8888e+03 +/-  0.00e+00  <none>
+
+EDM = 0.0851568
+-log(L) at minimum = 18016.8
+exp_par[0] =1864.53 +- 0.00913915
+exp_par[1] =-1.37206 +- 5.40095
+exp_par[2] =854.897 +- 38.5053
+exp_par[3] =452.21 +- 32.1606
+exp_par[4] =213.547 +- 17.1848
+M_D = 1864.91 +- 0.00913915
+[#1] INFO:Eval -- RooRealVar::setRange(de) new range named 'dEsigRegion' created with bounds [-100,100]
+[#1] INFO:Plotting -- RooTreeData::plotOn: plotting 512 events out of 1521 total events
+[#1] INFO:Plotting -- RooAbsReal::plotOn(exp_model) plot on mbc integrates over variables (de,dp) in range dEsigRegion
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(sig_model_Int[de,dp,mbc]) using numeric integrator RooAdaptiveIntegratorND to calculate Int(de,dp,mbc)
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(exp_model_Int[de,dp|dEsigRegion]_Norm[de,dp,mbc]) using numeric integrator RooMCIntegrator to calculate Int(de,dp)
+[#0] WARNING:NumericIntegration -- RooAdaptiveIntegratorND::dtor(sig_model) WARNING: Number of suppressed warningings about integral evaluations where target precision was not reached is 1
+mbc Chi2 : 0.481456
+[#1] INFO:Plotting -- RooAbsPdf::plotOn(exp_model) directly selected PDF components: (sig_model)
+[#1] INFO:Plotting -- RooAbsPdf::plotOn(exp_model) indirectly selected PDF components: ()
+[#1] INFO:Plotting -- RooAbsReal::plotOn(exp_model) plot on mbc integrates over variables (de,dp) in range dEsigRegion
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(exp_model_Int[de,dp|dEsigRegion]_Norm[de,dp,mbc]) using numeric integrator RooMCIntegrator to calculate Int(de,dp)
+[#1] INFO:Plotting -- RooAbsPdf::plotOn(exp_model) directly selected PDF components: (uds_model)
+[#1] INFO:Plotting -- RooAbsPdf::plotOn(exp_model) indirectly selected PDF components: ()
+[#1] INFO:Plotting -- RooAbsReal::plotOn(exp_model) plot on mbc integrates over variables (de,dp) in range dEsigRegion
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(exp_model_Int[de,dp|dEsigRegion]_Norm[de,dp,mbc]) using numeric integrator RooMCIntegrator to calculate Int(de,dp)
