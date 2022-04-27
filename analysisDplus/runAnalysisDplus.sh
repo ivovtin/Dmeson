@@ -6,10 +6,10 @@
 ##inruns=4422
 ##inruns=23219
 ##inruns=25059
-##inruns=24835
+inruns=24835
 ##inruns=23341
-inruns="/store/users/ovtin/outDmeson/simulation/outsimDplus/Signal/simDmeson000001.dat"
-Nevents=20000
+##inruns="/store/users/ovtin/outDmeson/simulation/outsimDplus/Signal/simDmeson000001.dat"
+##Nevents=50000
 outfile="/store/users/ovtin/psi3770_to_D0meson_test.root"
 mintracks=3
 maxtracks=20
@@ -32,14 +32,15 @@ verbose=1
 #nevend=20100
 nevbegin=0
 nevend=0
-#pSF=1.0270   ##data 2004
+##pSF=1.0270   ##data 2004
 ##pSF=1.0155   ##data 2016-17
-pSF=1.0170   ##data 2016-17
+##pSF=1.0170   ##data 2016-17
+pSF=1.0150   ##data 2016-17
 
 
 ##$HOME/development/Dmeson/analysis_Dplusmeson -x -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -n $Nevents -z $verbose -o $outfile -f $kinefit $inruns -y $pSF
-##$HOME/development/Dmeson/analysis_Dplusmeson -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -n $Nevents -z $verbose -o $outfile -f $kinefit $inruns -y $pSF
+$HOME/development/Dmeson/analysis_Dplusmeson -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -n $Nevents -z $verbose -o $outfile -f $kinefit $inruns -y $pSF
 ##$HOME/development/Dmeson/analysis_Dplusmeson -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -n $Nevents -z $verbose -o $outfile -f $kinefit $inruns -w $nevbegin -g $nevend -y $pSF
 ##For MC
-$HOME/development/Dmeson/analysis_Dplusmeson -D 1 -x -v 23272 -m 23272 -M 50 -S 1.0 -A 6.0 -Z 0.0 -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -n $Nevents -z $verbose -o $outfile -f $kinefit $inruns -w $nevbegin -g $nevend
+##$HOME/development/Dmeson/analysis_Dplusmeson -D 1 -x -v 23272 -m 23272 -M 50 -S 1.0 -A 6.0 -Z 0.0 -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -n $Nevents -z $verbose -o $outfile -f $kinefit $inruns -w $nevbegin -g $nevend
 

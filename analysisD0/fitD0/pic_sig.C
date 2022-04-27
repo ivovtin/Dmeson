@@ -7,31 +7,35 @@
   gStyle->SetHistLineWidth(2);
   gStyle->SetHistLineColor(4);
 
-  TString KEDR="/spool/users/ovtin/outDmeson/D0/results/fitsD0/";
-  //TString KEDR="/spool/users/ovtin/outDmeson/D0/results/fitsD0/forTest/";
+  TString KEDR="/store/users/ovtin/outDmeson/D0/results/fitsD0/";
+  //TString KEDR="/store/users/ovtin/outDmeson/D0/results/fitsD0/forTest/";
+
+  TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc";
+  TString data_file = "kp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_ATC.dat";
+  TString type = "S1.0_A6.0_Z0.0_"+dat_dirname;
+
+  TString gen_dirname = dat_dirname;
+
+  //Syst_SigShape
+  //TString gen_dirname = dat_dirname + "_Syst_SigShape";
+  //type = type + "_Syst_SigShape";
+
 
   TNtuple nt("nt","NTuple","mbc:de:dp");
 
-  TNtuple nt2("nt2","NTuple","mbc:de:dp");
-
-  FILE* file = fopen("dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/kp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0.dat","r");
-  //FILE* file = fopen("dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/kp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0.dat","r");
-
-  int i=0;
+  FILE* file = fopen(TString("dat/" + dat_dirname + "/" + data_file).Data(),"r");
   while (!feof(file)) {
     double mbc,de,dp;
     if (fscanf(file,"%lf %lf %lf", &mbc,&de,&dp) == 3) {
       nt.Fill(mbc,de,dp);
-      i++;
     }
-    //if (i >= 15000) break;                                 //!!!!!!
   }
 
   fclose(file);
 
-  FILE* file = fopen("gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/sig_S1.0_A6.0_Z0.0.gen","r");
-  //FILE* file = fopen("gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/sig_S1.0_A6.0_Z0.0.gen","r");
+  TNtuple nt2("nt2","NTuple","mbc:de:dp");
 
+  file = fopen(TString("gen/" + gen_dirname + "/sig_S1.0_A6.0_Z0.0.gen").Data(),"r");
   while (!feof(file)) {
     double mbc,de,dp;
     if (fscanf(file,"%lf %lf %lf", &mbc,&de,&dp) == 3) {
@@ -104,10 +108,28 @@
   mbcs5.Draw("elp");
   mbcs6.Draw("same");
 
-  c.Print(KEDR+"signal_atc_S1.0_A6.0_Z0.0.eps");
-  c.Print(KEDR+"signal_atc_S1.0_A6.0_Z0.0.png");
+  c.Print(KEDR+"sig_"+type+".eps");
+  c.Print(KEDR+"sig_"+type+".png");
 
-  //c.Print(KEDR+"signal_S1.0_A6.0_Z0.0.eps");
-  //c.Print(KEDR+"signal_S1.0_A6.0_Z0.0.png");
 
+  TCanvas c2("c2","c2",900,300);
+  c2.Divide(4,1);
+
+  c2.cd(1);
+  nt->Draw("mbc:dp","mbc>1830");
+
+  c2.cd(2);
+  mbc1.Draw("elp");
+  mbc2.Draw("same");
+
+  c2.cd(3);
+  de1.Draw("elp");
+  de2.Draw("same");
+
+  c2.cd(4);
+  dp1.Draw("elp");
+  dp2.Draw("same");
+
+  c2.Print(KEDR+"sig_"+type+"_2.eps");
+  c2.Print(KEDR+"sig_"+type+"_2.png");
 }

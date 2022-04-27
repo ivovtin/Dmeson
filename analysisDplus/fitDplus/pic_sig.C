@@ -6,8 +6,8 @@
   gStyle->SetCanvasColor(0);
   gStyle->SetFrameFillColor(0);
 
-  //TString KEDR="/spool/users/ovtin/outDmeson/Dplus/results/fitsDplus/";
-  TString KEDR="/spool/users/ovtin/outDmeson/Dplus/results/fitsDplus/forTest/";
+  TString KEDR="/spool/users/ovtin/outDmeson/Dplus/results/fitsDplus/";
+  //TString KEDR="/spool/users/ovtin/outDmeson/Dplus/results/fitsDplus/forTest/";
 
   TString type = "tof";
 
@@ -15,7 +15,7 @@
 
   TNtuple nt2("nt2","NTuple","mbc:de:dp");
 
-  FILE* file = fopen(TString("dat/kpp_signal_def.dat").Data(),"r");
+  FILE* file = fopen(TString("dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_tof_atcPthr600/kpp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_tof_atc_ATC.dat").Data(),"r");
 
   while (!feof(file)) {
     double mbc,de,dp;
@@ -26,7 +26,7 @@
 
   fclose(file);
 
-  FILE* file = fopen("gen/sig.gen","r");
+  FILE* file = fopen(TString("gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_tof_atcPthr600/sig_S1.0_A6.0_Z0.0.gen").Data(),"r");
 
   while (!feof(file)) {
     double mbc,de,dp;

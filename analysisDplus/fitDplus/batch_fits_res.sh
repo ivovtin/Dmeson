@@ -4,7 +4,7 @@
 #$ -S /bin/bash                            ##specifies the interpreting shell for this job to be the Bash shell.
 # -------------------------------------------
 # --             batch name                --
-#$ -N Dmeson
+#$ -N fitDp
 # -------------------------------------------
 # --     What to redirect to where         --
 # -- working directory --
@@ -20,9 +20,9 @@
 ##$ -v PATH=$PATH:$HOME/development/lib:/home/ovtin/development/KrKRec,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/ovtin/development/lib,KDBHOST=bison-2
 # -------------------------------------------
 # --             Queue list                --
-#$ -soft
+##$ -soft
 ##$ -hard
-#$ -l time=24:00:00
+##$ -l time=24:00:00
 ##$ -q remote
 ##$ -q extralong
 ##$ -q 6h
@@ -40,6 +40,8 @@
 ##$HOME/development/Dmeson/analysisDplus/fitDplus/batch_dbck
 ## exp
 $HOME/development/Dmeson/analysisDplus/fitDplus/batch_exp
+## exp TMVA
+##$HOME/development/Dmeson/analysisDplus/fitDplus/batch_exp_tmva
 
 status=$?
 if [ $status != 0 ]; then

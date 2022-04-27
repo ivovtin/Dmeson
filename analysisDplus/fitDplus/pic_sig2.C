@@ -1,5 +1,4 @@
 {
-
   gROOT->Reset();
   gROOT->DeleteAll();
   gStyle->SetOptStat(0);
@@ -11,13 +10,39 @@
   //TString KEDR="/store/users/ovtin/outDmeson/Dplus/results/fitsDplus/";
   TString KEDR="/store/users/ovtin/outDmeson/Dplus/results/fitsDplus/forTest/";
 
-  TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_tof_atcPthr600";
-  TString data_file = "kpp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_tof_atc_ATC.dat";
-  TString gen_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_tof_atcPthr600";
+  //atc_tof
+  //TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_0.80_0.70_Pcuttof380_20012022";
+  //TString data_file = "kpp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_atc_tof_ATC.dat";
+  //TString type = "atc_tof_S1.0_A6.0_Z0.0"+dat_dirname;
 
-  //TString type = "tof_S1.0_A6.0_Z0.0";
-  //TString type = "dedx_tof_atc_S1.0_A6.0_Z0.0";
-  TString type = "tof_atcPthr600_S1.0_A6.0_Z0.0";
+  //atc_dedx
+  //TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_dedx_0.80_0.70_Pcuttof380_20012022";
+  //TString data_file = "kpp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_atc_dedx_ATC.dat";
+  //TString type = "atc_dedx_S1.0_A6.0_Z0.0"+dat_dirname;
+
+  //atc_tof_dedx
+  //TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12";
+  //TString data_file = "kpp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_atc_tof_dedx_ATC.dat";
+  //TString type = "atc_tof_dedx_S1.0_A6.0_Z0.0"+dat_dirname;
+
+  //atc_tof_dedx
+  TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_TMVA";
+  TString data_file = "kpp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_atc_tof_dedx_tmva_0.50_ATC.dat";
+  TString type = "atc_tof_dedx_S1.0_A6.0_Z0.0"+dat_dirname;
+
+  //TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_syst_momres_S1.0_A7.2_Z0.2";
+  //TString data_file = "kpp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A7.2_Z0.2_atc_tof_dedx_syst_momres_ATC.dat";
+  //TString type = "atc_tof_dedx_S1.0_A7.2_Z0.2"+dat_dirname;
+
+  //TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_syst_momres_S1.0_A6.9_Z0.0";
+  //TString data_file = "kpp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.9_Z0.0_atc_tof_dedx_syst_momres_ATC.dat";
+  //TString type = "atc_tof_dedx_S1.0_A6.9_Z0.0"+dat_dirname;
+
+  TString gen_dirname = dat_dirname;
+
+  //Syst_SigShape
+  //TString gen_dirname = dat_dirname + "_Syst_SigShape";
+  //type = type + "_Syst_SigShape";
 
   TNtuple nt("nt","NTuple","mbc:de:dp");
 
@@ -34,7 +59,7 @@
 
   fclose(file);
 
-  FILE* file = fopen("gen/" + gen_dirname + "/sig_S1.0_A6.0_Z0.0.gen","r");
+  FILE* file = fopen(TString("gen/" + gen_dirname + "/sig_S1.0_A6.0_Z0.0.gen").Data(),"r");
 
   while (!feof(file)) {
     double mbc,de,dp;

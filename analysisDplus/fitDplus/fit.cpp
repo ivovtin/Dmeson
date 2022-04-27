@@ -12,7 +12,7 @@ typedef struct {
 } t_point;
 
 int num_sig;
-t_point sig[300000];
+t_point sig[5000000];
 int num_norm;
 t_point norm[5000000];
 
@@ -30,6 +30,7 @@ int gen_seed;
 int norm_seed;
 
 #define BCK_PARS 5
+#define BCK_TMVA_PARS 8
 #define DBCK_PARS 14
 #define SIG_PARS 30
 #define EXP_PARS 5
@@ -39,6 +40,8 @@ TRandom3* rnd;
 
 double bck_par[BCK_PARS];
 double bck_epar[BCK_PARS];
+double bck_tmva_par[BCK_TMVA_PARS];
+double bck_tmva_epar[BCK_PARS];
 
 double dbck_gaus_par[DBCK_PARS] = {
   0., 0., 1888.75, -1.512, -251.5, 75.5,
@@ -47,34 +50,6 @@ double dbck_gaus_par[DBCK_PARS] = {
 
 double dbck_par[DBCK_PARS];
 double dbck_epar[DBCK_PARS];
-
-double sig_par_corr[SIG_PARS] = {
-//  1864.572136, -0.413509, -0.030059, 0.803902, 1.717566, 47.629182, 
-  1864.572136, -0.413509, -0.030059, 1.023902, 2.317566, 47.629182, 
-  1888.750000, 10.217552, 21.278622, 20.641600, 0.199009, 
-  16.911367, 123.621517, -0.162603, 3.978513, 17.952010, 13.816511, 4.875620, 
-  1888.750000, -1.345018, -138.970831, 57.627908, 22.354517, 
-  1881.809090, 20.123182, 3.190639, -26.957989, 51.593411, 
-  144.109, 1872.757467
-};
-
-double sig_par_xs[SIG_PARS] = {
-  1864.358135, 3.128730, -0.035154, 0.952214, 2.318660, 47.434301, 
-  1888.750000, 9.351257, 22.389010, 9.368806, 0.190371, 
-  17.228983, 135.805031, -0.088875, 4.704761, 9.017986, 10.148626, 4.582520, 
-  1888.750000, -1.363022, -158.882916, 63.682994, 21.442926, 
-  1906.083059, 34.452337, 5.435646, -15.180071, 53.906745, 
-  276.070560, 1868.574895
-};
-
-double sig_par_xsgm[SIG_PARS] = {
-  1864.556452, 1.646712, -0.034027, 1.125386, 2.486065, 49.477989, 
-  1888.750000, 6.110003, 21.472286, 3.712464, 0.145991, 
-  18.049578, 172.622018, -0.084118, 1.336431, 38.999130, 4.969049, 4.180077, 
-  1888.750000, -1.690715, -182.401724, 69.533828, 12.471282, 
-  1879.784836, 29.781964, 6.865934, -16.421617, 73.733742, 
-  187.836093, 1869.914083
-};
 
 double sig_par[SIG_PARS];
 double sig_epar[SIG_PARS];
@@ -93,16 +68,42 @@ double pdf_bck(double mbc, double de, double dp, double *par) {
   double dp_max = sqrt(ebeam*ebeam - mbc*mbc);
   if (fabs(dp)<dp_max) {
     double arg = alpha_mbc*(mbc/ebeam-1.);
-    double ade = (-alpha_de+(twist*(mbc/ebeam-1.)))*de/1000. - 
+    double ade = (-alpha_de+(twist*(mbc/ebeam-1.)))*de/1000. -
                  c2_de*pow(de/1000.,2.);
 //    printf("pdf_bck, arg = %f\n", arg);
     if (no_dp) {
       return exp(arg+ade)*dp_max/1000.;
-    } 
+    }
     else return exp(arg-alpha_de*de/1000.)*(1.+twist*dp*dp/1000./1000.);
   }
   return 0.;
 }
+
+
+double pdf_bck_tmva(double mbc, double de, double dp, double *par) {
+  double alpha_mbc = par[0];
+  double alpha_de = par[1];
+  double ebeam = par[2];
+  double twist = par[3];
+  double c2_de = par[4];
+  double mbcw_frac = par[5];
+  double mbc_mean = par[6];
+  double mbc_sigma = par[7];
+
+  if (mbc > ebeam) return 0;
+  double dp_max = sqrt(ebeam*ebeam - mbc*mbc);
+  if (fabs(dp)<dp_max) {
+    double arg = alpha_mbc*(mbc/ebeam-1.);
+    double ade = (-alpha_de+(twist*(mbc/ebeam-1.)))*de/1000. -
+                 c2_de*pow(de/1000.,2.);
+    if (no_dp) {
+      return (exp(arg+ade)+fabs(mbcw_frac)*exp(-pow(mbc-mbc_mean,2)/2./mbc_sigma/mbc_sigma))*dp_max/1000.;
+    }
+    else return exp(arg-alpha_de*de/1000.)*(1.+twist*dp*dp/1000./1000.);
+  }
+  return 0.;
+}
+
 
 double pdf_dbck(double mbc, double de, double dp, double *par) {
   double alpha_mbc = par[0];
@@ -125,12 +126,12 @@ double pdf_dbck(double mbc, double de, double dp, double *par) {
   if (fabs(dp)<dp_max) {
     double p_mbc = exp(alpha_mbc*(mbc-ebeam)/ebeam);
     double p_de = exp(-alpha_de*de/1000.);
-    
+
 //    double mbc_sigma = mbc_sigma0*exp(-de*mbc_sigma1);
 //    double mbc_sigma = mbc_sigma0-de*mbc_sigma1;
 
     if (no_dp) mbc_mean += (de-de_mean)*dpcurv;
-    
+
     double p_mbc2 = exp(-pow(mbc-mbc_mean,2)/2./mbc_sigma0/mbc_sigma0);
 //    double p_mbc2 = exp((mbc-ebeam)/ebeam*mbc_sigma0);
     double p_mbc3 = exp(-pow(mbc-mbc_mean1,2)/2./mbc_sigma1/mbc_sigma1);
@@ -139,7 +140,7 @@ double pdf_dbck(double mbc, double de, double dp, double *par) {
     if (no_dp)
       return (p_mbc*p_de+fabs(de_frac)*p_mbc2*p_de2+
              fabs(de_frac1)*p_mbc3*p_de3)*dp_max/1000.;
-    else 
+    else
       return (p_mbc*p_de+fabs(de_frac)*p_mbc2*p_de2+
               fabs(de_frac1)*p_mbc3*p_de3)*
            fabs(1.+dpcurv*dp*dp/1000./1000.);
@@ -147,9 +148,10 @@ double pdf_dbck(double mbc, double de, double dp, double *par) {
   return 0.;
 }
 
+
 double pdf_sig(double mbc, double de, double dp, double *par) {
 //  printf("%f %f\n", par[0], par[1]);
- 
+
   double mbc_mean = par[0];
   double de_mean = par[1];
   double mbcde_corr = par[2];
@@ -168,13 +170,13 @@ double pdf_sig(double mbc, double de, double dp, double *par) {
   double mbc_sigma4 = par[15];
 
   double dbck_par[14];
-  
+
   for (int i=0; i<14; i++) {
     dbck_par[i] = par[i+16];
   }
 
 //  printf("%f %f\n", mbc, ebeam);
-  
+
   if (mbc > ebeam) return 0;
   if (mbc < min_mbc) return 0;
   if (fabs(de)>max_de) return 0;
@@ -182,7 +184,7 @@ double pdf_sig(double mbc, double de, double dp, double *par) {
   double dp_max = sqrt(ebeam*ebeam - mbc*mbc);
 
 //  printf("%f %f\n", dp, dp_max);
-  
+
   if (fabs(dp)<dp_max) {
 
     double dde = de - de_mean;
@@ -191,18 +193,18 @@ double pdf_sig(double mbc, double de, double dp, double *par) {
 
     double dpsig = fabs(1.+dp*dp*dpcurv/1000./1000.);
 
-    double mbc_sigma_l = sqrt(pow(mbc_sigma0_l,2) + 
-                         pow(fr*mbc_sigma2,2.) + 
+    double mbc_sigma_l = sqrt(pow(mbc_sigma0_l,2) +
+                         pow(fr*mbc_sigma2,2.) +
                          pow(fr*fr*mbc_sigma4,2.));
-    double mbc_sigma_r = sqrt(pow(mbc_sigma0_r,2) + 
-                         pow(fr*mbc_sigma2,2.) + 
+    double mbc_sigma_r = sqrt(pow(mbc_sigma0_r,2) +
+                         pow(fr*mbc_sigma2,2.) +
                          pow(fr*fr*mbc_sigma4,2.));
 
     double desig = exp(-dde*dde/2./de_sigma/de_sigma);
     double mbcsig;
     if (dmbc<0)
       mbcsig = exp(-dmbc*dmbc/2./mbc_sigma_l/mbc_sigma_l)/(mbc_sigma_l+mbc_sigma_r);
-    else 
+    else
       mbcsig = exp(-dmbc*dmbc/2./mbc_sigma_r/mbc_sigma_r)/(mbc_sigma_l+mbc_sigma_r);
 
     dmbc = mbc - mbc_mean - mbcdew_corr*dde - mbcw_shift;
@@ -211,10 +213,10 @@ double pdf_sig(double mbc, double de, double dp, double *par) {
 
 //    printf("%f %f\n", desig, mbcsig);
 
-    if (no_dp) 
+    if (no_dp)
       return dpsig*(desig*mbcsig + fabs(mbcw_frac)*desig2*mbcsig2)*dp_max/1000.+
              fabs(bck)/1e5*pdf_dbck(mbc, de, dp, dbck_par);
-    else 
+    else
     return dpsig*(desig*mbcsig + fabs(mbcw_frac)*desig2*mbcsig2)
            + fabs(bck)/1e5*pdf_dbck(mbc, de, dp, dbck_par);
   }
@@ -231,10 +233,35 @@ double pdf_exp(double mbc, double de, double dp, double *par) {
   sig_par[0] = mbc_mean;
   sig_par[1] = de_mean;
 
-  return fabs(sig)*pdf_sig(mbc, de, dp, sig_par) + 
+  return fabs(sig)*pdf_sig(mbc, de, dp, sig_par) +
          fabs(bck)/1e5*pdf_bck(mbc, de, dp, bck_par) +
          fabs(dbck)/1e5*pdf_dbck(mbc, de, dp, dbck_par);
+
+  //return fabs(sig)*pdf_sig(mbc, de, dp, sig_par) +
+  //       fabs(bck)/1e6*pdf_bck(mbc, de, dp, bck_par) +
+  //       fabs(dbck)/1e6*pdf_dbck(mbc, de, dp, dbck_par);
 }
+
+
+double pdf_exp_tmva(double mbc, double de, double dp, double *par) {
+  double mbc_mean = par[0];
+  double de_mean = par[1];
+  double bck = par[2];
+  double dbck = par[3];
+  double sig = par[4];
+
+  sig_par[0] = mbc_mean;
+  sig_par[1] = de_mean;
+
+  return fabs(sig)*pdf_sig(mbc, de, dp, sig_par) +
+         fabs(bck)/1e5*pdf_bck_tmva(mbc, de, dp, bck_tmva_par) +
+         fabs(dbck)/1e5*pdf_dbck(mbc, de, dp, dbck_par);
+
+  //return fabs(sig)*pdf_sig(mbc, de, dp, sig_par) +
+  //       fabs(bck)/1e6*pdf_bck(mbc, de, dp, bck_par) +
+  //       fabs(dbck)/1e6*pdf_dbck(mbc, de, dp, dbck_par);
+}
+
 
 double pdf_exp2(double mbc, double de, double dp, double *par) {
   double mbc_mean = par[0];
@@ -249,7 +276,7 @@ double pdf_exp2(double mbc, double de, double dp, double *par) {
   sig_par[0] = mbc_mean;
   sig_par[1] = de_mean;
 
-  return fabs(sig)*pdf_sig(mbc, de, dp, sig_par) + 
+  return fabs(sig)*pdf_sig(mbc, de, dp, sig_par) +
          fabs(bck)/1e5*pdf_bck(mbc, de, dp, bck_par) +
          fabs(dbck)/1e5*pdf_dbck(mbc, de, dp, dbck_par);
 }
@@ -298,6 +325,10 @@ void fit_func_bck(int &, double *, double &f, double *par, int) {
   f = loglh(BCK_PARS, par, &pdf_bck);
 }
 
+void fit_func_bck_tmva(int &, double *, double &f, double *par, int) {
+  f = loglh(BCK_TMVA_PARS, par, &pdf_bck_tmva);
+}
+
 void fit_func_dbck(int &, double *, double &f, double *par, int) {
   f = loglh(DBCK_PARS, par, &pdf_dbck);
 }
@@ -308,6 +339,10 @@ void fit_func_sig(int &, double *, double &f, double *par, int) {
 
 void fit_func_exp(int &, double *, double &f, double *par, int) {
   f = loglh(EXP_PARS, par, &pdf_exp);
+}
+
+void fit_func_exp_tmva(int &, double *, double &f, double *par, int) {
+  f = loglh(EXP_PARS, par, &pdf_exp_tmva);
 }
 
 void fit_func_exp2(int &, double *, double &f, double *par, int) {
@@ -322,10 +357,10 @@ void init() {
   max_de = 300.;
   num_norm = 4000000;
   no_dp = 1;
-  
+
   gen_seed = 12345;
   norm_seed = 1;
-  
+
   rnd = new TRandom3(gen_seed);
 
   max_dp = sqrt(max_mbc*max_mbc-min_mbc*min_mbc);
@@ -344,28 +379,28 @@ void make_norm() {
     norm[i].de = (2.*rnd.Rndm()-1.)*mid_de;
     norm[i].dp = (2.*rnd.Rndm()-1.)*max_dp;
   }
-  
+
 }
 
-double gen(TString filename, int num, double* par, double maj, 
+double gen(TString filename, int num, double* par, double maj,
      double (*pdf)(double, double, double, double*)) {
 //  TRandom3 rnd(gen_seed);
-  
+
   double maj1 = maj;
-  
+
   FILE* file = fopen(filename,"w");
-  
+
   for (int i=-1000; i<num; i++) {
     if ((i) % 1000 == 0) printf("Generating event %d\n", i);
-  
+
     for (int j=0; j<100000; j++) {
       double mbc = min_mbc + (max_mbc-min_mbc)*rnd->Rndm();
       double de = (2.*rnd->Rndm()-1.)*max_de;
       double dp = (2.*rnd->Rndm()-1.)*max_dp;
       double f = maj1*rnd->Rndm();
-      
+
       double fp = (*pdf)(mbc, de, no_dp ? 0 : dp, par);
-    
+
       if (fp > maj1) {
         maj1 = 1.5*fp;
         printf("Updated majorant: %f\n", maj1);
@@ -375,20 +410,24 @@ double gen(TString filename, int num, double* par, double maj,
         if (i>=0) fprintf(file,"%f %f %f\n", mbc, de, dp);
         break;
       }
-      
+
       if (j==100000-1) printf("Failed. F=%f, maj=%f\n", fp, maj1);
     }
-    
+
   }
-  
+
   fclose(file);
-  
+
   return maj1;
-  
+
 }
 
 double gen_bck(TString filename, int num, double* par, double maj) {
   return gen(filename,num,par,maj,&pdf_bck);
+}
+
+double gen_bck_tmva(TString filename, int num, double* par, double maj) {
+  return gen(filename,num,par,maj,&pdf_bck_tmva);
 }
 
 double gen_dbck(TString filename, int num, double* par, double maj) {
@@ -403,13 +442,17 @@ double gen_exp(TString filename, int num, double* par, double maj) {
   return gen(filename,num,par,maj,&pdf_exp);
 }
 
+double gen_exp_tmva(TString filename, int num, double* par, double maj) {
+  return gen(filename,num,par,maj,&pdf_exp_tmva);
+}
+
 double gen_maj(TString filename, int num, double* par, double maj) {
 //  TRandom3 rnd(gen_seed);
-  
+
   FILE* file = fopen(filename,"w");
-  
+
   double maj1 = maj;
-  
+
   for (int i=-1000; i<num; i++) {
     if ((i) % 100000 == 0) printf("Generating event %d\n", i);
 
@@ -417,9 +460,9 @@ double gen_maj(TString filename, int num, double* par, double maj) {
     double de = (2.*rnd->Rndm()-1.)*max_de;
     double dp = (2.*rnd->Rndm()-1.)*max_dp;
     double f = maj*rnd->Rndm();
-      
+
     double fp = pdf_exp(mbc, de, no_dp ? 0 : dp, par);
-    
+
     if (fp > maj1) {
       maj1 = 1.5*fp;
       printf("Updated majorant: %f\n", maj1);
@@ -427,17 +470,49 @@ double gen_maj(TString filename, int num, double* par, double maj) {
 
     if (f < fp && i>0) fprintf(file,"%f %f %f\n", mbc, de, dp);
   }
-  
+
   fclose(file);
-  
+
   return maj1;
 }
+
+
+double gen_maj_tmva(TString filename, int num, double* par, double maj) {
+//  TRandom3 rnd(gen_seed);
+
+  FILE* file = fopen(filename,"w");
+
+  double maj1 = maj;
+
+  for (int i=-1000; i<num; i++) {
+    if ((i) % 100000 == 0) printf("Generating event %d\n", i);
+
+    double mbc = min_mbc + (max_mbc-min_mbc)*rnd->Rndm();
+    double de = (2.*rnd->Rndm()-1.)*max_de;
+    double dp = (2.*rnd->Rndm()-1.)*max_dp;
+    double f = maj*rnd->Rndm();
+
+    double fp = pdf_exp_tmva(mbc, de, no_dp ? 0 : dp, par);
+
+    if (fp > maj1) {
+      maj1 = 1.5*fp;
+      printf("Updated majorant: %f\n", maj1);
+    }
+
+    if (f < fp && i>0) fprintf(file,"%f %f %f\n", mbc, de, dp);
+  }
+
+  fclose(file);
+
+  return maj1;
+}
+
 
 void load_sig(TString filename, int skip=0, int max=1000000) {
   FILE* file = fopen(filename,"r");
 
   num_sig = 0;
-  
+
   int i=0;
 
   while (!feof(file)) {
@@ -453,7 +528,7 @@ void load_sig(TString filename, int skip=0, int max=1000000) {
       i++;
     }
   }
-  
+
   fclose(file);
 }
 
@@ -464,7 +539,7 @@ void read_par(TString filename, int npar, double* par, double* epar) {
     return;
   }
   printf("Reading file %s\n", filename.Data());
-  
+
   for (int i=0; i<npar; i++) {
     int dummy;
     fscanf(file, "%d %lf %lf", &dummy, &par[i], &epar[i]);
@@ -512,6 +587,41 @@ void fit_bck() {
   }
 }
 
+void fit_bck_tmva() {
+  make_norm();
+
+  TVirtualFitter *minuit = TVirtualFitter::Fitter(0, 7);
+  minuit->SetFCN(fit_func_bck_tmva);
+
+  minuit->SetParameter(0, "C_mbc",    bck_tmva_par[0], bck_tmva_epar[0], 0,0);
+  minuit->SetParameter(1, "C_de" ,    bck_tmva_par[1], bck_tmva_epar[1], 0,0);
+  minuit->SetParameter(2, "Ebeam",    bck_tmva_par[2], bck_tmva_epar[2], 0,0);
+  minuit->SetParameter(3, "DPcurv",   bck_tmva_par[3], bck_tmva_epar[3], 0,0);
+  minuit->SetParameter(4, "C2_de",    bck_tmva_par[4], bck_tmva_epar[4], 0,0);
+  minuit->SetParameter(5, "mbc_frac",    bck_tmva_par[5], bck_tmva_epar[5], 0,0);
+  minuit->SetParameter(6, "mbc_mean",    bck_tmva_par[6], bck_tmva_epar[6], 0,0);
+  minuit->SetParameter(7, "mbc_sigma",    bck_tmva_par[7], bck_tmva_epar[7], 0,0);
+
+  double arglist[100];
+
+  arglist[0] = 3;
+  minuit->ExecuteCommand("FIX", arglist, 1);
+
+//  if (no_dp) {
+//    arglist[0] = 4;
+//    minuit->ExecuteCommand("FIX", arglist, 1);
+//  }
+
+  arglist[0] = 1;
+  minuit->ExecuteCommand("MIGRAD", arglist, 0);
+
+  for (int i=0; i<BCK_TMVA_PARS; i++) {
+    bck_tmva_par[i] = minuit->GetParameter(i);
+    bck_tmva_epar[i] = minuit->GetParError(i);
+  }
+}
+
+
 void fit_dbck() {
   make_norm();
 
@@ -542,7 +652,7 @@ void fit_dbck() {
 //    arglist[0] = 4;
 //    minuit->ExecuteCommand("FIX", arglist, 1);
 //  }
-  
+
   arglist[0] = 1;
   minuit->ExecuteCommand("MIGRAD", arglist, 0);
 
@@ -597,7 +707,7 @@ void fit_sig() {
 
   arglist[0] = 7;
   minuit->ExecuteCommand("FIX", arglist, 1);
-  
+
   if (no_dp) {
     arglist[0] = 9;
     minuit->ExecuteCommand("FIX", arglist, 1);
@@ -608,8 +718,9 @@ void fit_sig() {
     arglist[0] = 20;
     minuit->ExecuteCommand("FIX", arglist, 1);
   }
-  
-  arglist[0] = 1;
+
+  //arglist[0] = 1;
+  arglist[0] = 5000;
   minuit->ExecuteCommand("MIGRAD", arglist, 0);
 
   for (int i=0; i<SIG_PARS; i++) {
@@ -619,6 +730,7 @@ void fit_sig() {
 
 
 }
+
 
 void fit_exp() {
   make_norm();
@@ -645,6 +757,34 @@ void fit_exp() {
   }
 
 }
+
+
+void fit_exp_tmva() {
+  make_norm();
+
+  TVirtualFitter *minuit = TVirtualFitter::Fitter(0, 8);
+  minuit->SetFCN(fit_func_exp_tmva);
+
+  minuit->SetParameter(0, "MD",   exp_par[0], exp_epar[0], 0,0);
+  minuit->SetParameter(1, "DE" ,  exp_par[1], exp_epar[1], 0,0);
+  minuit->SetParameter(2, "Bck",  exp_par[2], exp_epar[2], 0,0);
+  minuit->SetParameter(3, "DBck", exp_par[3], exp_epar[3], 0,0);
+  minuit->SetParameter(4, "Sig",  exp_par[4], exp_epar[4], 0,0);
+
+  double arglist[100];
+
+//  arglist[0] = 5;
+//  minuit->ExecuteCommand("FIX", arglist, 1);
+  arglist[0] = 1;
+  minuit->ExecuteCommand("MIGRAD", arglist, 0);
+
+  for (int i=0; i<EXP_PARS; i++) {
+    exp_par[i] = minuit->GetParameter(i);
+    exp_epar[i] = minuit->GetParError(i);
+  }
+
+}
+
 
 void fit_exp2() {
   make_norm();

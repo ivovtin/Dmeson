@@ -10,13 +10,35 @@
   //TString KEDR="/spool/users/ovtin/outDmeson/Dplus/results/fitsDplus/";
   TString KEDR="/spool/users/ovtin/outDmeson/Dplus/results/fitsDplus/forTest/";
 
-  TString data_file = "kpp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_tof_atc_ATC.dat";
-  TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_tof_atcPthr600";
-  TString gen_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_tof_atcPthr600";
+  //atc_tof
+  //TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_0.80_0.70_Pcuttof380_20012022";
+  //TString data_file = "kpp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_atc_tof_ATC.dat";
+  //TString type = "atc_tof_S1.0_A6.0_Z0.0_"+dat_dirname;
 
-  //TString type = "tof_S1.0_A6.0_Z0.0";
-  //TString type = "dedx_tof_atc_S1.0_A6.0_Z0.0";
-  TString type = "tof_atc_S1.0_A6.0_Z0.0";
+  //atc_dedx
+  //TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_dedx_0.80_0.70_Pcuttof380_20012022";
+  //TString data_file = "kpp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_atc_dedx_ATC.dat";
+  //TString type = "atc_dedx_S1.0_A6.0_Z0.0_"+dat_dirname;
+
+  //atc_tof_dedx
+  //TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12";
+  //TString data_file = "kpp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_atc_tof_dedx_ATC.dat";
+  //TString type = "atc_tof_dedx_S1.0_A6.0_Z0.0_"+dat_dirname;
+
+  //atc_tof_dedx
+  TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_TMVA";
+  TString data_file = "kpp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_atc_tof_dedx_tmva_0.50_ATC.dat";
+  TString type = "atc_tof_dedx_S1.0_A6.0_Z0.0_"+dat_dirname;
+
+  //TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_syst_momres_S1.0_A7.2_Z0.2";
+  //TString data_file = "kpp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A7.2_Z0.2_atc_tof_dedx_syst_momres_ATC.dat";
+  //TString type = "atc_tof_dedx_S1.0_A7.2_Z0.2_"+dat_dirname;
+
+  TString gen_dirname = dat_dirname;
+
+  //Syst_DbckShape
+  //TString gen_dirname = dat_dirname + "_Syst_DbckShape";
+  //type = type + "_Syst_DbckShape";
 
   TNtuple nt("nt","NTuple","mbc:de:dp");
 
@@ -159,9 +181,33 @@
   des6.SetLineColor(2);
   des6.Draw("same");
 
-//  c.cd(9);
-//  nt2->Draw("mbc:de");
-
   c.Print(KEDR+"dbck_"+type+".eps");
   c.Print(KEDR+"dbck_"+type+".png");
+
+  TCanvas c2("c2","c2",800,300);
+  c2.Divide(3,1);
+
+  c2.cd(1);
+  mbc1.Draw("elp");
+  mbc1.GetXaxis()->SetTitle("M_{bc} (MeV)");
+  mbc2.SetLineColor(2);
+  mbc2.Draw("same");
+
+  c2.cd(2);
+  de1.Draw("elp");
+  de1.GetXaxis()->SetTitle("#Delta E (MeV)");
+  de2.SetLineColor(2);
+  de2.Draw("same");
+
+  c2.cd(3);
+  nt->Draw("de:mbc");
+  TH2F* htemp = (TH2F*)gPad->GetPrimitive("htemp");
+  htemp->GetXaxis()->SetTitle("M_{bc} (MeV)");
+  htemp->GetYaxis()->SetTitle("#DeltaE (MeV)");
+  htemp->GetYaxis()->SetTitleOffset(1.3);
+  htemp->SetTitle("");
+
+  c2.Print(KEDR+"dbck_"+type+"_2.eps");
+  c2.Print(KEDR+"dbck_"+type+"_2.png");
+
 }

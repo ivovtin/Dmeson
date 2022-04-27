@@ -18,7 +18,7 @@
 # -------------------------------------------
 # --             Enviroment                --
 ##$ -v PATH=$PATH:$HOME/development/lib:/home/ovtin/development/KrKRec,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/ovtin/development/lib,KDBHOST=bison-2
-#$ -v PATH=$PATH:$HOME/release/KdRunFastMon,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/alexbarn/release/lib,KDBHOST=localhost
+#$ -v PATH=$PATH:$HOME/release/KdRunFastMon,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/ovtin/release/lib,KDBHOST=localhost
 # -------------------------------------------
 # --             Queue list                --
 ##$ -soft
@@ -30,11 +30,11 @@
 ##$ -q day
 #
 # -- Send mail at submission and completion of script --
-#$ -m beas
-#$ -M ovtin.ivan@gmail.com
+##$ -m beas
+##$ -M ovtin.ivan@gmail.com
 
-##$ -t 1-482
-#$ -t 1-693
+##$ -t 1-693
+#$ -t 401-693
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]
@@ -43,14 +43,23 @@ myrand=$[1000+$i]
 inruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/runDmeson"$i
 ##outfile="/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0210_kNoiseReject3_atc_KemcAllowediOn/psi3770_to_D0meson_"$i".root"
 ##outfile="/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0150_kNoiseReject3_atc_KemcAllowediOn/psi3770_to_D0meson_"$i".root"
-outfile="/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0150_kNoiseReject3_atc_KemcAllowedOn_dedx_tof/psi3770_to_D0meson_"$i".root"
+##outfile="/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0150_kNoiseReject3_atc_KemcAllowedOn_dedx_tof/psi3770_to_D0meson_"$i".root"
+##outfile="/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0150_kNoiseReject3_atc_KemcAllowedOn_dedx_tof_KcExp1_kXTKey1/psi3770_to_D0meson_"$i".root"
+##outfile="/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0150_kNoiseReject3_atc_KemcAllowedOff_dedx_tof_KcExp1_kXTKey1/psi3770_to_D0meson_"$i".root"
+##outfile="/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0140_kNoiseReject3_atc_KemcAllowedOn_dedx_tof/psi3770_to_D0meson_"$i".root"
+##outfile="/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0140_kNoiseReject3_atc_KemcAllowedOn_dedx_tof_ionization_losses_1.20/psi3770_to_D0meson_"$i".root"
+##outfile="/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0140_kNoiseReject3_atc_KemcAllowedOn_dedx_tof_ionization_losses_0.80/psi3770_to_D0meson_"$i".root"
+##outfile="/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0140_kNoiseReject3_atc_KemcAllowedOn_dedx_tof_ionization_losses_plus1sigma/psi3770_to_D0meson_"$i".root"
+outfile="/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0140_kNoiseReject3_atc_KemcAllowedOn_dedx_tof_ionization_losses_minus1sigma/psi3770_to_D0meson_"$i".root"
+##outfile="/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0130_kNoiseReject3_atc_KemcAllowedOn_dedx_tof/psi3770_to_D0meson_"$i".root"
+##outfile="/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0120_kNoiseReject3_atc_KemcAllowedOn_dedx_tof/psi3770_to_D0meson_"$i".root"
+##outfile="/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0200_kNoiseReject3_atc_KemcAllowedOn_dedx_tof/psi3770_to_D0meson_"$i".root"
+##outfile="/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0300_kNoiseReject3_atc_KemcAllowedOn_dedx_tof/psi3770_to_D0meson_"$i".root"
+##outfile="/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0170_kNoiseReject3_atc_KemcAllowedOn_dedx_tof/psi3770_to_D0meson_"$i".root"
 ##outfile="/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0125_kNoiseReject3_atc_KemcAllowediOn/psi3770_to_D0meson_"$i".root"
 ##outfile="/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0165_kNoiseReject3_atc_KemcAllowediOn/psi3770_to_D0meson_"$i".root"
 ##outfile="/store/users/ovtin/outDmeson/Dplus/psi3770_to_D0meson_"$i".root"
 #outfile="/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0110_kNoiseReject3_atc_KemcAllowediOn_v2/psi3770_to_D0meson_"$i".root"
-##inruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/runDmeson"$i
-##outfile="/spool/users/ovtin/outDmeson/Dplus/dataPcorr2004/psi3770_to_D0meson_"$i".root"
-##outfile="/spool/users/ovtin/outDmeson/Dplus/dataPcorr2004_1.0250/psi3770_to_D0meson_"$i".root"
 mintracks=3
 maxtracks=20
 minbeamtracks=0
@@ -61,16 +70,21 @@ maxPt=2000
 minClusterEnergy=0
 minTotalEnergy=0
 minClusters=0
-maxClusters=35
+#maxClusters=35
+maxClusters=30
 minClustersLKr=0
 minClustersCsI=0
-maxtchi2=10000
+maxtchi2=1000
 minNhits=0
 kinefit=1
-##pSF=1.0280   ##data 2004
 ##pSF=1.0210   ##data 2016-17
-pSF=1.0150   ##data 2016-17
-##pSF=1.0135   ##data 2016-17
+##pSF=1.0150   ##data 2016-17
+pSF=1.0140   ##data 2016-17
+##pSF=1.0130   ##data 2016-17
+##pSF=1.0120   ##data 2016-17
+##pSF=1.0200   ##data 2016-17
+##pSF=1.0300   ##data 2016-17
+##pSF=1.0170   ##data 2016-17
 ##pSF=1.0125   ##data 2016-17
 ##pSF=1.0165   ##data 2016-17
 ##pSF=1.0110   ##data 2016-17

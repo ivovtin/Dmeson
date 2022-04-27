@@ -22,7 +22,7 @@
 # --             Queue list                --
 ##$ -soft
 ##$ -hard
-#$ -l time=24:00:00
+##$ -l time=24:00:00
 ##$ -q remote
 ##$ -q extralong
 ##$ -q 6h
@@ -37,9 +37,9 @@
 ## uds BG
 ##$HOME/development/Dmeson/analysisD0/fitD0/batch_bck
 ## DD BG
-$HOME/development/Dmeson/analysisD0/fitD0/batch_dbck
+##$HOME/development/Dmeson/analysisD0/fitD0/batch_dbck
 ## exp
-##$HOME/development/Dmeson/analysisD0/fitD0/batch_exp
+$HOME/development/Dmeson/analysisD0/fitD0/batch_exp
 
 status=$?
 if [ $status != 0 ]; then

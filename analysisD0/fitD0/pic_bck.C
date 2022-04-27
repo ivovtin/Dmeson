@@ -1,5 +1,4 @@
 {
-
   gROOT->Reset();
   gROOT->DeleteAll();
   gStyle->SetOptStat(0);
@@ -8,12 +7,28 @@
   gStyle->SetHistLineWidth(2);
   gStyle->SetHistLineColor(4);
 
-  TString KEDR="/spool/users/ovtin/outDmeson/D0/results/fitsD0/";
-  //TString KEDR="/spool/users/ovtin/outDmeson/D0/results/fitsD0/forTest/";
+  //TString KEDR="/store/users/ovtin/outDmeson/D0/results/fitsD0/";
+  TString KEDR="/store/users/ovtin/outDmeson/D0/results/fitsD0/forTest/";
 
   TNtuple nt("nt","NTuple","mbc:de:dp");
 
-  FILE* file = fopen("dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0.dat","r");
+  //TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc";
+  //TString data_file = "kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_ATC.dat";
+
+  //TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_Syst_BGudsShape";
+  //TString data_file = "kp_pions_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_ATC.dat";
+
+  //TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_woATC";
+  //TString data_file = "kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_woATC.dat";
+
+  TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_S1.0_A6.9_Z0.0_syst_momres";
+  TString data_file = "kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.9_Z0.0_syst_momres_ATC.dat";
+
+  TString type = "S1.0_A6.0_Z0.0_" + dat_dirname;
+
+  TString gen_dirname = dat_dirname;
+
+  FILE* file = fopen(TString("dat/" + dat_dirname + "/" + data_file).Data(),"r");
   while (!feof(file)) {
     double mbc,de,dp;
     if (fscanf(file,"%lf %lf %lf", &mbc,&de,&dp) == 3) {
@@ -25,7 +40,7 @@
 
   TNtuple nt2("nt2","NTuple","mbc:de:dp");
 
-  file = fopen("gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/bck_uds_S1.0_A6.0_Z0.0.gen","r");
+  file = fopen(TString("gen/" + gen_dirname + "/bck_S1.0_A6.0_Z0.0.gen").Data(),"r");
   while (!feof(file)) {
     double mbc,de,dp;
     if (fscanf(file,"%lf %lf %lf", &mbc,&de,&dp) == 3) {
@@ -53,6 +68,15 @@
   nt2->Project("mbc2","mbc","abs(de)<300");
   mbc2->Scale(scale);
 
+  TH1F dp1("dp1","",100,-800.,800.);
+  TH1F dp2("dp2","",100,-800.,800.);
+  dp2.SetLineColor(2);
+
+  nt->Project("dp1","dp");
+  nt2->Project("dp2","dp");
+  double scale_dp = dp1->GetSumOfWeights()/dp2->GetSumOfWeights();
+  dp2->Scale(scale_dp);
+
   TH1F de3("de3","M_{bc}<1800 MeV",30,-300.,300.);
   TH1F de4("de4","M_{bc}<1800 MeV",30,-300.,300.);
   de4.SetLineColor(2);
@@ -77,7 +101,8 @@
   nt2->Project("de8","de","mbc>1850");
   de8->Scale(scale);
 
-  TCanvas c("c","c",800,600);
+
+  TCanvas c("c","c",1000,600);
   c.Divide(3,2);
 
   c.cd(1);
@@ -89,7 +114,12 @@
   de1.Draw("elp");
   de1.GetXaxis()->SetTitle("#Delta E (MeV)");
   de2.Draw("same");
-
+  /*
+  c.cd(3);
+  dp1.Draw("elp");
+  dp1.GetXaxis()->SetTitle("#Delta|p| (MeV)");
+  dp2.Draw("same");
+  */
   c.cd(3);
   nt->Draw("de:mbc");
   TH2F* htemp = (TH2F*)gPad->GetPrimitive("htemp");
@@ -113,7 +143,64 @@
   de7.GetXaxis()->SetTitle("#Delta E (MeV)");
   de8.Draw("same");
 
-  c.Print(KEDR+"uds_atc_S1.0_A6.0_Z0.0.eps");
-  c.Print(KEDR+"uds_atc_S1.0_A6.0_Z0.0.png");
+  c.Print(KEDR+"uds_"+type+".eps");
+  c.Print(KEDR+"uds_"+type+".png");
 
+
+  TCanvas c2("c2","c2",1000,300);
+  c2.Divide(3,1);
+
+  c2.cd(1);
+  mbc1.Draw("elp");
+  mbc1.GetXaxis()->SetTitle("M_{bc} (MeV)");
+  mbc2.Draw("same");
+
+  c2.cd(2);
+  de1.Draw("elp");
+  de1.GetXaxis()->SetTitle("#Delta E (MeV)");
+  de2.Draw("same");
+
+  c2.cd(3);
+  nt->Draw("de:mbc");
+  TH2F* htemp = (TH2F*)gPad->GetPrimitive("htemp");
+  htemp->GetXaxis()->SetTitle("M_{bc} (MeV)");
+  htemp->GetYaxis()->SetTitle("#DeltaE (MeV)");
+  htemp->GetYaxis()->SetTitleOffset(1.3);
+  htemp->SetTitle("");
+
+  c2.Print(KEDR+"uds_"+type+"_2.eps");
+  c2.Print(KEDR+"uds_"+type+"_2.png");
+
+  ///////////////////////////////////////
+  TCanvas c3("c3","c3",600,600);
+  c3.Divide(2,2);
+
+  c3.cd(1);
+  mbc1.Draw("elp");
+  mbc1.GetXaxis()->SetTitle("M_{bc} (MeV)");
+  mbc2.SetLineColor(2);
+  mbc2.Draw("same");
+
+  c3.cd(2);
+  de1.Draw("elp");
+  de1.GetXaxis()->SetTitle("#Delta E (MeV)");
+  de2.SetLineColor(2);
+  de2.Draw("same");
+
+  c3.cd(3);
+  nt->Draw("de:mbc");
+  TH2F* htemp = (TH2F*)gPad->GetPrimitive("htemp");
+  htemp->GetXaxis()->SetTitle("M_{bc} (MeV)");
+  htemp->GetYaxis()->SetTitle("#DeltaE (MeV)");
+  htemp->GetYaxis()->SetTitleOffset(1.3);
+  htemp->SetTitle("");
+
+  c3.cd(4);
+  dp1.Draw("elp");
+  dp1.GetXaxis()->SetTitle("#Delta|p| (MeV)");
+  dp2.SetLineColor(2);
+  dp2.Draw("same");
+
+  c3.Print(KEDR+"uds_"+type+"_3.eps");
+  c3.Print(KEDR+"uds_"+type+"_3.png");
 }

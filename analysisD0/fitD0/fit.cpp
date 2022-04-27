@@ -95,8 +95,8 @@ double pdf_bck(double mbc, double de, double dp, double *par) {
   double dp_max = sqrt(ebeam*ebeam - mbc*mbc);
   if (fabs(dp)<dp_max) {
     double arg = alpha_mbc*(mbc*mbc/ebeam/ebeam-1.)-alpha_de*de/1000.;
-//    printf("pdf_bck, arg = %f\n", arg);
-    return exp(arg)*(1.+dpcurv*dp*dp/1000./1000.);
+    //printf("pdf_bck, arg = %f\n", arg);
+    return exp(arg)*(1.+dpcurv*dp*dp/100./100.);
   }
   return 0.;
 }
@@ -209,10 +209,13 @@ double pdf_sig(double mbc, double de, double dp, double *par) {
     double desig2 = exp(-dde*dde/2./dew_sigma/dew_sigma);
     double mbcsig2 = fabs(mbcw_frac)*exp(-dmbc*dmbc/2./mbcw_sigma/mbcw_sigma)/mbcw_sigma;
 
-//    printf("%f %f\n", desig, mbcsig);
+    //printf("%f %f\n", desig, mbcsig);
 
     return dpsig*(desig*mbcsig + fabs(mbcw_frac)*desig2*mbcsig2)
            + fabs(bck)/1e5*pdf_dbck(mbc, de, dp, dbck_par);
+    //1 Gauss
+    //return dpsig*(desig*mbcsig)
+    //       + fabs(bck)/1e5*pdf_dbck(mbc, de, dp, dbck_par);
   }
   return 0.;
 }
@@ -413,7 +416,7 @@ void make_norm() {
 
 }
 
-double gen(char* filename, int num, double* par, double maj,
+double gen(TString  filename, int num, double* par, double maj,
      double (*pdf)(double, double, double, double*)) {
   TRandom3 rnd(gen_seed);
 
@@ -453,23 +456,23 @@ double gen(char* filename, int num, double* par, double maj,
 
 }
 
-double gen_bck(char* filename, int num, double* par, double maj) {
+double gen_bck(TString filename, int num, double* par, double maj) {
   return gen(filename,num,par,maj,&pdf_bck);
 }
 
-double gen_dbck(char* filename, int num, double* par, double maj) {
+double gen_dbck(TString filename, int num, double* par, double maj) {
   return gen(filename,num,par,maj,&pdf_dbck);
 }
 
-double gen_sig(char* filename, int num, double* par, double maj) {
+double gen_sig(TString filename, int num, double* par, double maj) {
   return gen(filename,num,par,maj,&pdf_sig);
 }
 
-double gen_exp(char* filename, int num, double* par, double maj) {
+double gen_exp(TString filename, int num, double* par, double maj) {
   return gen(filename,num,par,maj,&pdf_exp);
 }
 
-double gen_maj(char* filename, int num, double* par, double maj) {
+double gen_maj(TString filename, int num, double* par, double maj) {
   TRandom3 rnd(gen_seed);
 
   FILE* file = fopen(filename,"w");
@@ -499,7 +502,7 @@ double gen_maj(char* filename, int num, double* par, double maj) {
   return maj1;
 }
 
-void load_sig(char* filename, int skip=0, int max=1000000) {
+void load_sig(TString filename, int skip=0, int max=1000000) {
   FILE* file = fopen(filename,"r");
 
   num_sig = 0;
@@ -523,23 +526,23 @@ void load_sig(char* filename, int skip=0, int max=1000000) {
   fclose(file);
 }
 
-void read_par(char* filename, int npar, double* par, double* epar) {
+void read_par(TString filename, int npar, double* par, double* epar) {
   FILE* file = fopen(filename, "r");
   if (!file) {
-    printf("Error opening file %s\n", filename);
+    printf("Error opening file %s\n", filename.Data());
     return;
   }
-  printf("Reading file %s\n", filename);
+  printf("Reading file %s\n", filename.Data());
 
   for (int i=0; i<npar; i++) {
     int dummy;
     fscanf(file, "%d %lf %lf", &dummy, &par[i], &epar[i]);
-    printf("%s : par(%d)=%f +- %f\n", filename, i, par[i], epar[i]);
+    printf("%s : par(%d)=%f +- %f\n", filename.Data(), i, par[i], epar[i]);
   }
   fclose(file);
 }
 
-void write_par(char* filename, int npar, double* par, double* epar) {
+void write_par(TString filename, int npar, double* par, double* epar) {
   FILE* file = fopen(filename, "w");
   for (int i=0; i<npar; i++) {
     fprintf(file, "%d %lf %lf\n", i, par[i], epar[i]);

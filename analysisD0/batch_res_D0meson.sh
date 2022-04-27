@@ -22,18 +22,20 @@
 # --             Queue list                --
 #$ -soft
 ##$ -hard
-#$ -l time=24:00:00
+##$ -l time=24:00:00
 ##$ -q remote
-#$ -q extralong
+##$ -q extralong
+#$ -q day
 #
 # -- Send mail at submission and completion of script --
 #$ -m beas
 #$ -M ovtin.ivan@gmail.com
 
 ##dataORmc=4
-dataORmc=1
+dataORmc=3
+verbose=0
 
-$HOME/development/Dmeson/analysisD0/D0meson $dataORmc
+$HOME/development/Dmeson/analysisD0/D0meson $dataORmc $verbose
 
 status=$?
 if [ $status != 0 ]; then

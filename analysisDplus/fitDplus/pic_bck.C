@@ -11,15 +11,37 @@
   //TString KEDR="/store/users/ovtin/outDmeson/Dplus/results/fitsDplus/";
   TString KEDR="/store/users/ovtin/outDmeson/Dplus/results/fitsDplus/forTest/";
 
-  TString data_file = "kpp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_tof_atc_ATC.dat";
-  TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_tof_atcPthr600";
-  TString gen_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_tof_atcPthr600";
+  /*
+  //atc_tof
+  TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_0.80_0.70_Pcuttof380_20012022";
+  TString data_file = "kpp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_atc_tof_ATC.dat";
+  TString type = "atc_tof_S1.0_A6.0_Z0.0" + dat_dirname;
+  */
+  //atc_dedx
+  //TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_dedx_0.80_0.70_Pcuttof380_20012022";
+  //TString data_file = "kpp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_atc_dedx_ATC.dat";
+  //TString type = "atc_dedx_S1.0_A6.0_Z0.0" + dat_dirname;
 
-  //TString type = "tof_S1.0_A6.0_Z0.0";
-  //TString type = "dedx_tof_atc_S1.0_A6.0_Z0.0";
-  TString type = "tof_atcPthr600_S1.0_A6.0_Z0.0";
+  //atc_tof_dedx
+  //TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12";
+  //TString data_file = "kpp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_atc_tof_dedx_ATC.dat";
+  //TString type = "atc_tof_dedx_S1.0_A6.0_Z0.0" + dat_dirname;
+
+  //atc_tof_dedx Syst BGudsShape
+  //TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_Syst_BGudsShape";
+  //TString data_file = "kpp_pions_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_atc_tof_dedx_ATC.dat";
+  //TString type = "atc_tof_dedx_S1.0_A6.0_Z0.0" + dat_dirname;
+
+  //atc_tof_dedx Syst BGudsShape
+  TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_TMVA";
+  TString data_file = "kpp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_atc_tof_dedx_tmva_0.50_ATC.dat";
+  TString type = "atc_tof_dedx_S1.0_A6.0_Z0.0" + dat_dirname;
+
+  TString gen_dirname = dat_dirname;
 
   TNtuple nt("nt","NTuple","mbc:de:dp");
+
+  TNtuple nt2("nt2","NTuple","mbc:de:dp");
 
   FILE* file = fopen(TString("dat/" + dat_dirname + "/" + data_file).Data(),"r");
   while (!feof(file)) {
@@ -31,9 +53,7 @@
 
   fclose(file);
 
-  TNtuple nt2("nt2","NTuple","mbc:de:dp");
-
-  file = fopen(TString("gen/" + gen_dirname + "/bck_S1.0_A6.0_Z0.0.gen").Data(),"r");
+  FILE* file = fopen(TString("gen/" + gen_dirname + "/bck_S1.0_A6.0_Z0.0.gen").Data(),"r");
   while (!feof(file)) {
     double mbc,de,dp;
     if (fscanf(file,"%lf %lf %lf", &mbc,&de,&dp) == 3) {

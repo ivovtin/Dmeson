@@ -28,8 +28,8 @@
   gStyle->SetTitleSize(0.06,"xyz");
   gStyle->SetTitleOffset(1.2,"xyz");
   gStyle->SetNdivisions(510);
-  gStyle->SetHistLineWidth(3);
-  gStyle->SetHatchesLineWidth(3);
+  //gStyle->SetHistLineWidth(3);
+  //gStyle->SetHatchesLineWidth(3);
 
   int mbcmax;
   double rmax;
@@ -47,10 +47,10 @@
 
   int key = 2016;
 
-  bool atc = 1;
+  bool final = 1;
 
-  TFile *fout=0;
-  fout = new TFile("result_hists.root","RECREATE");
+  //TFile *fout=0;
+  //fout = new TFile("result_hists.root","RECREATE");
 
   //TString KEDR="/spool/users/ovtin/outDmeson/Dplus/results/fitsDplus/";
   TString KEDR="/spool/users/ovtin/outDmeson/Dplus/results/fitsDplus/forTest/";
@@ -67,15 +67,20 @@
       exp_dbck = "gen/exp_dbck_2004.gen";
   }
   else{
-      if (atc ){
-          dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_tof_atcPthr600";
-          dataFile = "kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0150_tof_atc_ATC.dat";
-          gen_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_tof_atcPthr600_test";
-	  prefOutfile = "KemcAllowedOn_kNoiseReject3_1.0150_tof_atcPthr600_test";
+      if (final){
+	  //atc_tof_dedx
+          dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_TMVA";
+          dataFile = "kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0140_atc_tof_dedx_tmva_0.50_ATC.dat";
+          prefOutfile = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_k1.0140_TMVA";
 
-	  //mbcmax = 50;
+	  gen_dirname = dat_dirname;
+	  //gen_dirname = dat_dirname + "_Syst_SigShape";
+
+
+	  //mbcmax = 50.;
 	  //rmax = 50.;
-	  mbcmax = 90;
+
+	  mbcmax = 90.;
 	  rmax = 90.;
 
 	  infile = "dat/" + dat_dirname + "/" + dataFile;
@@ -89,13 +94,28 @@
 	  exp_dbck = "gen/" + gen_dirname + "/exp_dbck_S1.0_A6.0_Z0.0.gen";
       }
       else{
-          dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0";
-          dataFile = "kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0150.dat";
-          gen_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0";
-          prefOutfile = "KemcAllowedOn_kNoiseReject3_1.0150";
+          //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_tof_Pcuttof380_with_Cuts_chi255_rr0.5_z12";
+          //dataFile = "kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0140_tof_ATC.dat";
+          //prefOutfile = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_tof_k1.0140";
+	  //mbcmax = 140;
+	  //rmax = 150.;
 
-	  mbcmax = 120;
-	  rmax = 120.;
+	  //atc_tof
+          //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_Pcuttof380_with_Cuts_chi255_rr0.5_z12";
+          //dataFile = "kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0140_atc_tof_ATC.dat";
+          //prefOutfile = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_k1.0140";
+	  //mbcmax = 100;
+	  //rmax = 100.;
+
+	  //atc_dedx
+          dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_dedx_Pcuttof380_with_Cuts_chi255_rr0.5_z12";
+          dataFile = "kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0140_atc_dedx_ATC.dat";
+          prefOutfile = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_dedx_k1.0140";
+	  mbcmax = 110;
+	  rmax = 110.;
+
+	  gen_dirname = dat_dirname;
+
 
 	  infile = "dat/" + dat_dirname + "/" + dataFile;
 
@@ -119,7 +139,8 @@
   TString type = "tof2";
 
   TNtuple exp_nt("exp_nt","NTuple","mbc:de:dp");
-  FILE* file = fopen(infile,"r");
+
+  FILE* file = fopen(TString(infile).Data(),"r");
   while (!feof(file)) {
     double mbc,de,dp;
     if (fscanf(file,"%lf %lf %lf", &mbc,&de,&dp) == 3) {
@@ -129,7 +150,8 @@
   fclose(file);
 
   TNtuple sig_nt("sig_nt","NTuple","mbc:de:dp");
-  file = fopen(exp_sig,"r");
+
+  file = fopen(TString(exp_sig).Data(),"r");
   while (!feof(file)) {
     double mbc,de,dp;
     if (fscanf(file,"%lf %lf %lf", &mbc,&de,&dp) == 3) {
@@ -139,7 +161,8 @@
   fclose(file);
 
   TNtuple bck_nt("bck_nt","NTuple","mbc:de:dp");
-  file = fopen(exp_bck,"r");
+
+  file = fopen(TString(exp_bck).Data(),"r");
   while (!feof(file)) {
     double mbc,de,dp;
     if (fscanf(file,"%lf %lf %lf", &mbc,&de,&dp) == 3) {
@@ -149,7 +172,7 @@
   fclose(file);
 
   TNtuple dbck_nt("dbck_nt","NTuple","mbc:de:dp");
-  file = fopen(exp_dbck,"r");
+  file = fopen(TString(exp_dbck).Data(),"r");
   while (!feof(file)) {
     double mbc,de,dp;
     if (fscanf(file,"%lf %lf %lf", &mbc,&de,&dp) == 3) {
@@ -211,6 +234,83 @@
   printf("Backgrounds:\n UDS bck=%f\n DD bck=%f\n", bck_mbcde->GetSumOfWeights(),
          dbck_mbcde->GetSumOfWeights());
 
+  /////////////////////////////////////////////////////////////////
+
+  TH1F exp_mbcs1("exp_mbcs1","#Delta E<-200 MeV",55,1790.,1900.);
+  TH1F sig_mbcs1("sig_mbcs1","#Delta E<-200 MeV",55,1790.,1900.);
+  TH1F bck_mbcs1("bck_mbcs1","#Delta E<-200 MeV",55,1790.,1900.);
+  TH1F dbck_mbcs1("dbck_mbcs1","#Delta E<-200 MeV",55,1790.,1900.);
+  exp_nt->Project("exp_mbcs1","mbc","de<-200");
+  sig_nt->Project("sig_mbcs1","mbc","de<-200");
+  bck_nt->Project("bck_mbcs1","mbc","de<-200");
+  dbck_nt->Project("dbck_mbcs1","mbc","de<-200");
+  sig_mbcs1->Scale(scale);
+  bck_mbcs1->Scale(scale);
+  dbck_mbcs1->Scale(scale);
+
+  TH1F exp_mbcs2("exp_mbcs2","-200<#Delta E<0 MeV",55,1790.,1900.);
+  TH1F sig_mbcs2("sig_mbcs2","-200<#Delta E<0 MeV",55,1790.,1900.);
+  TH1F bck_mbcs2("bck_mbcs2","-200<#Delta E<0 MeV",55,1790.,1900.);
+  TH1F dbck_mbcs2("dbck_mbcs2","-200<#Delta E<0 MeV",55,1790.,1900.);
+  exp_nt->Project("exp_mbcs2","mbc","-200<de&&de<0");
+  sig_nt->Project("sig_mbcs2","mbc","-200<de&&de<0");
+  bck_nt->Project("bck_mbcs2","mbc","-200<de&&de<0");
+  dbck_nt->Project("dbck_mbcs2","mbc","-200<de&&de<0");
+  sig_mbcs2->Scale(scale);
+  bck_mbcs2->Scale(scale);
+  dbck_mbcs2->Scale(scale);
+
+  TH1F exp_mbcs3("exp_mbcs3","#Delta E>0 MeV",55,1790.,1900.);
+  TH1F sig_mbcs3("sig_mbcs3","#Delta E>0 MeV",55,1790.,1900.);
+  TH1F bck_mbcs3("bck_mbcs3","#Delta E>0 MeV",55,1790.,1900.);
+  TH1F dbck_mbcs3("dbck_mbcs3","#Delta E>0 MeV",55,1790.,1900.);
+  exp_nt->Project("exp_mbcs3","mbc","0<de");
+  sig_nt->Project("sig_mbcs3","mbc","0<de");
+  bck_nt->Project("bck_mbcs3","mbc","0<de");
+  dbck_nt->Project("dbck_mbcs3","mbc","0<de");
+  sig_mbcs3->Scale(scale);
+  bck_mbcs3->Scale(scale);
+  dbck_mbcs3->Scale(scale);
+
+  //-----------------------------
+
+  TH1F exp_des1("exp_des1","M_{bc}<1800 MeV",30,-300.,300.);
+  TH1F sig_des1("sig_des1","M_{bc}<1800 MeV",30,-300.,300.);
+  TH1F bck_des1("bck_des1","M_{bc}<1800 MeV",30,-300.,300.);
+  TH1F dbck_des1("dbck_des1","M_{bc}<1800 MeV",30,-300.,300.);
+  exp_nt->Project("exp_des1","de","mbc<1800");
+  sig_nt->Project("sig_des1","de","mbc<1800");
+  bck_nt->Project("bck_des1","de","mbc<1800");
+  dbck_nt->Project("dbck_des1","de","mbc<1800");
+  sig_des1->Scale(scale);
+  bck_des1->Scale(scale);
+  dbck_des1->Scale(scale);
+
+  TH1F exp_des2("exp_des2","1800<M_{bc}<1850 MeV",30,-300.,300.);
+  TH1F sig_des2("sig_des2","1800<M_{bc}<1850 MeV",30,-300.,300.);
+  TH1F bck_des2("bck_des2","1800<M_{bc}<1850 MeV",30,-300.,300.);
+  TH1F dbck_des2("dbck_des2","1800<M_{bc}<1850 MeV",30,-300.,300.);
+  exp_nt->Project("exp_des2","de","mbc<1850&&mbc>1800");
+  sig_nt->Project("sig_des2","de","mbc<1850&&mbc>1800");
+  bck_nt->Project("bck_des2","de","mbc<1850&&mbc>1800");
+  dbck_nt->Project("dbck_des2","de","mbc<1850&&mbc>1800");
+  sig_des2->Scale(scale);
+  bck_des2->Scale(scale);
+  dbck_des2->Scale(scale);
+
+  TH1F exp_des3("exp_des3","M_{bc}>1850 MeV",30,-300.,300.);
+  TH1F sig_des3("sig_des3","M_{bc}>1850 MeV",30,-300.,300.);
+  TH1F bck_des3("bck_des3","M_{bc}>1850 MeV",30,-300.,300.);
+  TH1F dbck_des3("dbck_des3","M_{bc}>1850 MeV",30,-300.,300.);
+  exp_nt->Project("exp_des3","de","mbc>1850");
+  sig_nt->Project("sig_des3","de","mbc>1850");
+  bck_nt->Project("bck_des3","de","mbc>1850");
+  dbck_nt->Project("dbck_des3","de","mbc>1850");
+  sig_des3->Scale(scale);
+  bck_des3->Scale(scale);
+  dbck_des3->Scale(scale);
+
+
   TCanvas c("c","c",800,800);
   c.cd();
 
@@ -229,6 +329,7 @@
   exp_mbc.GetYaxis()->SetTitle("Events/2 MeV");
   exp_mbc.SetMarkerStyle(20);
   exp_mbc.SetMarkerSize(1.7);
+  exp_mbc.SetLineColor(1);
   exp_mbc.Draw("e");
   exp_mbc->GetYaxis()->SetRangeUser(0, mbcmax);
   mbc_hs->Draw("same");
@@ -282,6 +383,7 @@
   exp_de.GetYaxis()->SetTitle("Events/20 MeV");
   exp_de.SetMarkerStyle(20);
   exp_de.SetMarkerSize(1.7);
+  exp_de.SetLineColor(1);
   exp_de.Draw("e");
   de_hs->Draw("same");
   exp_de.SetLineWidth(4);
@@ -320,6 +422,187 @@
   c3.Print(KEDR + outfile3 + ".eps");
   c3.Print(KEDR + outfile3 + ".png");
 
-  fout->Write();
-  fout->Close();
+  ////////////////////////////////////////////////
+  //gStyle->SetHistLineWidth(1.);
+  //gStyle->SetHatchesLineWidth(1.);
+
+  TCanvas c4("c4","c4",1000,800);
+  c4.Divide(3,2);
+
+  rmax = 80.;
+  mbcmax = 80;
+  //demax = 50;
+
+  c4.cd(1);
+  THStack mbcs1_hs("mbcs1_hs","");
+  mbcs1_hs->Add(&bck_mbcs1);
+  bck_mbcs1->SetFillColor(bck_color);
+  bck_mbcs1->SetFillStyle(bck_style);
+  mbcs1_hs->Add(&dbck_mbcs1);
+  dbck_mbcs1->SetFillColor(dbck_color);
+  dbck_mbcs1->SetFillStyle(dbck_style);
+  mbcs1_hs->Add(&sig_mbcs1);
+  sig_mbcs1->SetFillColor(sig_color);
+  sig_mbcs1->SetFillStyle(sig_style);
+
+  exp_mbcs1->GetYaxis()->SetRangeUser(0, mbcmax);
+  exp_mbcs1.GetXaxis()->SetTitle("M_{bc} (MeV)");
+  exp_mbcs1.GetYaxis()->SetTitle("Events/2 MeV");
+  exp_mbcs1.Draw("elp");
+  mbcs1_hs->Draw("same");
+  exp_mbcs1.SetLineWidth(2);
+  exp_mbcs1.SetLineColor(1);
+  exp_mbcs1.Draw("elpsame");
+
+  TBox b;
+  TLatex t;
+  //double rmax = 46.;
+  b.SetFillColor(sig_color);
+  b.SetFillStyle(sig_style);
+  b.SetLineColor(1);
+  b.SetLineStyle(1);
+  b.SetLineWidth(1);
+  b.DrawBox(1795,rmax*0.90,1815,rmax*0.84);
+  b.SetFillStyle(0);
+  b.DrawBox(1795,rmax*0.90,1815,rmax*0.84);
+  t.DrawLatex(1820,rmax*0.84,"Signal");
+  b.SetFillColor(dbck_color);
+  b.SetFillStyle(dbck_style);
+  b.DrawBox(1795,rmax*0.80,1815,rmax*0.74);
+  b.SetFillStyle(0);
+  b.DrawBox(1795,rmax*0.80,1815,rmax*0.74);
+  t.DrawLatex(1820,rmax*0.74,"D#bar{D} bck");
+  b.SetFillColor(bck_color);
+  b.SetFillStyle(bck_style);
+  b.DrawBox(1795,rmax*0.70,1815,rmax*0.64);
+  b.SetFillStyle(0);
+  b.DrawBox(1795,rmax*0.70,1815,rmax*0.64);
+  t.DrawLatex(1820,rmax*0.64,"uds bck");
+
+  c4.Update();
+
+  c4.cd(2);
+  THStack mbcs2_hs("mbcs2_hs","");
+  mbcs2_hs->Add(&bck_mbcs2);
+  bck_mbcs2->SetFillColor(bck_color);
+  bck_mbcs2->SetFillStyle(bck_style);
+  mbcs2_hs->Add(&dbck_mbcs2);
+  dbck_mbcs2->SetFillColor(dbck_color);
+  dbck_mbcs2->SetFillStyle(dbck_style);
+  mbcs2_hs->Add(&sig_mbcs2);
+  sig_mbcs2->SetFillColor(sig_color);
+  sig_mbcs2->SetFillStyle(sig_style);
+
+  exp_mbcs2->GetYaxis()->SetRangeUser(0, mbcmax);
+  exp_mbcs2.GetXaxis()->SetTitle("M_{bc} (MeV)");
+  exp_mbcs2.GetYaxis()->SetTitle("Events/2 MeV");
+  exp_mbcs2.Draw("elp");
+  mbcs2_hs->Draw("same");
+  exp_mbcs2.SetLineWidth(2);
+  exp_mbcs2.SetLineColor(1);
+  exp_mbcs2.Draw("elpsame");
+
+  c4.Update();
+
+  c4.cd(3);
+  THStack mbcs3_hs("mbcs3_hs","");
+  mbcs3_hs->Add(&bck_mbcs3);
+  bck_mbcs3->SetFillColor(bck_color);
+  bck_mbcs3->SetFillStyle(bck_style);
+  mbcs3_hs->Add(&dbck_mbcs3);
+  dbck_mbcs3->SetFillColor(dbck_color);
+  dbck_mbcs3->SetFillStyle(dbck_style);
+  mbcs3_hs->Add(&sig_mbcs3);
+  sig_mbcs3->SetFillColor(sig_color);
+  sig_mbcs3->SetFillStyle(sig_style);
+
+  exp_mbcs3->GetYaxis()->SetRangeUser(0, mbcmax);
+  exp_mbcs3.GetXaxis()->SetTitle("M_{bc} (MeV)");
+  exp_mbcs3.GetYaxis()->SetTitle("Events/2 MeV");
+  exp_mbcs3.Draw("elp");
+  mbcs3_hs->Draw("same");
+  exp_mbcs3.SetLineWidth(2);
+  exp_mbcs3.SetLineColor(1);
+  exp_mbcs3.Draw("elpsame");
+
+  c4.Update();
+
+  c4.cd(4);
+  THStack des1_hs("des1_hs","");
+  des1_hs->Add(&bck_des1);
+  bck_des1->SetFillColor(bck_color);
+  bck_des1->SetFillStyle(bck_style);
+  des1_hs->Add(&dbck_des1);
+  dbck_des1->SetFillColor(dbck_color);
+  dbck_des1->SetFillStyle(dbck_style);
+  des1_hs->Add(&sig_des1);
+  sig_des1->SetFillColor(sig_color);
+  sig_des1->SetFillStyle(sig_style);
+
+  //exp_des1->GetYaxis()->SetRangeUser(0, 270);
+  exp_des1->GetYaxis()->SetRangeUser(0, 170);
+  exp_des1.GetXaxis()->SetTitle("#Delta E (MeV)");
+  exp_des1.GetYaxis()->SetTitle("Events/20 MeV");
+  exp_des1.Draw("elp");
+  des1_hs->Draw("same");
+  exp_des1.SetLineWidth(2);
+  exp_des1.SetLineColor(1);
+  exp_des1.Draw("elpsame");
+
+  c4.Update();
+
+  c4.cd(5);
+  THStack des2_hs("des2_hs","");
+  des2_hs->Add(&bck_des2);
+  bck_des2->SetFillColor(bck_color);
+  bck_des2->SetFillStyle(bck_style);
+  des2_hs->Add(&dbck_des2);
+  dbck_des2->SetFillColor(dbck_color);
+  dbck_des2->SetFillStyle(dbck_style);
+  des2_hs->Add(&sig_des2);
+  sig_des2->SetFillColor(sig_color);
+  sig_des2->SetFillStyle(sig_style);
+
+  //exp_des2->GetYaxis()->SetRangeUser(0, 160);
+  exp_des2->GetYaxis()->SetRangeUser(0, 120);
+  exp_des2.GetXaxis()->SetTitle("#Delta E (MeV)");
+  exp_des2.GetYaxis()->SetTitle("Events/20 MeV");
+  exp_des2.Draw("elp");
+  des2_hs->Draw("same");
+  exp_des2.SetLineWidth(2);
+  exp_des2.SetLineColor(1);
+  exp_des2.Draw("elpsame");
+
+  c4.Update();
+
+  c4.cd(6);
+  THStack des3_hs("des3_hs","");
+  des3_hs->Add(&bck_des3);
+  bck_des3->SetFillColor(bck_color);
+  bck_des3->SetFillStyle(bck_style);
+  des3_hs->Add(&dbck_des3);
+  dbck_des3->SetFillColor(dbck_color);
+  dbck_des3->SetFillStyle(dbck_style);
+  des3_hs->Add(&sig_des3);
+  sig_des3->SetFillColor(sig_color);
+  sig_des3->SetFillStyle(sig_style);
+
+  exp_des3->GetYaxis()->SetRangeUser(0, 130);
+  exp_des3.GetXaxis()->SetTitle("#Delta E (MeV)");
+  exp_des3.GetYaxis()->SetTitle("Events/20 MeV");
+  exp_des3.Draw("elp");
+  des3_hs->Draw("same");
+  exp_des3.SetLineWidth(2);
+  exp_des3.SetLineColor(1);
+  exp_des3.Draw("elpsame");
+
+  c4.Update();
+
+  c4.Print(KEDR + outfile3 + "_4.eps");
+  c4.Print(KEDR + outfile3 + "_4.png");
+
+
+
+  //fout->Write();
+  //fout->Close();
 }

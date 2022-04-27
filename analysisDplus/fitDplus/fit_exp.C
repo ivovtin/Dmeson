@@ -19,7 +19,7 @@
   TString exp_fit_par;
 
   int key = 2016;
-  bool atc = 1;
+  bool final = 1;
 
   if( key==2004 ) {
       infile = "dat/kpp_2004.dat";
@@ -30,14 +30,58 @@
       exp_fit_par = "par/exp_fit_2004.par";
   }
   else{
-      if(atc){
-	  dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_tof_atcPthr600";
-          dataFile = "kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0150_tof_atc_ATC.dat";
-	  gen_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_tof_atcPthr600_test";
-	  par_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_tof_atcPthr600_test";
+      if(final){
+	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12";
+	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_plus1sigma";
+	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma";
+	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_syst_momres_S1.0_A7.2_Z0.2";
+	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_syst_momres_S1.0_A4.8_Z0.0";
+	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_syst_momres_S1.0_A6.9_Z0.0";
+	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_syst_momres_S1.0_A7.2_Z0.0";
+	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_syst_momres_S1.0_A5.1_Z0.0";
+	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_syst_isr_plus_sigma";
+	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_syst_isr_minus_sigma";
+	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_syst_isr_rnd";
+	  dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_TMVA";
+          //dataFile = "kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0150_atc_tof_dedx_ATC.dat";
+          //dataFile = "kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0140_atc_tof_dedx_ATC.dat";
+          dataFile = "kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0140_atc_tof_dedx_tmva_0.50_ATC.dat";
+          //dataFile = "kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0140_atc_tof_dedx_ionization_losses_plus1sigma_ATC.dat";
+          //dataFile = "kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0140_atc_tof_dedx_ionization_losses_minus1sigma_ATC.dat";
+          //dataFile = "kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0140_atc_tof_dedx_ATC.dat";
+          //dataFile = "kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0130_atc_tof_dedx_ATC.dat";
+          //dataFile = "kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0150_atc_tof_dedx_ATC.dat";
+          //dataFile = "kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0170_atc_tof_dedx_ATC.dat";
+          //dataFile = "kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0120_atc_tof_dedx_ATC.dat";
+	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp1_atc_tof_dedx_0.80_0.70_Pcuttof380_20012022_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12";
+          //dataFile = "kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0150_atc_tof_dedx_KcExp1_kXTKey1_ATC.dat";
+	  //dat_dirname = "KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp1_atc_tof_dedx_0.80_0.70_Pcuttof380_20012022_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12";
+          //dataFile = "kpp_exp_2016-17_KemcAllowedOff_kNoiseReject3_1.0150_atc_tof_dedx_KcExp1_kXTKey1_ATC.dat";
+
+	  par_dirname = dat_dirname;
+	  gen_dirname = dat_dirname;
+
+	  //par_dirname = dat_dirname + "_Syst_SigShape";
+	  //gen_dirname = dat_dirname + "_Syst_SigShape";
+
+	  //par_dirname = dat_dirname + "_Syst_BGudsShape";
+	  //gen_dirname = dat_dirname + "_Syst_BGudsShape";
+
+	  //par_dirname = dat_dirname + "_Syst_DbckShape";
+	  //gen_dirname = dat_dirname + "_Syst_DbckShape";
+
+	  //gen_dirname = dat_dirname + "_1.0130";
+	  //gen_dirname = dat_dirname + "_1.0150";
+	  //gen_dirname = dat_dirname + "_1.0170";
+	  //gen_dirname = dat_dirname + "_1.0120";
+	  //gen_dirname = dat_dirname + "_1.0140";
 
 	  infile = "dat/" + dat_dirname + "/" + dataFile;
-	  exp_fit_par = "par/" + par_dirname + "/exp_fit_S1.0_A6.0_Z0.0.par";
+	  exp_fit_par = "par/" + par_dirname + "/exp_fit_S1.0_A6.0_Z0.0_k1.0140.par";
+	  //exp_fit_par = "par/" + par_dirname + "/exp_fit_S1.0_A6.0_Z0.0_k1.0130.par";
+	  //exp_fit_par = "par/" + par_dirname + "/exp_fit_S1.0_A6.0_Z0.0_k1.0150.par";
+	  //exp_fit_par = "par/" + par_dirname + "/exp_fit_S1.0_A6.0_Z0.0_k1.0170.par";
+	  //exp_fit_par = "par/" + par_dirname + "/exp_fit_S1.0_A6.0_Z0.0_k1.0120.par";
 	  gSystem->Exec("mkdir gen/" + gen_dirname);
 	  exp_def = "gen/" + gen_dirname + "/exp_def_S1.0_A6.0_Z0.0.gen";
 	  exp_sig = "gen/" + gen_dirname + "/exp_sig_S1.0_A6.0_Z0.0.gen";
@@ -45,10 +89,18 @@
 	  exp_dbck = "gen/" + gen_dirname + "/exp_dbck_S1.0_A6.0_Z0.0.gen";
       }
       else{
-	  dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0";
-          dataFile = "kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0150.dat";
-	  gen_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0";
-	  par_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0";
+          ///////
+	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_tof_Pcuttof380_with_Cuts_chi255_rr0.5_z12";
+          //dataFile = "kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0140_tof_ATC.dat";
+          ///////
+	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_Pcuttof380_with_Cuts_chi255_rr0.5_z12";
+          //dataFile = "kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0140_atc_tof_ATC.dat";
+          ///////
+	  dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_dedx_Pcuttof380_with_Cuts_chi255_rr0.5_z12";
+          dataFile = "kpp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0140_atc_dedx_ATC.dat";
+
+	  par_dirname = dat_dirname;
+	  gen_dirname = dat_dirname;
 
 	  infile = "dat/" + dat_dirname + "/" + dataFile;
 	  exp_fit_par = "par/" + par_dirname + "/exp_fit_S1.0_A6.0_Z0.0.par";
@@ -62,9 +114,8 @@
 
   load_sig(infile);
 
-  //read_par("par/exp_tof2.par", 5, exp_par, exp_epar);
-  //read_par("par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/exp_fit_S1.0_A6.0_Z0.0.par", 5, exp_par, exp_epar);
-  read_par("par/exp_fit_S1.0_A6.0_Z0.0_test.par", 5, exp_par, exp_epar);
+  //read_par("par/exp.par", 5, exp_par, exp_epar);
+  read_par("par/exp_tmva.par", 5, exp_par, exp_epar);                                                        ///!!!!!!!!!!!!!!!!!!!!!!!!!
 
   read_par("par/" + par_dirname + "/bck_S1.0_A6.0_Z0.0.par", 5, bck_par, bck_epar);
   read_par("par/" + par_dirname + "/dbck_S1.0_A6.0_Z0.0.par", 14, dbck_par, dbck_epar);

@@ -1,5 +1,4 @@
 {
-
   gROOT->Reset();
   gROOT->DeleteAll();
   gStyle->SetOptStat(0);
@@ -9,11 +8,22 @@
   gStyle->SetHistLineColor(4);
 
   TString KEDR="/spool/users/ovtin/outDmeson/D0/results/fitsD0/";
-  //TString KEDR="/spool/users/ovtin/outDmeson/D0/results/fitsD0/forTest/";
+  //TString KEDR="/store/users/ovtin/outDmeson/D0/results/fitsD0/forTest/";
+
+  TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc";
+  TString data_file = "kp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_ATC.dat";
+  TString type = "S1.0_A6.0_Z0.0_"+dat_dirname;
+
+  //TString gen_dirname = dat_dirname;
+
+  //Syst_DbckShape
+  TString gen_dirname = dat_dirname + "_Syst_DbckShape";
+  type = type + "_Syst_DbckShape";
+
 
   TNtuple nt("nt","NTuple","mbc:de:dp");
 
-  FILE* file = fopen("dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/kp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0.dat","r");
+  FILE* file = fopen(TString("dat/" + dat_dirname + "/" + data_file).Data(),"r");
   while (!feof(file)) {
     double mbc,de,dp;
     if (fscanf(file,"%lf %lf %lf", &mbc,&de,&dp) == 3) {
@@ -25,7 +35,7 @@
 
   TNtuple nt2("nt2","NTuple","mbc:de:dp");
 
-  file = fopen("gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/dbck_sim_S1.0_A6.0_Z0.0.gen","r");
+  file = fopen(TString("gen/" + gen_dirname + "/dbck_S1.0_A6.0_Z0.0.gen").Data(),"r");
   while (!feof(file)) {
     double mbc,de,dp;
     if (fscanf(file,"%lf %lf %lf", &mbc,&de,&dp) == 3) {
@@ -93,6 +103,15 @@
   nt->Project("mbcde","de","abs(de)<100.&&abs(mbc-1870)<10.");
   printf("Events in signal box: %f\n", mbcde->GetSumOfWeights());
 
+  TH1F dp1("dp1","",100,-800.,800.);
+  TH1F dp2("dp2","",100,-800.,800.);
+  dp2.SetLineColor(2);
+
+  nt->Project("dp1","dp","abs(de)<300.&&mbc>1700.");
+  nt2->Project("dp2","dp","abs(de)<300.&&mbc>1700.");
+  double scale_dp = dp1->GetSumOfWeights()/dp2->GetSumOfWeights();
+  dp2->Scale(scale_dp);
+
   TCanvas c("c","c",800,800);
   c.Divide(3,3);
 
@@ -152,9 +171,87 @@
   des6.SetLineColor(2);
   des6.Draw("same");
 
-//  c.cd(9);
-//  nt2->Draw("mbc:de");
+  //c.cd(9);
+  //nt2->Draw("mbc:de");
 
-  c.Print(KEDR+"dbck_atc_S1.0_A6.0_Z0.0.eps");
-  c.Print(KEDR+"dbck_atc_S1.0_A6.0_Z0.0.png");
+  c.Print(KEDR+"dbck_"+type+".eps");
+  c.Print(KEDR+"dbck_"+type+".png");
+
+  ///////////////////////////////////////
+  TCanvas c2("c2","c2",1000,300);
+  c2.Divide(4,1);
+
+  c2.cd(1);
+  mbc1.Draw("elp");
+  mbc1.GetXaxis()->SetTitle("M_{bc} (MeV)");
+  mbc2.SetLineColor(2);
+  mbc2.Draw("same");
+
+  c2.cd(2);
+  de1.Draw("elp");
+  de1.GetXaxis()->SetTitle("#Delta E (MeV)");
+  de2.SetLineColor(2);
+  de2.Draw("same");
+
+  c2.cd(3);
+  nt->Draw("de:mbc");
+  TH2F* htemp = (TH2F*)gPad->GetPrimitive("htemp");
+  htemp->GetXaxis()->SetTitle("M_{bc} (MeV)");
+  htemp->GetYaxis()->SetTitle("#DeltaE (MeV)");
+  htemp->GetYaxis()->SetTitleOffset(1.3);
+  htemp->SetTitle("");
+
+  c2.cd(4);
+  dp1.Draw("elp");
+  dp1.GetXaxis()->SetTitle("#Delta|p| (MeV)");
+  dp2.SetLineColor(2);
+  dp2.Draw("same");
+
+  c2.Print(KEDR+"dbck_"+type+"_2.eps");
+  c2.Print(KEDR+"dbck_"+type+"_2.png");
+
+  ////////////////////////////////////////////////
+  TCanvas c3("c3","c3",800,500);
+  c3.Divide(3,2);
+
+  c3.cd(1);
+  mbcs1.Draw("elp");
+  mbcs1.GetXaxis()->SetTitle("M_{bc} (MeV)");
+  mbcs2.SetLineColor(2);
+  mbcs2.Draw("same");
+
+  c3.cd(2);
+  mbcs3.Draw("elp");
+  mbcs3.GetXaxis()->SetTitle("M_{bc} (MeV)");
+  mbcs4.SetLineColor(2);
+  mbcs4.Draw("same");
+
+  c3.cd(3);
+  mbcs5.Draw("elp");
+  mbcs5.GetXaxis()->SetTitle("M_{bc} (MeV)");
+  mbcs6.SetLineColor(2);
+  mbcs6.Draw("same");
+
+  c3.cd(4);
+  des1.Draw("elp");
+  des1.GetXaxis()->SetTitle("#Delta E (MeV)");
+  des2.SetLineColor(2);
+  des2.Draw("same");
+
+  c3.cd(5);
+  des3.Draw("elp");
+  des3.GetXaxis()->SetTitle("#Delta E (MeV)");
+  des4.SetLineColor(2);
+  des4.Draw("same");
+
+  c3.cd(6);
+  des5.Draw("elp");
+  des5.GetXaxis()->SetTitle("#Delta E (MeV)");
+  des6.SetLineColor(2);
+  des6.Draw("same");
+
+  c3.Print(KEDR+"dbck_"+type+"_3.eps");
+  c3.Print(KEDR+"dbck_"+type+"_3.png");
+
+  ///////////////////////////////////////
 }

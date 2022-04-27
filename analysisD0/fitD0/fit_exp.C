@@ -4,15 +4,20 @@
   init();
 
   num_norm = 1000000;
-//  mid_de = 100.;
-//  mid_mbc = 1700.;
+  //mid_de = 100.;
+  //mid_mbc = 1700.;
 
-  char *infile;
-  char *exp_def;
-  char *exp_sig;
-  char *exp_bck;
-  char *exp_dbck;
-  char *exp_fit_par;
+  TString dataFile;
+  TString dat_dirname;
+  TString gen_dirname;
+  TString par_dirname;
+  TString infile;
+  TString exp_def;
+  TString exp_sig;
+  TString exp_bck;
+  TString exp_dbck;
+  TString exp_fit_par;
+  TString corr;
 
   int key = 2016;
   bool atc = 1;
@@ -27,54 +32,88 @@
   }
   else{
       if(atc){
-         infile = "dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/kp_exp_2016-17_KemcAllowedOn_kNoiseReject3_ATC_1.0155.dat";
-         exp_def = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/exp_def_S1.0_A6.0_Z0.0.gen";
-         exp_sig = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/exp_sig_S1.0_A6.0_Z0.0.gen";
-         exp_bck = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/exp_bck_S1.0_A6.0_Z0.0.gen";
-         exp_dbck = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/exp_dbck_S1.0_A6.0_Z0.0.gen";
-         exp_fit_par = "par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/exp_fit_S1.0_A6.0_Z0.0.par";
+	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc";
+	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_ionization_losses_plus1sigma";
+	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_ionization_losses_minus1sigma";
+	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_S1.0_A7.2_Z0.2_syst_momres";
+	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_S1.0_A4.8_Z0.0_syst_momres";
+	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_S1.0_A6.9_Z0.0_syst_momres";
+	  dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_S1.0_A5.1_Z0.0_syst_momres";
+	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_syst_isr_plus_sigma";
+	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_syst_isr_minus_sigma";
+	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_syst_isr_rnd";
+          //corr = "1.0090";
+          //corr = "1.0110";
+          //corr = "1.0120";
+          corr = "1.0130";
+          //corr = "1.0140";
+          //corr = "1.0150";
+          //corr = "1.0160";
+          //corr = "1.0170";
+          dataFile = "kp_exp_2016-17_KemcAllowedOn_kNoiseReject3_" + corr + "_atc_dedx_ATC.dat";
+          //dataFile = "kp_exp_2016-17_KemcAllowedOn_kNoiseReject3_" + corr + "_atc_dedx_ionization_losses_plus1sigma_ATC.dat";
+          //dataFile = "kp_exp_2016-17_KemcAllowedOn_kNoiseReject3_" + corr + "_atc_dedx_ionization_losses_minus1sigma_ATC.dat";
+
+	  par_dirname = dat_dirname;
+	  gen_dirname = dat_dirname;
+
+	  //par_dirname = dat_dirname + "_Syst_SigShape";
+	  //gen_dirname = dat_dirname + "_Syst_SigShape";
+
+	  //par_dirname = dat_dirname + "_Syst_BGudsShape";
+	  //gen_dirname = dat_dirname + "_Syst_BGudsShape";
+
+	  //par_dirname = dat_dirname + "_Syst_DbckShape";
+	  //gen_dirname = dat_dirname + "_Syst_DbckShape";
+
+	  infile = "dat/" + dat_dirname + "/" + dataFile;
+          //corr = corr + "_test";
+	  exp_fit_par = "par/" + par_dirname + "/exp_fit_S1.0_A6.0_Z0.0_k" + corr + ".par";
+	  gSystem->Exec("mkdir gen/" + gen_dirname);
+	  exp_def = "gen/" + gen_dirname + "/exp_def_S1.0_A6.0_Z0.0_" + corr + ".gen";
+	  exp_sig = "gen/" + gen_dirname + "/exp_sig_S1.0_A6.0_Z0.0_" + corr + ".gen";
+	  exp_bck = "gen/" + gen_dirname + "/exp_bck_S1.0_A6.0_Z0.0_" + corr + ".gen";
+	  exp_dbck = "gen/" + gen_dirname + "/exp_dbck_S1.0_A6.0_Z0.0_" + corr + ".gen";
       }
       else{
-         infile = "dat/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/kp_exp_2016-17_KemcAllowedOn_kNoiseReject3_1.0155.dat";
-         exp_def = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/exp_def_S1.0_A6.0_Z0.0.gen";
-         exp_sig = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/exp_sig_S1.0_A6.0_Z0.0.gen";
-         exp_bck = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/exp_bck_S1.0_A6.0_Z0.0.gen";
-         exp_dbck = "gen/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/exp_dbck_S1.0_A6.0_Z0.0.gen";
-         exp_fit_par = "par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/exp_fit_S1.0_A6.0_Z0.0.par";
+	  dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_woATC";
+          corr = "1.0130";
+          dataFile = "kp_exp_2016-17_KemcAllowedOn_kNoiseReject3_" + corr + "_woATC.dat";
+	  par_dirname = dat_dirname;
+	  gen_dirname = dat_dirname;
+	  infile = "dat/" + dat_dirname + "/" + dataFile;
+	  exp_fit_par = "par/" + par_dirname + "/exp_fit_S1.0_A6.0_Z0.0_k" + corr + ".par";
+	  gSystem->Exec("mkdir gen/" + gen_dirname);
+	  exp_def = "gen/" + gen_dirname + "/exp_def_S1.0_A6.0_Z0.0_" + corr + ".gen";
+	  exp_sig = "gen/" + gen_dirname + "/exp_sig_S1.0_A6.0_Z0.0_" + corr + ".gen";
+	  exp_bck = "gen/" + gen_dirname + "/exp_bck_S1.0_A6.0_Z0.0_" + corr + ".gen";
+	  exp_dbck = "gen/" + gen_dirname + "/exp_dbck_S1.0_A6.0_Z0.0_" + corr + ".gen";
       }
   }
 
-  //load_sig("dat/kp_exp_1.030.dat");
   load_sig(infile);
 
   read_par("par/exp_init.par", 5, exp_par, exp_epar);
 
-  if(atc){
-      read_par("par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/bck_uds_S1.0_A6.0_Z0.0.par", 4, bck_par, bck_epar);
-      read_par("par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/dbck_sim_S1.0_A6.0_Z0.0.par", 16, dbck_par, dbck_epar);
-      read_par("par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC/sig_S1.0_A6.0_Z0.0.par", 30, sig_par, sig_epar);
-  }
-  else{
-     read_par("par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/bck_uds_S1.0_A6.0_Z0.0.par", 4, bck_par, bck_epar);
-     read_par("par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/dbck_sim_S1.0_A6.0_Z0.0.par", 16, dbck_par, dbck_epar);
-     read_par("par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/sig_S1.0_A6.0_Z0.0.par", 30, sig_par, sig_epar);
-  }
+  read_par("par/" + par_dirname + "/bck_S1.0_A6.0_Z0.0.par", 4, bck_par, bck_epar);
+  read_par("par/" + par_dirname + "/dbck_S1.0_A6.0_Z0.0.par", 16, dbck_par, dbck_epar);
+  read_par("par/" + par_dirname + "/sig_S1.0_A6.0_Z0.0.par", 30, sig_par, sig_epar);
 
   double mdsig = sig_par[0];
   double desig = sig_par[1];
 
   sig_par[7] = 0;
 
-//  exp_epar[0] = 0.;
-//  exp_epar[1] = 0.;
-//  fit_exp();
-//  exp_epar[0] = 0.1;
-//  exp_epar[1] = 1.;
+  //exp_epar[0] = 0.;
+  //exp_epar[1] = 0.;
+  //fit_exp();
+  //exp_epar[0] = 0.1;
+  //exp_epar[1] = 1.;
   dpcut=0;
 
   fit_exp();
   write_par(exp_fit_par, 5, exp_par, exp_epar);
-//  read_par("par/exp_def.par", 5, exp_par, exp_epar);
+  //read_par("par/exp_def.par", 5, exp_par, exp_epar);
 
   double maj = gen_exp(exp_def, 100000, exp_par, 0.);
 

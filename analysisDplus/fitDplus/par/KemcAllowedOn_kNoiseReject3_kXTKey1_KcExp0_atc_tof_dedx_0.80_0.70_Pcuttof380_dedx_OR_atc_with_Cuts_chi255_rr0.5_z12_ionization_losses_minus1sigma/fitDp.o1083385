@@ -1,0 +1,1029 @@
+  *******************************************
+  *                                         *
+  *        W E L C O M E  to  R O O T       *
+  *                                         *
+  *   Version   5.30/00      27 June 2011   *
+  *                                         *
+  *  You are welcome to visit our Web site  *
+  *          http://root.cern.ch            *
+  *                                         *
+  *******************************************
+
+ROOT 5.30/00 (tags/v5-30-00@40062, Jun 28 2011, 11:49:57 on linux)
+
+CINT/ROOT C/C++ Interpreter version 5.18.00, July 2, 2010
+Type ? for help. Commands must be C++ statements.
+Enclose multiple statements between { }.
+
+Processing fit_exp.C...
+Reading file par/exp.par
+par/exp.par : par(0)=1870.000000 +- 0.210000
+par/exp.par : par(1)=3.407980 +- 12.608200
+par/exp.par : par(2)=1200.000000 +- 5.000000
+par/exp.par : par(3)=20.000000 +- 5.000000
+par/exp.par : par(4)=1.000000 +- 0.000000
+Reading file par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/bck_S1.0_A6.0_Z0.0.par
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/bck_S1.0_A6.0_Z0.0.par : par(0)=14.698249 +- 0.097088
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/bck_S1.0_A6.0_Z0.0.par : par(1)=0.317572 +- 0.032777
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/bck_S1.0_A6.0_Z0.0.par : par(2)=1888.750000 +- 0.000000
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/bck_S1.0_A6.0_Z0.0.par : par(3)=24.124895 +- 0.586953
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/bck_S1.0_A6.0_Z0.0.par : par(4)=5.073572 +- 0.100357
+Reading file par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/dbck_S1.0_A6.0_Z0.0.par
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/dbck_S1.0_A6.0_Z0.0.par : par(0)=54.822890 +- 6.041869
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/dbck_S1.0_A6.0_Z0.0.par : par(1)=3.951727 +- 0.319385
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/dbck_S1.0_A6.0_Z0.0.par : par(2)=1888.750000 +- 0.000000
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/dbck_S1.0_A6.0_Z0.0.par : par(3)=0.043407 +- 0.006197
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/dbck_S1.0_A6.0_Z0.0.par : par(4)=-188.606088 +- 1.057919
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/dbck_S1.0_A6.0_Z0.0.par : par(5)=54.766367 +- 1.195734
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/dbck_S1.0_A6.0_Z0.0.par : par(6)=12.356545 +- 2.082548
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/dbck_S1.0_A6.0_Z0.0.par : par(7)=1861.209453 +- 0.295099
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/dbck_S1.0_A6.0_Z0.0.par : par(8)=13.741305 +- 0.313121
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/dbck_S1.0_A6.0_Z0.0.par : par(9)=-474.074234 +- 16.654324
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/dbck_S1.0_A6.0_Z0.0.par : par(10)=-565.522417 +- 17.788977
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/dbck_S1.0_A6.0_Z0.0.par : par(11)=313.964112 +- 5.863167
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/dbck_S1.0_A6.0_Z0.0.par : par(12)=-248754.765197 +- 63757.244229
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/dbck_S1.0_A6.0_Z0.0.par : par(13)=3947.765441 +- 109.409690
+Reading file par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/sig_S1.0_A6.0_Z0.0.par
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/sig_S1.0_A6.0_Z0.0.par : par(0)=1869.797053 +- 0.037510
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/sig_S1.0_A6.0_Z0.0.par : par(1)=-1.714342 +- 1.066674
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/sig_S1.0_A6.0_Z0.0.par : par(2)=-0.000817 +- 0.000399
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/sig_S1.0_A6.0_Z0.0.par : par(3)=3.426053 +- 0.039669
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/sig_S1.0_A6.0_Z0.0.par : par(4)=3.392141 +- 0.036806
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/sig_S1.0_A6.0_Z0.0.par : par(5)=42.773911 +- 0.304295
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/sig_S1.0_A6.0_Z0.0.par : par(6)=1888.750000 +- 0.000000
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/sig_S1.0_A6.0_Z0.0.par : par(7)=0.188123 +- 0.000000
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/sig_S1.0_A6.0_Z0.0.par : par(8)=4.389010 +- 0.000000
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/sig_S1.0_A6.0_Z0.0.par : par(9)=0.566144 +- 0.116910
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/sig_S1.0_A6.0_Z0.0.par : par(10)=0.304097 +- 0.005788
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/sig_S1.0_A6.0_Z0.0.par : par(11)=9.965162 +- 0.194589
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/sig_S1.0_A6.0_Z0.0.par : par(12)=96.412598 +- 1.395978
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/sig_S1.0_A6.0_Z0.0.par : par(13)=-0.001286 +- 0.001161
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/sig_S1.0_A6.0_Z0.0.par : par(14)=4.704761 +- 0.000000
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/sig_S1.0_A6.0_Z0.0.par : par(15)=9.017986 +- 0.000000
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/sig_S1.0_A6.0_Z0.0.par : par(16)=512.021010 +- 0.000335
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/sig_S1.0_A6.0_Z0.0.par : par(17)=-1.912352 +- 1.303737
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/sig_S1.0_A6.0_Z0.0.par : par(18)=1888.750000 +- 0.000000
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/sig_S1.0_A6.0_Z0.0.par : par(19)=-1.363022 +- 0.000000
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/sig_S1.0_A6.0_Z0.0.par : par(20)=-415.787717 +- 6.196505
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/sig_S1.0_A6.0_Z0.0.par : par(21)=269.083260 +- 3.606477
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/sig_S1.0_A6.0_Z0.0.par : par(22)=-1414.667099 +- 3.701987
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/sig_S1.0_A6.0_Z0.0.par : par(23)=3043.854341 +- 20.696640
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/sig_S1.0_A6.0_Z0.0.par : par(24)=453.154028 +- 8.597169
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/sig_S1.0_A6.0_Z0.0.par : par(25)=1609.991335 +- 0.000000
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/sig_S1.0_A6.0_Z0.0.par : par(26)=-2038.378560 +- 0.000000
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/sig_S1.0_A6.0_Z0.0.par : par(27)=-179.927654 +- 0.000000
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/sig_S1.0_A6.0_Z0.0.par : par(28)=0.000000 +- 0.000000
+par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_ionization_losses_minus1sigma/sig_S1.0_A6.0_Z0.0.par : par(29)=2273.107959 +- 0.000000
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+     1 MD           1.87000e+03  2.10000e-01     no limits
+     2 DE           3.40798e+00  1.26082e+01     no limits
+     3 Bck          1.20000e+03  5.00000e+00     no limits
+     4 DBck         2.00000e+01  5.00000e+00     no limits
+     5 Sig          1.00000e+00  constant
+ **********
+ **    1 **MIGRAD
+ **********
+ FIRST CALL TO USER FUNCTION AT NEW START POINT, WITH IFLAG=4.
+
+1 : f=245639.252759, int=3188.285917, out=0/8969
+ 0   1870.000000   1      3.407980   2   1200.000000   3     20.000000  
+ 4      1.000000  
+ START MIGRAD MINIMIZATION.  STRATEGY  1.  CONVERGENCE WHEN EDM .LT. 1.00e-04
+
+2 : f=245638.348276, int=3187.697373, out=0/8969
+ 0   1870.050821   1      3.407980   2   1200.000000   3     20.000000  
+ 4      1.000000  
+
+3 : f=245640.216184, int=3188.873617, out=0/8969
+ 0   1869.949179   1      3.407980   2   1200.000000   3     20.000000  
+ 4      1.000000  
+
+4 : f=245643.528125, int=3188.266632, out=0/8969
+ 0   1870.000000   1      6.459187   2   1200.000000   3     20.000000  
+ 4      1.000000  
+
+5 : f=245636.478867, int=3188.305112, out=0/8969
+ 0   1870.000000   1      0.356773   2   1200.000000   3     20.000000  
+ 4      1.000000  
+
+6 : f=245640.295997, int=3188.280503, out=0/8969
+ 0   1870.000000   1      4.260192   2   1200.000000   3     20.000000  
+ 4      1.000000  
+
+7 : f=245638.326678, int=3188.291324, out=0/8969
+ 0   1870.000000   1      2.555768   2   1200.000000   3     20.000000  
+ 4      1.000000  
+
+8 : f=245638.115294, int=3190.833447, out=0/8969
+ 0   1870.000000   1      3.407980   2   1201.210012   3     20.000000  
+ 4      1.000000  
+
+9 : f=245640.392706, int=3185.738387, out=0/8969
+ 0   1870.000000   1      3.407980   2   1198.789988   3     20.000000  
+ 4      1.000000  
+
+10 : f=245631.487925, int=3205.787696, out=0/8969
+ 0   1870.000000   1      3.407980   2   1208.312898   3     20.000000  
+ 4      1.000000  
+
+11 : f=245647.134722, int=3170.784138, out=0/8969
+ 0   1870.000000   1      3.407980   2   1191.687102   3     20.000000  
+ 4      1.000000  
+
+12 : f=245633.639448, int=3203.401028, out=0/8969
+ 0   1870.000000   1      3.407980   2   1200.000000   3     21.210012  
+ 4      1.000000  
+
+13 : f=245645.179216, int=3173.170806, out=0/8969
+ 0   1870.000000   1      3.407980   2   1200.000000   3     18.789988  
+ 4      1.000000  
+
+14 : f=245635.783231, int=3197.530195, out=0/8969
+ 0   1870.000000   1      3.407980   2   1200.000000   3     20.740033  
+ 4      1.000000  
+
+15 : f=245642.839407, int=3179.041639, out=0/8969
+ 0   1870.000000   1      3.407980   2   1200.000000   3     19.259967  
+ 4      1.000000  
+ FCN=245639 FROM MIGRAD    STATUS=INITIATE       14 CALLS          15 TOTAL
+                     EDM= unknown      STRATEGY= 1      NO ERROR MATRIX       
+  EXT PARAMETER               CURRENT GUESS       STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  MD           1.87000e+03   2.10000e-01   2.10000e-01  -1.83775e+01
+   2  DE           3.40798e+00   1.26082e+01   1.26082e+01   1.15542e+00
+   3  Bck          1.20000e+03   5.00000e+00   5.00000e+00  -9.41116e-01
+   4  DBck         2.00000e+01   5.00000e+00   5.00000e+00  -4.76747e+00
+   5  Sig          1.00000e+00   constant   
+
+16 : f=245261.038770, int=4626.380065, out=0/8969
+ 0   1870.805257   1     -3.754549   2   1755.241583   3     42.292522  
+ 4      1.000000  
+
+17 : f=245226.546609, int=4900.978742, out=0/8969
+ 0   1870.959032   1     -5.122332   2   1861.272545   3     46.549584  
+ 4      1.000000  
+
+18 : f=245170.388519, int=5546.379202, out=0/8969
+ 0   1871.320475   1     -8.337271   2   2110.495684   3     56.555701  
+ 4      1.000000  
+
+19 : f=245136.950391, int=6260.433628, out=0/8969
+ 0   1871.720404   1    -11.894525   2   2386.255201   3     67.627234  
+ 4      1.000000  
+
+20 : f=245126.803960, int=6695.294160, out=0/8969
+ 0   1871.963983   1    -14.061084   2   2554.207506   3     74.370390  
+ 4      1.000000  
+
+21 : f=245122.814571, int=7048.180267, out=0/8969
+ 0   1872.161657   1    -15.819338   2   2690.507930   3     79.842747  
+ 4      1.000000  
+
+22 : f=245125.425983, int=7047.290269, out=0/8969
+ 0   1872.233222   1    -15.819338   2   2690.507930   3     79.842747  
+ 4      1.000000  
+
+23 : f=245120.277417, int=7049.067740, out=0/8969
+ 0   1872.090092   1    -15.819338   2   2690.507930   3     79.842747  
+ 4      1.000000  
+
+24 : f=245121.379686, int=7048.176084, out=0/8969
+ 0   1872.161657   1    -14.968118   2   2690.507930   3     79.842747  
+ 4      1.000000  
+
+25 : f=245124.326700, int=7048.184009, out=0/8969
+ 0   1872.161657   1    -16.670557   2   2690.507930   3     79.842747  
+ 4      1.000000  
+
+26 : f=245121.793215, int=7065.663116, out=0/8969
+ 0   1872.161657   1    -15.819338   2   2698.811837   3     79.842747  
+ 4      1.000000  
+
+27 : f=245123.845052, int=7030.697418, out=0/8969
+ 0   1872.161657   1    -15.819338   2   2682.204023   3     79.842747  
+ 4      1.000000  
+
+28 : f=245119.202220, int=7110.723233, out=0/8969
+ 0   1872.161657   1    -15.819338   2   2720.214241   3     79.842747  
+ 4      1.000000  
+
+29 : f=245126.543718, int=6985.637300, out=0/8969
+ 0   1872.161657   1    -15.819338   2   2660.801619   3     79.842747  
+ 4      1.000000  
+
+30 : f=245123.405533, int=7057.415221, out=0/8969
+ 0   1872.161657   1    -15.819338   2   2690.507930   3     80.582034  
+ 4      1.000000  
+
+31 : f=245122.235169, int=7038.945313, out=0/8969
+ 0   1872.161657   1    -15.819338   2   2690.507930   3     79.103460  
+ 4      1.000000  
+
+32 : f=245124.733101, int=7077.544181, out=0/8969
+ 0   1872.161657   1    -15.819338   2   2690.507930   3     82.193420  
+ 4      1.000000  
+
+33 : f=245121.012934, int=7018.816353, out=0/8969
+ 0   1872.161657   1    -15.819338   2   2690.507930   3     77.492074  
+ 4      1.000000  
+
+34 : f=245056.876753, int=7410.358690, out=0/8969
+ 0   1870.692992   1     -6.093771   2   2854.879966   3     79.715975  
+ 4      1.000000  
+
+35 : f=245042.294350, int=7723.290545, out=0/8969
+ 0   1869.421404   1      2.326751   2   2997.195397   3     79.606214  
+ 4      1.000000  
+
+36 : f=245041.926937, int=7682.522613, out=0/8969
+ 0   1869.587169   1      1.229048   2   2978.643098   3     79.620522  
+ 4      1.000000  
+
+37 : f=245041.248711, int=7681.494663, out=0/8969
+ 0   1869.676940   1      1.229048   2   2978.643098   3     79.620522  
+ 4      1.000000  
+
+38 : f=245042.753081, int=7683.548204, out=0/8969
+ 0   1869.497397   1      1.229048   2   2978.643098   3     79.620522  
+ 4      1.000000  
+
+39 : f=245042.315847, int=7682.517422, out=0/8969
+ 0   1869.587169   1      2.275970   2   2978.643098   3     79.620522  
+ 4      1.000000  
+
+40 : f=245041.674947, int=7682.527771, out=0/8969
+ 0   1869.587169   1      0.182127   2   2978.643098   3     79.620522  
+ 4      1.000000  
+
+41 : f=245039.274831, int=7745.063080, out=0/8969
+ 0   1869.587169   1      1.229048   2   3008.348222   3     79.620522  
+ 4      1.000000  
+
+42 : f=245044.664720, int=7619.982146, out=0/8969
+ 0   1869.587169   1      1.229048   2   2948.937975   3     79.620522  
+ 4      1.000000  
+
+43 : f=245043.293841, int=7711.880493, out=0/8969
+ 0   1869.587169   1      1.229048   2   2978.643098   3     81.970712  
+ 4      1.000000  
+
+44 : f=245040.668334, int=7653.164733, out=0/8969
+ 0   1869.587169   1      1.229048   2   2978.643098   3     77.270332  
+ 4      1.000000  
+
+45 : f=245028.253209, int=7997.493486, out=0/8969
+ 0   1869.695091   1      0.849674   2   3130.236929   3     79.383796  
+ 4      1.000000  
+
+46 : f=244993.025063, int=9257.343362, out=0/8969
+ 0   1870.126781   1     -0.667824   2   3736.612252   3     78.436890  
+ 4      1.000000  
+
+47 : f=244982.212549, int=10052.322683, out=0/8969
+ 0   1870.399193   1     -1.625418   2   4119.256215   3     77.839359  
+ 4      1.000000  
+
+48 : f=244978.220909, int=10627.754478, out=0/8969
+ 0   1870.596378   1     -2.318575   2   4396.233836   3     77.406836  
+ 4      1.000000  
+
+49 : f=244976.920023, int=11053.207210, out=0/8969
+ 0   1870.742173   1     -2.831080   2   4601.025002   3     77.087037  
+ 4      1.000000  
+
+50 : f=244976.734865, int=11234.924476, out=0/8969
+ 0   1870.804445   1     -3.049981   2   4688.495539   3     76.950445  
+ 4      1.000000  
+
+51 : f=244977.926705, int=11233.978634, out=0/8969
+ 0   1870.884221   1     -3.049981   2   4688.495539   3     76.950445  
+ 4      1.000000  
+
+52 : f=244975.640647, int=11235.867824, out=0/8969
+ 0   1870.724668   1     -3.049981   2   4688.495539   3     76.950445  
+ 4      1.000000  
+
+53 : f=244976.660698, int=11234.916674, out=0/8969
+ 0   1870.804445   1     -2.082976   2   4688.495539   3     76.950445  
+ 4      1.000000  
+
+54 : f=244976.903857, int=11234.932011, out=0/8969
+ 0   1870.804445   1     -4.016986   2   4688.495539   3     76.950445  
+ 4      1.000000  
+
+55 : f=244976.356890, int=11307.925635, out=0/8969
+ 0   1870.804445   1     -3.049981   2   4723.169223   3     76.950445  
+ 4      1.000000  
+
+56 : f=244977.134521, int=11161.923318, out=0/8969
+ 0   1870.804445   1     -3.049981   2   4653.821854   3     76.950445  
+ 4      1.000000  
+
+57 : f=244975.891089, int=11404.070538, out=0/8969
+ 0   1870.804445   1     -3.049981   2   4768.835595   3     76.950445  
+ 4      1.000000  
+
+58 : f=244977.695078, int=11065.778414, out=0/8969
+ 0   1870.804445   1     -3.049981   2   4608.155482   3     76.950445  
+ 4      1.000000  
+
+59 : f=244977.148515, int=11265.414330, out=0/8969
+ 0   1870.804445   1     -3.049981   2   4688.495539   3     79.391252  
+ 4      1.000000  
+
+60 : f=244976.388799, int=11204.434622, out=0/8969
+ 0   1870.804445   1     -3.049981   2   4688.495539   3     74.509637  
+ 4      1.000000  
+
+61 : f=244968.240396, int=11712.168228, out=0/8969
+ 0   1870.100084   1     -1.408256   2   4915.515643   3     76.233443  
+ 4      1.000000  
+
+62 : f=244967.276946, int=11927.526280, out=0/8969
+ 0   1869.782159   1     -0.667236   2   5017.984931   3     75.909812  
+ 4      1.000000  
+
+63 : f=244967.205584, int=11926.522405, out=0/8969
+ 0   1869.869424   1     -0.667236   2   5017.984931   3     75.909812  
+ 4      1.000000  
+
+64 : f=244967.466590, int=11928.527817, out=0/8969
+ 0   1869.694894   1     -0.667236   2   5017.984931   3     75.909812  
+ 4      1.000000  
+
+65 : f=244967.472573, int=11927.520422, out=0/8969
+ 0   1869.782159   1      0.406029   2   5017.984931   3     75.909812  
+ 4      1.000000  
+
+66 : f=244967.198562, int=11927.532011, out=0/8969
+ 0   1869.782159   1     -1.740500   2   5017.984931   3     75.909812  
+ 4      1.000000  
+
+67 : f=244966.824245, int=12096.660771, out=0/8969
+ 0   1869.782159   1     -0.667236   2   5098.319491   3     75.909812  
+ 4      1.000000  
+
+68 : f=244967.819209, int=11758.391790, out=0/8969
+ 0   1869.782159   1     -0.667236   2   4937.650370   3     75.909812  
+ 4      1.000000  
+
+69 : f=244967.631223, int=11967.610243, out=0/8969
+ 0   1869.782159   1     -0.667236   2   5017.984931   3     79.118658  
+ 4      1.000000  
+
+70 : f=244967.030306, int=11887.442318, out=0/8969
+ 0   1869.782159   1     -0.667236   2   5017.984931   3     72.700966  
+ 4      1.000000  
+
+71 : f=244966.324795, int=12250.510911, out=0/8969
+ 0   1869.802718   1     -1.465036   2   5175.343284   3     75.262826  
+ 4      1.000000  
+
+72 : f=244965.591198, int=12802.615539, out=0/8969
+ 0   1869.837863   1     -2.828784   2   5444.329215   3     74.156878  
+ 4      1.000000  
+
+73 : f=244965.568132, int=12885.603995, out=0/8969
+ 0   1869.843145   1     -3.033773   2   5484.761293   3     73.990639  
+ 4      1.000000  
+
+74 : f=244965.605327, int=12884.605329, out=0/8969
+ 0   1869.929865   1     -3.033773   2   5484.761293   3     73.990639  
+ 4      1.000000  
+
+75 : f=244965.644071, int=12886.600320, out=0/8969
+ 0   1869.756425   1     -3.033773   2   5484.761293   3     73.990639  
+ 4      1.000000  
+
+76 : f=244965.518067, int=12885.598295, out=0/8969
+ 0   1869.843145   1     -1.962494   2   5484.761293   3     73.990639  
+ 4      1.000000  
+
+77 : f=244965.729751, int=12885.609477, out=0/8969
+ 0   1869.843145   1     -4.105051   2   5484.761293   3     73.990639  
+ 4      1.000000  
+
+78 : f=244965.548836, int=13078.345443, out=0/8969
+ 0   1869.843145   1     -3.033773   2   5576.308555   3     73.990639  
+ 4      1.000000  
+
+79 : f=244965.665759, int=12692.862547, out=0/8969
+ 0   1869.843145   1     -3.033773   2   5393.214030   3     73.990639  
+ 4      1.000000  
+
+80 : f=244965.744064, int=12927.360928, out=0/8969
+ 0   1869.843145   1     -3.033773   2   5484.761293   3     77.333412  
+ 4      1.000000  
+
+81 : f=244965.496426, int=12843.847062, out=0/8969
+ 0   1869.843145   1     -3.033773   2   5484.761293   3     70.647867  
+ 4      1.000000  
+
+82 : f=244965.498673, int=12974.715226, out=0/8969
+ 0   1869.847314   1     -2.489174   2   5529.217395   3     73.635623  
+ 4      1.000000  
+
+83 : f=244965.480687, int=13045.556731, out=0/8969
+ 0   1869.850629   1     -2.056229   2   5564.559062   3     73.353392  
+ 4      1.000000  
+
+84 : f=244965.533695, int=13044.541509, out=0/8969
+ 0   1869.938746   1     -2.056229   2   5564.559062   3     73.353392  
+ 4      1.000000  
+
+85 : f=244965.543739, int=13046.569528, out=0/8969
+ 0   1869.762512   1     -2.056229   2   5564.559062   3     73.353392  
+ 4      1.000000  
+
+86 : f=244965.537178, int=13045.550704, out=0/8969
+ 0   1869.850629   1     -0.960016   2   5564.559062   3     73.353392  
+ 4      1.000000  
+
+87 : f=244965.540557, int=13045.562566, out=0/8969
+ 0   1869.850629   1     -3.152442   2   5564.559062   3     73.353392  
+ 4      1.000000  
+
+88 : f=244965.550878, int=13280.176138, out=0/8969
+ 0   1869.850629   1     -2.056229   2   5675.997284   3     73.353392  
+ 4      1.000000  
+
+89 : f=244965.518809, int=12810.937324, out=0/8969
+ 0   1869.850629   1     -2.056229   2   5453.120839   3     73.353392  
+ 4      1.000000  
+
+90 : f=244965.618354, int=13089.762256, out=0/8969
+ 0   1869.850629   1     -2.056229   2   5564.559062   3     76.892182  
+ 4      1.000000  
+
+91 : f=244965.458085, int=13001.351206, out=0/8969
+ 0   1869.850629   1     -2.056229   2   5564.559062   3     69.814602  
+ 4      1.000000  
+
+92 : f=244965.476846, int=13036.753416, out=0/8969
+ 0   1869.855058   1     -2.009022   2   5561.276417   3     73.206023  
+ 4      1.000000  
+
+93 : f=244965.468858, int=13001.540078, out=0/8969
+ 0   1869.872774   1     -1.820194   2   5548.145838   3     72.616549  
+ 4      1.000000  
+
+94 : f=244965.468677, int=12995.312794, out=0/8969
+ 0   1869.875907   1     -1.786801   2   5545.823773   3     72.512304  
+ 4      1.000000  
+
+95 : f=244965.554274, int=12994.293522, out=0/8969
+ 0   1869.964308   1     -1.786801   2   5545.823773   3     72.512304  
+ 4      1.000000  
+
+96 : f=244965.500081, int=12996.329609, out=0/8969
+ 0   1869.787506   1     -1.786801   2   5545.823773   3     72.512304  
+ 4      1.000000  
+
+97 : f=244965.556315, int=12995.306632, out=0/8969
+ 0   1869.875907   1     -0.688481   2   5545.823773   3     72.512304  
+ 4      1.000000  
+
+98 : f=244965.498088, int=12995.318770, out=0/8969
+ 0   1869.875907   1     -2.885120   2   5545.823773   3     72.512304  
+ 4      1.000000  
+
+99 : f=244965.534155, int=13238.131227, out=0/8969
+ 0   1869.875907   1     -1.786801   2   5661.156323   3     72.512304  
+ 4      1.000000  
+
+100 : f=244965.520464, int=12752.494362, out=0/8969
+ 0   1869.875907   1     -1.786801   2   5430.491223   3     72.512304  
+ 4      1.000000  
+
+101 : f=244965.584111, int=13039.851974, out=0/8969
+ 0   1869.875907   1     -1.786801   2   5545.823773   3     76.077804  
+ 4      1.000000  
+
+102 : f=244965.471457, int=12950.773615, out=0/8969
+ 0   1869.875907   1     -1.786801   2   5545.823773   3     68.946804  
+ 4      1.000000  
+
+103 : f=244965.458294, int=12972.220885, out=0/8969
+ 0   1869.870556   1     -1.872822   2   5537.572904   3     72.049371  
+ 4      1.000000  
+
+104 : f=244965.446257, int=12894.316974, out=0/8969
+ 0   1869.852503   1     -2.163028   2   5509.737432   3     70.487603  
+ 4      1.000000  
+
+105 : f=244965.445776, int=12906.831313, out=0/8969
+ 0   1869.855403   1     -2.116410   2   5514.208866   3     70.738482  
+ 4      1.000000  
+
+106 : f=244965.501570, int=12905.813536, out=0/8969
+ 0   1869.943732   1     -2.116410   2   5514.208866   3     70.738482  
+ 4      1.000000  
+
+107 : f=244965.507164, int=12907.846650, out=0/8969
+ 0   1869.767075   1     -2.116410   2   5514.208866   3     70.738482  
+ 4      1.000000  
+
+108 : f=244965.502452, int=12906.825274, out=0/8969
+ 0   1869.855403   1     -1.019216   2   5514.208866   3     70.738482  
+ 4      1.000000  
+
+109 : f=244965.506186, int=12906.837155, out=0/8969
+ 0   1869.855403   1     -3.213605   2   5514.208866   3     70.738482  
+ 4      1.000000  
+
+110 : f=244965.492679, int=13148.362115, out=0/8969
+ 0   1869.855403   1     -2.116410   2   5628.929825   3     70.738482  
+ 4      1.000000  
+
+111 : f=244965.517186, int=12665.300511, out=0/8969
+ 0   1869.855403   1     -2.116410   2   5399.487908   3     70.738482  
+ 4      1.000000  
+
+112 : f=244965.512899, int=12951.104828, out=0/8969
+ 0   1869.855403   1     -2.116410   2   5514.208866   3     74.282715  
+ 4      1.000000  
+
+113 : f=244965.498116, int=12862.557797, out=0/8969
+ 0   1869.855403   1     -2.116410   2   5514.208866   3     67.194249  
+ 4      1.000000  
+
+114 : f=244965.445170, int=12924.902587, out=0/8969
+ 0   1869.856735   1     -2.099455   2   5523.484190   3     70.623097  
+ 4      1.000000  
+
+115 : f=244965.445175, int=12923.731438, out=0/8969
+ 0   1869.856648   1     -2.100554   2   5522.883082   3     70.630575  
+ 4      1.000000  
+
+116 : f=244965.502989, int=12923.886390, out=0/8969
+ 0   1869.944922   1     -2.099455   2   5523.484190   3     70.623097  
+ 4      1.000000  
+
+117 : f=244965.504084, int=12925.916351, out=0/8969
+ 0   1869.768547   1     -2.099455   2   5523.484190   3     70.623097  
+ 4      1.000000  
+
+118 : f=244965.503839, int=12924.896549, out=0/8969
+ 0   1869.856735   1     -1.003559   2   5523.484190   3     70.623097  
+ 4      1.000000  
+
+119 : f=244965.503225, int=12924.908430, out=0/8969
+ 0   1869.856735   1     -3.195352   2   5523.484190   3     70.623097  
+ 4      1.000000  
+
+120 : f=244965.501105, int=13164.101649, out=0/8969
+ 0   1869.856735   1     -2.099455   2   5637.097632   3     70.623097  
+ 4      1.000000  
+
+121 : f=244965.504328, int=12685.703525, out=0/8969
+ 0   1869.856735   1     -2.099455   2   5409.870749   3     70.623097  
+ 4      1.000000  
+
+122 : f=244965.504531, int=12968.681569, out=0/8969
+ 0   1869.856735   1     -2.099455   2   5523.484190   3     74.127741  
+ 4      1.000000  
+
+123 : f=244965.502437, int=12881.123605, out=0/8969
+ 0   1869.856735   1     -2.099455   2   5523.484190   3     67.118453  
+ 4      1.000000  
+
+124 : f=244965.445174, int=12927.515864, out=0/8969
+ 0   1869.857079   1     -2.102670   2   5524.859406   3     70.600832  
+ 4      1.000000  
+
+125 : f=244965.445168, int=12926.067362, out=0/8969
+ 0   1869.856888   1     -2.100888   2   5524.097143   3     70.613173  
+ 4      1.000000  
+
+126 : f=244965.445168, int=12925.886632, out=0/8969
+ 0   1869.856864   1     -2.100666   2   5524.002036   3     70.614713  
+ 4      1.000000  
+
+127 : f=244965.503220, int=12924.870100, out=0/8969
+ 0   1869.945081   1     -2.100666   2   5524.002036   3     70.614713  
+ 4      1.000000  
+
+128 : f=244965.503922, int=12926.900731, out=0/8969
+ 0   1869.768648   1     -2.100666   2   5524.002036   3     70.614713  
+ 4      1.000000  
+
+129 : f=244965.503774, int=12925.880592, out=0/8969
+ 0   1869.856864   1     -1.004370   2   5524.002036   3     70.614713  
+ 4      1.000000  
+
+130 : f=244965.503366, int=12925.892478, out=0/8969
+ 0   1869.856864   1     -3.196962   2   5524.002036   3     70.614713  
+ 4      1.000000  
+
+131 : f=244965.502129, int=13166.061119, out=0/8969
+ 0   1869.856864   1     -2.100666   2   5638.078779   3     70.614713  
+ 4      1.000000  
+
+132 : f=244965.504187, int=12685.712146, out=0/8969
+ 0   1869.856864   1     -2.100666   2   5409.925292   3     70.614713  
+ 4      1.000000  
+
+133 : f=244965.504219, int=12969.699474, out=0/8969
+ 0   1869.856864   1     -2.100666   2   5524.002036   3     74.122068  
+ 4      1.000000  
+
+134 : f=244965.502917, int=12882.073790, out=0/8969
+ 0   1869.856864   1     -2.100666   2   5524.002036   3     67.107359  
+ 4      1.000000  
+ MIGRAD MINIMIZATION HAS CONVERGED.
+ MIGRAD WILL VERIFY CONVERGENCE AND ERROR MATRIX.
+
+135 : f=244965.445168, int=12925.886632, out=0/8969
+ 0   1869.856864   1     -2.100666   2   5524.002036   3     70.614713  
+ 4      1.000000  
+
+136 : f=244965.503220, int=12924.870100, out=0/8969
+ 0   1869.945081   1     -2.100666   2   5524.002036   3     70.614713  
+ 4      1.000000  
+
+137 : f=244965.503922, int=12926.900731, out=0/8969
+ 0   1869.768648   1     -2.100666   2   5524.002036   3     70.614713  
+ 4      1.000000  
+
+138 : f=244965.503774, int=12925.880592, out=0/8969
+ 0   1869.856864   1     -1.004370   2   5524.002036   3     70.614713  
+ 4      1.000000  
+
+139 : f=244965.503366, int=12925.892478, out=0/8969
+ 0   1869.856864   1     -3.196962   2   5524.002036   3     70.614713  
+ 4      1.000000  
+
+140 : f=244965.502129, int=13166.061119, out=0/8969
+ 0   1869.856864   1     -2.100666   2   5638.078779   3     70.614713  
+ 4      1.000000  
+
+141 : f=244965.504187, int=12685.712146, out=0/8969
+ 0   1869.856864   1     -2.100666   2   5409.925292   3     70.614713  
+ 4      1.000000  
+
+142 : f=244965.504219, int=12969.699474, out=0/8969
+ 0   1869.856864   1     -2.100666   2   5524.002036   3     74.122068  
+ 4      1.000000  
+
+143 : f=244965.502917, int=12882.073790, out=0/8969
+ 0   1869.856864   1     -2.100666   2   5524.002036   3     67.107359  
+ 4      1.000000  
+
+144 : f=244965.447432, int=12925.683522, out=0/8969
+ 0   1869.874508   1     -2.100666   2   5524.002036   3     70.614713  
+ 4      1.000000  
+
+145 : f=244965.447577, int=12926.089645, out=0/8969
+ 0   1869.839221   1     -2.100666   2   5524.002036   3     70.614713  
+ 4      1.000000  
+
+146 : f=244965.447534, int=12925.885438, out=0/8969
+ 0   1869.856864   1     -1.881407   2   5524.002036   3     70.614713  
+ 4      1.000000  
+
+147 : f=244965.447474, int=12925.887818, out=0/8969
+ 0   1869.856864   1     -2.319925   2   5524.002036   3     70.614713  
+ 4      1.000000  
+
+148 : f=244965.445268, int=12925.886394, out=0/8969
+ 0   1869.856864   1     -2.056814   2   5524.002036   3     70.614713  
+ 4      1.000000  
+
+149 : f=244965.445256, int=12925.886870, out=0/8969
+ 0   1869.856864   1     -2.144518   2   5524.002036   3     70.614713  
+ 4      1.000000  
+
+150 : f=244965.447629, int=12973.921530, out=0/8969
+ 0   1869.856864   1     -2.100666   2   5546.817384   3     70.614713  
+ 4      1.000000  
+
+151 : f=244965.447343, int=12877.851735, out=0/8969
+ 0   1869.856864   1     -2.100666   2   5501.186687   3     70.614713  
+ 4      1.000000  
+
+152 : f=244965.445292, int=12935.493612, out=0/8969
+ 0   1869.856864   1     -2.100666   2   5528.565106   3     70.614713  
+ 4      1.000000  
+
+153 : f=244965.445229, int=12916.279653, out=0/8969
+ 0   1869.856864   1     -2.100666   2   5519.438966   3     70.614713  
+ 4      1.000000  
+
+154 : f=244965.447740, int=12934.649201, out=0/8969
+ 0   1869.856864   1     -2.100666   2   5524.002036   3     71.316184  
+ 4      1.000000  
+
+155 : f=244965.447268, int=12917.124064, out=0/8969
+ 0   1869.856864   1     -2.100666   2   5524.002036   3     69.913242  
+ 4      1.000000  
+
+156 : f=244965.445310, int=12927.639146, out=0/8969
+ 0   1869.856864   1     -2.100666   2   5524.002036   3     70.755007  
+ 4      1.000000  
+
+157 : f=244965.445213, int=12924.134119, out=0/8969
+ 0   1869.856864   1     -2.100666   2   5524.002036   3     70.474419  
+ 4      1.000000  
+
+158 : f=244965.562188, int=12924.863776, out=0/8969
+ 0   1869.945081   1     -1.004370   2   5524.002036   3     70.614713  
+ 4      1.000000  
+
+159 : f=244965.565990, int=13165.044586, out=0/8969
+ 0   1869.945081   1     -2.100666   2   5638.078779   3     70.614713  
+ 4      1.000000  
+
+160 : f=244965.560924, int=13166.055078, out=0/8969
+ 0   1869.856864   1     -1.004370   2   5638.078779   3     70.614713  
+ 4      1.000000  
+
+161 : f=244965.563813, int=12968.682942, out=0/8969
+ 0   1869.945081   1     -2.100666   2   5524.002036   3     74.122068  
+ 4      1.000000  
+
+162 : f=244965.553952, int=12969.693434, out=0/8969
+ 0   1869.856864   1     -1.004370   2   5524.002036   3     74.122068  
+ 4      1.000000  
+
+163 : f=244965.531850, int=13209.873961, out=0/8969
+ 0   1869.856864   1     -2.100666   2   5638.078779   3     74.122068  
+ 4      1.000000  
+ COVARIANCE MATRIX CALCULATED SUCCESSFULLY
+ FCN=244965 FROM MIGRAD    STATUS=CONVERGED     162 CALLS         163 TOTAL
+                     EDM=2.55348e-05    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  MD           1.86986e+03   3.65625e-01   8.82166e-02  -4.11963e-03
+   2  DE          -2.10067e+00   4.55039e+00   1.09630e+00   1.35442e-04
+   3  Bck          5.52400e+03   4.90342e+02   1.14077e+02   6.88124e-06
+   4  DBck         7.06147e+01   1.50490e+01   3.50735e+00   3.42968e-04
+   5  Sig          1.00000e+00   constant   
+ EXTERNAL ERROR MATRIX.    NDIM=  25    NPAR=  4    ERR DEF=1
+  1.337e-01 -8.531e-03 -9.879e+00 -1.485e-01 
+ -8.531e-03  2.071e+01  4.107e+01  5.354e+00 
+ -9.879e+00  4.107e+01  2.404e+05  1.871e+03 
+ -1.485e-01  5.354e+00  1.871e+03  2.265e+02 
+ PARAMETER  CORRELATION COEFFICIENTS  
+       NO.  GLOBAL      1      2      3      4
+        1  0.05681   1.000 -0.005 -0.055 -0.027
+        2  0.07826  -0.005  1.000  0.018  0.078
+        3  0.25818  -0.055  0.018  1.000  0.254
+        4  0.26437  -0.027  0.078  0.254  1.000
+Generating event -1000
+Updated majorant: 0.005980
+Updated majorant: 0.026334
+Updated majorant: 0.082727
+Generating event 0
+Generating event 1000
+Generating event 2000
+Generating event 3000
+Generating event 4000
+Generating event 5000
+Generating event 6000
+Generating event 7000
+Generating event 8000
+Generating event 9000
+Generating event 10000
+Generating event 11000
+Generating event 12000
+Generating event 13000
+Generating event 14000
+Generating event 15000
+Generating event 16000
+Generating event 17000
+Generating event 18000
+Generating event 19000
+Generating event 20000
+Generating event 21000
+Generating event 22000
+Generating event 23000
+Generating event 24000
+Generating event 25000
+Generating event 26000
+Generating event 27000
+Generating event 28000
+Generating event 29000
+Generating event 30000
+Generating event 31000
+Generating event 32000
+Generating event 33000
+Generating event 34000
+Generating event 35000
+Generating event 36000
+Generating event 37000
+Generating event 38000
+Generating event 39000
+Generating event 40000
+Generating event 41000
+Generating event 42000
+Generating event 43000
+Generating event 44000
+Generating event 45000
+Generating event 46000
+Generating event 47000
+Generating event 48000
+Generating event 49000
+Generating event 50000
+Generating event 51000
+Generating event 52000
+Generating event 53000
+Generating event 54000
+Generating event 55000
+Generating event 56000
+Generating event 57000
+Generating event 58000
+Generating event 59000
+Generating event 60000
+Generating event 61000
+Generating event 62000
+Generating event 63000
+Generating event 64000
+Generating event 65000
+Generating event 66000
+Generating event 67000
+Generating event 68000
+Generating event 69000
+Generating event 70000
+Generating event 71000
+Generating event 72000
+Generating event 73000
+Generating event 74000
+Generating event 75000
+Generating event 76000
+Generating event 77000
+Generating event 78000
+Generating event 79000
+Generating event 80000
+Generating event 81000
+Generating event 82000
+Generating event 83000
+Generating event 84000
+Generating event 85000
+Generating event 86000
+Generating event 87000
+Generating event 88000
+Generating event 89000
+Generating event 90000
+Generating event 91000
+Generating event 92000
+Generating event 93000
+Generating event 94000
+Generating event 95000
+Generating event 96000
+Generating event 97000
+Generating event 98000
+Generating event 99000
+M_D = 1869.556721 +- 0.365625
+Generating event 0
+Generating event 100000
+Generating event 200000
+Generating event 300000
+Generating event 400000
+Generating event 500000
+Generating event 600000
+Generating event 700000
+Generating event 800000
+Generating event 900000
+Generating event 1000000
+Generating event 1100000
+Generating event 1200000
+Generating event 1300000
+Generating event 1400000
+Generating event 1500000
+Generating event 1600000
+Generating event 1700000
+Generating event 1800000
+Generating event 1900000
+Generating event 2000000
+Generating event 2100000
+Generating event 2200000
+Generating event 2300000
+Generating event 2400000
+Generating event 2500000
+Generating event 2600000
+Generating event 2700000
+Generating event 2800000
+Generating event 2900000
+Generating event 3000000
+Generating event 3100000
+Generating event 3200000
+Generating event 3300000
+Generating event 3400000
+Generating event 3500000
+Generating event 3600000
+Generating event 3700000
+Generating event 3800000
+Generating event 3900000
+Generating event 4000000
+Generating event 4100000
+Generating event 4200000
+Generating event 4300000
+Generating event 4400000
+Generating event 4500000
+Generating event 4600000
+Generating event 4700000
+Generating event 4800000
+Generating event 4900000
+Generating event 0
+Generating event 100000
+Generating event 200000
+Generating event 300000
+Generating event 400000
+Generating event 500000
+Generating event 600000
+Generating event 700000
+Generating event 800000
+Generating event 900000
+Generating event 1000000
+Generating event 1100000
+Generating event 1200000
+Generating event 1300000
+Generating event 1400000
+Generating event 1500000
+Generating event 1600000
+Generating event 1700000
+Generating event 1800000
+Generating event 1900000
+Generating event 2000000
+Generating event 2100000
+Generating event 2200000
+Generating event 2300000
+Generating event 2400000
+Generating event 2500000
+Generating event 2600000
+Generating event 2700000
+Generating event 2800000
+Generating event 2900000
+Generating event 3000000
+Generating event 3100000
+Generating event 3200000
+Generating event 3300000
+Generating event 3400000
+Generating event 3500000
+Generating event 3600000
+Generating event 3700000
+Generating event 3800000
+Generating event 3900000
+Generating event 4000000
+Generating event 4100000
+Generating event 4200000
+Generating event 4300000
+Generating event 4400000
+Generating event 4500000
+Generating event 4600000
+Generating event 4700000
+Generating event 4800000
+Generating event 4900000
+Generating event 0
+Generating event 100000
+Generating event 200000
+Generating event 300000
+Generating event 400000
+Generating event 500000
+Generating event 600000
+Generating event 700000
+Generating event 800000
+Generating event 900000
+Generating event 1000000
+Generating event 1100000
+Generating event 1200000
+Generating event 1300000
+Generating event 1400000
+Generating event 1500000
+Generating event 1600000
+Generating event 1700000
+Generating event 1800000
+Generating event 1900000
+Generating event 2000000
+Generating event 2100000
+Generating event 2200000
+Generating event 2300000
+Generating event 2400000
+Generating event 2500000
+Generating event 2600000
+Generating event 2700000
+Generating event 2800000
+Generating event 2900000
+Generating event 3000000
+Generating event 3100000
+Generating event 3200000
+Generating event 3300000
+Generating event 3400000
+Generating event 3500000
+Generating event 3600000
+Generating event 3700000
+Generating event 3800000
+Generating event 3900000
+Generating event 4000000
+Generating event 4100000
+Generating event 4200000
+Generating event 4300000
+Generating event 4400000
+Generating event 4500000
+Generating event 4600000
+Generating event 4700000
+Generating event 4800000
+Generating event 4900000
+M_D = 1869.556721 +- 0.365625
+Job finished\n
