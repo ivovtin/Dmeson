@@ -1,0 +1,701 @@
+
+Processing fit_unbin_exp_new.C...
+
+[1mRooFit v3.60 -- Developed by Wouter Verkerke and David Kirkby[0m 
+                Copyright (C) 2000-2013 NIKHEF, University of California & Stanford University
+                All rights reserved, please read http://roofit.sourceforge.net/license.txt
+
+Reading file /home/ovtin/development/Dmeson/analysisDplus/rooFit/par/init/exp_fitNew.par
+par(0)=1869.730000 +- 0.250000
+par(1)=0.105736 +- 4.000000
+par(2)=8177.850000 +- 100.000000
+par(3)=645.503000 +- 10.000000
+par(4)=350.074000 +- 0.000000
+Reading file /home/ovtin/development/Dmeson/analysisDplus/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12/sig_ATC_S1.0_A6.0_Z0.0.par
+par(0)=1869.692446 +- 0.032052
+par(1)=-0.632669 +- 0.170962
+par(2)=-0.001100 +- 0.000502
+par(3)=2.811935 +- 0.032121
+par(4)=2.958640 +- 0.033492
+par(5)=39.004045 +- 0.243570
+par(6)=1888.750000 +- 0.000000
+par(7)=0.000020 +- 0.000001
+par(8)=0.171860 +- 0.057591
+par(9)=0.460157 +- 0.006217
+par(10)=6.767671 +- 0.057074
+par(11)=71.082303 +- 0.486593
+par(12)=-0.000900 +- 0.000634
+par(13)=0.076147 +- 0.002387
+par(14)=70.266814 +- 4.843173
+par(15)=-2.049557 +- 0.335841
+par(16)=1888.750000 +- 0.000000
+par(17)=-5.801386 +- 2.654498
+par(18)=174.599003 +- 2.491605
+par(19)=-514.507087 +- 21.088127
+par(20)=2754.004260 +- 3.004599
+par(21)=278.440442 +- 0.889600
+par(22)=609.494515 +- 23.802335
+par(23)=-220.222548 +- 5.264558
+par(24)=92.389983 +- 6.487246
+par(25)=3.603153 +- 0.971180
+par(26)=471.907030 +- 60.967651
+RooSigPdfNew::sig_model[ mbc=mbc de=de mbc_mean=sig_mbc_mean de_mean=sig_de_mean mbcde_corr=sig_mbcde_corr mbc_sigma_l=sig_mbc_sigma_l mbc_sigma_r=sig_mbc_sigma_r de_sigma=sig_de_sigma ebeam=sig_ebeam bck=sig_bck mbcw_shift=sig_mbcw_shift mbcw_frac=sig_mbcw_frac mbcw_sigma=sig_mbcw_sigma dew_sigma=sig_dew_sigma mbcdew_corr=sig_mbcdew_corr dpsig=sig_dpsig dbck_alpha_mbc=sig_dbck_alpha_mbc dbck_alpha_de=sig_dbck_alpha_de dbck_ebeam=sig_dbck_ebeam dbck_de_mean=sig_dbck_de_mean dbck_de_width=sig_dbck_de_width dbck_de_frac=sig_dbck_de_frac dbck_mbc_mean=sig_dbck_mbc_mean dbck_mbc_sigma0=sig_dbck_mbc_sigma0 dbck_mbc_sigma1=sig_dbck_mbc_sigma1 dbck_de_mean1=sig_dbck_de_mean1 dbck_de_width1=sig_dbck_de_width1 dbck_de_frac1=sig_dbck_de_frac1 dbck_mbc_mean1=sig_dbck_mbc_mean1 ] = 0.0172637
+Reading file /home/ovtin/development/Dmeson/analysisDplus/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12/dbck_sim_ATC_S1.0_A6.0_Z0.0.par
+par(0)=12.755291 +- 0.995578
+par(1)=6.192658 +- 0.196442
+par(2)=1888.750000 +- 0.000000
+par(3)=-194.683907 +- 1.105420
+par(4)=55.249080 +- 1.104013
+par(5)=8.772005 +- 1.227891
+par(6)=1862.002831 +- 0.313980
+par(7)=15.335128 +- 0.350288
+par(8)=-335.312736 +- 22.652666
+par(9)=-190.133296 +- 28.581559
+par(10)=200.851588 +- 12.211757
+par(11)=-275419.123736 +- 254733.992513
+par(12)=3468.155243 +- 214.069404
+RoodbckPdfNew::dbck_model[ mbc=mbc ebeam=dbck_ebeam alpha_mbc=dbck_alpha_mbc alpha_de=dbck_alpha_de de=de de_mean=dbck_de_mean de_width=dbck_de_width de_frac=dbck_de_frac mbc_mean=dbck_mbc_mean mbc_sigma0=dbck_mbc_sigma0 mbc_sigma1=dbck_mbc_sigma1 de_mean1=dbck_de_mean1 de_width1=dbck_de_width1 de_frac1=dbck_de_frac1 mbc_mean1=dbck_mbc_mean1 ] = 739.389
+Reading file /home/ovtin/development/Dmeson/analysisDplus/rooFit/par/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12/bck_uds_ATC_S1.0_A6.0_Z0.0.par
+par(0)=14.619416 +- 0.095833
+par(1)=0.348341 +- 0.032439
+par(2)=1888.750000 +- 0.000000
+par(3)=23.896529 +- 0.579849
+par(4)=5.104783 +- 0.098977
+RooudsPdf::uds_model[ mbc=mbc ebeam=uds_ebeam alpha_mbc=uds_alpha_mbc alpha_de=uds_alpha_de de=de twist=uds_twist c2_de=uds_c2_de ] = 0.287863
+ndata=9141
+[#1] INFO:Minization -- p.d.f. provides expected number of events, including extended term in likelihood.
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(uds_model_Int[de,mbc]) using numeric integrator RooAdaptiveIntegratorND to calculate Int(mbc,de)
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(dbck_model_Int[de,mbc]) using numeric integrator RooAdaptiveIntegratorND to calculate Int(mbc,de)
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(sig_model_Int[de,mbc]) using numeric integrator RooAdaptiveIntegratorND to calculate Int(mbc,de)
+[#1] INFO:Minization -- p.d.f. provides expected number of events, including extended term in likelihood.
+[#1] INFO:Minization -- RooMinimizer::optimizeConst: activating const optimization
+[#1] INFO:Minization --  The following expressions will be evaluated in cache-and-track mode: (uds_model,dbck_model,sig_model)
+[#1] INFO:Minization -- RooMinimizerFcn::synchronize: set of constant parameters changed, rerunning const optimizer
+[#1] INFO:Minization --  The following expressions will be evaluated in cache-and-track mode: (uds_model,dbck_model,sig_model)
+ **********
+ **    1 **SET PRINT           1
+ **********
+ **********
+ **    2 **SET NOGRAD
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+     1 Bck          8.17785e+03  4.08893e+03    0.00000e+00  5.00000e+04
+     2 DBck         6.45503e+02  3.22752e+02    0.00000e+00  2.00000e+04
+     3 Sig          3.50074e+02  1.75037e+02    0.00000e+00  1.00000e+04
+     4 dbck_alpha_de   6.19266e+00  6.19266e-01     no limits
+ **********
+ **    3 **FIX           4
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+     5 dbck_alpha_mbc   1.27553e+01  1.27553e+00     no limits
+ **********
+ **    4 **FIX           5
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+     6 dbck_de_frac   8.77201e+00  8.77201e-01     no limits
+ **********
+ **    5 **FIX           6
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+     7 dbck_de_frac1  -2.75419e+05  2.75419e+04     no limits
+ **********
+ **    6 **FIX           7
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+     8 dbck_de_mean  -1.94684e+02  1.94684e+01     no limits
+ **********
+ **    7 **FIX           8
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+     9 dbck_de_mean1  -1.90133e+02  1.90133e+01     no limits
+ **********
+ **    8 **FIX           9
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    10 dbck_de_width   5.52491e+01  5.52491e+00     no limits
+ **********
+ **    9 **FIX          10
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    11 dbck_de_width1   2.00852e+02  2.00852e+01     no limits
+ **********
+ **   10 **FIX          11
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    12 dbck_ebeam   1.88875e+03  1.88875e+02     no limits
+ **********
+ **   11 **FIX          12
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    13 dbck_mbc_mean   1.86200e+03  1.86200e+02     no limits
+ **********
+ **   12 **FIX          13
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    14 dbck_mbc_mean1   3.46816e+03  3.46816e+02     no limits
+ **********
+ **   13 **FIX          14
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    15 dbck_mbc_sigma0   1.53351e+01  1.53351e+00     no limits
+ **********
+ **   14 **FIX          15
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    16 dbck_mbc_sigma1  -3.35313e+02  3.35313e+01     no limits
+ **********
+ **   15 **FIX          16
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    17 sig_bck      2.00000e-05  2.00000e-06     no limits
+ **********
+ **   16 **FIX          17
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    18 sig_dbck_alpha_de  -2.04956e+00  2.04956e-01     no limits
+ **********
+ **   17 **FIX          18
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    19 sig_dbck_alpha_mbc   7.02668e+01  7.02668e+00     no limits
+ **********
+ **   18 **FIX          19
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    20 sig_dbck_de_frac  -5.14507e+02  5.14507e+01     no limits
+ **********
+ **   19 **FIX          20
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    21 sig_dbck_de_frac1   3.60315e+00  3.60315e-01     no limits
+ **********
+ **   20 **FIX          21
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    22 sig_dbck_de_mean  -5.80139e+00  5.80139e-01     no limits
+ **********
+ **   21 **FIX          22
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    23 sig_dbck_de_mean1  -2.20223e+02  2.20223e+01     no limits
+ **********
+ **   22 **FIX          23
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    24 sig_dbck_de_width   1.74599e+02  1.74599e+01     no limits
+ **********
+ **   23 **FIX          24
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    25 sig_dbck_de_width1   9.23900e+01  9.23900e+00     no limits
+ **********
+ **   24 **FIX          25
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    26 sig_dbck_ebeam   1.88875e+03  1.88875e+02     no limits
+ **********
+ **   25 **FIX          26
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    27 sig_dbck_mbc_mean   2.75400e+03  2.75400e+02     no limits
+ **********
+ **   26 **FIX          27
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    28 sig_dbck_mbc_mean1   4.71907e+02  4.71907e+01     no limits
+ **********
+ **   27 **FIX          28
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    29 sig_dbck_mbc_sigma0   2.78440e+02  2.78440e+01     no limits
+ **********
+ **   28 **FIX          29
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    30 sig_dbck_mbc_sigma1   6.09495e+02  6.09495e+01     no limits
+ **********
+ **   29 **FIX          30
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    31 sig_de_mean   1.05736e-01  2.00000e+00   -1.00000e+01  1.00000e+01
+    32 sig_de_sigma   3.90040e+01  3.90040e+00     no limits
+ **********
+ **   30 **FIX          32
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    33 sig_dew_sigma   7.10823e+01  7.10823e+00     no limits
+ **********
+ **   31 **FIX          33
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    34 sig_dpsig    7.61470e-02  7.61470e-03     no limits
+ **********
+ **   32 **FIX          34
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    35 sig_ebeam    1.88875e+03  1.88875e+02     no limits
+ **********
+ **   33 **FIX          35
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    36 sig_mbc_mean   1.86973e+03  2.00000e+00    1.85973e+03  1.87973e+03
+    37 sig_mbc_sigma_l   2.81194e+00  2.81194e-01     no limits
+ **********
+ **   34 **FIX          37
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    38 sig_mbc_sigma_r   2.95864e+00  2.95864e-01     no limits
+ **********
+ **   35 **FIX          38
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    39 sig_mbcde_corr  -1.10000e-03  1.10000e-04     no limits
+ **********
+ **   36 **FIX          39
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    40 sig_mbcdew_corr  -9.00000e-04  9.00000e-05     no limits
+ **********
+ **   37 **FIX          40
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    41 sig_mbcw_frac   4.60157e-01  4.60157e-02     no limits
+ **********
+ **   38 **FIX          41
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    42 sig_mbcw_shift   1.71860e-01  1.71860e-02     no limits
+ **********
+ **   39 **FIX          42
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    43 sig_mbcw_sigma   6.76767e+00  6.76767e-01     no limits
+ **********
+ **   40 **FIX          43
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    44 uds_alpha_de   3.48341e-01  3.48341e-02     no limits
+ **********
+ **   41 **FIX          44
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    45 uds_alpha_mbc   1.46194e+01  1.46194e+00     no limits
+ **********
+ **   42 **FIX          45
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    46 uds_c2_de    5.10478e+00  5.10478e-01     no limits
+ **********
+ **   43 **FIX          46
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    47 uds_ebeam    1.88875e+03  1.88875e+02     no limits
+ **********
+ **   44 **FIX          47
+ **********
+ PARAMETER DEFINITIONS:
+    NO.   NAME         VALUE      STEP SIZE      LIMITS
+    48 uds_twist    2.38965e+01  2.38965e+00     no limits
+ **********
+ **   45 **FIX          48
+ **********
+ **********
+ **   46 **SET ERR         0.5
+ **********
+ **********
+ **   47 **SET PRINT           1
+ **********
+ **********
+ **   48 **SET STR           1
+ **********
+ NOW USING STRATEGY  1: TRY TO BALANCE SPEED AGAINST RELIABILITY
+ **********
+ **   49 **MIGRAD     2.4e+04           1
+ **********
+ FIRST CALL TO USER FUNCTION AT NEW START POINT, WITH IFLAG=4.
+ START MIGRAD MINIMIZATION.  STRATEGY  1.  CONVERGENCE WHEN EDM .LT. 1.00e-03
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(sig_model_Int[de,mbc]) using numeric integrator RooAdaptiveIntegratorND to calculate Int(mbc,de)
+ FCN=31217.7 FROM MIGRAD    STATUS=INITIATE       20 CALLS          21 TOTAL
+                     EDM= unknown      STRATEGY= 1      NO ERROR MATRIX       
+  EXT PARAMETER               CURRENT GUESS       STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Bck          8.17785e+03   4.08893e+03   2.28178e-01   7.20798e+01
+   2  DBck         6.45503e+02   3.22752e+02   9.44662e-02   4.41119e+00
+   3  Sig          3.50074e+02   1.75037e+02   9.85169e-02  -1.38563e+00
+   4  dbck_alpha_de   6.19266e+00     fixed    
+   5  dbck_alpha_mbc   1.27553e+01     fixed    
+   6  dbck_de_frac   8.77201e+00     fixed    
+   7  dbck_de_frac1  -2.75419e+05     fixed    
+   8  dbck_de_mean  -1.94684e+02     fixed    
+   9  dbck_de_mean1  -1.90133e+02     fixed    
+  10  dbck_de_width   5.52491e+01     fixed    
+  11  dbck_de_width1   2.00852e+02     fixed    
+  12  dbck_ebeam   1.88875e+03     fixed    
+  13  dbck_mbc_mean   1.86200e+03     fixed    
+  14  dbck_mbc_mean1   3.46816e+03     fixed    
+  15  dbck_mbc_sigma0   1.53351e+01     fixed    
+  16  dbck_mbc_sigma1  -3.35313e+02     fixed    
+  17  sig_bck      2.00000e-05     fixed    
+  18  sig_dbck_alpha_de  -2.04956e+00     fixed    
+  19  sig_dbck_alpha_mbc   7.02668e+01     fixed    
+  20  sig_dbck_de_frac  -5.14507e+02     fixed    
+  21  sig_dbck_de_frac1   3.60315e+00     fixed    
+  22  sig_dbck_de_mean  -5.80139e+00     fixed    
+  23  sig_dbck_de_mean1  -2.20223e+02     fixed    
+  24  sig_dbck_de_width   1.74599e+02     fixed    
+  25  sig_dbck_de_width1   9.23900e+01     fixed    
+  26  sig_dbck_ebeam   1.88875e+03     fixed    
+  27  sig_dbck_mbc_mean   2.75400e+03     fixed    
+  28  sig_dbck_mbc_mean1   4.71907e+02     fixed    
+  29  sig_dbck_mbc_sigma0   2.78440e+02     fixed    
+  30  sig_dbck_mbc_sigma1   6.09495e+02     fixed    
+  31  sig_de_mean   1.05736e-01   2.00000e+00   2.01370e-01   1.60148e+00
+  32  sig_de_sigma   3.90040e+01     fixed    
+  33  sig_dew_sigma   7.10823e+01     fixed    
+  34  sig_dpsig    7.61470e-02     fixed    
+  35  sig_ebeam    1.88875e+03     fixed    
+  36  sig_mbc_mean   1.86973e+03   2.00000e+00   2.01358e-01  -4.47930e+00
+  37  sig_mbc_sigma_l   2.81194e+00     fixed    
+  38  sig_mbc_sigma_r   2.95864e+00     fixed    
+  39  sig_mbcde_corr  -1.10000e-03     fixed    
+  40  sig_mbcdew_corr  -9.00000e-04     fixed    
+  41  sig_mbcw_frac   4.60157e-01     fixed    
+  42  sig_mbcw_shift   1.71860e-01     fixed    
+  43  sig_mbcw_sigma   6.76767e+00     fixed    
+  44  uds_alpha_de   3.48341e-01     fixed    
+  45  uds_alpha_mbc   1.46194e+01     fixed    
+  46  uds_c2_de    5.10478e+00     fixed    
+  47  uds_ebeam    1.88875e+03     fixed    
+  48  uds_twist    2.38965e+01     fixed    
+                               ERR DEF= 0.5
+ MIGRAD MINIMIZATION HAS CONVERGED.
+ MIGRAD WILL VERIFY CONVERGENCE AND ERROR MATRIX.
+ COVARIANCE MATRIX CALCULATED SUCCESSFULLY
+ FCN=31217.3 FROM MIGRAD    STATUS=CONVERGED     105 CALLS         106 TOTAL
+                     EDM=8.88283e-06    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  Bck          8.10994e+03   1.52271e+02   6.27017e-04   1.91413e-01
+   2  DBck         6.77410e+02   1.23036e+02   2.60460e-03   2.90455e-02
+   3  Sig          3.53738e+02   3.03108e+01   1.96229e-03  -6.59716e-03
+   4  dbck_alpha_de   6.19266e+00     fixed    
+   5  dbck_alpha_mbc   1.27553e+01     fixed    
+   6  dbck_de_frac   8.77201e+00     fixed    
+   7  dbck_de_frac1  -2.75419e+05     fixed    
+   8  dbck_de_mean  -1.94684e+02     fixed    
+   9  dbck_de_mean1  -1.90133e+02     fixed    
+  10  dbck_de_width   5.52491e+01     fixed    
+  11  dbck_de_width1   2.00852e+02     fixed    
+  12  dbck_ebeam   1.88875e+03     fixed    
+  13  dbck_mbc_mean   1.86200e+03     fixed    
+  14  dbck_mbc_mean1   3.46816e+03     fixed    
+  15  dbck_mbc_sigma0   1.53351e+01     fixed    
+  16  dbck_mbc_sigma1  -3.35313e+02     fixed    
+  17  sig_bck      2.00000e-05     fixed    
+  18  sig_dbck_alpha_de  -2.04956e+00     fixed    
+  19  sig_dbck_alpha_mbc   7.02668e+01     fixed    
+  20  sig_dbck_de_frac  -5.14507e+02     fixed    
+  21  sig_dbck_de_frac1   3.60315e+00     fixed    
+  22  sig_dbck_de_mean  -5.80139e+00     fixed    
+  23  sig_dbck_de_mean1  -2.20223e+02     fixed    
+  24  sig_dbck_de_width   1.74599e+02     fixed    
+  25  sig_dbck_de_width1   9.23900e+01     fixed    
+  26  sig_dbck_ebeam   1.88875e+03     fixed    
+  27  sig_dbck_mbc_mean   2.75400e+03     fixed    
+  28  sig_dbck_mbc_mean1   4.71907e+02     fixed    
+  29  sig_dbck_mbc_sigma0   2.78440e+02     fixed    
+  30  sig_dbck_mbc_sigma1   6.09495e+02     fixed    
+  31  sig_de_mean  -3.12965e+00   4.35814e+00   5.82122e-02  -2.53526e-03
+  32  sig_de_sigma   3.90040e+01     fixed    
+  33  sig_dew_sigma   7.10823e+01     fixed    
+  34  sig_dpsig    7.61470e-02     fixed    
+  35  sig_ebeam    1.88875e+03     fixed    
+  36  sig_mbc_mean   1.86979e+03   3.50075e-01   4.26539e-03  -7.26106e-02
+  37  sig_mbc_sigma_l   2.81194e+00     fixed    
+  38  sig_mbc_sigma_r   2.95864e+00     fixed    
+  39  sig_mbcde_corr  -1.10000e-03     fixed    
+  40  sig_mbcdew_corr  -9.00000e-04     fixed    
+  41  sig_mbcw_frac   4.60157e-01     fixed    
+  42  sig_mbcw_shift   1.71860e-01     fixed    
+  43  sig_mbcw_sigma   6.76767e+00     fixed    
+  44  uds_alpha_de   3.48341e-01     fixed    
+  45  uds_alpha_mbc   1.46194e+01     fixed    
+  46  uds_c2_de    5.10478e+00     fixed    
+  47  uds_ebeam    1.88875e+03     fixed    
+  48  uds_twist    2.38965e+01     fixed    
+                               ERR DEF= 0.5
+ EXTERNAL ERROR MATRIX.    NDIM=  49    NPAR=  5    ERR DEF=0.5
+  2.319e+04 -1.449e+04 -5.767e+02 -3.298e+01  3.582e-01 
+ -1.449e+04  1.514e+04  1.204e+01  3.642e+01 -9.692e-02 
+ -5.767e+02  1.204e+01  9.188e+02 -3.466e+00 -2.617e-01 
+ -3.298e+01  3.642e+01 -3.466e+00  2.050e+01 -3.105e-02 
+  3.582e-01 -9.692e-02 -2.617e-01 -3.105e-02  1.226e-01 
+ PARAMETER  CORRELATION COEFFICIENTS  
+       NO.  GLOBAL      1      2      3     31     36
+        1  0.78290   1.000 -0.773 -0.125 -0.048  0.007
+        2  0.77939  -0.773  1.000  0.003  0.065 -0.002
+        3  0.19614  -0.125  0.003  1.000 -0.025 -0.025
+       31  0.07297  -0.048  0.065 -0.025  1.000 -0.020
+       36  0.03205   0.007 -0.002 -0.025 -0.020  1.000
+[#1] INFO:Minization -- RooMinimizerFcn::synchronize: set of constant parameters changed, rerunning const optimizer
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(sig_model_Int[de,mbc]) using numeric integrator RooAdaptiveIntegratorND to calculate Int(mbc,de)
+[#1] INFO:Minization --  The following expressions will be evaluated in cache-and-track mode: (uds_model,dbck_model,sig_model)
+ **********
+ **   50 **SET ERR         0.5
+ **********
+ **********
+ **   51 **SET PRINT           1
+ **********
+ **********
+ **   52 **HESSE     2.4e+04
+ **********
+ COVARIANCE MATRIX CALCULATED SUCCESSFULLY
+ FCN=31217.3 FROM HESSE     STATUS=OK             31 CALLS         137 TOTAL
+                     EDM=8.9649e-06    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                INTERNAL      INTERNAL  
+  NO.   NAME      VALUE            ERROR       STEP SIZE       VALUE   
+   1  Bck          8.10994e+03   1.52053e+02   1.25403e-04  -7.41781e-01
+   2  DBck         6.77410e+02   1.22846e+02   1.04184e-04  -1.20061e+00
+   3  Sig          3.53738e+02   3.03083e+01   7.84917e-05  -1.19238e+00
+   4  dbck_alpha_de   6.19266e+00     fixed    
+   5  dbck_alpha_mbc   1.27553e+01     fixed    
+   6  dbck_de_frac   8.77201e+00     fixed    
+   7  dbck_de_frac1  -2.75419e+05     fixed    
+   8  dbck_de_mean  -1.94684e+02     fixed    
+   9  dbck_de_mean1  -1.90133e+02     fixed    
+  10  dbck_de_width   5.52491e+01     fixed    
+  11  dbck_de_width1   2.00852e+02     fixed    
+  12  dbck_ebeam   1.88875e+03     fixed    
+  13  dbck_mbc_mean   1.86200e+03     fixed    
+  14  dbck_mbc_mean1   3.46816e+03     fixed    
+  15  dbck_mbc_sigma0   1.53351e+01     fixed    
+  16  dbck_mbc_sigma1  -3.35313e+02     fixed    
+  17  sig_bck      2.00000e-05     fixed    
+  18  sig_dbck_alpha_de  -2.04956e+00     fixed    
+  19  sig_dbck_alpha_mbc   7.02668e+01     fixed    
+  20  sig_dbck_de_frac  -5.14507e+02     fixed    
+  21  sig_dbck_de_frac1   3.60315e+00     fixed    
+  22  sig_dbck_de_mean  -5.80139e+00     fixed    
+  23  sig_dbck_de_mean1  -2.20223e+02     fixed    
+  24  sig_dbck_de_width   1.74599e+02     fixed    
+  25  sig_dbck_de_width1   9.23900e+01     fixed    
+  26  sig_dbck_ebeam   1.88875e+03     fixed    
+  27  sig_dbck_mbc_mean   2.75400e+03     fixed    
+  28  sig_dbck_mbc_mean1   4.71907e+02     fixed    
+  29  sig_dbck_mbc_sigma0   2.78440e+02     fixed    
+  30  sig_dbck_mbc_sigma1   6.09495e+02     fixed    
+  31  sig_de_mean  -3.12965e+00   4.35561e+00   2.32849e-03  -3.18313e-01
+  32  sig_de_sigma   3.90040e+01     fixed    
+  33  sig_dew_sigma   7.10823e+01     fixed    
+  34  sig_dpsig    7.61470e-02     fixed    
+  35  sig_ebeam    1.88875e+03     fixed    
+  36  sig_mbc_mean   1.86979e+03   3.50128e-01   8.53077e-04   5.81936e-03
+  37  sig_mbc_sigma_l   2.81194e+00     fixed    
+  38  sig_mbc_sigma_r   2.95864e+00     fixed    
+  39  sig_mbcde_corr  -1.10000e-03     fixed    
+  40  sig_mbcdew_corr  -9.00000e-04     fixed    
+  41  sig_mbcw_frac   4.60157e-01     fixed    
+  42  sig_mbcw_shift   1.71860e-01     fixed    
+  43  sig_mbcw_sigma   6.76767e+00     fixed    
+  44  uds_alpha_de   3.48341e-01     fixed    
+  45  uds_alpha_mbc   1.46194e+01     fixed    
+  46  uds_c2_de    5.10478e+00     fixed    
+  47  uds_ebeam    1.88875e+03     fixed    
+  48  uds_twist    2.38965e+01     fixed    
+                               ERR DEF= 0.5
+ EXTERNAL ERROR MATRIX.    NDIM=  49    NPAR=  5    ERR DEF=0.5
+  2.312e+04 -1.443e+04 -5.793e+02 -3.293e+01  3.375e-01 
+ -1.443e+04  1.510e+04  1.438e+01  3.602e+01 -9.606e-02 
+ -5.793e+02  1.438e+01  9.187e+02 -3.086e+00 -2.415e-01 
+ -3.293e+01  3.602e+01 -3.086e+00  2.047e+01 -3.126e-02 
+  3.375e-01 -9.606e-02 -2.415e-01 -3.126e-02  1.226e-01 
+ PARAMETER  CORRELATION COEFFICIENTS  
+       NO.  GLOBAL      1      2      3     31     36
+        1  0.78219   1.000 -0.773 -0.126 -0.048  0.006
+        2  0.77861  -0.773  1.000  0.004  0.065 -0.002
+        3  0.19575  -0.126  0.004  1.000 -0.023 -0.023
+       31  0.07156  -0.048  0.065 -0.023  1.000 -0.020
+       36  0.03061   0.006 -0.002 -0.023 -0.020  1.000
+[#1] INFO:Minization -- RooMinimizer::optimizeConst: deactivating const optimization
+
+  RooFitResult: minimized FCN value: 31217.3, estimated distance to minimum: 8.9649e-06
+                covariance matrix quality: Full, accurate covariance matrix
+                Status : MINIMIZE=0 HESSE=0 
+
+    Floating Parameter  InitialValue    FinalValue +/-  Error     GblCorr.
+  --------------------  ------------  --------------------------  --------
+                   Bck    8.1779e+03    8.1099e+03 +/-  1.52e+02  <none>
+                  DBck    6.4550e+02    6.7741e+02 +/-  1.23e+02  <none>
+                   Sig    3.5007e+02    3.5374e+02 +/-  3.03e+01  <none>
+         dbck_alpha_de    6.1927e+00    6.1927e+00 +/-  0.00e+00  <none>
+        dbck_alpha_mbc    1.2755e+01    1.2755e+01 +/-  0.00e+00  <none>
+          dbck_de_frac    8.7720e+00    8.7720e+00 +/-  0.00e+00  <none>
+         dbck_de_frac1   -2.7542e+05   -2.7542e+05 +/-  0.00e+00  <none>
+          dbck_de_mean   -1.9468e+02   -1.9468e+02 +/-  0.00e+00  <none>
+         dbck_de_mean1   -1.9013e+02   -1.9013e+02 +/-  0.00e+00  <none>
+         dbck_de_width    5.5249e+01    5.5249e+01 +/-  0.00e+00  <none>
+        dbck_de_width1    2.0085e+02    2.0085e+02 +/-  0.00e+00  <none>
+            dbck_ebeam    1.8888e+03    1.8888e+03 +/-  0.00e+00  <none>
+         dbck_mbc_mean    1.8620e+03    1.8620e+03 +/-  0.00e+00  <none>
+        dbck_mbc_mean1    3.4682e+03    3.4682e+03 +/-  0.00e+00  <none>
+       dbck_mbc_sigma0    1.5335e+01    1.5335e+01 +/-  0.00e+00  <none>
+       dbck_mbc_sigma1   -3.3531e+02   -3.3531e+02 +/-  0.00e+00  <none>
+               sig_bck    2.0000e-05    2.0000e-05 +/-  0.00e+00  <none>
+     sig_dbck_alpha_de   -2.0496e+00   -2.0496e+00 +/-  0.00e+00  <none>
+    sig_dbck_alpha_mbc    7.0267e+01    7.0267e+01 +/-  0.00e+00  <none>
+      sig_dbck_de_frac   -5.1451e+02   -5.1451e+02 +/-  0.00e+00  <none>
+     sig_dbck_de_frac1    3.6032e+00    3.6032e+00 +/-  0.00e+00  <none>
+      sig_dbck_de_mean   -5.8014e+00   -5.8014e+00 +/-  0.00e+00  <none>
+     sig_dbck_de_mean1   -2.2022e+02   -2.2022e+02 +/-  0.00e+00  <none>
+     sig_dbck_de_width    1.7460e+02    1.7460e+02 +/-  0.00e+00  <none>
+    sig_dbck_de_width1    9.2390e+01    9.2390e+01 +/-  0.00e+00  <none>
+        sig_dbck_ebeam    1.8888e+03    1.8888e+03 +/-  0.00e+00  <none>
+     sig_dbck_mbc_mean    2.7540e+03    2.7540e+03 +/-  0.00e+00  <none>
+    sig_dbck_mbc_mean1    4.7191e+02    4.7191e+02 +/-  0.00e+00  <none>
+   sig_dbck_mbc_sigma0    2.7844e+02    2.7844e+02 +/-  0.00e+00  <none>
+   sig_dbck_mbc_sigma1    6.0949e+02    6.0949e+02 +/-  0.00e+00  <none>
+           sig_de_mean    1.0574e-01   -3.1296e+00 +/-  4.36e+00  <none>
+          sig_de_sigma    3.9004e+01    3.9004e+01 +/-  0.00e+00  <none>
+         sig_dew_sigma    7.1082e+01    7.1082e+01 +/-  0.00e+00  <none>
+             sig_dpsig    7.6147e-02    7.6147e-02 +/-  0.00e+00  <none>
+             sig_ebeam    1.8888e+03    1.8888e+03 +/-  0.00e+00  <none>
+          sig_mbc_mean    1.8697e+03    1.8698e+03 +/-  3.50e-01  <none>
+       sig_mbc_sigma_l    2.8119e+00    2.8119e+00 +/-  0.00e+00  <none>
+       sig_mbc_sigma_r    2.9586e+00    2.9586e+00 +/-  0.00e+00  <none>
+        sig_mbcde_corr   -1.1000e-03   -1.1000e-03 +/-  0.00e+00  <none>
+       sig_mbcdew_corr   -9.0000e-04   -9.0000e-04 +/-  0.00e+00  <none>
+         sig_mbcw_frac    4.6016e-01    4.6016e-01 +/-  0.00e+00  <none>
+        sig_mbcw_shift    1.7186e-01    1.7186e-01 +/-  0.00e+00  <none>
+        sig_mbcw_sigma    6.7677e+00    6.7677e+00 +/-  0.00e+00  <none>
+          uds_alpha_de    3.4834e-01    3.4834e-01 +/-  0.00e+00  <none>
+         uds_alpha_mbc    1.4619e+01    1.4619e+01 +/-  0.00e+00  <none>
+             uds_c2_de    5.1048e+00    5.1048e+00 +/-  0.00e+00  <none>
+             uds_ebeam    1.8888e+03    1.8888e+03 +/-  0.00e+00  <none>
+             uds_twist    2.3897e+01    2.3897e+01 +/-  0.00e+00  <none>
+
+EDM = 8.9649e-06
+-log(L) at minimum = 31217.3
+exp_par[0] =1869.79 +- 0.350128
+exp_par[1] =-3.12965 +- 4.35561
+exp_par[2] =8109.94 +- 152.053
+exp_par[3] =677.41 +- 122.846
+exp_par[4] =353.738 +- 30.3083
+M_D = 1869.58 +- 0.350128
+[#1] INFO:Eval -- RooRealVar::setRange(de) new range named 'dEsigRegion' created with bounds [-70,70]
+[#1] INFO:Plotting -- RooTreeData::plotOn: plotting 2492 events out of 9141 total events
+[#1] INFO:Plotting -- RooAbsReal::plotOn(exp_model) plot on mbc integrates over variables (de) in range dEsigRegion
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(sig_model_Int[de,mbc]) using numeric integrator RooMCIntegrator to calculate Int(de,mbc)
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(exp_model_Int[de|dEsigRegion]_Norm[de,mbc]) using numeric integrator RooIntegrator1D to calculate Int(de)
+mbc Chi2 : 0.877158
+[#1] INFO:Plotting -- RooAbsPdf::plotOn(exp_model) directly selected PDF components: (sig_model)
+[#1] INFO:Plotting -- RooAbsPdf::plotOn(exp_model) indirectly selected PDF components: ()
+[#1] INFO:Plotting -- RooAbsReal::plotOn(exp_model) plot on mbc integrates over variables (de) in range dEsigRegion
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(exp_model_Int[de|dEsigRegion]_Norm[de,mbc]) using numeric integrator RooIntegrator1D to calculate Int(de)
+[#1] INFO:Plotting -- RooAbsPdf::plotOn(exp_model) directly selected PDF components: (uds_model)
+[#1] INFO:Plotting -- RooAbsPdf::plotOn(exp_model) indirectly selected PDF components: ()
+[#1] INFO:Plotting -- RooAbsReal::plotOn(exp_model) plot on mbc integrates over variables (de) in range dEsigRegion
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(exp_model_Int[de|dEsigRegion]_Norm[de,mbc]) using numeric integrator RooIntegrator1D to calculate Int(de)
+[#1] INFO:Plotting -- RooAbsPdf::plotOn(exp_model) directly selected PDF components: (uds_model,dbck_model)
+[#1] INFO:Plotting -- RooAbsPdf::plotOn(exp_model) indirectly selected PDF components: ()
+[#1] INFO:Plotting -- RooAbsReal::plotOn(exp_model) plot on mbc integrates over variables (de) in range dEsigRegion
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(exp_model_Int[de|dEsigRegion]_Norm[de,mbc]) using numeric integrator RooIntegrator1D to calculate Int(de)
+[#1] INFO:Eval -- RooRealVar::setRange(mbc) new range named 'MbcsigRegion' created with bounds [1860,1880]
+[#1] INFO:Plotting -- RooTreeData::plotOn: plotting 1050 events out of 9141 total events
+[#1] INFO:Plotting -- RooAbsReal::plotOn(exp_model) plot on de integrates over variables (mbc) in range MbcsigRegion
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(exp_model_Int[mbc|MbcsigRegion]_Norm[de,mbc]) using numeric integrator RooIntegrator1D to calculate Int(mbc)
+de Chi2 : 1.2679
+[#1] INFO:Plotting -- RooAbsPdf::plotOn(exp_model) directly selected PDF components: (sig_model)
+[#1] INFO:Plotting -- RooAbsPdf::plotOn(exp_model) indirectly selected PDF components: ()
+[#1] INFO:Plotting -- RooAbsReal::plotOn(exp_model) plot on de integrates over variables (mbc) in range MbcsigRegion
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(exp_model_Int[mbc|MbcsigRegion]_Norm[de,mbc]) using numeric integrator RooIntegrator1D to calculate Int(mbc)
+[#1] INFO:Plotting -- RooAbsPdf::plotOn(exp_model) directly selected PDF components: (uds_model)
+[#1] INFO:Plotting -- RooAbsPdf::plotOn(exp_model) indirectly selected PDF components: ()
+[#1] INFO:Plotting -- RooAbsReal::plotOn(exp_model) plot on de integrates over variables (mbc) in range MbcsigRegion
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(exp_model_Int[mbc|MbcsigRegion]_Norm[de,mbc]) using numeric integrator RooIntegrator1D to calculate Int(mbc)
+[#1] INFO:Plotting -- RooAbsPdf::plotOn(exp_model) directly selected PDF components: (uds_model,dbck_model)
+[#1] INFO:Plotting -- RooAbsPdf::plotOn(exp_model) indirectly selected PDF components: ()
+[#1] INFO:Plotting -- RooAbsReal::plotOn(exp_model) plot on de integrates over variables (mbc) in range MbcsigRegion
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(exp_model_Int[mbc|MbcsigRegion]_Norm[de,mbc]) using numeric integrator RooIntegrator1D to calculate Int(mbc)
+[#1] INFO:Eval -- RooRealVar::setRange(de) new range named 'desigRegion1' created with bounds [-300,-200]
+[#1] INFO:Plotting -- RooTreeData::plotOn: plotting 2028 events out of 9141 total events
+[#1] INFO:Plotting -- RooAbsReal::plotOn(exp_model) plot on mbc integrates over variables (de) in range desigRegion1
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(exp_model_Int[de|desigRegion1]_Norm[de,mbc]) using numeric integrator RooIntegrator1D to calculate Int(de)
+mbc1 Chi2 : 0.925321
+[#1] INFO:Eval -- RooRealVar::setRange(de) new range named 'desigRegion2' created with bounds [-200,0]
+[#1] INFO:Plotting -- RooTreeData::plotOn: plotting 3730 events out of 9141 total events
+[#1] INFO:Plotting -- RooAbsReal::plotOn(exp_model) plot on mbc integrates over variables (de) in range desigRegion2
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(exp_model_Int[de|desigRegion2]_Norm[de,mbc]) using numeric integrator RooIntegrator1D to calculate Int(de)
+mbc2 Chi2 : 0.73054
+[#1] INFO:Eval -- RooRealVar::setRange(de) new range named 'desigRegion3' created with bounds [0,300]
+[#1] INFO:Plotting -- RooTreeData::plotOn: plotting 3383 events out of 9141 total events
+[#1] INFO:Plotting -- RooAbsReal::plotOn(exp_model) plot on mbc integrates over variables (de) in range desigRegion3
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(exp_model_Int[de|desigRegion3]_Norm[de,mbc]) using numeric integrator RooIntegrator1D to calculate Int(de)
+mbc3 Chi2 : 0.968577
+[#1] INFO:Eval -- RooRealVar::setRange(mbc) new range named 'MbcsigRegion1' created with bounds [1700,1800]
+[#1] INFO:Plotting -- RooTreeData::plotOn: plotting 4560 events out of 9141 total events
+[#1] INFO:Plotting -- RooAbsReal::plotOn(exp_model) plot on de integrates over variables (mbc) in range MbcsigRegion1
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(exp_model_Int[mbc|MbcsigRegion1]_Norm[de,mbc]) using numeric integrator RooIntegrator1D to calculate Int(mbc)
+de1 Chi2 : 1.74595
+[#1] INFO:Eval -- RooRealVar::setRange(mbc) new range named 'MbcsigRegion2' created with bounds [1800,1850]
+[#1] INFO:Plotting -- RooTreeData::plotOn: plotting 2869 events out of 9141 total events
+[#1] INFO:Plotting -- RooAbsReal::plotOn(exp_model) plot on de integrates over variables (mbc) in range MbcsigRegion2
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(exp_model_Int[mbc|MbcsigRegion2]_Norm[de,mbc]) using numeric integrator RooIntegrator1D to calculate Int(mbc)
+de2 Chi2 : 1.39666
+[#1] INFO:Eval -- RooRealVar::setRange(mbc) new range named 'MbcsigRegion3' created with bounds [1850,1900]
+[#1] INFO:Plotting -- RooTreeData::plotOn: plotting 1713 events out of 9141 total events
+[#1] INFO:Plotting -- RooAbsReal::plotOn(exp_model) plot on de integrates over variables (mbc) in range MbcsigRegion3
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(exp_model_Int[mbc|MbcsigRegion3]_Norm[de,mbc]) using numeric integrator RooIntegrator1D to calculate Int(mbc)
+de3 Chi2 : 1.47696
+[#1] INFO:Eval -- RooRealVar::setRange(mbc) new range named 'signal' created with bounds [1860,1880]
+[#1] INFO:Eval -- RooRealVar::setRange(de) new range named 'signal' created with bounds [-70,70]
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(exp_model_Int[de,mbc|signal]_Norm[de,mbc]) using numeric integrator RooMCIntegrator to calculate Int(mbc,de)
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(uds_model_Int[de,mbc|signal]_Norm[de,mbc]) using numeric integrator RooMCIntegrator to calculate Int(mbc,de)
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(dbck_model_Int[de,mbc|signal]_Norm[de,mbc]) using numeric integrator RooMCIntegrator to calculate Int(mbc,de)
+[#1] INFO:NumericIntegration -- RooRealIntegral::init(sig_model_Int[de,mbc|signal]_Norm[de,mbc]) using numeric integrator RooMCIntegrator to calculate Int(mbc,de)
+n_exp_events = 215.07
+n_sig_events = 215.069
+n_uds_events = 200.059
+n_bkg_dbck_events = 14.3124
+total_nevents = 429.442
