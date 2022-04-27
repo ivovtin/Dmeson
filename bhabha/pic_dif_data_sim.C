@@ -1,11 +1,17 @@
 void pic_dif_data_sim()
 {
     TString dir_out="/home/ovtin/public_html/outDmeson/BhaBha/";
+    gSystem->Exec("cp /store/users/ovtin/outDmeson/demo/index.php " + dir_out);
 
     gROOT->SetStyle("Plain");
 
     TFile *inData = TFile::Open("exp_bhabha_data_0.root");
-    TFile *inSim = TFile::Open("sim_bhabha_sig_2.root");
+    TString pref_out = "S1.0_A6.0_Z0.0";
+    //TString pref_out = "S1.0_A7.2_Z0.2";
+    //TString pref_out = "S1.0_A4.8_Z0.0";
+    //TString pref_out = "S1.0_A6.9_Z0.0";
+    //TString pref_out = "S1.0_A5.1_Z0.0";
+    TFile *inSim = TFile::Open("sim_bhabha_sig_2_" + pref_out + ".root");
 
     TCanvas c("c","c",1200,400);
     c.Divide(3,1);
@@ -16,7 +22,7 @@ void pic_dif_data_sim()
     hpres1->SetLineColor(kBlue);
     hpres1->SetName("data");
     hpres1->SetTitle("");
-    hpres1->SetMaximum(0.065);
+    hpres1->SetMaximum(0.060);
     hpres1->GetYaxis()->SetTitle("Number of events");
     hpres1->GetYaxis()->SetTitleOffset(1.5);
     hpres1->GetListOfFunctions()->ls();
@@ -71,7 +77,7 @@ void pic_dif_data_sim()
     TH1F *hphi1 = (TH1F*)inData->Get("hphi");
     hphi1->SetLineColor(kBlue);
     hphi1->SetName("data");
-    hphi1->SetMaximum(0.11);
+    hphi1->SetMaximum(0.105);
     hphi1->SetTitle("");
     hphi1->GetYaxis()->SetTitle("Number of events");
     hphi1->GetYaxis()->SetTitleOffset(1.5);
@@ -158,7 +164,52 @@ void pic_dif_data_sim()
     gPad->Modified();
 
     c.Update();
-    c.Print(dir_out + "compare_data_sim_2016-17_KsimSystErr1_2method_corr_S1.0_A9.5_Z5.5.png");
-    c.Print(dir_out + "compare_data_sim_2016-17_KsimSystErr1_2method_corr_S1.0_A9.5_Z5.5.eps");
+    c.Print(dir_out + "compare_data_sim_2016-17_KsimSystErr1_2method_corr_" + pref_out + ".png");
+    c.Print(dir_out + "compare_data_sim_2016-17_KsimSystErr1_2method_corr_" + pref_out + ".eps");
     c.Print("compare_data_sim_2016-17.root");
+
+    TCanvas c2("c2","c2",400,400);
+    c2.Divide(1,1);
+
+    c2.cd(1);
+
+    TH1F *hpres3 = (TH1F*)inData->Get("hpres");
+    hpres3->SetLineColor(kBlue);
+    hpres3->SetName("data");
+    hpres3->SetTitle("");
+    hpres3->SetMaximum(0.060);
+    hpres3->GetYaxis()->SetTitle("Number of events");
+    hpres3->GetYaxis()->SetTitleOffset(1.5);
+    hpres3->GetListOfFunctions()->ls();
+    TF1 *fun7 = hpres3->GetFunction("gaus");
+    hpres3->GetListOfFunctions()->Remove(fun7);
+    hpres3->Draw("");
+    TH1F *hpres4 = (TH1F*)inSim->Get("hpres");
+    hpres4->SetLineColor(kRed);
+    hpres4->SetName("sim");
+    hpres4->SetTitle("");
+    hpres4->GetYaxis()->SetTitle("Number of events");
+    hpres4->GetYaxis()->SetTitleOffset(1.5);
+    hpres4->GetListOfFunctions()->ls();
+    TF1 *fun8 = hpres4->GetFunction("gaus");
+    hpres4->GetListOfFunctions()->Remove(fun8);
+    hpres4->Draw("sames");
+    TPaveStats *st7 = (TPaveStats*)hpres3->FindObject("stats");
+    st7->SetX1NDC(.70);
+    st7->SetX2NDC(.90);
+    st7->SetY1NDC(.70);
+    st7->SetY2NDC(.90);
+    st7->SetTextColor(4);
+    TPaveStats *st8 = (TPaveStats*)hpres4->FindObject("stats");
+    st8->SetX1NDC(.70);
+    st8->SetX2NDC(.90);
+    st8->SetY1NDC(.50);
+    st8->SetY2NDC(.70);
+    st8->SetTextColor(2);
+    gPad->Modified();
+
+    c2.Update();
+    c2.Print(dir_out + "compare_data_sim_2016-17_KsimSystErr1_2method_corr_" + pref_out + "_dp.png");
+    c2.Print(dir_out + "compare_data_sim_2016-17_KsimSystErr1_2method_corr_" + pref_out + "_dp.eps");
+
 }

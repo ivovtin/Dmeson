@@ -34,12 +34,11 @@
 ##$ -m beas
 ##$ -M ovtin.ivan@gmail.com
 
-#$ -t 1-24
-##$ -t 1-1
+##$ -t 1-24
 ##soft
 ##$ -t 1-9
 ##$ -t 10-99
-##$ -t 100-119
+#$ -t 100-119
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]
@@ -73,7 +72,15 @@ simOn=1
 ##outfile="/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A4.5_Z0.0_new/psi3770_to_simCosmic_"$i".root"
 ##outfile="/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A7.5_Z5.5_new/psi3770_to_simCosmic_"$i".root"
 ##outfile="/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A6.0_Z0.0/softcosm/psi3770_to_simCosmic_"$i".root"
-outfile="/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A6.0_Z0.0/psi3770_to_simCosmic_"$i".root"
+##outfile="/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A6.0_Z0.0/psi3770_to_simCosmic_"$i".root"
+##outfile="/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A7.2_Z0.2/psi3770_to_simCosmic_"$i".root"
+##outfile="/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A7.2_Z0.2/softcosm/psi3770_to_simCosmic_"$i".root"
+##outfile="/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A4.8_Z0.0/psi3770_to_simCosmic_"$i".root"
+##outfile="/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A4.8_Z0.0/softcosm/psi3770_to_simCosmic_"$i".root"
+##outfile="/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A6.9_Z0.0/psi3770_to_simCosmic_"$i".root"
+##outfile="/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A6.9_Z0.0/softcosm/psi3770_to_simCosmic_"$i".root"
+##outfile="/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A5.1_Z0.0/psi3770_to_simCosmic_"$i".root"
+outfile="/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A5.1_Z0.0/softcosm/psi3770_to_simCosmic_"$i".root"
 
 
 mintracks=2
@@ -94,10 +101,10 @@ minNhits=0
 #verbose=1
 
 ########################################################################################################
-inruns="/store/users/ovtin/outDmeson/simulation/Cosmic/simCosm00000"$i".dat"
+##inruns="/store/users/ovtin/outDmeson/simulation/Cosmic/simCosm00000"$i".dat"
 ##inruns="/store/users/offline/SimCosm/softcos00"$i".dat.bz2"
 ##inruns="/store/users/offline/SimCosm/softcos0"$i".dat.bz2"
-##inruns="/store/users/offline/SimCosm/softcos"$i".dat.bz2"
+inruns="/store/users/offline/SimCosm/softcos"$i".dat.bz2"
 ##inruns="/spool/sim/Cosmic/DC/theta-0-80-Field-6kGs.dat.bz2"
 NumFirstExpRun=23275
 NumLastExpRun=26134
@@ -117,8 +124,12 @@ NevRate=1000
 ##$HOME/development/Dmeson/analysis_bhabha -D $simOn -v $NumFirstExpRun -m $NumLastExpRun -M $NevRate -S 1.0 -A 8.0 -Z 5.5 -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile $inruns
 ##$HOME/development/Dmeson/analysis_bhabha -D $simOn -v $NumFirstExpRun -m $NumLastExpRun -M $NevRate -S 1.0 -A 7.5 -Z 5.5 -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile $inruns
 ##$HOME/development/Dmeson/analysis_bhabha -D $simOn -v $NumFirstExpRun -m $NumLastExpRun -M $NevRate -S 1.0 -A 6.5 -Z 0.0 -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile $inruns
-$HOME/development/Dmeson/analysis_bhabha -D $simOn -v $NumFirstExpRun -m $NumLastExpRun -M $NevRate -S 1.0 -A 6.0 -Z 0.0 -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile $inruns
 ##$HOME/development/Dmeson/analysis_bhabha -D $simOn -v $NumFirstExpRun -m $NumLastExpRun -M $NevRate -S 1.0 -A 4.5 -Z 0.0 -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile $inruns
+##$HOME/development/Dmeson/analysis_bhabha -D $simOn -v $NumFirstExpRun -m $NumLastExpRun -M $NevRate -S 1.0 -A 6.0 -Z 0.0 -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile $inruns
+##$HOME/development/Dmeson/analysis_bhabha -D $simOn -v $NumFirstExpRun -m $NumLastExpRun -M $NevRate -S 1.0 -A 7.2 -Z 0.2 -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile $inruns
+##$HOME/development/Dmeson/analysis_bhabha -D $simOn -v $NumFirstExpRun -m $NumLastExpRun -M $NevRate -S 1.0 -A 4.8 -Z 0.0 -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile $inruns
+##$HOME/development/Dmeson/analysis_bhabha -D $simOn -v $NumFirstExpRun -m $NumLastExpRun -M $NevRate -S 1.0 -A 6.9 -Z 0.0 -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile $inruns
+$HOME/development/Dmeson/analysis_bhabha -D $simOn -v $NumFirstExpRun -m $NumLastExpRun -M $NevRate -S 1.0 -A 5.1 -Z 0.0 -a $mintracks -d $maxtracks -b $minbeamtracks -p $minIPtracks -h $maxIPtracks -s $minPt -j $maxPt -t $minClusterEnergy -e $minTotalEnergy -c $minClusters -l $maxClusters -k $minClustersLKr -i $minClustersCsI -u $maxtchi2 -q $minNhits -o $outfile $inruns
 
 
 status=$?

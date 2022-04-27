@@ -1,13 +1,14 @@
 {
+   TString KEDR = "/store/users/ovtin/outDmeson/demo/";
 
    TCanvas *c1 = new TCanvas("c1","",200,10,400,400);
 
    c1->SetFillColor(0);
-//   c1->SetGrid();
+   //c1->SetGrid();
    c1->GetFrame()->SetFillColor(0);
    c1->GetFrame()->SetBorderSize(12);
 
-   const Int_t n = 7;
+   const Int_t n = 8;
 
    Float_t x_pdg = 1864.84;
    Float_t ex_pdg = 0.05;
@@ -19,7 +20,8 @@
                      1865.300,    // KEDR 2010
                      1864.750,    // LHCb 2013
                      1864.841,    // BaBar 2013
-                     1864.845     // CLEO 2014
+                     1864.845,     // CLEO 2014
+                     1864.95     // KEDR 2022
                    };
 
    Float_t ex[n] = {
@@ -29,8 +31,9 @@
                      sqrt(0.33*0.33+0.23*0.23),       // KEDR 2010
                      sqrt(0.150*0.150+0.110*0.110),   // LHCb 2013
                      sqrt(0.048*0.048+0.063*0.063),   // BaBar 2013
-                     sqrt(0.025*0.025+0.057*0.057)    // CLEO 2014
-                   };
+                     sqrt(0.025*0.025+0.057*0.057),   // CLEO 2014
+                     sqrt(0.270*0.270+0.109*0.109)    // KEDR 2022
+   };
 
    Float_t sx[n] = {
                      0.,        // MARK II
@@ -38,15 +41,16 @@
                      0.095,     // CLEO
                      0.23,      // KEDR
                      0.11,      // LHCb 2013
-                     0.063,      // BaBar 2013
-                     0.057       // CLEO 2014
+                     0.063,     // BaBar 2013
+                     0.057,     // CLEO 2014
+                     0.109       // KEDR 2022
                    };
 
-   char *exp[n] = {"MARK II","ACCMOR","CLEO 2007","KEDR 2010","LHCb 2013","BaBar 2013","CLEO 2014"};
+   char *exp[n] = {"MARK II","ACCMOR","CLEO 2007","KEDR 2010","LHCb 2013","BaBar 2013","CLEO 2014","KEDR 2022"};
 
-   Float_t y[n]  = {7.,6.,5.,4.,3.,2.,1.};
-   Float_t ey[n] = {0.06,0.06,0.06,0.06,0.06,0.06,0.06};
-   Float_t ey0[n] = {0.0,0.0,0.0,0.0,0.0,0.0,0.0};
+   Float_t y[n]  = {8.,7.,6.,5.,4.,3.,2.,1.};
+   Float_t ey[n] = {0.06,0.06,0.06,0.06,0.06,0.06,0.06,0.06};
+   Float_t ey0[n] = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
 
    Float_t y_pdg = ((float)n+1.5)/2.;
    Float_t ey_pdg = ((float)n+0.5)/2.-0.2;
@@ -60,6 +64,7 @@
    gr->SetLineWidth(4.);
    gr->SetMarkerSize(1.2);
    gr->SetFillColor(4);
+   gr_sys->SetLineWidth(7.);
    gr_sys->SetFillColor(2);
    c1->SetLeftMargin(0.25);
    c1->SetBottomMargin(0.2);
@@ -100,7 +105,8 @@
    }
 
    c1->Update();
-   c1->Print("d0.eps");
-   c1->Print("d0.pdf");
+   c1->Print(KEDR+"d0.eps");
+   c1->Print(KEDR+"d0.png");
+   c1->Print(KEDR+"d0.pdf");
 
 }

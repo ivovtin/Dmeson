@@ -191,32 +191,33 @@ static TTree *eventTree;
 
 typedef struct {
     Int_t vrtntrk,vrtnip,vrtnbeam,nhitsdc,nhitst1,nhitst2,nhitsvd,nhitsvdt1,nhitsvdt2,nhitsxyt1,nhitszt1,nhitsxyt2,nhitszt2,nvect1,nvecxyt1,nveczt1,nvect2,nvecxyt2,
-    nveczt2,ncomb,ncls1,ncls2,ncls,nlkr,ncsi,munhits,mulayerhits1,mulayerhits2,mulayerhits3,Run,numn,numo,natccrosst1,atcCNTt1[15],natccrosst2,atcCNTt2[15],
-    aerogel_REGIONt1[15],aerogel_REGION0t1[15],aerogel_REGION5t1[15],aerogel_REGION20t1[15],single_aerogel_REGIONt1[15],single_aerogel_REGION0t1[15],
-    single_aerogel_REGION5t1[15],single_aerogel_REGION20t1[15],aerogel_REGIONt2[15],aerogel_REGION0t2[15],aerogel_REGION5t2[15],aerogel_REGION20t2[15],single_aerogel_REGIONt2[15],
-    single_aerogel_REGION0t2[15],single_aerogel_REGION5t2[15],single_aerogel_REGION20t2[15],wlshitt1[15],nearwlst1[15],wlshitt2[15],nearwlst2[15],kft1,kft2;
+    nveczt2,ncomb,ncls1,ncls2,ncls,nlkr,ncsi,munhits,mulayerhits1,mulayerhits2,mulayerhits3,Run,numn,numo,natccrosst1,atcCNTt1[20],natccrosst2,atcCNTt2[20],
+    aerogel_REGIONt1[20],aerogel_REGION0t1[20],aerogel_REGION5t1[20],aerogel_REGION20t1[20],single_aerogel_REGIONt1[20],single_aerogel_REGION0t1[20],
+    single_aerogel_REGION5t1[20],single_aerogel_REGION20t1[20],aerogel_REGIONt2[20],aerogel_REGION0t2[20],aerogel_REGION5t2[20],aerogel_REGION20t2[20],single_aerogel_REGIONt2[20],
+    single_aerogel_REGION0t2[20],single_aerogel_REGION5t2[20],single_aerogel_REGION20t2[20],wlshitt1[20],nearwlst1[20],wlshitt2[20],nearwlst2[20],kft1,kft2;
     Float_t mbc,de,dp,prec1,prec2,fchi2,Ebeam,rEv,p1,p2,pt1,pt2,chi2t1,chi2t2,theta2t,phi2t,thetat1,thetat2,phit1,phit2,e1,
-	e2,d1,d2,rr1,rr2,zip1,zip2,ecls1,ecls2,tcls1,tcls2,pcls1,pcls2,emcenergy,lkrenergy,csienergy,enn,eno,tofc1,timet1,betat1,lengtht1,tofc2,timet2,betat2,lengtht2,atcNpet1[15],atcTotalNpet1,
-    atcNpet2[15],atcTotalNpet2,tlent1[15],tlent2[15],dedxt1,dedxt2,probpit1,probpit2,resdpit1,resdpit2,probKt1,probKt2,resdKt1,resdKt2;
+	e2,d1,d2,rr1,rr2,zip1,zip2,ecls1,ecls2,tcls1,tcls2,pcls1,pcls2,emcenergy,lkrenergy,csienergy,enn,eno,tofc1,timet1,betat1,lengtht1,tofc2,timet2,betat2,lengtht2,atcNpet1[20],atcTotalNpet1,
+    atcNpet2[20],atcTotalNpet2,tlent1[20],tlent2[20],dedxt1,dedxt2,probpit1,probpit2,resdpit1,resdpit2,probKt1,probKt2,resdKt1,resdKt2;
 } DMESON;
 
 static DMESON Dmeson;
 
 static const char* DmesonBranchList="vrtntrk/I:vrtnip:vrtnbeam:nhitsdc:nhitst1:nhitst2:nhitsvd:nhitsvdt1:nhitsvdt2:nhitsxyt1:nhitszt1:nhitsxyt2:nhitszt2:nvect1:nvecxyt1:nveczt1:nvect2:nvecxyt2"
-    ":nveczt2:ncomb:ncls1:ncls2:ncls:nlkr:ncsi:munhits:mulayerhits1:mulayerhits2:mulayerhits3:Run:numn:numo:natccrosst1:atcCNTt1[15]:natccrosst2:atcCNTt2[15]"
-    ":aerogel_REGIONt1[15]:aerogel_REGION0t1[15]:aerogel_REGION5t1[15]:aerogel_REGION20t1[15]:single_aerogel_REGIONt1[15]"
-    ":single_aerogel_REGION0t1[15]:single_aerogel_REGION5t1[15]:single_aerogel_REGION20t1[15]:aerogel_REGIONt2[15]:aerogel_REGION0t2[15]:aerogel_REGION5t2[15]"
-    ":aerogel_REGION20t2[15]:single_aerogel_REGIONt2[15]:single_aerogel_REGION0t2[15]:single_aerogel_REGION5t2[15]:single_aerogel_REGION20t2[15]"
-    ":wlshitt1[15]:nearwlst1[15]:wlshitt2[15]:nearwlst2[15]:kft1:kft2"
+    ":nveczt2:ncomb:ncls1:ncls2:ncls:nlkr:ncsi:munhits:mulayerhits1:mulayerhits2:mulayerhits3:Run:numn:numo:natccrosst1:atcCNTt1[20]:natccrosst2:atcCNTt2[20]"
+    ":aerogel_REGIONt1[20]:aerogel_REGION0t1[20]:aerogel_REGION5t1[20]:aerogel_REGION20t1[20]:single_aerogel_REGIONt1[20]"
+    ":single_aerogel_REGION0t1[20]:single_aerogel_REGION5t1[20]:single_aerogel_REGION20t1[20]:aerogel_REGIONt2[20]:aerogel_REGION0t2[20]:aerogel_REGION5t2[20]"
+    ":aerogel_REGION20t2[20]:single_aerogel_REGIONt2[20]:single_aerogel_REGION0t2[20]:single_aerogel_REGION5t2[20]:single_aerogel_REGION20t2[20]"
+    ":wlshitt1[20]:nearwlst1[20]:wlshitt2[20]:nearwlst2[20]:kft1:kft2"
     ":mbc/F:de:dp:prec1:prec2:fchi2:Ebeam:rEv:p1:p2:pt1:pt2:chi2t1:chi2t2:theta2t:phi2t:thetat1:thetat2:phit1:phit2:e1"
-    ":e2:d1:d2:rr1:rr2:zip1:zip2:ecls1:ecls2:tcls1:tcls2:pcls1:pcls2:emcenergy:lkrenergy:csienergy:enn:eno:tofc1:timet1:betat1:lengtht1:tofc2:timet2:betat2:lengtht2:atcNpet1[15]:atcTotalNpet1"
-    ":atcNpet2[15]:atcTotalNpet2:tlent1[15]:tlent2[15]:dedxt1:dedxt2:probpit1:probpit2:resdpit1:resdpit2:probKt1:probKt2:resdKt1:resdKt2";
+    ":e2:d1:d2:rr1:rr2:zip1:zip2:ecls1:ecls2:tcls1:tcls2:pcls1:pcls2:emcenergy:lkrenergy:csienergy:enn:eno:tofc1:timet1:betat1:lengtht1:tofc2:timet2:betat2:lengtht2:atcNpet1[20]:atcTotalNpet1"
+    ":atcNpet2[20]:atcTotalNpet2:tlent1[20]:tlent2[20]:dedxt1:dedxt2:probpit1:probpit2:resdpit1:resdpit2:probKt1:probKt2:resdKt1:resdKt2";
 
 
 static ProcInfo_t info;
 const float toMB = 1.f/1024.f;
 
 int idATC=0;
+int iddEdx=0;
 
 int dcand_t1;
 int dcand_t2;
@@ -366,15 +367,27 @@ double pcorr(double p, int type) {
     double ms, dedx, k;
 
     if (type==1) {    //pion
+
 	ms = 149.484;
 	dedx = 1.30782;
 	k = 0.;
+	/*
+	ms = 149.484 - 7.2881;
+	dedx = 1.30782 - 0.12893;
+	k = 0.;
+        */
     }
     else if(type==2)  //kaon
     {
+
 	ms = 502.997;
 	dedx = 1.28546;
 	k = 0.;
+        /*
+	ms = 502.997 - 64.3663;
+	dedx = 1.28546 - 0.432916;
+	k = 0.;
+        */
     }
     else if(type==3)  //muon
     {
@@ -411,10 +424,12 @@ void kine_fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t ifla
 
     double p1i;
     double p2i;
+    //if( idATC==1 || iddEdx==1 ){
     if( idATC==1 ){
 	p1i = pcorr(tP(dcand_t1),1);
 	p2i = pcorr(tP(dcand_t2),2);
     }
+    //if( idATC==2 || iddEdx==2 ){
     if( idATC==2 ){
 	p1i = pcorr(tP(dcand_t1),2);
 	p2i = pcorr(tP(dcand_t2),1);
@@ -435,9 +450,11 @@ void kine_fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t ifla
 		      pow(tan(ktrrec_.TETRAK[dcand_t2]/180.*PI),2))*p2i;
 
     double de;
+    //if( idATC==1 || iddEdx==1 ){
     if( idATC==1 ){
         de = sqrt(mpi*mpi+pp1*pp1) + sqrt(mk*mk + pp2*pp2) - ebeam;
     }
+    //if( idATC==2 || iddEdx==2 ){
     if( idATC==2 ){
         de = sqrt(mpi*mpi+pp2*pp2) + sqrt(mk*mk + pp1*pp1) - ebeam;
     }
@@ -510,16 +527,19 @@ void kine_fit(int ip1, int ip2, double* mbc, double* de, double* dp, double* pre
 
     double p1i;
     double p2i;
-    if( idATC==1 && pcorr(tP(dcand_t1),1)>450. && pcorr(tP(dcand_t1),1)<1500. && pcorr(tP(dcand_t2),2)>450. && pcorr(tP(dcand_t2),2)<1500. ){
+    //if( (idATC==1 && pcorr(tP(dcand_t1),1)>600. && pcorr(tP(dcand_t1),1)<1500. && pcorr(tP(dcand_t2),2)>600. && pcorr(tP(dcand_t2),2)<1500.) || (iddEdx==1 && pcorr(tP(dcand_t1),1)<600. && pcorr(tP(dcand_t2),2)<600.) ){
+    if( (idATC==1 && pcorr(tP(dcand_t1),1)>450. && pcorr(tP(dcand_t1),1)<1500. && pcorr(tP(dcand_t2),2)>450. && pcorr(tP(dcand_t2),2)<1500.) ){
 	p1i = pcorr(tP(dcand_t1),1);   //pion
 	p2i = pcorr(tP(dcand_t2),2);   //kaon
     }
-    if( idATC==2 && pcorr(tP(dcand_t1),2)>450. && pcorr(tP(dcand_t1),2)<1500. && pcorr(tP(dcand_t2),1)>450. && pcorr(tP(dcand_t2),1)<1500. ){
+    //if( (idATC==2 && pcorr(tP(dcand_t1),2)>600. && pcorr(tP(dcand_t1),2)<1500. && pcorr(tP(dcand_t2),1)>600. && pcorr(tP(dcand_t2),1)<1500.) || (iddEdx==2 && pcorr(tP(dcand_t1),2)<600. && pcorr(tP(dcand_t2),1)<600.) ){
+    if( (idATC==2 && pcorr(tP(dcand_t1),2)>450. && pcorr(tP(dcand_t1),2)<1500. && pcorr(tP(dcand_t2),1)>450. && pcorr(tP(dcand_t2),1)<1500.) ){
 	p1i = pcorr(tP(dcand_t1),2);   //kaon
 	p2i = pcorr(tP(dcand_t2),1);   //pion
     }
     else{
-        idATC=0;
+	idATC=0;
+        //iddEdx=0;
 	p1i = (pcorr(tP(dcand_t1),1)+pcorr(tP(dcand_t1),2))/2.;
 	p2i = (pcorr(tP(dcand_t2),1)+pcorr(tP(dcand_t2),2))/2.;
     }
@@ -634,9 +654,11 @@ void kine_fit(int ip1, int ip2, double* mbc, double* de, double* dp, double* pre
     //*de = (sqrt(mk*mk + p1ki*p1ki) + sqrt(mpi*mpi + p1pi*p1pi) +
     //	   sqrt(mk*mk + p2ki*p2ki) + sqrt(mpi*mpi + p2pi*p2pi))/2. - ebeam;
 
+    //if( idATC==1 || iddEdx==1 ){
     if( idATC==1 ){
         *de = sqrt(mpi*mpi+p1pi*p1pi) + sqrt(mk*mk + p2ki*p2ki) - ebeam;         //piK
     }
+    //if( idATC==2 || iddEdx==2 ){
     if( idATC==2 ){
         *de = sqrt(mk*mk + p1ki*p1ki) + sqrt(mpi*mpi+p2pi*p2pi) - ebeam;         //Kpi
     }
@@ -934,7 +956,7 @@ int analyse_event()
 		Dmeson.mulayerhits1 = mu_layer_hits[0];
 		Dmeson.mulayerhits2 = mu_layer_hits[1];
 		Dmeson.mulayerhits3 = mu_layer_hits[2];
-
+                /*
 		//tof
 		double tof1 = 0;
 		double tof2 = 0;
@@ -990,14 +1012,16 @@ int analyse_event()
 
 		    }
 		}
-
+                */
 		Dmeson.tofc1 = kscBhit_.number_B[t1][0];
-		Dmeson.timet1 = kedrrun_cb_.Header.RunType != 64 ? kscBhit_.time_B_ns[t1][0] : tof1;
+		//Dmeson.timet1 = kedrrun_cb_.Header.RunType != 64 ? kscBhit_.time_B_ns[t1][0] : tof1;
+		Dmeson.timet1 = kscBhit_.time_B_ns[t1][0];
                 Dmeson.betat1 = kscBhit_.Beta[t1][0];
                 Dmeson.lengtht1 = kscBhit_.len[t1][0];
 
 		Dmeson.tofc2 = kscBhit_.number_B[t2][0];
-		Dmeson.timet2 = kedrrun_cb_.Header.RunType != 64 ? kscBhit_.time_B_ns[t2][0] : tof2;
+		//Dmeson.timet2 = kedrrun_cb_.Header.RunType != 64 ? kscBhit_.time_B_ns[t2][0] : tof2;
+		Dmeson.timet2 = kscBhit_.time_B_ns[t2][0];
                 Dmeson.betat2 = kscBhit_.Beta[t2][0];
 		Dmeson.lengtht2 = kscBhit_.len[t2][0];
 
@@ -1031,9 +1055,12 @@ int analyse_event()
                     Dmeson.single_aerogel_REGION20t1[i]=atctrackinfo.single_aerogel_REGION20[cnt];
 
 		    if (progpar.verbose) cout<<"atc cnt="<<Dmeson.atcCNTt1[i]<<"\t"<<"npe="<<Dmeson.atcNpet1[i]<<endl;
-		    totalNpe1 += atctrackinfo.npe[cnt];
-
-		    if( Dmeson.wlshitt1[i]!=1 ) good_region_t1++;
+                    //if( Dmeson.single_aerogel_REGION0t1[i]==1 )
+		    if( Dmeson.wlshitt1[i]!=1 )
+		    {
+			totalNpe1 += atctrackinfo.npe[cnt];
+			good_region_t1++;
+		    }
 		}
 		if (progpar.verbose) cout<<"t1="<<t1<<"\t"<<"Total ATC Npe="<<totalNpe1<<endl;
 		Dmeson.atcTotalNpet1=totalNpe1;
@@ -1064,30 +1091,18 @@ int analyse_event()
                     Dmeson.single_aerogel_REGION20t2[i]=atctrackinfo.single_aerogel_REGION20[cnt];
 
 		    if (progpar.verbose) cout<<"atc cnt="<<Dmeson.atcCNTt2[i]<<"\t"<<"npe="<<Dmeson.atcNpet2[i]<<endl;
-		    totalNpe2 += atctrackinfo.npe[cnt];
 
-		    if( Dmeson.wlshitt2[i]!=1 ) good_region_t2++;
+                    //if( Dmeson.single_aerogel_REGION0t2[i]==1 )
+		    if( Dmeson.wlshitt2[i]!=1 )
+		    {
+			totalNpe2 += atctrackinfo.npe[cnt];
+			good_region_t2++;
+		    }
 		}
 		if (progpar.verbose) cout<<"t2="<<t2<<"\t"<<"Total ATC Npe="<<totalNpe2<<endl;
 		Dmeson.atcTotalNpet2=totalNpe2;
 
-		double npetrh=0.5;
-
-		if( pcorr(tP(t1),1)>450. && pcorr(tP(t1),1)<1500. && pcorr(tP(t2),2)>450. && pcorr(tP(t2),2)<1500. && (good_region_t1>=1 && Dmeson.atcTotalNpet1>npetrh) && (good_region_t2>=1 && Dmeson.atcTotalNpet2<=npetrh) ){ idATC=1;}  //pi - t1, K - t2
-		if( pcorr(tP(t1),2)>450. && pcorr(tP(t1),2)<1500. && pcorr(tP(t2),1)>450. && pcorr(tP(t2),1)<1500. && (good_region_t1>=1 && Dmeson.atcTotalNpet1<=npetrh) && (good_region_t2>=1 && Dmeson.atcTotalNpet2>npetrh) ){ idATC=2;}  //K - t1, pi -t2
-
-		double mbc, de, dp, prec1, prec2, fchi2;
-		kine_fit(t1, t2, &mbc, &de, &dp, &prec1, &prec2, &fchi2, progpar.Dkine_fit);
-
-		idATC=0;
-		Dmeson.mbc = mbc;
-		Dmeson.de = de;
-		Dmeson.dp = dp;
-		Dmeson.prec1 = prec1;
-		Dmeson.prec2 = prec2;
-		Dmeson.fchi2 = fchi2;
-
-                //DC identification
+		//DC identification
 		Dmeson.dedxt1 = dcinfo.dedx[t1];
 		Dmeson.dedxt2 = dcinfo.dedx[t2];
 
@@ -1106,6 +1121,30 @@ int analyse_event()
                 if (progpar.verbose) cout<<"dedxt1="<<Dmeson.dedxt1<<"\t"<<"dedxt2="<<Dmeson.dedxt2<<endl;
 		if (progpar.verbose) cout<<"Pion "<<"probt1="<<dcinfo.p[t1][2]<<"\t"<<"probt2="<<dcinfo.p[t2][2]<<endl;
 		if (progpar.verbose) cout<<"Kaon "<<"probt1="<<dcinfo.p[t1][3]<<"\t"<<"probt2="<<dcinfo.p[t2][3]<<endl;
+
+		double npetrh=0.5;
+                double PatcCut=450.;
+
+		if( pcorr(tP(t1),1)>PatcCut && pcorr(tP(t1),1)<1500. && pcorr(tP(t2),2)>PatcCut && pcorr(tP(t2),2)<1500. && (good_region_t1>=1 && Dmeson.atcTotalNpet1>npetrh) && (good_region_t2>=1 && Dmeson.atcTotalNpet2<=npetrh) ){ idATC=1;}  //pi - t1, K - t2
+		if( pcorr(tP(t1),2)>PatcCut && pcorr(tP(t1),2)<1500. && pcorr(tP(t2),1)>PatcCut && pcorr(tP(t2),1)<1500. && (good_region_t1>=1 && Dmeson.atcTotalNpet1<=npetrh) && (good_region_t2>=1 && Dmeson.atcTotalNpet2>npetrh) ){ idATC=2;}  //K - t1, pi -t2
+
+		//double PdedxCut=600.;
+		//float probCutK = 0.80;
+		//float probCutPi = 0.70;
+		//if( pcorr(tP(t1),1)<PdedxCut && ( Dmeson.probpit1>0. && Dmeson.probpit1<=probCutPi ) && pcorr(tP(t2),2)<PdedxCut && Dmeson.probKt2>0. && Dmeson.probKt2<=probCutK ) {iddEdx=1;}    //piK
+		//if( pcorr(tP(t1),2)<PdedxCut && Dmeson.probKt1>0. && Dmeson.probKt1<=probCutK && pcorr(tP(t2),1)<PdedxCut && ( Dmeson.probpit2>0. && Dmeson.probpit2<=probCutPi ) ) {iddEdx=2;}    //Kpi
+
+		double mbc, de, dp, prec1, prec2, fchi2;
+		kine_fit(t1, t2, &mbc, &de, &dp, &prec1, &prec2, &fchi2, progpar.Dkine_fit);
+
+		idATC=0;
+		//iddEdx=0;
+		Dmeson.mbc = mbc;
+		Dmeson.de = de;
+		Dmeson.dp = dp;
+		Dmeson.prec1 = prec1;
+		Dmeson.prec2 = prec2;
+		Dmeson.fchi2 = fchi2;
 
                 Dmeson.kft1 = kedrrun_cb_.Header.RunType != 64 ? 0 : mctracks_cb_.kf[t1];
 		Dmeson.kft2 = kedrrun_cb_.Header.RunType != 64 ? 0 : mctracks_cb_.kf[t2];

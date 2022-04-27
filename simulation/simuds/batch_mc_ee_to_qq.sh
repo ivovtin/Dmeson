@@ -17,15 +17,15 @@
 # --             Queue list                --
 ##$ -soft
 ##$ -l time=24:00:00
-#$ -q remote
+##$ -q remote
 ##$ -q extralong
 ##$ -q 6h
-##$ -q day
+#$ -q day
 #$ -m beas
 #$ -M ovtin.ivan@gmail.com
 
 ##$ -t 1-33
-#$ -t 7-33
+#$ -t 5-10
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]

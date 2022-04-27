@@ -47,17 +47,23 @@ void chain(){
     if(key==0){
 	for(int i=1; i<=62; i++)   //signal 2016+2017
 	{
-	    if( i!=50 && i!=51 && i!=52 ) tt->Add(TString::Format("/store/users/ovtin/outDmeson/cosmic/psi3770_to_cosmic_%d.root",i).Data());
+	    //if( i!=50 && i!=51 && i!=52 ) tt->Add(TString::Format("/store/users/ovtin/outDmeson/cosmic/psi3770_to_cosmic_%d.root",i).Data());
+	    tt->Add(TString::Format("/store/users/ovtin/outDmeson/cosmic/psi3770_to_cosmic_%d.root",i).Data());
 	}
     }
     else if (key==1){              //MC Signal
 	//for(int i=1; i<=17; i++)
 	//for(int i=1; i<=119; i++)
-	//for(int i=1; i<=143; i++)
-	for(int i=1; i<=107; i++)
+	for(int i=1; i<=143; i++)
+	//for(int i=1; i<=59; i++)
 	{
 	    if(i<=119)
 	    {
+		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A6.0_Z0.0/softcosm/psi3770_to_simCosmic_%d.root",i).Data());
+		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A7.2_Z0.2/softcosm/psi3770_to_simCosmic_%d.root",i).Data());
+		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A4.8_Z0.0/softcosm/psi3770_to_simCosmic_%d.root",i).Data());
+		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A6.9_Z0.0/softcosm/psi3770_to_simCosmic_%d.root",i).Data());
+		tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A5.1_Z0.0/softcosm/psi3770_to_simCosmic_%d.root",i).Data());
 		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/1method/softcosm/psi3770_to_simCosmic_%d.root",i).Data());
 		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method/softcosm/psi3770_to_simCosmic_%d.root",i).Data());
 		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A3.0_Z1.0/softcosm/psi3770_to_simCosmic_%d.root",i).Data());
@@ -67,18 +73,30 @@ void chain(){
 		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A9.5_Z5.5/softcosm/psi3770_to_simCosmic_%d.root",i).Data());
 		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A6.5_Z3.5/softcosm/psi3770_to_simCosmic_%d.root",i).Data());
 		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A8.0_Z5.5/softcosm/psi3770_to_simCosmic_%d.root",i).Data());
-		tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A7.5_Z5.5/softcosm/psi3770_to_simCosmic_%d.root",i).Data());
+		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A7.5_Z5.5/softcosm/psi3770_to_simCosmic_%d.root",i).Data());
+		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A6.5_Z0.0/softcosm/psi3770_to_simCosmic_%d.root",i).Data());
+		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A6.0_Z0.0/softcosm/psi3770_to_simCosmic_%d.root",i).Data());
+		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A4.5_Z0.0_new/psi3770_to_simCosmic_%d.root",i).Data());
+		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A7.5_Z5.5_new/psi3770_to_simCosmic_%d.root",i).Data());
 	    }
             else
 	    {
+		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A6.0_Z0.0/psi3770_to_simCosmic_%d.root",i-119).Data());
+		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A7.2_Z0.2/psi3770_to_simCosmic_%d.root",i-119).Data());
+		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A4.8_Z0.0/psi3770_to_simCosmic_%d.root",i-119).Data());
+		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A6.9_Z0.0/psi3770_to_simCosmic_%d.root",i-119).Data());
+		tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A5.1_Z0.0/psi3770_to_simCosmic_%d.root",i-119).Data());
 		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/1method/psi3770_to_simCosmic_%d.root",i-119).Data());
 		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method/psi3770_to_simCosmic_%d.root",i-119).Data());
 		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A3.0_Z1.0/psi3770_to_simCosmic_%d.root",i-119).Data());
 		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A6.5_Z2.5/psi3770_to_simCosmic_%d.root",i-119).Data());
 		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A9.5_Z5.5/psi3770_to_simCosmic_%d.root",i-119).Data());
 		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A6.5_Z3.5/psi3770_to_simCosmic_%d.root",i-119).Data());
+		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A5.5_Z0.0/psi3770_to_simCosmic_%d.root",i-119).Data());
+		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A6.5_Z0.0/psi3770_to_simCosmic_%d.root",i-119).Data());
+		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A6.0_Z0.0/psi3770_to_simCosmic_%d.root",i-119).Data());
 		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A8.0_Z5.5/psi3770_to_simCosmic_%d.root",i-119).Data());
-		tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A7.5_Z5.5/psi3770_to_simCosmic_%d.root",i-119).Data());
+		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic/2method_corr_S1.0_A7.5_Z5.5/psi3770_to_simCosmic_%d.root",i-119).Data());
 	    }
 	}
     }

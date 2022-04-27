@@ -60,14 +60,31 @@ inline char* timestamp(time_t t)
     return strtime;
 }
 
+void get_run_lumi(int run, double *en, double *en_err, double *lum, int *t) {
+  int array[8];
+  KdDbConn* conn;
+  KDBruninfo runinfo;
+  int id;
+
+  conn = kd_db_open(NULL);
+  id = kd_db_get_id("runenergy",conn);
+  if (kd_db_get_for_run_int(id, run, conn, array, 8)) {
+    *en = array[1]/1e6;
+    *en_err = array[2]/1e6;
+  }
+  if (kd_db_get_run_info(run, 1, conn, &runinfo))
+  *lum = runinfo.intelum;
+  *t = runinfo.livesec;
+  kd_db_close(conn);
+}
 
 int main(int argc, char** argv) {
 
     int year;
 
     TString KEDR, list_runs;
-    TH1F* hEn[2];
-    TH1F* herrEn[2];
+    TH1F* hEn[3];
+    TH1F* herrEn[3];
 
     TH1F* hx[2];
     TH1F* hy[2];
@@ -77,6 +94,9 @@ int main(int argc, char** argv) {
     TH1F* hsz[2];
     TProfile* pr[2];
     TProfile* prtime[2];
+
+    double s_lum_er_en_beam[2];
+    double slum[2];
 
     for(int key=0; key<=1; key++)
     {
@@ -93,7 +113,7 @@ int main(int argc, char** argv) {
 	}
 
         hEn[key] = new TH1F("Energy of beam","Energy of beam",100,1885.,1890.);
-        herrEn[key] = new TH1F("Energy error of beam","Energy error of beam",100,-0.0,0.010);
+        herrEn[key] = new TH1F("Energy error of beam","Energy error of beam",200,-0.0,0.060);
 
 	hx[key] = new TH1F("x","x",100,-0.5,0.0);
 	hy[key] = new TH1F("y","y",100,0.5,1.0);
@@ -130,6 +150,10 @@ int main(int argc, char** argv) {
 		int buflum[lum_table_length];
 		int bufenergy[e_table_length];
 
+		double en=0, en_err=0, lum=0;
+		int t;
+		get_run_lumi(run, &en, &en_err, &lum, &t);
+
 		KDBconn *conn = kdb_open();
 
 		if (!conn) {
@@ -140,11 +164,14 @@ int main(int argc, char** argv) {
 		time_t runTime_end=kdb_run_get_end_time(conn, run);
 		cout<<"Begin time of Run"<<run<<": "<<timestamp(runTime_begin)<<endl;
 		cout<<"End time of Run"<<run<<": "<<timestamp(runTime_end)<<endl;
-
+                /*
 		if( kdb_read_for_run(conn,lum_table_id,run,buflum,lum_table_length) ) {
 		    lum_p=buflum[0]*1E-3;
 		    lum_e=buflum[1]*1E-3;
+                    cout<<"lum_e="<<lum_e<<endl;
 		}
+		*/
+
 		kdb_setver(conn,0);
 		if( kdb_read_for_run(conn,e_table_id,run,bufenergy,e_table_length) ) {
 		    beam_energy=bufenergy[1]*1E-6;
@@ -169,8 +196,15 @@ int main(int argc, char** argv) {
 		}
 		kdb_close(conn);
 
+                if( lum<100000 )
+		{
+		    s_lum_er_en_beam[key] += lum*0.001*err_beam_energy;
+		    slum[key] += lum*0.001;
+		}
+
 		printf("RUN DB INFO: i=%d Run=%d  En=%1.4f+-%1.4f\n",i,run,beam_energy,err_beam_energy);
-            /*
+                cout<<"lum = "<<lum*0.001<<"\t"<<"s_lum_er_en_beam = "<<s_lum_er_en_beam[key]<<endl;
+	    /*
             if (run==23307 || run==23313 || run==23342 || run==23353 || run==23423
 	       || run==23429 || run==23466 || run==23467 || run==23470 || run==23562
                || run==23564 || run==23626 || run==23632 || run==23635 || run==23636
@@ -240,8 +274,8 @@ int main(int argc, char** argv) {
     //for(int k=0; k<=1; k++)
     for(int k=0; k<1; k++)
     {
-	hEn[k]->Draw();    cc1->SaveAs(KEDR+"hEn.png");
-	herrEn[k]->Draw(); cc1->SaveAs(KEDR+"herrEn.png");
+	//hEn[k]->Draw();    cc1->SaveAs(KEDR+"hEn.png");
+	//herrEn[k]->Draw(); cc1->SaveAs(KEDR+"herrEn.png");
 	hx[k]->GetXaxis()->SetTitle("x, cm");   hx[k]->Draw();    cc1->SaveAs(KEDR+"hx.png");
 	hy[k]->GetXaxis()->SetTitle("y, cm");   hy[k]->Draw();    cc1->SaveAs(KEDR+"hy.png");
 	hz[k]->GetXaxis()->SetTitle("z, cm");   hz[k]->Draw();    cc1->SaveAs(KEDR+"hz.png");
@@ -249,6 +283,23 @@ int main(int argc, char** argv) {
 	hsy[k]->GetXaxis()->SetTitle("#sigma_y, cm");  hsy[k]->Draw();    cc1->SaveAs(KEDR+"hsy.png");
 	hsz[k]->GetXaxis()->SetTitle("#sigma_z, cm");  hsz[k]->Draw();    cc1->SaveAs(KEDR+"hsz.png");
     }
+
+    /////////////////////////
+    hEn[2] = new TH1F("Energy of beam","Energy of beam",100,1885.,1890.);
+    herrEn[2] = new TH1F("Energy error of beam","Energy error of beam",200,-0.0,0.060);
+
+    FILE* file = fopen(TString("beamen.dat").Data(),"r");
+    while (!feof(file)) {
+	double run,ebeam,err_ebeam,var;
+	if (fscanf(file,"%lf %lf %lf %lf", &run,&ebeam,&err_ebeam,&var) == 4) {
+	    hEn[2]->Fill(ebeam);
+	    herrEn[2]->Fill(err_ebeam);
+	}
+    }
+    fclose(file);
+    /////////////////////////
+
+    gStyle->SetOptStat(0);
 
     TCanvas *cc2 = new TCanvas();
     cc2->cd();
@@ -262,34 +313,50 @@ int main(int argc, char** argv) {
     hEn[1]->SetLineWidth(2);
     hEn[1]->SetLineColor(kBlue);
     hEn[1]->Draw("same");
+    hEn[2]->SetLineWidth(2);
+    hEn[2]->SetLineColor(kGreen);
+    //hEn[2]->Draw("same");
     //TLegend *leg1 = new TLegend(0.1,0.7,0.48,0.9);
     //TLegend *leg1 = new TLegend(0.1,0.7,0.38,0.8);
-    TLegend *leg1 = new TLegend(0.2,0.7,0.30,0.8);
-    leg1->AddEntry(hEn[0],"2016","l");
+    //TLegend *leg1 = new TLegend(0.2,0.7,0.30,0.8);
+    //TLegend *leg1 = new TLegend(0.15,0.6,0.35,0.8);
+    TLegend *leg1 = new TLegend(0.15,0.7,0.30,0.8);
+    leg1->AddEntry(hEn[0],"2016-17","l");
     leg1->AddEntry(hEn[1],"2004","l");
+    //leg1->AddEntry(hEn[2],"2004 - result 2010","l");
     leg1->Draw("same");
     cc2->SaveAs("/spool/users/ovtin/outDmeson/demo/hEn.png");
     cc2->SaveAs("/spool/users/ovtin/outDmeson/demo/hEn.eps");
 
+    gStyle->SetOptTitle(1);
     TCanvas *cc3 = new TCanvas();
     cc3->cd();
     herrEn[0]->SetLineWidth(2);
     herrEn[0]->SetLineColor(kRed);
+    herrEn[0]->SetTitle("Error of beam energy");
     herrEn[0]->GetXaxis()->SetTitle("#Delta E_{beam}, MeV");
     herrEn[0]->GetYaxis()->SetTitle("a.u.");
     herrEn[0]->Draw();
     herrEn[1]->SetLineWidth(2);
     herrEn[1]->SetLineColor(kBlue);
-    herrEn[1]->Draw("same");
+    //herrEn[1]->Draw("same");
+    herrEn[2]->SetLineWidth(2);
+    herrEn[2]->SetLineColor(kGreen);
+    //herrEn[2]->Draw("same");
     //TLegend *leg2 = new TLegend(0.1,0.7,0.48,0.9);
-    TLegend *leg2 = new TLegend(0.3,0.7,0.48,0.8);
-    leg2->AddEntry(hEn[0],"2016","l");
-    leg2->AddEntry(hEn[1],"2004","l");
+    //TLegend *leg2 = new TLegend(0.35,0.55,0.65,0.75);
+    TLegend *leg2 = new TLegend(0.40,0.65,0.65,0.75);
+    leg2->AddEntry(herrEn[0],"2016-2017","l");
+    //leg2->AddEntry(herrEn[1],"2004","l");
+    //leg2->AddEntry(herrEn[2],"2004 - result 2010","l");
     leg2->Draw("same");
-    cc3->SaveAs("/spool/users/ovtin/outDmeson/demo/herrEn.png");
-    cc3->SaveAs("/spool/users/ovtin/outDmeson/demo/herrEn.eps");
+    //cc3->SaveAs("/spool/users/ovtin/outDmeson/demo/herrEn.png");
+    //cc3->SaveAs("/spool/users/ovtin/outDmeson/demo/herrEn.eps");
+    cc3->SaveAs("/spool/users/ovtin/outDmeson/demo/herrEn2016.png");
+    cc3->SaveAs("/spool/users/ovtin/outDmeson/demo/herrEn2016.eps");
 
     gStyle->SetOptStat(0);
+    gStyle->SetOptTitle(0);
     TCanvas *cc4 = new TCanvas();
     cc4->cd();
     pr[0]->SetMarkerStyle(20);
@@ -389,6 +456,13 @@ int main(int argc, char** argv) {
     prtime[1]->Draw();
     cc7->SaveAs("/spool/users/ovtin/outDmeson/demo/Time_Ebeam_2004.png");
     cc7->SaveAs("/spool/users/ovtin/outDmeson/demo/Time_Ebeam_2004.eps");
+
+    for(int k=0; k<=1; k++)
+    {
+        cout<<"Total lumi = "<<slum[k]<<endl;
+	cout<<"sMd = "<<s_lum_er_en_beam[k]/slum[k]<<endl;
+    }
+
 
     return 0;
 }

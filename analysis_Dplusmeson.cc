@@ -80,6 +80,12 @@
 #include "TMinuit.h"
 #include "TRandom3.h"
 
+#include "Math/Minimizer.h"
+#include "Math/Factory.h"
+#include "Math/Functor.h"
+#include "TRandom2.h"
+#include "TError.h"
+
 #define PI 3.14159265358979
 #define THETA_CL_CUT 30.
 #define DIST_CL_CUT 20.
@@ -370,15 +376,27 @@ double pcorr(double p, int type) {
     double ms, dedx, k;
 
     if (type==1) {    //pion
+
 	ms = 149.484;
 	dedx = 1.30782;
 	k = 0.;
+        /*
+	ms = 149.484 - 7.2881;
+	dedx = 1.30782 - 0.12893;
+	k = 0.;
+        */
     }
     else if(type==2)  //kaon
     {
+
 	ms = 502.997;
 	dedx = 1.28546;
 	k = 0.;
+        /*
+	ms = 502.997 - 64.3663;
+	dedx = 1.28546 - 0.432916;
+	k = 0.;
+        */
     }
     else if(type==3)  //muon
     {
@@ -397,6 +415,8 @@ double pcorr(double p, int type) {
     double beta = sqrt(1.-1./gamma/gamma);
 
     double pc = p+1.*dedx/pow(beta,3) + k*p;
+    //double pc = p+1.20*(dedx/pow(beta,3) + k*p);
+    //double pc = p+0.80*(dedx/pow(beta,3) + k*p);
 
     pc = pc*fabs(progpar.pSF);
     if (progpar.verbose==3) cout<<"pc="<<pc<<"\t"<<"p="<<p<<"\t"<<"progpar.pSF="<<progpar.pSF<<endl;
@@ -419,6 +439,11 @@ void kine_fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *parval, Int_t i
     double p1i = pcorr(tP(dcand_t2),1);
     double p2i = pcorr(tP(dcand_t3),1);
 
+    double sk = sqrt(ktrrec_h_.FitTrack[dcand_t1][fitSigCC]/
+		     pow(ktrrec_h_.FitTrack[dcand_t1][fitC],2)+
+		     ktrrec_h_.FitTrack[dcand_t1][fitSigTheThe]/
+		     pow(tan(ktrrec_.TETRAK[dcand_t1]/180.*PI),2))*pki;
+
     double sp1 = sqrt(ktrrec_h_.FitTrack[dcand_t2][fitSigCC]/
 		      pow(ktrrec_h_.FitTrack[dcand_t2][fitC],2)+
 		      ktrrec_h_.FitTrack[dcand_t2][fitSigTheThe]/
@@ -428,11 +453,6 @@ void kine_fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *parval, Int_t i
 		      pow(ktrrec_h_.FitTrack[dcand_t3][fitC],2)+
 		      ktrrec_h_.FitTrack[dcand_t3][fitSigTheThe]/
 		      pow(tan(ktrrec_.TETRAK[dcand_t3]/180.*PI),2))*p2i;
-
-    double sk = sqrt(ktrrec_h_.FitTrack[dcand_t1][fitSigCC]/
-		     pow(ktrrec_h_.FitTrack[dcand_t1][fitC],2)+
-		     ktrrec_h_.FitTrack[dcand_t1][fitSigTheThe]/
-		     pow(tan(ktrrec_.TETRAK[dcand_t1]/180.*PI),2))*pki;
 
     double chi2 = pow((pp1-p1i)/sp1,2) + pow((pp2-p2i)/sp2,2) +
 	pow((pk-pki)/sk,2);
@@ -447,6 +467,8 @@ void kine_fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *parval, Int_t i
     f = chi2;
 }
 
+
+/*
 void refit(int t, double p, double* phi, double* theta) {
     double p0 = ktrrec_.PTRAK[t];
     double r0 = tRc(t);
@@ -478,6 +500,8 @@ void refit(int t, double p, double* phi, double* theta) {
     *phi = phi1;
     *theta = theta1;
 }
+*/
+
 
 void kine_fit(int ip1, int ip2, int ip3, double* mbc, double* de, double* prec1, double* prec2, double* prec3, double* fchi2, int enable) {
     dcand_t1 = ip1;   //kaon
@@ -493,46 +517,6 @@ void kine_fit(int ip1, int ip2, int ip3, double* mbc, double* de, double* prec1,
     *fchi2 = 0;
 
     if (enable) {
-        /*
-	TMinuit *dMinuit = new TMinuit(2); //initialise Minuit with a maximum of 2 parameters to minimise
-	dMinuit->SetFCN(kine_fcn);         //set the function to minimise
-	dMinuit->SetPrintLevel(progpar.verbose-1); //set print out level for Minuit
-	Double_t arglist[2];
-	arglist[0]=1;
-	Int_t iflag=0;
-	dMinuit->mnexcm("SET ERR",arglist,2,iflag);    //Interprets command
-	double lowerLimit = 0.0;
-	double upperLimit = 0.0;
-	dMinuit->mnparm(0,"p1", p2i, 0.5, lowerLimit, upperLimit, iflag);    //set the parameters used in the fit
-	dMinuit->mnparm(1,"p2", p3i, 0.5, lowerLimit, upperLimit, iflag);
-	arglist[0] = 5000;  //maximum number of function calls after which the calculation will be stopped even if it has not yet converged.
-	arglist[1] = 1.; //The optional argument [tolerance] specifies required tolerance on the function value at the minimum. The default tolerance is 0.1, and the minimization will stop when the estimated vertical distance to the minimum (EDM) is less than 0.001*[tolerance]*UP (see [SET ERRordef]).
-	dMinuit->mnexcm("MIGRAD",arglist,2,iflag);                          //run the minimisation Using MIGRAD
-
-	Double_t val[2],err[2],bnd1[2],bnd2[2];
-	TString para0,para1;
-	int ivar;
-
-	dMinuit->mnpout(0,para0,val[0],err[0],bnd1[0],bnd2[0],ivar);
-	pp1 = val[0];
-	dMinuit->mnpout(1,para1,val[1],err[1],bnd1[1],bnd2[1],ivar);
-	pp2 = val[1];
-
-	double ek = ebeam - sqrt(mpi*mpi+pp1*pp1) - sqrt(mpi*mpi+pp2*pp2);
-	if (ek < mk) pk = 0.;
-	else
-	    pk = sqrt(ek*ek-mk*mk);
-
-	if (progpar.verbose) printf("  val0=%lf, val1=%lf\n",val[0], val[1]);
-
-	Double_t fmin;
-	Double_t edm,errdef;
-	Int_t nvpar,nparx,icstat;
-	dMinuit->mnstat(fmin,edm,errdef,nvpar,nparx,icstat);
-	*fchi2 = fmin;
-	if (progpar.verbose) printf(" Minimal function value: %8.3lf  \n",fmin);
-        */
-
 	TVirtualFitter *minuit = TVirtualFitter::Fitter(0, 1);
 	minuit->SetFCN(kine_fcn);   //set the function to minimise
 	Double_t arglist[2];
@@ -563,8 +547,9 @@ void kine_fit(int ip1, int ip2, int ip3, double* mbc, double* de, double* prec1,
 	minuit->GetStats(fmin,edm,errdef,nvpar,nparx);
 	*fchi2 = fmin;
 	if (progpar.verbose) printf(" Minimal function value: %8.3lf  \n",fmin);
-
-    } else {
+    }
+    else
+    {
 	pp1 = p2i;
 	pp2 = p3i;
 	pk = p1i;
@@ -584,12 +569,13 @@ void kine_fit(int ip1, int ip2, int ip3, double* mbc, double* de, double* prec1,
 
     double theta2 = ktrrec_.TETRAK[dcand_t3]/180.*PI;
     double phi2 = ktrrec_.FITRAK[dcand_t3]/180.*PI;
-
+    /*
     if (enable) {
 	refit(dcand_t1, pk, &phik, &thetak);
 	refit(dcand_t2, pp1, &phi1, &theta1);
 	refit(dcand_t3, pp2, &phi2, &theta2);
     }
+    */
     double pxk = pk*sin(thetak)*cos(phik);
     double pyk = pk*sin(thetak)*sin(phik);
     double pzk = pk*cos(thetak);
@@ -919,7 +905,8 @@ int analyse_event()
 				    //RANECU(r2, 1, 1);       //RANECU generates a sequence of uniformly distributed random numbers in the interval (0,1).
                                     r2 = rndm.Rndm();
 
-				    tof += r1*0.420;
+				    //tof += r1*0.420;  //v0
+				    tof += r1*0.589;    //v1
 				    if (progpar.verbose) cout<<"r2="<<r2<<"\t"<<"tof="<<tof<<endl;
 				    if (r2 < 0.15) tof = 0.;
 
@@ -928,7 +915,8 @@ int analyse_event()
 			    }
 			}
 
-			Dmeson.timet1 = kedrrun_cb_.Header.RunType != 64 ? kscBhit_.time_B_ns[t1][0] : tof;
+			//Dmeson.timet1 = kedrrun_cb_.Header.RunType != 64 ? kscBhit_.time_B_ns[t1][0] : tof; //v0, v1   !!!!
+			Dmeson.timet1 = kscBhit_.time_B_ns[t1][0];
 			Dmeson.betat1=kscBhit_.Beta[t1][0];         //v/c
 			Dmeson.lengtht1 = kscBhit_.len[t1][0];
 
@@ -1186,7 +1174,7 @@ int main(int argc, char* argv[])
 	kf_install_signal_handler(1);
 
         kdcswitches_.kNoiseReject=3;   //Cut for DC noise  (0 - not cut, 1 - standart, 2 - soft, 3 - hard)
-        kdcswitches_.KemcAllowed=0;
+        kdcswitches_.KemcAllowed=0;     //on use strips for track reconstruction
 	//kdcswitches_.KemcAllowed=-1;  //off use strips for track reconstruction
 
 	kf_MCCalibRunNumber(progpar.simOn,progpar.MCCalibRunNumber,progpar.MCCalibRunNumberL,progpar.NsimRate,progpar.Scale,progpar.Ascale,progpar.Zscale);

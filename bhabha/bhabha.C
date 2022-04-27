@@ -53,16 +53,16 @@ int main(int argc, char* argv[])
 	//2016-17
 	rrCut=0.5;
 	zCut=13.;
-	max_chi2=1000.;
-	min_nhits=23.;
+	max_chi2=50.;
+	min_nhits=24.;
         //max_nhits=100.;
     }
     if(key==2){
 	//2016-17  - sim
 	rrCut=0.5;
 	zCut=13.;
-	max_chi2=1000.;
-	min_nhits=23.;
+	max_chi2=50.;
+	min_nhits=24.;
 	//min_nhits=10.;
         //max_nhits=100.;
 	epCut1=0.0;
@@ -90,7 +90,6 @@ int main(int argc, char* argv[])
     if( key==0 ){           //exp 2016-17
 	fnameout=TString::Format("exp_bhabha_data_%d.root",key).Data();
         KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/data/";
-        //KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/data_test/";
 	list_badruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/badruns";
     }
     else if (key==1)        //exp 2004
@@ -101,14 +100,21 @@ int main(int argc, char* argv[])
     }
     else if (key==2)        //sig
     {
-	fnameout=TString::Format("sim_bhabha_sig_%d.root",key).Data();
+        //TString pref_out = "S1.0_A6.0_Z0.0";
+        //TString pref_out = "S1.0_A7.2_Z0.2";
+        //TString pref_out = "S1.0_A4.8_Z0.0";
+        //TString pref_out = "S1.0_A6.9_Z0.0";
+        TString pref_out = "S1.0_A5.1_Z0.0";
+	fnameout=TString::Format("sim_bhabha_sig_%d_" + pref_out +".root",key).Data();
         //KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/simulation/";
         //KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/simulation_tuning/";
         //KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/simulationKsimSystErr2/";
         //KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/simulationKsimSystErr1_notksimreal_kdcsimxt_kdcsimsigma/";
         //KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/simulationKsimSystErr1_2method_corr_S1.0_A6.5_Z2.5/";
         //KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/simulationKsimSystErr1_2method_corr_S1.0_A7.5_Z3.5/";
-        KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/simulationKsimSystErr1_2method_corr_S1.0_A8.5_Z4.5/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/simulationKsimSystErr1_2method_corr_S1.0_A8.5_Z4.5/";
+        //KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/simulationKsimSystErr1_2method_corr_S1.0_A6.0_Z0.0/";
+        KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/simulationKsimSystErr1_2method_corr_" + pref_out + "/";
     }
 
     gSystem->Exec("mkdir " + KEDR);
@@ -284,9 +290,12 @@ int main(int argc, char* argv[])
            && bhabha.phi2t>=165
            && bhabha.rr1<rrCut && bhabha.rr2<rrCut
            && fabs(bhabha.zip1)<zCut && fabs(bhabha.zip2)<zCut
-           && bhabha.pt1>100 && bhabha.pt2>100
+           && bhabha.pt1>50 && bhabha.pt2>50
            && bhabha.vrtnip>=2
            && (bhabha.mulayerhits2+bhabha.mulayerhits3)<=max_munhits
+           //&& bhabha.chi2t1<=max_chi2 && bhabha.chi2t2<=max_chi2
+	   //&& bhabha.nhitst1>=min_nhits && bhabha.nhitst2>=min_nhits
+           //&& 1.<bhabha.thetat1/180.*PI<2.14 && 1.<bhabha.thetat2/180.*PI<2.14
            //=======================================
 	   //&& bhabha.nhitst1<=max_nhits && bhabha.nhitst2<=max_nhits
 	   //bhabha.vrtnip>=1 && bhabha.vrtnip<=3

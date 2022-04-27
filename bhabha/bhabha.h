@@ -50,13 +50,13 @@ void chain(){
 	//tt->Add("/spool/users/ovtin/bhabha_out_23551-23569.root");
 	for(int i=1; i<=693; i++)   //signal 2016+2017
 	{
-	    tt->Add(TString::Format("/spool/users/ovtin/outDmeson/bhabha/data/psi3770_to_bhabha_%d.root",i).Data());
+	    tt->Add(TString::Format("/store/users/ovtin/outDmeson/bhabha/data/psi3770_to_bhabha_%d.root",i).Data());
 	}
     }
     else if (key==1){
 	for(int i=1; i<=482; i++)   //signal 2004+2005
 	{
-	    tt->Add(TString::Format("/spool/users/ovtin/outDmeson/bhabha/data2004/psi3770_to_bhabha_%d.root",i).Data());
+	    tt->Add(TString::Format("/store/users/ovtin/outDmeson/bhabha/data2004/psi3770_to_bhabha_%d.root",i).Data());
 	}
     }
     else if (key==2){              //MC Signal
@@ -64,8 +64,13 @@ void chain(){
 	//for(int i=1; i<=124; i++)
 	for(int i=1; i<=1; i++)
 	{
-	    //tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/BhaBha/KsimSystErr2/psi3770_to_simBhaBha_%d.root",i).Data());
-	    tt->Add(TString::Format("/spool/users/ovtin/outDmeson/simulation/BhaBha/psi3770_to_simBhaBha_%d.root",i).Data());
+	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/BhaBha/KsimSystErr2/psi3770_to_simBhaBha_%d.root",i).Data());
+	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/BhaBha/psi3770_to_simBhaBha_%d.root",i).Data());
+	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/BhaBha/psi3770_to_simBhaBha_%d_2method_corr_S1.0_A6.0_Z0.0.root",i).Data());
+	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/BhaBha/psi3770_to_simBhaBha_%d_2method_corr_S1.0_A7.2_Z0.2.root",i).Data());
+	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/BhaBha/psi3770_to_simBhaBha_%d_2method_corr_S1.0_A4.8_Z0.0.root",i).Data());
+	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/BhaBha/psi3770_to_simBhaBha_%d_2method_corr_S1.0_A6.9_Z0.0.root",i).Data());
+	    tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/BhaBha/psi3770_to_simBhaBha_%d_2method_corr_S1.0_A5.1_Z0.0.root",i).Data());
 	}
 	//for(int i=121; i<=124; i++)
 	//{

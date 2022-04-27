@@ -755,6 +755,9 @@ int main(int argc, char* argv[])
 	//Set kframework signal handling
 	kf_install_signal_handler(1);
 
+	kdcswitches_.kNoiseReject=3;      //Cut for DC noise  (0 - not cut, 1 - standart, 2 - soft, 3 - hard)
+	kdcswitches_.KemcAllowed=0;         //On use strips
+
         kf_MCCalibRunNumber(progpar.simOn,progpar.MCCalibRunNumber,progpar.MCCalibRunNumberL,progpar.NsimRate,progpar.Scale,progpar.Ascale,progpar.Zscale);
 
 	//Set subsystems to be used

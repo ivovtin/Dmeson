@@ -17,107 +17,108 @@
 ##$ -e /dev/null
 # -------------------------------------------
 # --             Enviroment                --
-##$ -v PATH=$PATH:$HOME/release/KdRunFastMon,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/alexbarn/release/lib,KDBHOST=bison-2
-#$ -v PATH=$PATH:$HOME/release/KdRunFastMon,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/alexbarn/release/lib,KDBHOST=localhost
+#$ -v PATH=$PATH:$HOME/release/KdRunFastMon,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/ovtin/release/lib,KDBHOST=bison-2
+##$ -v PATH=$PATH:$HOME/release/KdRunFastMon,LD_LIBRARY_PATH=/usr/local/root/lib/root:/home/ovtin/release/lib,KDBHOST=localhost
 # -------------------------------------------
 # --             Queue list                --
-#$ -soft
+##$ -soft
 ##$ -hard
-#$ -l time=24:00:00
-#$ -q remote
+##$ -l time=24:00:00
+##$ -q remote
 ##$ -q extralong
 ##$ -q 6h
-##$ -q day
+#$ -q day
 #
 # -- Send mail at submission and completion of script --
 ##$ -m beas
 ##$ -M ovtin.ivan@gmail.com
 
-#$ -t 1-62
+##$ -t 1-62
+#$ -t 50-51
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]
 
 
-outfile="/spool/users/ovtin/outDmeson/cosmic/psi3770_to_cosmic_"$i".root"
+outfile="/store/users/ovtin/outDmeson/cosmic/psi3770_to_cosmic_"$i".root"
 
 ##5 +
-inruns="/spool/users/ovtin/cosmruns/march16cosmruns_"$i
+inruns="/store/users/ovtin/cosmruns/march16cosmruns_"$i
 
 ##4 +
 if [ $i -ge 6 ]; then
-inruns="/spool/users/ovtin/cosmruns/apr16cosmruns_"[$i-5]
+inruns="/store/users/ovtin/cosmruns/apr16cosmruns_"[$i-5]
 fi
 
 ##6 +
 if [ $i -ge 10 ]; then
-inruns="/spool/users/ovtin/cosmruns/may16cosmruns_"[$i-9]
+inruns="/store/users/ovtin/cosmruns/may16cosmruns_"[$i-9]
 fi
 
 ##4 +
 if [ $i -ge 16 ]; then
-inruns="/spool/users/ovtin/cosmruns/jun16cosmruns_"[$i-15]
+inruns="/store/users/ovtin/cosmruns/jun16cosmruns_"[$i-15]
 fi
 
 ##5 +
 if [ $i -ge 20 ]; then
-inruns="/spool/users/ovtin/cosmruns/oct16cosmruns_"[$i-19]
+inruns="/store/users/ovtin/cosmruns/oct16cosmruns_"[$i-19]
 fi
 
 ##2 +
 if [ $i -ge 25 ]; then
-inruns="/spool/users/ovtin/cosmruns/feb17cosmruns_"[$i-24]
+inruns="/store/users/ovtin/cosmruns/feb17cosmruns_"[$i-24]
 fi
 
 ##3 +
 if [ $i -ge 27 ]; then
-inruns="/spool/users/ovtin/cosmruns/march17cosmruns_"[$i-26]
+inruns="/store/users/ovtin/cosmruns/march17cosmruns_"[$i-26]
 fi
 
 ##3 +
 if [ $i -ge 30 ]; then
-inruns="/spool/users/ovtin/cosmruns/apr17cosmruns_"[$i-29]
+inruns="/store/users/ovtin/cosmruns/apr17cosmruns_"[$i-29]
 fi
 
 ##3 +
 if [ $i -ge 33 ]; then
-inruns="/spool/users/ovtin/cosmruns/may17cosmruns_"[$i-32]
+inruns="/store/users/ovtin/cosmruns/may17cosmruns_"[$i-32]
 fi
 
 ##1 +
 if [ $i -ge 36 ]; then
-inruns="/spool/users/ovtin/cosmruns/jun17cosmruns_"[$i-35]
+inruns="/store/users/ovtin/cosmruns/jun17cosmruns_"[$i-35]
 fi
 
 ##9 +
 if [ $i -ge 37 ]; then
-inruns="/spool/users/ovtin/cosmruns/oct17cosmruns_"[$i-36]
+inruns="/store/users/ovtin/cosmruns/oct17cosmruns_"[$i-36]
 fi
 
 ##1 +
 if [ $i -ge 46 ]; then
-inruns="/spool/users/ovtin/cosmruns/nov17cosmruns_"[$i-45]
+inruns="/store/users/ovtin/cosmruns/nov17cosmruns_"[$i-45]
 fi
 
 ##7 +
 if [ $i -ge 47 ]; then
-inruns="/spool/users/ovtin/cosmruns/dec17cosmruns_"[$i-46]
+inruns="/store/users/ovtin/cosmruns/dec17cosmruns_"[$i-46]
 fi
 
 ##6
 if [ $i -ge 54 ]; then
-inruns="/spool/users/ovtin/cosmruns/SC1_17cosmruns_"[$i-53]
+inruns="/store/users/ovtin/cosmruns/SC1_17cosmruns_"[$i-53]
 fi
 
 ##2
 if [ $i -ge 60 ]; then
-inruns="/spool/users/ovtin/cosmruns/SC2_17cosmruns_"[$i-59]
+inruns="/store/users/ovtin/cosmruns/SC2_17cosmruns_"[$i-59]
 fi
 
 ##============================================================
 
 #inruns=23621
-#outfile="/spool/users/ovtin/psi3770_to_cosmic_"$i".root"
+#outfile="/store/users/ovtin/psi3770_to_cosmic_"$i".root"
 
 mintracks=2
 maxtracks=2

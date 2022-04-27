@@ -17,10 +17,10 @@
 # --             Queue list                --
 ##$ -soft
 ##$ -l time=24:00:00
-#$ -q remote
+##$ -q remote
 ##$ -q extralong
 ##$ -q 6h
-##$ -q day
+#$ -q day
 ##$ -m beas
 ##$ -M ovtin.ivan@gmail.com
 
@@ -31,7 +31,9 @@ myrand=$[1000+$i]
 
 #start the job
 ##$HOME/3.0.0/bin/ks < $HOME/development/Dmeson/simulation/simD0/mccards/mc.cards.ee_to_DD_"$i" > /dev/null
-$HOME/development/bin/ks < $HOME/development/Dmeson/simulation/simD0/mccards/mc.cards.ee_to_DD_"$i"
+##$HOME/development/bin/ks < $HOME/development/Dmeson/simulation/simD0/mccards/mc.cards.ee_to_DD_"$i"
+cd $HOME/development/Dmeson/simulation/simD0
+./ks < mccards/mc.cards.ee_to_DD_"$i"
 ##$HOME/3.0.0/bin/ks < $HOME/development/Dmeson/simulation/simD0/mccards/mc.cards.ee_to_qq_3 > /dev/null
 status=$?
 if [ $status != 0 ]; then

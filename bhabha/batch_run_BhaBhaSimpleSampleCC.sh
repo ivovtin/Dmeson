@@ -40,9 +40,11 @@ i=${SGE_TASK_ID}
 myrand=$[1000+$i]
 
 ##simulation
-$HOME/development/Dmeson/BhaBhaSimpleSampleCC -RF23551 -RL23569 -Nsw50 -N25000 -sim1
+##$HOME/development/Dmeson/BhaBhaSimpleSampleCC -RF23551 -RL23569 -Nsw50 -N25000 -sim1
+$HOME/development/Dmeson/BhaBhaSimpleSampleCC -RF23556 -RL23556 -Nsw550 -N2000 -sim1
 ##data
 ##$HOME/development/Dmeson/BhaBhaSimpleSampleCC -RF23551 -RL23569 -N1000000 -sim0
+##$HOME/development/Dmeson/BhaBhaSimpleSampleCC -RF23556 -RL23556 -N5000 -sim0
 
 #COUNTER=0
 

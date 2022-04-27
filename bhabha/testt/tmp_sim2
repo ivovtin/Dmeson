@@ -1,0 +1,266 @@
+Птн Фев 26 14:49:08 NOVT 2021
+start 
+iter: a
+ tanya check kXTKey  1
+ KeeSel 1101 Th1,2CsI  21.  31. ThLKr  39.
+ kTOFallowed -2
+ SigX,Zsyst0  1.  0.0500000007
+ First event to process: sequential 0 daq 0
+ Debugging mode 0
+ K1trk 0 Kmu 0 Kee 2 Kpp 0 p1mn,mn  700.  5000.
+ z-cell expansion 0
+Initializing mu system data structures... done.
+KrMu initialized
+got MU status or run 4700
+got MU clbr for run 4700
+ Simulation -3
+   x(t) is not simulated
+   s(t) is simulated, KsimSystErr 2
+     SF  1.  1.  1.  1.
+ tanya  check  SF 2  1.  1.  1.  1.
+ Kbad 0 file ""
+ Trigger formulae from "trg.dat"
+ kedr_read_trg: error openning "trg.dat"
+ kedr_read_trg: err -1
+ klkr_loadthr: reading "lkrthra.txt"
+ klkr_loadthr: no "lkrthra.txt"
+ kcsi_loadthr: reading "csithra.txt"
+ kcsi_loadthr: no "csithra.txt"
+ klkr_loadthr_pt: reading "lkrptthr.txt"
+ klkr_loadthr: no "lkrptthr.txt"
+ kcsi_loadthr_st: reading "csithrb.txt"
+ kcsi_loadthr_st: no "csithrb.txt"
+ New e+e- selection
+ ksimplee_emin1:  900.  400.
+ ksimplee_strong2cut:  0.850000024
+ ksimplee_extracuts: Ecls  40.  80. cone  30.6803207 Nmax 2 1
+ *** WARNING in HBOOK1 : Already existing histogram replaced : ID=    2825 
+ kee: SIM1,2RUN 23556 23556
+ calling ksimreal 550 23556 23556
+ Data file: 
+ /space/skim/psi3770/sim/sim713201.dat                                       
+ kedrSetRun: initialization, kSimData 1
+ ksimruns: UseListR 0 NevSwitch 550 Nruns 1
+ run: 23556 Lum:  5.41599989
+ ksimruns: integrated luminosity  5.41599989 in 1 runs
+ ksimruns: random run list handling
+ File "param_new.dc" from "/space/offline/DCREC/GEOM/"
+ use mccard record version: 1
+ angdc: -16.7119999 anglor: -0.0174532933 fiel:  6.00000028
+ read DC's geometry data files...
+ File "connections_new2.dc" from /space/offline/DCREC/GEOM/
+ dcgeom L=7,W=1: X,YsWir  48.3018117  10.7098839
+ dcMakeCellCS L=7,W=1: X,Yw -3.51098217  49.3501736 X,YsWire  48.3018117
+  10.7098839 c,s  0.146642996 -0.989189482 aLor -0.0174532933
+ Default DC status is set
+ Bad ADCs: 0 0, bad wires: 0, bad cells 0
+ DC data loaded
+ KDCDBRUNS: file "dccalibrationsDB.txt" from current directory
+ number of calibations expected 556
+ number of calibrations read 556
+ File "param_new.vd" from "/space/offline/DCREC/GEOM/"
+ File "vdtabl_new.tbl" from /space/offline/DCREC/GEOM/
+ File "badtubes.t" from /space/offline/DCREC/GEOM/
+ 7 VD tubes marked as bad
+ VD geometry is read in, shift VD-DC  0.0315  0.033, bunch dT  1.60000002 -1.5
+ UangleVD:  0. DangleVD:  0.
+ XUshiftVD: -0.0095 YDshiftVD:  0.001
+ XDshiftVD: -0.0095 YDshiftVD:  0.001
+ updateflag: 1
+ no VD tube shift file
+Emc -> Version 1.8.20 (30-03-2017 20:20 +0700 NOVT)
+Emc -> Loading configuration from `param.emc'
+Emc -> emc_cards() -> no file param.emc. Default values are used.
+Calib table 'lkrs_calib' 101 Monitor table 'lkrs_calib_test' 101
+Emc -> Initialised successfully
+ kdcvr_read_trk_cor: file "trkeffcor.v" is absent
+ kDCVDrec: run type 64 event 1 reread DC & VD connection files
+ Simulating run 23556
+ File "connections_sim.dc" from /space/KEDR/stable/KedrSim/
+ File "vdtabl_new.tbl" from /space/offline/DCREC/GEOM/
+ File "badtubes.t" from /space/offline/DCREC/GEOM/
+ 7 VD tubes marked as bad
+ VD geometry is read in, no VD-DC shift, bunch dT  0.  0.
+ kvdrt_sim: linear VD R(t), t0 = 500, dt = 100->140 ns
+ kDCVDrec: IP position 0,0,0
+ kDCVDrec: max DC data length 4500
+ KedrSetRun: simulating run 23556
+ Set vertex from GEANT cards: X,Y,Zip -0.231000006  0.112999998 -0.67900002
+  assume dX,Y,Zip  0.100000001  0.100000001  0.300000012 cm
+ kDCVDrun: run 23556
+ call XT
+ connection opened
+ Use maximum number  for version X(t) in DB : 1
+ test table:  1210
+ kdcreadxtdb: LOAD X(t) DC INFORMATION ...  
+ Table is opened. Status:    1
+ kdcreadxtdb: 827zeros in data for layer 3 VS 1 A 3 W 4 using data of layer 1
+ Use angles bins from DB
+ Load  angles bins master calibration from DB
+ call XT COSMIC
+ Bad ADCs: 109 20, bad wires: 356, bad cells 25
+ p1:  1081.66231
+ p2:  1022.69228
+ Scale factors for errors in simulations  1.  1.  2.4000001  1.70000005 mode 2
+ p1:  1081.66231
+ p2:  1013.31265
+ kedrNbad 0 Nbw,a 0 0
+ Bad ADCs: 109 20, bad wires: 435, bad cells 34
+ LKrShape: -1
+ KDCEMCSHIFT: LKr shifts from GEANT cards:
+ ShiftX,Y,Z: -0.841000021 -0.439999998 -0.939999998 dR  0.
+ phiMCd: -0.488999963
+ thetaMCd:  0. sin  0.
+ gammaMCd:  0. sin  0.
+ DxShiftDz  0.00268999999 <-  0.
+ DyShiftDz  0.00232199999 <-  0.
+ KDCEMCSHIFT: run 23556 dR  0. phi -0.488999963 xyz -0.841000021 -0.439999998
+ -0.939999998 LKrShape -1
+Emc -> emc_run(23556, sim) -> 
+LKr(sim,4exp)... GEmcDBStatus: BadTwr 14: 25 0 25
+Cosmic corrections: 0.791 0.736 abslen 0.41
+CsI(sim,4exp)... Done.  0.642929 sec in DB.
+ tof_run__: run 23556
+Getting ToF calibrations from DB for run 23556 ----------
+NumBadToF:0 
+!!! effa=   nan 
+!!! efft=   nan 
+!!! effat=   nan 
+get_BT_sim_: Калибровка B t0 для моделирования заход 9000
+Getting ToF calibrations from DB for run 23556 ----------
+NumBadToF:2 
+ Alternative VD R(t): CalibRun: 23551
+ Load VD R(t) alternative version 1 fcsu:  244.445007 dt0:  103.width:  52.
+  fcsurat:  4.09089947
+ kdcvdrun_sim: use calibration for run: 23551
+ connection opened
+ Use maximum number  for version X(t) in DB : 1
+ test table:  1210
+ kdcreadxtdb: LOAD X(t) DC INFORMATION ...  
+ Table is opened. Status:    1
+ kdcreadxtdb: 827zeros in data for layer 3 VS 1 A 3 W 4 using data of layer 1
+ Use default values angles bins from DB
+ Load  angles bins master calibration from DB
+ RANLUX DEFAULT INITIALIZATION:    314159265
+ RANLUX DEFAULT LUXURY LEVEL =   3      p = 223
+ kVDhitsim: no efficiency file "eff.vd"
+ KVDSIMPAR: file "simpar.vd" from current directory
+ KVDSIMPAR: file "vdrnd_11000.v" is not found, tube noise is not simulated
+ KVDSIMPAR: file "vdthr_11000.v" is not found, using standard thresold values
+ sc 18 q 3
+ KTOFEVN_SIM: 1 SC, 2 PMT are dead
+ Reconstruction with KEVTRK_H7_1 version 24311299, Kcosmic 0 VD 3 tiltCor 0
+ EMCallowed 0 TOFallowed -2 IPalternative 2 kCosmInSigRuns 0 field  6.00000028
+ kdcemcvec: cos,sin  0.999963582 -0.00853455625 Shifts -0.841000021
+ -0.439999998 -0.939999998 Dx,yShiftDz  0.  0. Zfact  1. dR  0.
+ RM48 INITIALIZED:  54217137           0         0
+ murec: MU status loaded, run 23556
+ first calling kdcvd_trigger
+ KEDR_TRIGGER: LVL1 FORMULA IS NOT SPECIFIED
+ assume no LVL1 trigger conditions!
+ KEDR_TRIGGER: LVL2 FORMULA IS NOT SPECIFIED
+ assume no LVL2 trigger conditions!
+ seltanya daq  21 p1   1399.86644 p2   2202.54984phi1   57.6698282 phi2 
+  236.914679theta1   72.9198517 theta2   106.924092 Nh1  44 Nh2 47
+ seltanya daq  28 p1   1743.61597 p2   1736.39053phi1   67.23184 phi2 
+  246.729173theta1   133.445962 theta2   46.510371 Nh1  35 Nh2 44
+ seltanya daq  40 p1   325.520798 p2   1097.46955phi1   91.4978586 phi2 
+  224.983764theta1   66.5747971 theta2   89.9830634 Nh1  41 Nh2 48
+ private version of DRTEQ3
+ seltanya daq  43 p1   1271.6804 p2   2067.73405phi1   157.129455 phi2 
+  336.711842theta1   142.173641 theta2   37.6657602 Nh1  29 Nh2 32
+ seltanya daq  68 p1   1375.63167 p2   368.663198phi1   180.085246 phi2 
+  357.252008theta1   36.0117858 theta2   145.815077 Nh1  32 Nh2 28
+ seltanya daq  95 p1   1688.41501 p2   1189.95495phi1   96.6982398 phi2 
+  279.043392theta1   137.135827 theta2   39.9207112 Nh1  33 Nh2 38
+ seltanya daq  103 p1   2613.96373 p2   1390.14097phi1   45.8235272 phi2 
+  224.636752theta1   135.647762 theta2   45.0464609 Nh1  31 Nh2 40
+ seltanya daq  104 p1   1102.00549 p2   1192.67615phi1   235.437448 phi2 
+  56.0799297theta1   132.578797 theta2   34.8389634 Nh1  43 Nh2 20
+ seltanya daq  110 p1   1542.20276 p2   1658.24979phi1   23.3808208 phi2 
+  203.234402theta1   120.30165 theta2   59.1841381 Nh1  40 Nh2 47
+ seltanya daq  114 p1   1045.89993 p2   1491.8659phi1   128.32974 phi2 
+  307.476235theta1   80.6339552 theta2   99.5158208 Nh1  40 Nh2 49
+ seltanya daq  117 p1   244.361099 p2   1808.93661phi1   122.723615 phi2 
+  305.049706theta1   127.518908 theta2   56.2066072 Nh1  36 Nh2 44
+ seltanya daq  120 p1   1802.72112 p2   1119.20878phi1   210.791083 phi2 
+  41.1464671theta1   126.807045 theta2   22.904467 Nh1  45 Nh2 12
+ seltanya daq  121 p1   1732.35379 p2   1637.73033phi1   131.368677 phi2 
+  311.029071theta1   103.920653 theta2   75.4693008 Nh1  34 Nh2 45
+ seltanya daq  126 p1   1071.51131 p2   1724.12141phi1   113.505781 phi2 
+  294.117665theta1   138.409411 theta2   42.032336 Nh1  33 Nh2 42
+ seltanya daq  130 p1   1165.03386 p2   735.614203phi1   89.0627584 phi2 
+  117.750056theta1   39.4507478 theta2   151.596922 Nh1  28 Nh2 20
+ seltanya daq  137 p1   1663.28979 p2   1439.61083phi1   171.105145 phi2 
+  351.326622theta1   41.2953719 theta2   139.302645 Nh1  37 Nh2 40
+ seltanya daq  166 p1   1426.90497 p2   1288.23639phi1   59.8219916 phi2 
+  240.010951theta1   64.137553 theta2   113.46376 Nh1  40 Nh2 42
+ seltanya daq  167 p1   1579.43113 p2   1504.78225phi1   200.310709 phi2 
+  20.3696769theta1   36.257463 theta2   143.291342 Nh1  37 Nh2 25
+ seltanya daq  204 p1   1339.53117 p2   1463.1695phi1   304.245916 phi2 
+  123.13525theta1   144.293794 theta2   28.0130119 Nh1  28 Nh2 25
+ seltanya daq  221 p1   1513.89319 p2   1850.75106phi1   36.339619 phi2 
+  216.570682theta1   47.0492984 theta2   133.610575 Nh1  40 Nh2 40
+ seltanya daq  222 p1   1387.63254 p2   1510.68264phi1   151.625782 phi2 
+  331.56408theta1   51.9823369 theta2   127.497647 Nh1  40 Nh2 40
+ seltanya daq  226 p1   1167.64937 p2   1395.31721phi1   128.750677 phi2 
+  309.647731theta1   44.6928395 theta2   139.677852 Nh1  36 Nh2 31
+ seltanya daq  229 p1   974.183722 p2   1496.0031phi1   309.298004 phi2 
+  131.014571theta1   133.091784 theta2   33.2774751 Nh1  42 Nh2 25
+ seltanya daq  237 p1   1347.88158 p2   1592.49225phi1   116.214449 phi2 
+  296.388111theta1   102.205338 theta2   77.1330939 Nh1  39 Nh2 41
+ seltanya daq  238 p1   1689.16394 p2   1800.53166phi1   102.525703 phi2 
+  283.259324theta1   39.9541477 theta2   139.824622 Nh1  34 Nh2 38
+ seltanya daq  249 p1   1173.41974 p2   1705.57092phi1   98.5959782 phi2 
+  279.298766theta1   136.759081 theta2   41.0541258 Nh1  34 Nh2 47
+ seltanya daq  255 p1   1179.36199 p2   1466.52087phi1   74.0727525 phi2 
+  253.941088theta1   55.0403002 theta2   138.358954 Nh1  36 Nh2 41
+ seltanya daq  262 p1   1462.88708 p2   1734.29877phi1   116.767735 phi2 
+  296.951433theta1   109.383429 theta2   71.1490187 Nh1  43 Nh2 43
+ seltanya daq  279 p1   1501.50648 p2   1586.87109phi1   9.00793729 phi2 
+  188.979082theta1   135.946392 theta2   43.7086468 Nh1  39 Nh2 38
+ seltanya daq  291 p1   1497.49251 p2   1754.49736phi1   91.1180847 phi2 
+  271.280837theta1   60.3496475 theta2   119.771865 Nh1  42 Nh2 44
+ seltanya daq  294 p1   1640.24599 p2   1277.67886phi1   23.6547094 phi2 
+  203.142781theta1   141.348777 theta2   38.522914 Nh1  36 Nh2 31
+ seltanya daq  303 p1   2227.26711 p2   1796.72729phi1   90.3172257 phi2 
+  271.424346theta1   39.4215479 theta2   141.011215 Nh1  29 Nh2 29
+ seltanya daq  325 p1   1125.52868 p2   2370.95622phi1   291.682655 phi2 
+  95.7241385theta1   41.0518582 theta2   163.075784 Nh1  38 Nh2 12
+ seltanya daq  346 p1   1193.27566 p2   1503.31994phi1   181.073358 phi2 
+  1.39426959theta1   110.933452 theta2   69.4476626 Nh1  41 Nh2 39
+ seltanya daq  362 p1   1720.15273 p2   1595.47374phi1   57.6278362 phi2 
+  237.834804theta1   49.498201 theta2   131.190086 Nh1  40 Nh2 43
+ seltanya daq  369 p1   1438.48314 p2   1125.1241phi1   338.401411 phi2 
+  158.627418theta1   141.09424 theta2   28.047659 Nh1  34 Nh2 20
+ seltanya daq  377 p1   1341.98815 p2   1561.74938phi1   62.3331557 phi2 
+  242.591479theta1   77.1665517 theta2   102.679346 Nh1  38 Nh2 43
+ seltanya daq  431 p1   1306.35229 p2   1812.79456phi1   154.657755 phi2 
+  334.59773theta1   72.1819705 theta2   108.209376 Nh1  39 Nh2 40
+ seltanya daq  432 p1   1729.53307 p2   1457.37921phi1   60.5481621 phi2 
+  241.223075theta1   119.580119 theta2   59.9082623 Nh1  36 Nh2 41
+ seltanya daq  435 p1   1501.90178 p2   1498.12108phi1   79.7303989 phi2 
+  259.51287theta1   51.874884 theta2   128.332317 Nh1  39 Nh2 45
+ seltanya daq  448 p1   1618.20615 p2   409.63044phi1   155.099414 phi2 
+  334.475493theta1   59.0695725 theta2   125.196109 Nh1  38 Nh2 39
+ seltanya daq  450 p1   1527.04414 p2   1542.59034phi1   306.701587 phi2 
+  126.444613theta1   38.7125 theta2   140.577392 Nh1  43 Nh2 29
+ seltanya daq  460 p1   1547.2873 p2   1160.3885phi1   210.068626 phi2 
+  30.6651641theta1   142.215981 theta2   36.9210876 Nh1  35 Nh2 28
+ seltanya daq  499 p1   1269.98071 p2   1363.31866phi1   52.2605153 phi2 
+  226.804625theta1   93.050958 theta2   83.5168746 Nh1  39 Nh2 47
+ seltanya daq  504 p1   1121.3431 p2   1658.55042phi1   155.912303 phi2 
+  336.264334theta1   129.523776 theta2   50.5426327 Nh1  40 Nh2 45
+ seltanya daq  517 p1   1902.10611 p2   1722.752phi1   104.783071 phi2 
+  285.26866theta1   38.3325264 theta2   141.657325 Nh1  32 Nh2 32
+ Run 23556 Time  0.100833334 mins, Rate  86.4462814 Hz, 523 events 0 skipped 0
+  Lost
+ 33 16 4 2 m.h. event candidates
+ 40 38 38 38 e+e- event candidates 0 0 with errors
+ 0 events written
+ 40 events selected
+ lm  5.42  4.55 nb,    0.0    0.0    0.0 in total, by DB    5.4
+ Histograms are saved in "ee_sim2_a23556-23556.rz"
+ Overall time  0.100999996 mins
+ NO LVL1 CHECK!
+Птн Фев 26 14:49:17 NOVT 2021

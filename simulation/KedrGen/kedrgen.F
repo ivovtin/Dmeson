@@ -140,7 +140,7 @@ c      Real *4 Wtot,Wmin,dWtot,x,phi,theta         ! for gen 60
       integer rcndt
       save /rcordt/
       external frand
-      double precision rcfen,rcfth,rcffi
+      Real *4 rcfen,rcfth,rcffi
 
       Real *4 PLAB(3),UB(20),PSTO(4),PPMIN,PPMAX,SECGG102
       Real *4 amass_mu,charge_mu,tlife_mu,PLBX
@@ -696,7 +696,8 @@ c
         IF(IGENPAR(3).EQ.1.or.IGENPAR(3).ge.3)
      +		CALL PHOINI      ! initialization of PHOTOS
         if(IGENPAR(3).ge.2)      ! initialize RadCor
-     +		call rcini(rccs0,rcben,'/home/ovtin/development/Dmeson/simulation/KedrGen/rccs.dat',rcndt,1000,20,30)
+c     +		call rcini(rccs0,rcben,'/home/ovtin/development/Dmeson/simulation/KedrGen/rccs.dat',rcndt,1000,20,30)
+     +		call rcini(rccs0,rcben,'rccs.dat',rcndt,1000,20,30)
         print *,'Photon CS variation=',GENPAR(5)
       endif
 
@@ -739,6 +740,7 @@ c     Call RadCor to simulate ISR
          endif
          Wtot = Wtot - rcfen/1000.  ! Now only simulate energy loss
 c         print *,'RadCor: photon energy=',rcfen
+c         print *,'RadCor: rcndt=',rcndt
       endif
 c
       Wmin=PMAS(LUCOMP(kf),1)+PMAS(LUCOMP(-kf),1)

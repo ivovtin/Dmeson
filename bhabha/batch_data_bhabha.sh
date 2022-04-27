@@ -34,21 +34,20 @@
 ##$ -M ovtin.ivan@gmail.com
 
 ##$ -t 1-482
-#$ -t 1-693
-##$ -t 1-1
+##$ -t 1-693
+#$ -t 401-693
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]
 
 ##inruns=23219
 #Signal
-##inruns="/spool/users/ovtin/cosmruns/apr16cosmruns_1"
 ##inruns=23621
 ##outfile="/spool/users/ovtin/psi3770_to_cosmic_"$i".root"
 inruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/runDmeson"$i
-outfile="/spool/users/ovtin/outDmeson/bhabha/data/psi3770_to_bhabha_"$i".root"
+outfile="/store/users/ovtin/outDmeson/bhabha/data/psi3770_to_bhabha_"$i".root"
 ##inruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/runDmeson"$i
-##outfile="/spool/users/ovtin/outDmeson/bhabha/data2004_new/psi3770_to_bhabha_"$i".root"
+##outfile="/tore/users/ovtin/outDmeson/bhabha/data2004_new/psi3770_to_bhabha_"$i".root"
 mintracks=2
 maxtracks=2
 minbeamtracks=0

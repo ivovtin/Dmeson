@@ -17,7 +17,7 @@ string progname;
 
 int Usage(string status)
 {
-	cout<<"Usage: "<<progname<<"\t"<<"Data (0 - 2016-17, 1 - 2004) or MC (2)  Verbose (0 or 1)"<<endl;
+	cout<<"Usage: "<<progname<<"\t"<<"Data (0 - 2016-17) or MC (1)  Verbose (0 or 1)"<<endl;
         exit(0);
 }
 
@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
 	//2016-17
 	rrCut=6.0;
 	zCut=15.;
-	max_chi2=1000.;
+	max_chi2=50.;
 	min_nhits=23.;
         max_nhits=100.;
     }
@@ -63,7 +63,7 @@ int main(int argc, char* argv[])
 	//2016-17  - sim
 	rrCut=6.0;
 	zCut=15.;
-	max_chi2=1000.;
+	max_chi2=50.;
 	min_nhits=23.;
         max_nhits=100.;
 	epCut1=0.0;
@@ -86,8 +86,13 @@ int main(int argc, char* argv[])
     }
     else if (key==1)        //sig
     {
-	fnameout=TString::Format("sim_cosmic_sig_%d.root",key).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/Cosmic/simulation/";
+        //TString pref_out = "S1.0_A6.0_Z0.0";
+        //TString pref_out = "S1.0_A7.2_Z0.2";
+        //TString pref_out = "S1.0_A4.8_Z0.0";
+        //TString pref_out = "S1.0_A6.9_Z0.0";
+        TString pref_out = "S1.0_A5.1_Z0.0";
+	fnameout= "sim_cosmic_sig_method2_" + pref_out + ".root";
+        KEDR = "/home/ovtin/public_html/outDmeson/Cosmic/simulation_method2_" + pref_out + "/";
     }
 
     gSystem->Exec("mkdir " + KEDR);
@@ -107,7 +112,7 @@ int main(int argc, char* argv[])
     TH1F* hncomb=new TH1F("ncomb","ncomb",150,-0.5,149.5);
 
     TH1F *hRun;
-    if( key!=1 )
+    if( key!=4 )
     {
 	hRun = new TH1F("Run","Run", 1000, 23206., 26248.);
     }
@@ -229,15 +234,16 @@ int main(int argc, char* argv[])
 
 	if(
            //=======================================
-           cosmic.nhitst1>min_nhits && cosmic.nhitst2>min_nhits &&
-           1.<cosmic.thetat1/180.*PI<2.14 && 1.<cosmic.thetat2/180.*PI<2.14
+	   cosmic.nhitst1>min_nhits && cosmic.nhitst2>min_nhits
+	   && 1.<cosmic.thetat1/180.*PI<2.14 && 1.<cosmic.thetat2/180.*PI<2.14
+           && cosmic.chi2t1<max_chi2 && cosmic.chi2t2<max_chi2
            //&& cosmic.theta2t>=165
            //&& cosmic.phi2t>=165
            && cosmic.rr1<rrCut && cosmic.rr2<rrCut
            && fabs(cosmic.zip1)<zCut && fabs(cosmic.zip2)<zCut
            && cosmic.pt1>50 && cosmic.pt2>50
-           //&& cosmic.pt1<2000 && cosmic.pt2<2000
-           && (cosmic.mulayerhits2+cosmic.mulayerhits3)>=min_munhits
+	   && (cosmic.mulayerhits2+cosmic.mulayerhits3)>=min_munhits
+           //&& cosmic.Run<24500
            //=======================================
           )
 	{
