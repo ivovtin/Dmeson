@@ -371,9 +371,16 @@ double pcorr(double p, int type) {
 	ms = 149.484;
 	dedx = 1.30782;
 	k = 0.;
+
 	/*
 	ms = 149.484 - 7.2881;
 	dedx = 1.30782 - 0.12893;
+	k = 0.;
+	*/
+        /*
+	//rnd Gauss
+	ms = 146.546;
+	dedx = 1.40913;
 	k = 0.;
         */
     }
@@ -383,9 +390,16 @@ double pcorr(double p, int type) {
 	ms = 502.997;
 	dedx = 1.28546;
 	k = 0.;
-        /*
+
+	/*
 	ms = 502.997 - 64.3663;
 	dedx = 1.28546 - 0.432916;
+	k = 0.;
+        */
+	/*
+	//rnd Gauss
+	ms = 407.857;
+	dedx = 1.06629;
 	k = 0.;
         */
     }
@@ -1290,8 +1304,8 @@ int main(int argc, char* argv[])
 
         kdcswitches_.kNoiseReject=3;      //Cut for DC noise  (0 - not cut, 1 - standart, 2 - soft, 3 - hard)
 	//kdcswitches_.kEmcPatch=1;
-	kdcswitches_.KemcAllowed=0;         //On use strips
-	//kdcswitches_.KemcAllowed=-1;      //off use strips for track reconstruction
+	//kdcswitches_.KemcAllowed=0;         //On use strips                                 - 2016
+	kdcswitches_.KemcAllowed=-1;      //off use strips for track reconstruction
 	//kdcpar1_.DeleteTracksGhost=0;
         //kdcswitches_.kVDRtAlt=1;
 

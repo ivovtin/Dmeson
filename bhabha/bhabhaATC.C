@@ -5,10 +5,12 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include "TGraph.h"
-#include "TGraphErrors.h"
+#include <TMultiGraph.h>
+#include <TGraphErrors.h>
 
-#include "cosmic.h"
+#include "KDB/kdb.h"
+
+#include "bhabhaATC.h"
 
 #define PI 3.14159265358979
 
@@ -17,8 +19,19 @@ string progname;
 
 int Usage(string status)
 {
-	cout<<"Usage: "<<progname<<"\t"<<"Data (0 - 2016-17) or MC (1)  Verbose (0 or 1)"<<endl;
+	cout<<"Usage: "<<progname<<"\t"<<"Data (0 - 20022) Verbose (0 or 1)"<<endl;
         exit(0);
+}
+
+inline char* timestamp(time_t t)
+{
+    static const char* time_fmt="%m %d %Y %H %M %S";
+    static char strtime[50];
+
+    struct tm* brtm=localtime(&t);
+    strftime(strtime,50,time_fmt,brtm);
+
+    return strtime;
 }
 
 int main(int argc, char* argv[])
@@ -30,7 +43,7 @@ int main(int argc, char* argv[])
     {
 	key=atoi(argv[1]);
 	if(argv[2]!=0) verbose=atoi(argv[2]);
-	if( key>4 ){ Usage(progname); return 0;}
+	if( key>1 ){ Usage(progname); return 0;}
 	if( key<0 ){ Usage(progname); return 0;}
     }
     else
@@ -42,50 +55,28 @@ int main(int argc, char* argv[])
     float rrCut,zCut,max_chi2,min_nhits,max_nhits;
 
     int ntrk=2;
-    int min_munhits=1;
+    int max_munhits=0;
     float min_p=500.; //MeV
     float max_p=3000.; //MeV
     float eclsCut=500.;
+    float epCut1=0.0;
+    float epCut2=10.0;
+    float theta2tCut=174;
+    float phi2tCut=165;
 
-    rrCut=6.0;
-    zCut=15.;
+    rrCut=0.5;
+    zCut=13.;
     max_chi2=50.;
-    min_nhits=23.;
-    max_nhits=100.;
+    min_nhits=24.;
+    //max_nhits=100.;
 
     //*****************************************
 
     TFile *fout=0;
-    TString fnameout;
-    TString KEDR;
+    TString fnameout=TString::Format("exp_bhabhaATC_data_%d.root",key).Data();
+    TString KEDR = "/home/ovtin/public_html/outDmeson/BhaBha/data2022/";
     TString fout_result;
     TString list_badruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/badruns";
-    if( key==0 ){           //exp 2016-17
-	fnameout=TString::Format("exp_cosmic_data_%d.root",key).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/Cosmic/data/";
-	list_badruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/badruns";
-    }
-    else if (key==1)        //sig
-    {
-        //TString pref_out = "S1.0_A6.0_Z0.0";
-        //TString pref_out = "S1.0_A7.2_Z0.2";
-        //TString pref_out = "S1.0_A4.8_Z0.0";
-        //TString pref_out = "S1.0_A6.9_Z0.0";
-        TString pref_out = "S1.0_A5.1_Z0.0";
-	fnameout= "sim_cosmic_sig_method2_" + pref_out + ".root";
-        KEDR = "/home/ovtin/public_html/outDmeson/Cosmic/simulation_method2_" + pref_out + "/";
-    }
-    else if( key==2 ){     //2004
-	fnameout=TString::Format("exp_cosmic_data_2004_%d.root",key).Data();
-        KEDR = "/home/ovtin/public_html/outDmeson/Cosmic/data2004/";
-    }
-    else if (key==3)       //MC 2004
-    {
-        //TString pref_out = "S1.0_A4.0_Z0.0";
-        TString pref_out = "S1.0_A4.5_Z0.0";
-	fnameout= "sim_cosmic_sig_method2_2004_" + pref_out + ".root";
-        KEDR = "/home/ovtin/public_html/outDmeson/Cosmic/simulation_method2_2004_" + pref_out + "/";
-    }
 
     gSystem->Exec("mkdir " + KEDR);
     gSystem->Exec("cp /store/users/ovtin/outDmeson/demo/index.php " + KEDR);
@@ -101,21 +92,47 @@ int main(int argc, char* argv[])
     setbranchstatus();
     setbranchaddress();
 
+    time_t runTime_begin; //start time of the current run
+    time_t runTime_end; //end time of the current run
+
+    time_t runTime1;
+    time_t runTime2;
+
+    Int_t startRun = 30925;
+    Int_t endRun = 31190;
+
+    KDBconn* connection=kdb_open();
+    if( !connection ) {
+	cerr<<"Can not establish connection to database"<<endl;
+	return 1;
+    }
+
+    runTime1=kdb_run_get_begin_time(connection, startRun);
+    runTime2=kdb_run_get_end_time(connection, endRun);
+
+    kdb_close(connection);
+
+    char name0[161];
+    char name1[161];
+    TProfile* pr[160];
+    TProfile* pr1[160];
+    for (int j=0; j<160; j++)
+    {
+	sprintf(name0,"Cnt%d",j);
+	sprintf(name1,"Run_Cnt%d",j);
+
+	pr1[j]=new TProfile(name1,name1,endRun-startRun,startRun,endRun,0,100);
+
+	pr[j]=new TProfile(name0,name0,1000,runTime1,runTime2,0,100);
+    }
+
     TH1F* hncomb=new TH1F("ncomb","ncomb",150,-0.5,149.5);
 
-    TH1F *hRun;
-    if( key!=2 && key!=3 )
-    {
-	hRun = new TH1F("Run","Run", 1000, 23206., 26248.);
-    }
-    else
-    {
-	hRun = new TH1F("Run","Run", 500, 4100., 4709.);
-    }
+    TH1F *hRun = new TH1F("Run","Run", 1000, startRun, endRun);
 
     TH1F* hEbeam=new TH1F("Ebeam","Ebeam",100,1880.,1895.);
 
-    TH1F* hrr=new TH1F("rr","rr",50,0.,6.);
+    TH1F* hrr=new TH1F("rr","rr",50,0.,3.);
     TH1F* hZip=new TH1F("zip","zip",100,-50.,50.);
     TH1F* hvrtntrk=new TH1F("vrt.ntrk","vrt.ntrk",15,-0.5,14.5);
     TH1F* hvrtnip=new TH1F("vrt.nip","vrt.nip",12,-0.5,11.5);
@@ -174,20 +191,6 @@ int main(int argc, char* argv[])
 
     TH1F* hpres=new TH1F("hpres","momres",100,-1.0,1.0);
 
-    TH1F* hprescosm[20];
-    TH1F* hthetadifcosm[20];
-    TH1F* hphidifcosm[20];
-    char name0[20];
-    char name1[20];
-    for (int j=0; j<=19; j++)
-    {
-	sprintf(name0,"hpres",j);
-	sprintf(name1,"momres",j);
-	hprescosm[j] = new TH1F(name0,name0,100,-1.0,1.0);
-	hthetadifcosm[j] = new TH1F("htheta","#Delta #theta",100,-10.,10.);
-        hphidifcosm[j] = new TH1F("hphi","#Delta #phi",100,-5.,5.);
-    }
-
     std::vector<int> badruns;
     string line;
     int run=0;
@@ -202,76 +205,84 @@ int main(int argc, char* argv[])
     }
     in.close();
 
-    int runprev=0;
     float pres,pp,pm,tp,tm,phim,phip;
-    float prescosm[20];
-    double pcosm[20];
+
+    int runprev=0;
+    int NumRun=0;
 
     //event loop
     for(int k=0; k<nentr; k++)
     {
-	tt->GetEntry(k);
+	if(k>0) { tt->GetEntry(k-1); runprev=bhabha.Run; }
 
-	if ( *std::find(badruns.begin(), badruns.end(), cosmic.Run) ) continue;        //skip bad runs
+	tt->GetEntry(k);
 
 	if( (k %100000)==0 )cout<<k<<endl;
 
-	if(k>0)
-	{
-	    tt->GetEntry(k-1);
-	    runprev=cosmic.Run;
-	}
+        ////////////////////////////////////////////////////////////////////////////////////////////////
+	if( k==0 || runprev!=bhabha.Run ){
+	    KDBconn* connection=kdb_open();
+	    if( !connection ) {
+		cerr<<"Can not establish connection to database"<<endl;
+		return 1;
+	    }
 
-	tt->GetEntry(k);
+	    runTime_begin=kdb_run_get_begin_time(connection, bhabha.Run);
+	    runTime_end=kdb_run_get_end_time(connection, bhabha.Run);
+
+	    if ( verbose==1 )
+	    {
+		cout<<"\n========================================================================="<<endl;
+		cout<<"Check database...."<<endl;
+		cout<<"Begin time of Run"<< bhabha.Run<<": "<<runTime_begin<<endl;
+		cout<<"Begin time of Run"<< bhabha.Run<<": "<<timestamp(runTime_begin)<<endl;
+		cout<<"End time of Run"<< bhabha.Run<<": "<<timestamp(runTime_end)<<endl;
+	    }
+	    kdb_close(connection);
+
+	    NumRun++;
+	    cout<<"NumRun="<<NumRun<<endl;
+	}
+        ///////////////////////////////////////////////////////////////////////////////////////////////
 
 	if(
-           //=======================================
-	   cosmic.nhitst1>min_nhits && cosmic.nhitst2>min_nhits
-	   && 1.<cosmic.thetat1/180.*PI<2.14 && 1.<cosmic.thetat2/180.*PI<2.14
-           && cosmic.chi2t1<max_chi2 && cosmic.chi2t2<max_chi2
-           //&& cosmic.theta2t>=165
-           //&& cosmic.phi2t>=165
-           && cosmic.rr1<rrCut && cosmic.rr2<rrCut
-           && fabs(cosmic.zip1)<zCut && fabs(cosmic.zip2)<zCut
-           && cosmic.pt1>50 && cosmic.pt2>50
-	   && (cosmic.mulayerhits2+cosmic.mulayerhits3)>=min_munhits
-           //&& cosmic.Run<24500
-           //=======================================
+	   bhabha.ncls>=2
+           && (bhabha.thetat1>40 && bhabha.thetat1<140 ) && (bhabha.thetat2>40 && bhabha.thetat2<140)
+           && bhabha.ecls1>700 && bhabha.ecls2>700
+           && bhabha.enn<0.1*bhabha.emcenergy
+           && bhabha.theta2t>=165
+           && bhabha.phi2t>=165
+           && bhabha.rr1<rrCut && bhabha.rr2<rrCut
+           && fabs(bhabha.zip1)<zCut && fabs(bhabha.zip2)<zCut
+           && bhabha.pt1>50 && bhabha.pt2>50
+           && bhabha.vrtnip>=2
+           && (bhabha.mulayerhits2+bhabha.mulayerhits3)<=max_munhits
           )
 	{
-	    if( cosmic.charge1==1 )
+	    if( bhabha.charge1==1 )
 	    {
-		pp=cosmic.p1;
-		pm=cosmic.p2;
-		tp=cosmic.thetat1/180.*PI;
-		tm=cosmic.thetat2/180.*PI;
-		phip=cosmic.phit1/180.*PI;
-                phim=cosmic.phit2/180.*PI;
+		pp=bhabha.p1;
+		pm=bhabha.p2;
+		tp=bhabha.thetat1/180.*PI;
+		tm=bhabha.thetat2/180.*PI;
+		phip=bhabha.phit1/180.*PI;
+                phim=bhabha.phit2/180.*PI;
 	    }
 	    else
 	    {
-		pp=cosmic.p2;
-		pm=cosmic.p1;
-		tp=cosmic.thetat2/180.*PI;
-		tm=cosmic.thetat1/180.*PI;
-		phip=cosmic.phit2/180.*PI;
-                phim=cosmic.phit1/180.*PI;
+		pp=bhabha.p2;
+		pm=bhabha.p1;
+		tp=bhabha.thetat2/180.*PI;
+		tm=bhabha.thetat1/180.*PI;
+		phip=bhabha.phit2/180.*PI;
+                phim=bhabha.phit1/180.*PI;
 	    }
 
 	    if ( verbose==1 )
 	    {
                 cout<<"<<<<<<<<<<<<<<<<<<<<  Next event  >>>>>>>>>>>>>>>>>>"<<endl;
-                cout<<"Run="<<cosmic.Run<<"\t"<<"Event="<<cosmic.rEv<<endl;
-		cout<<"p1="<<cosmic.p1<<"\t"<<"p2="<<cosmic.p2<<endl;
-                /*
-		cout<<"e1/p1="<<cosmic.e1/cosmic.p1<<"\t"<<"e2/p2="<<cosmic.e2/cosmic.p2<<endl;
-		cout<<"(e1+e2)="<<cosmic.e1+cosmic.e2<<endl;
-		cout<<"rr1="<<cosmic.rr1<<"\t"<<"rr2="<<cosmic.rr2<<"\t"<<endl;
-		cout<<"zip1="<<cosmic.zip1<<"\t"<<"zip2="<<cosmic.zip2<<"\t"<<endl;
-		cout<<"fabs(fabs(cosmic.zip1)-fabs(cosmic.zip2))="<<fabs(fabs(cosmic.zip1)-fabs(cosmic.zip2))<<endl;
-		cout<<"cosmic.thetat1="<<cosmic.thetat1<<"\t"<<"cosmic.thetat2="<<cosmic.thetat2<<endl;
-		cout<<"fabs(cosmic.thetat1-cosmic.thetat2)="<<fabs(cosmic.thetat1-cosmic.thetat2)<<endl;
-                */
+                cout<<"Run="<<bhabha.Run<<"\t"<<"Event="<<bhabha.rEv<<endl;
+		cout<<"p1="<<bhabha.p1<<"\t"<<"p2="<<bhabha.p2<<endl;
 	    }
 
 	    pres = (pm*sin(tm)-pp*sin(tp))/(sqrt(2.)*(pm*sin(tm)+pp*sin(tp))/2.);
@@ -280,114 +291,120 @@ int main(int argc, char* argv[])
             //cout<<tm*180./PI<<"\t"<<tp*180./PI<<"\t"<<tm+tp-PI<<"\t"<<(tm+tp-PI)*180./PI<<endl;
 	    hthetadif->Fill((tm+tp-PI)*180./PI);
             //hphidif->Fill((fabs(phim-phip)-PI)*180./PI);
-	    hphidif->Fill( TMath::Max(cosmic.phit1,cosmic.phit2)-TMath::Min(cosmic.phit1,cosmic.phit2)-180. );
+	    hphidif->Fill( TMath::Max(bhabha.phit1,bhabha.phit2)-TMath::Min(bhabha.phit1,bhabha.phit2)-180. );
 
+	    hncomb->Fill(bhabha.ncomb);
 
-	    for(int k=0; k<=19; k++ )
+	    hEbeam->Fill(bhabha.Ebeam);
+	    hRun->Fill(bhabha.Run);
+
+	    hrr->Fill(bhabha.rr1);
+	    hrr->Fill(bhabha.rr2);
+	    hZip->Fill(bhabha.zip1);
+	    hZip->Fill(bhabha.zip2);
+
+	    hvrtntrk->Fill(bhabha.vrtntrk);
+	    hvrtnip->Fill(bhabha.vrtnip);
+	    hvrtnbeam->Fill(bhabha.vrtnbeam);
+
+	    htnhits->Fill(bhabha.nhitst1);
+	    htnhits->Fill(bhabha.nhitst2);
+
+	    htnhitsvd->Fill(bhabha.nhitsvdt1);
+	    htnhitsvd->Fill(bhabha.nhitsvdt2);
+
+	    htnhitsxy->Fill(bhabha.nhitsxyt1);
+	    htnhitsxy->Fill(bhabha.nhitsxyt2);
+
+	    htnhitsz->Fill(bhabha.nhitszt1);
+	    htnhitsz->Fill(bhabha.nhitszt2);
+
+	    hmomt->Fill(bhabha.pt1);
+	    hmomt->Fill(bhabha.pt2);
+	    hmom->Fill(bhabha.p1);
+	    hmom->Fill(bhabha.p2);
+
+	    htchi2->Fill(bhabha.chi2t1);
+	    htchi2->Fill(bhabha.chi2t2);
+
+	    htheta->Fill(bhabha.thetat1);
+	    htheta->Fill(bhabha.thetat2);
+
+	    hphi->Fill(bhabha.phit1);
+	    hphi->Fill(bhabha.phit2);
+
+            htheta2t->Fill(bhabha.theta2t);
+            hphi2t->Fill(bhabha.phi2t);
+
+	    htnvec->Fill(bhabha.nvect1);
+	    htnvec->Fill(bhabha.nvect2);
+
+	    htnvecxy->Fill(bhabha.nvecxyt1);
+	    htnvecxy->Fill(bhabha.nvecxyt2);
+
+	    htnvecz->Fill(bhabha.nveczt1);
+	    htnvecz->Fill(bhabha.nveczt2);
+
+	    hnclst1->Fill(bhabha.ncls1);
+	    heclst1->Fill(bhabha.ecls1);
+	    htclst1->Fill(bhabha.tcls1);
+	    hpclst1->Fill(bhabha.pcls1);
+
+	    hnclst2->Fill(bhabha.ncls2);
+	    heclst2->Fill(bhabha.ecls2);
+	    htclst2->Fill(bhabha.tcls2);
+	    hpclst2->Fill(bhabha.pcls2);
+
+	    heclst12diff->Fill(bhabha.ecls1-bhabha.ecls2);
+
+	    hncls->Fill(bhabha.ncls);
+	    hnlkr->Fill(bhabha.nlkr);
+	    hncsi->Fill(bhabha.ncsi);
+	    henergy->Fill(bhabha.emcenergy);
+	    hlkrenergy->Fill(bhabha.lkrenergy);
+	    hcsienergy->Fill(bhabha.csienergy);
+
+	    hep->Fill(bhabha.e1/bhabha.p1);
+	    hep->Fill(bhabha.e2/bhabha.p2);
+
+	    henass->Fill(bhabha.e1);
+	    henass->Fill(bhabha.e2);
+
+	    hnumn->Fill(bhabha.numn);
+	    henn->Fill(bhabha.enn);
+	    hnumo->Fill(bhabha.numo);
+	    heno->Fill(bhabha.eno);
+
+	    hMUnhits->Fill(bhabha.munhits);
+	    hMUnhits1->Fill(bhabha.mulayerhits1);
+	    hMUnhits2->Fill(bhabha.mulayerhits2);
+	    hMUnhits3->Fill(bhabha.mulayerhits3);
+
+            htofc1->Fill(bhabha.tofc1);
+            httof1->Fill(bhabha.ttof1);
+            htofc2->Fill(bhabha.tofc2);
+	    httof2->Fill(bhabha.ttof2);
+
+	    ////////////////////////////////////////////////////////////////////
+
+	    for(int i=0; i<bhabha.natccrosst1; i++)
 	    {
-		if( (k*100 < (pp*sin(tp)+pm*sin(tm))/2) && ((pp*sin(tp)+pm*sin(tm))/2 < k*100+100) )
+		for( int j=0; j<160; j++) if( j==bhabha.atcCNTt1[i]-1 && bhabha.single_aerogel_REGION5t1[i]==1 && bhabha.wlshitt1[i]!=1 )
 		{
-		    prescosm[k] = (pm*sin(tm)-pp*sin(tp))/(sqrt(2.)*(pm*sin(tm)+pp*sin(tp))/2.);
-		    hprescosm[k]->Fill(prescosm[k]);
-                    //pcosm[k] = (pp*sin(tp)+pm*sin(tm))/2);
-                    pcosm[k] = k*100;
-
-		    hthetadifcosm[k]->Fill((tm+tp-PI)*180./PI);
-		    hphidifcosm[k]->Fill( TMath::Max(cosmic.phit1,cosmic.phit2)-TMath::Min(cosmic.phit1,cosmic.phit2)-180. );
+		    pr[j]->Fill(runTime_begin, bhabha.atcNpet1[i]);
+		    pr1[j]->Fill(bhabha.Run, bhabha.atcNpet1[i]);
+		}
+	    }
+	    for(int i=0; i<bhabha.natccrosst2; i++)
+	    {
+		for( int j=0; j<160; j++) if( j==bhabha.atcCNTt2[i]-1 && bhabha.single_aerogel_REGION5t2[i]==1 && bhabha.wlshitt2[i]!=1 )
+		{
+		    pr[j]->Fill(runTime_begin, bhabha.atcNpet2[i]);
+		    pr1[j]->Fill(bhabha.Run, bhabha.atcNpet2[i]);
 		}
 	    }
 
-	    hncomb->Fill(cosmic.ncomb);
-
-	    hEbeam->Fill(cosmic.Ebeam);
-	    hRun->Fill(cosmic.Run);
-
-	    hrr->Fill(cosmic.rr1);
-	    hrr->Fill(cosmic.rr2);
-	    hZip->Fill(cosmic.zip1);
-	    hZip->Fill(cosmic.zip2);
-
-	    hvrtntrk->Fill(cosmic.vrtntrk);
-	    hvrtnip->Fill(cosmic.vrtnip);
-	    hvrtnbeam->Fill(cosmic.vrtnbeam);
-
-	    htnhits->Fill(cosmic.nhitst1);
-	    htnhits->Fill(cosmic.nhitst2);
-
-	    htnhitsvd->Fill(cosmic.nhitsvdt1);
-	    htnhitsvd->Fill(cosmic.nhitsvdt2);
-
-	    htnhitsxy->Fill(cosmic.nhitsxyt1);
-	    htnhitsxy->Fill(cosmic.nhitsxyt2);
-
-	    htnhitsz->Fill(cosmic.nhitszt1);
-	    htnhitsz->Fill(cosmic.nhitszt2);
-
-	    hmomt->Fill(cosmic.pt1);
-	    hmomt->Fill(cosmic.pt2);
-	    hmom->Fill(cosmic.p1);
-	    hmom->Fill(cosmic.p2);
-
-	    htchi2->Fill(cosmic.chi2t1);
-	    htchi2->Fill(cosmic.chi2t2);
-
-	    htheta->Fill(cosmic.thetat1);
-	    htheta->Fill(cosmic.thetat2);
-
-	    hphi->Fill(cosmic.phit1);
-	    hphi->Fill(cosmic.phit2);
-
-            htheta2t->Fill(cosmic.theta2t);
-            hphi2t->Fill(cosmic.phi2t);
-
-	    htnvec->Fill(cosmic.nvect1);
-	    htnvec->Fill(cosmic.nvect2);
-
-	    htnvecxy->Fill(cosmic.nvecxyt1);
-	    htnvecxy->Fill(cosmic.nvecxyt2);
-
-	    htnvecz->Fill(cosmic.nveczt1);
-	    htnvecz->Fill(cosmic.nveczt2);
-
-	    hnclst1->Fill(cosmic.ncls1);
-	    heclst1->Fill(cosmic.ecls1);
-	    htclst1->Fill(cosmic.tcls1);
-	    hpclst1->Fill(cosmic.pcls1);
-
-	    hnclst2->Fill(cosmic.ncls2);
-	    heclst2->Fill(cosmic.ecls2);
-	    htclst2->Fill(cosmic.tcls2);
-	    hpclst2->Fill(cosmic.pcls2);
-
-	    heclst12diff->Fill(cosmic.ecls1-cosmic.ecls2);
-
-	    hncls->Fill(cosmic.ncls);
-	    hnlkr->Fill(cosmic.nlkr);
-	    hncsi->Fill(cosmic.ncsi);
-	    henergy->Fill(cosmic.emcenergy);
-	    hlkrenergy->Fill(cosmic.lkrenergy);
-	    hcsienergy->Fill(cosmic.csienergy);
-
-	    hep->Fill(cosmic.e1/cosmic.p1);
-	    hep->Fill(cosmic.e2/cosmic.p2);
-
-	    henass->Fill(cosmic.e1);
-	    henass->Fill(cosmic.e2);
-
-	    hnumn->Fill(cosmic.numn);
-	    henn->Fill(cosmic.enn);
-	    hnumo->Fill(cosmic.numo);
-	    heno->Fill(cosmic.eno);
-
-	    hMUnhits->Fill(cosmic.munhits);
-	    hMUnhits1->Fill(cosmic.mulayerhits1);
-	    hMUnhits2->Fill(cosmic.mulayerhits2);
-	    hMUnhits3->Fill(cosmic.mulayerhits3);
-
-            htofc1->Fill(cosmic.tofc1);
-            httof1->Fill(cosmic.ttof1);
-            htofc2->Fill(cosmic.tofc2);
-	    httof2->Fill(cosmic.ttof2);
+            ////////////////////////////////////////////////////////////////////
 
 	}
     }
@@ -542,126 +559,79 @@ int main(int argc, char* argv[])
     hpres->Draw();
     cc1->SaveAs(KEDR+"mom_res.png"); cc1->SaveAs(KEDR+"mom_res.eps");
 
-    //======================================================================
-    double pcosmres[20];
-    double err_pcosmres[20];
-    double thetadifcosmres[20];
-    double err_thetadifcosmres[20];
-    double phidifcosmres[20];
-    double err_phidifcosmres[20];
-    char namefit1[20];
-    char namefit2[20];
-    char namefit3[20];
-    TF1* f1[20];
-    TF1* f2[20];
-    TF1* f3[20];
-    for(int i=0; i<=19; i++)
+    gStyle->SetPalette(1);
+    gStyle->SetPadGridX(kTRUE);
+    gStyle->SetPadGridY(kTRUE);
+    gStyle->SetOptStat(11);
+    gStyle->SetOptFit(1011);
+
+    TCanvas c("c","c",1400,800);
+    c.cd();
+    char namefit[161];
+    TF1* myfit[161];
+    for(int i=0; i<160; i++)
     {
-	sprintf(namefit1,"myfit",i);
-	double bound1=-0.30;
-	double bound2=0.30;
-        /*
-	if( key==0 && i==15 )
-	{
-	    bound1=-0.20;
-	    bound2=0.20;
-	}
-	if( key==1 && i>=11 )
-	{
-	    bound1=-0.30;
-	    bound2=0.35;
-	}
-	if( key==1 && i==14 )
-	{
-	    bound1=-0.25;
-	    bound2=0.30;
-	}
-	if( key==1 && i>=15 )
-	{
-	    bound1=-0.35;
-	    bound2=0.40;
-	}
-        */
-        f1[i] = new TF1(namefit1,"gaus",bound1,bound2);
-        /*
-	f1[i] = new TF1(namefit1,"[2]*(exp(-pow((x-[0]),2)/2./pow([1],2))+[4]*exp(-pow((x-[0]),2)/2./pow([3],2)))");
-	f1[i]->SetParameter(0,0.004);
-	f1[i]->SetParameter(1,0.11);
-	f1[i]->SetParameter(2,0.06);
-	f1[i]->SetParameter(3,0.05);
-	f1[i]->SetParameter(4,0.8);
-        */
-	hprescosm[i]->Fit(namefit1,"","",bound1,bound2);
-        pcosmres[i]=f1[i]->GetParameter(2);
-	err_pcosmres[i]=f1[i]->GetParError(2);
-        /*
-	pcosmres[i]=abs(f1[i]->GetParameter(3));
-	err_pcosmres[i]=f1[i]->GetParError(3);
-	if( abs(f1[i]->GetParameter(1))<abs(f1[i]->GetParameter(3)) )
-	{
-	    pcosmres[i]=abs(f1[i]->GetParameter(1));
-	    err_pcosmres[i]=f1[i]->GetParError(1);
-	}
-        */
-	cout<<"i="<<i<<"\t"<<"pcosmres="<<pcosmres[i]<<"\t"<<"err_pcosmres="<<err_pcosmres[i]<<endl;
-	hprescosm[i]->Draw();
-	cc1->SaveAs(KEDR+TString::Format("cosmpres%d.png",i).Data());
-
-	sprintf(namefit2,"myfit2",i);
-        f2[i] = new TF1(namefit2,"gaus",-1.0,1.0);
-	hthetadifcosm[i]->Fit(namefit2);
-        thetadifcosmres[i]=f2[i]->GetParameter(2);
-	err_thetadifcosmres[i]=f2[i]->GetParError(2);
-	hthetadifcosm[i]->Draw();
-	cc1->SaveAs(KEDR+TString::Format("cosmthetadif%d.png",i).Data());
-
-	sprintf(namefit3,"myfit3",i);
-        f3[i] = new TF1(namefit3,"gaus",-0.7,0.7);
-	hphidifcosm[i]->Fit(namefit3);
-        phidifcosmres[i]=f3[i]->GetParameter(2);
-	err_phidifcosmres[i]=f3[i]->GetParError(2);
-	hphidifcosm[i]->Draw();
-	cc1->SaveAs(KEDR+TString::Format("cosmphidif%d.png",i).Data());
+       	sprintf(namefit,"myfit",i);
+        myfit[i] = new TF1(namefit,"[0]*exp(-(x-1400778000)/[1])+[2]",1400778000,1603714452);
+	myfit[i]->SetParLimits(0,0,10000);
+	myfit[i]->SetParLimits(1,500000,1e12);
+	myfit[i]->SetParLimits(2,0,10000);
+	myfit[i]->SetParNames("p0","#tau","Const. level");
+	myfit[i]->SetLineColor(kBlue);
+	gStyle->SetOptFit(kTRUE);
+	//pr[i]->Fit(namefit,"","",1400778000,1603714452);
+	pr[i]->SetMarkerStyle(20);
+	pr[i]->SetMarkerSize(0.5);
+	pr[i]->SetMarkerColor(1);
+	pr[i]->SetLineWidth(2);
+	pr[i]->SetLineColor(1);
+	pr[i]->GetXaxis()->SetTimeDisplay(1);
+	pr[i]->GetXaxis()->SetTimeFormat("%d/%m/%y%F1970-01-01 00:00:00");
+	pr[i]->GetXaxis()->SetTitleSize(0.05);
+	pr[i]->GetXaxis()->SetTitleOffset(1.0);
+	pr[i]->GetXaxis()->SetLabelSize(0.05);
+	pr[i]->GetXaxis()->SetNdivisions(510);
+	pr[i]->GetYaxis()->SetTitleSize(0.05);
+	pr[i]->GetYaxis()->SetTitleOffset(1.00);
+	pr[i]->GetYaxis()->SetLabelSize(0.05);
+	pr[i]->GetYaxis()->SetNdivisions(205);
+	pr[i]->GetYaxis()->SetDecimals();
+	pr[i]->GetXaxis()->SetTitle("Time(d/m/y)");
+	pr[i]->GetYaxis()->SetTitle("N_{ph.e.}");
+	pr[i]->SetTitle("");
+	pr[i]->Draw();
+	c.Update();
+	c.Print(KEDR + "/" + TString::Format("cnt_%d.png",i).Data());
     }
 
-    TGraphErrors* gr1=new TGraphErrors(20,pcosm,pcosmres,0,err_pcosmres);
-    //TGraphErrors* gr1=new TGraphErrors(14,pcosm,pcosmres,0,err_pcosmres);
-    gr1->SetMarkerStyle(20);
-    gr1->SetMarkerColor(4);
-    gr1->SetLineWidth(2);
-    gr1->SetLineColor(4);
-    gr1->GetXaxis()->SetTitle("P_{t} (MeV/c)");
-    gr1->GetYaxis()->SetTitle("#Delta p_{t}/p_{t}");
-    gr1->SetName("gr1");
-    gr1->Draw("ap");
-    cc1->SaveAs(KEDR+"cosmpres_p.png");
-    fout->WriteTObject(gr1);
+    TCanvas c1("c1","c1",1400,800);
+    c1.cd();
+    for(int i=0; i<160; i++)
+    {
+	pr1[i]->SetMarkerStyle(20);
+	pr1[i]->SetMarkerSize(0.5);
+	pr1[i]->SetMarkerColor(1);
+	pr1[i]->SetLineWidth(2);
+	pr1[i]->SetLineColor(1);
+	pr1[i]->GetXaxis()->SetTitleSize(0.05);
+	pr1[i]->GetXaxis()->SetTitleOffset(1.0);
+	pr1[i]->GetXaxis()->SetLabelSize(0.05);
+	pr1[i]->GetXaxis()->SetNdivisions(510);
+	pr1[i]->GetYaxis()->SetTitleSize(0.05);
+	pr1[i]->GetYaxis()->SetTitleOffset(1.00);
+	pr1[i]->GetYaxis()->SetLabelSize(0.05);
+	pr1[i]->GetYaxis()->SetNdivisions(205);
+	pr1[i]->GetYaxis()->SetDecimals();
+	pr1[i]->GetXaxis()->SetTitle("Run");
+	pr1[i]->GetYaxis()->SetTitle("N_{ph.e.}");
+	pr1[i]->SetTitle("");
+	pr1[i]->Draw();
+	c1.Update();
+	c1.Print(KEDR + "/" + TString::Format("runs_cnt_%d.png",i).Data());
+    }
 
-    TGraphErrors* gr2=new TGraphErrors(20,pcosm,thetadifcosmres,0,err_thetadifcosmres);
-    gr2->SetMarkerStyle(20);
-    gr2->SetMarkerColor(4);
-    gr2->SetLineWidth(2);
-    gr2->SetLineColor(4);
-    gr2->GetXaxis()->SetTitle("P_{t} (MeV/c)");
-    gr2->GetYaxis()->SetTitle("#Delta #theta");
-    gr2->SetName("gr2");
-    gr2->Draw("ap");
-    cc1->SaveAs(KEDR+"cosmthetadif_p.png");
-    fout->WriteTObject(gr2);
-
-    TGraphErrors* gr3=new TGraphErrors(20,pcosm,phidifcosmres,0,err_phidifcosmres);
-    gr3->SetMarkerStyle(20);
-    gr3->SetMarkerColor(4);
-    gr3->SetLineWidth(2);
-    gr3->SetLineColor(4);
-    gr3->GetXaxis()->SetTitle("P_{t} (MeV/c)");
-    gr3->GetYaxis()->SetTitle("#Delta #phi");
-    gr3->SetName("gr3");
-    gr3->Draw("ap");
-    cc1->SaveAs(KEDR+"cosmphidif_p.png");
-    fout->WriteTObject(gr3);
-
-    //======================================================================
     fout->Write();
     fout->Close();
+
+    cout<<"NumRun="<<NumRun<<endl;
 }

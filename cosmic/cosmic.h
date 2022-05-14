@@ -47,7 +47,6 @@ void chain(){
     if(key==0){
 	for(int i=1; i<=62; i++)   //signal 2016+2017
 	{
-	    //if( i!=50 && i!=51 && i!=52 ) tt->Add(TString::Format("/store/users/ovtin/outDmeson/cosmic/psi3770_to_cosmic_%d.root",i).Data());
 	    tt->Add(TString::Format("/store/users/ovtin/outDmeson/cosmic/psi3770_to_cosmic_%d.root",i).Data());
 	}
     }
@@ -100,6 +99,28 @@ void chain(){
 	    }
 	}
     }
+    else if(key==2){
+	for(int i=1; i<=23; i++)   //2004
+	{
+	    tt->Add(TString::Format("/store/users/ovtin/outDmeson/cosmic2004/psi3770_to_cosmic_%d.root",i).Data());
+	}
+    }
+    else if (key==3){              //MC 2004
+	for(int i=1; i<=143; i++)
+	{
+	    if(i<=119)
+	    {
+		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic2004/2method_corr_S1.0_A4.0_Z0.0/softcosm/psi3770_to_simCosmic_%d.root",i).Data());
+		tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic2004/2method_corr_S1.0_A4.5_Z0.0/softcosm/psi3770_to_simCosmic_%d.root",i).Data());
+	    }
+            else
+	    {
+		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic2004/2method_corr_S1.0_A4.0_Z0.0/psi3770_to_simCosmic_%d.root",i-119).Data());
+		tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/Cosmic2004/2method_corr_S1.0_A4.5_Z0.0/psi3770_to_simCosmic_%d.root",i-119).Data());
+	    }
+	}
+    }
+
 }
 
 void setbranchstatus(){

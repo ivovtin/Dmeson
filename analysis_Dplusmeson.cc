@@ -376,27 +376,55 @@ double pcorr(double p, int type) {
     double ms, dedx, k;
 
     if (type==1) {    //pion
-
+        /*
+        //2016
 	ms = 149.484;
 	dedx = 1.30782;
 	k = 0.;
+        */
         /*
 	ms = 149.484 - 7.2881;
 	dedx = 1.30782 - 0.12893;
 	k = 0.;
         */
+        /*
+        //rnd Gauss
+	ms = 146.546;
+	dedx = 1.40913;
+	k = 0.;
+	*/
+
+	//2004
+	ms = 174.418;
+	dedx = 0.975741;
+	k = 0;
+
     }
     else if(type==2)  //kaon
     {
-
+	/*
+        //2016
 	ms = 502.997;
 	dedx = 1.28546;
 	k = 0.;
-        /*
+        */
+	/*
 	ms = 502.997 - 64.3663;
 	dedx = 1.28546 - 0.432916;
 	k = 0.;
         */
+        /*
+        //rnd Gauss
+	ms = 407.857;
+	dedx = 1.06629;
+	k = 0.;
+	*/
+
+	//2004
+	ms = 856.05;
+	dedx = 0.3013;
+	k = 0;
+
     }
     else if(type==3)  //muon
     {
@@ -1174,8 +1202,8 @@ int main(int argc, char* argv[])
 	kf_install_signal_handler(1);
 
         kdcswitches_.kNoiseReject=3;   //Cut for DC noise  (0 - not cut, 1 - standart, 2 - soft, 3 - hard)
-        kdcswitches_.KemcAllowed=0;     //on use strips for track reconstruction
-	//kdcswitches_.KemcAllowed=-1;  //off use strips for track reconstruction
+        //kdcswitches_.KemcAllowed=0;     //on use strips for track reconstruction     //2016
+	kdcswitches_.KemcAllowed=-1;  //off use strips for track reconstruction    //2004
 
 	kf_MCCalibRunNumber(progpar.simOn,progpar.MCCalibRunNumber,progpar.MCCalibRunNumberL,progpar.NsimRate,progpar.Scale,progpar.Ascale,progpar.Zscale);
 

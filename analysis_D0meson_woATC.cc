@@ -216,9 +216,6 @@ static const char* DmesonBranchList="vrtntrk/I:vrtnip:vrtnbeam:nhitsdc:nhitst1:n
 static ProcInfo_t info;
 const float toMB = 1.f/1024.f;
 
-int idATC=0;
-int iddEdx=0;
-
 int dcand_t1;
 int dcand_t2;
 double ebeam;
@@ -367,25 +364,41 @@ double pcorr(double p, int type) {
     double ms, dedx, k;
 
     if (type==1) {    //pion
+        /*
+        //2016
 	ms = 149.484;
 	dedx = 1.30782;
 	k = 0.;
-	/*
-	ms = 149.484 - 7.2881;
-	dedx = 1.30782 - 0.12893;
-	k = 0.;
         */
+        /*
+	//poluektov
+	ms = 134.7;
+	dedx = 1.74;
+	k = 0;
+        */
+	//2004
+	ms = 174.418;
+	dedx = 0.975741;
+	k = 0;
     }
     else if(type==2)  //kaon
     {
+	/*
+        //2016
 	ms = 502.997;
 	dedx = 1.28546;
 	k = 0.;
-        /*
-	ms = 502.997 - 64.3663;
-	dedx = 1.28546 - 0.432916;
-	k = 0.;
+	*/
+	/*
+        //poluektov
+	ms = 228.;
+	dedx = 3.095;
+	k = 0;
         */
+        //2004
+	ms = 856.05;
+	dedx = 0.3013;
+	k = 0;
     }
     else if(type==3)  //muon
     {
@@ -422,20 +435,8 @@ void kine_fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t ifla
 
     double p1i;
     double p2i;
-    //if( idATC==1 || iddEdx==1 ){
-    if( idATC==1 ){
-	p1i = pcorr(tP(dcand_t1),1);
-	p2i = pcorr(tP(dcand_t2),2);
-    }
-    //if( idATC==2 || iddEdx==2 ){
-    if( idATC==2 ){
-	p1i = pcorr(tP(dcand_t1),2);
-	p2i = pcorr(tP(dcand_t2),1);
-    }
-    else{
-	p1i = (pcorr(tP(dcand_t1),1)+pcorr(tP(dcand_t1),2))/2.;
-	p2i = (pcorr(tP(dcand_t2),1)+pcorr(tP(dcand_t2),2))/2.;
-    }
+    p1i = (pcorr(tP(dcand_t1),1)+pcorr(tP(dcand_t1),2))/2.;
+    p2i = (pcorr(tP(dcand_t2),1)+pcorr(tP(dcand_t2),2))/2.;
 
     double sp1 = sqrt(ktrrec_h_.FitTrack[dcand_t1][fitSigCC]/
 		      pow(ktrrec_h_.FitTrack[dcand_t1][fitC],2)+
@@ -448,23 +449,13 @@ void kine_fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t ifla
 		      pow(tan(ktrrec_.TETRAK[dcand_t2]/180.*PI),2))*p2i;
 
     double de;
-    //if( idATC==1 || iddEdx==1 ){
-    if( idATC==1 ){
-        de = sqrt(mpi*mpi+pp1*pp1) + sqrt(mk*mk + pp2*pp2) - ebeam;
-    }
-    //if( idATC==2 || iddEdx==2 ){
-    if( idATC==2 ){
-        de = sqrt(mpi*mpi+pp2*pp2) + sqrt(mk*mk + pp1*pp1) - ebeam;
-    }
-    else{
-        de = (sqrt(mk*mk + pp1*pp1) + sqrt(mpi*mpi+pp1*pp1) +
-		 sqrt(mk*mk + pp2*pp2) + sqrt(mpi*mpi+pp2*pp2))/2. - ebeam;
-    }
+    de = (sqrt(mk*mk + pp1*pp1) + sqrt(mpi*mpi+pp1*pp1) +
+	  sqrt(mk*mk + pp2*pp2) + sqrt(mpi*mpi+pp2*pp2))/2. - ebeam;
 
     //double chi2 = pow((pp1-p1i)/sp1,2) + pow((pp2-p2i)/sp2,2) + pow(de/0.1,2);
     double chi2 = pow((pp1-p1i)/sp1,2) + pow((pp2-p2i)/sp2,2) + pow(de,2);
 
-    if (progpar.verbose>=2) cout<<"idATC="<<idATC<<"\t"<<"p1i="<<p1i<<"\t"<<"p2i="<<p2i<<"\t"<<"pp1="<<pp1<<"\t"<<"pp2="<<pp2<<"\t"<<"de="<<de<<"\t"<<"sp1="<<sp1<<"\t"<<"sp2="<<sp2<<"\t"<<"chi2="<<chi2<<endl;
+    if (progpar.verbose>=2) cout<<"p1i="<<p1i<<"\t"<<"p2i="<<p2i<<"\t"<<"pp1="<<pp1<<"\t"<<"pp2="<<pp2<<"\t"<<"de="<<de<<"\t"<<"sp1="<<sp1<<"\t"<<"sp2="<<sp2<<"\t"<<"chi2="<<chi2<<endl;
 
     f = chi2;
 }
@@ -525,22 +516,8 @@ void kine_fit(int ip1, int ip2, double* mbc, double* de, double* dp, double* pre
 
     double p1i;
     double p2i;
-    //if( (idATC==1 && pcorr(tP(dcand_t1),1)>600. && pcorr(tP(dcand_t1),1)<1500. && pcorr(tP(dcand_t2),2)>600. && pcorr(tP(dcand_t2),2)<1500.) || (iddEdx==1 && pcorr(tP(dcand_t1),1)<600. && pcorr(tP(dcand_t2),2)<600.) ){
-    if( (idATC==1 && pcorr(tP(dcand_t1),1)>450. && pcorr(tP(dcand_t1),1)<1500. && pcorr(tP(dcand_t2),2)>450. && pcorr(tP(dcand_t2),2)<1500.) ){
-	p1i = pcorr(tP(dcand_t1),1);   //pion
-	p2i = pcorr(tP(dcand_t2),2);   //kaon
-    }
-    //if( (idATC==2 && pcorr(tP(dcand_t1),2)>600. && pcorr(tP(dcand_t1),2)<1500. && pcorr(tP(dcand_t2),1)>600. && pcorr(tP(dcand_t2),1)<1500.) || (iddEdx==2 && pcorr(tP(dcand_t1),2)<600. && pcorr(tP(dcand_t2),1)<600.) ){
-    if( (idATC==2 && pcorr(tP(dcand_t1),2)>450. && pcorr(tP(dcand_t1),2)<1500. && pcorr(tP(dcand_t2),1)>450. && pcorr(tP(dcand_t2),1)<1500.) ){
-	p1i = pcorr(tP(dcand_t1),2);   //kaon
-	p2i = pcorr(tP(dcand_t2),1);   //pion
-    }
-    else{
-	idATC=0;
-        //iddEdx=0;
-	p1i = (pcorr(tP(dcand_t1),1)+pcorr(tP(dcand_t1),2))/2.;
-	p2i = (pcorr(tP(dcand_t2),1)+pcorr(tP(dcand_t2),2))/2.;
-    }
+    p1i = (pcorr(tP(dcand_t1),1)+pcorr(tP(dcand_t1),2))/2.;
+    p2i = (pcorr(tP(dcand_t2),1)+pcorr(tP(dcand_t2),2))/2.;
 
     if (enable) {
 	if (progpar.verbose) printf("Start fitter: \n");
@@ -649,21 +626,8 @@ void kine_fit(int ip1, int ip2, double* mbc, double* de, double* dp, double* pre
     double p2pi = pcorr(ktrrec_.PTRAK[dcand_t2],1);
     double p2ki = pcorr(ktrrec_.PTRAK[dcand_t2],2);
 
-    //*de = (sqrt(mk*mk + p1ki*p1ki) + sqrt(mpi*mpi + p1pi*p1pi) +
-    //	   sqrt(mk*mk + p2ki*p2ki) + sqrt(mpi*mpi + p2pi*p2pi))/2. - ebeam;
-
-    //if( idATC==1 || iddEdx==1 ){
-    if( idATC==1 ){
-        *de = sqrt(mpi*mpi+p1pi*p1pi) + sqrt(mk*mk + p2ki*p2ki) - ebeam;         //piK
-    }
-    //if( idATC==2 || iddEdx==2 ){
-    if( idATC==2 ){
-        *de = sqrt(mk*mk + p1ki*p1ki) + sqrt(mpi*mpi+p2pi*p2pi) - ebeam;         //Kpi
-    }
-    else{
-	*de = (sqrt(mk*mk + p1ki*p1ki) + sqrt(mpi*mpi + p1pi*p1pi) +
-	       sqrt(mk*mk + p2ki*p2ki) + sqrt(mpi*mpi + p2pi*p2pi))/2. - ebeam;
-    }
+    *de = (sqrt(mk*mk + p1ki*p1ki) + sqrt(mpi*mpi + p1pi*p1pi) +
+	   sqrt(mk*mk + p2ki*p2ki) + sqrt(mpi*mpi + p2pi*p2pi))/2. - ebeam;
 
     *dp = pp1-pp2;
     *prec1 = pp1;
@@ -1120,23 +1084,9 @@ int analyse_event()
 		if (progpar.verbose) cout<<"Pion "<<"probt1="<<dcinfo.p[t1][2]<<"\t"<<"probt2="<<dcinfo.p[t2][2]<<endl;
 		if (progpar.verbose) cout<<"Kaon "<<"probt1="<<dcinfo.p[t1][3]<<"\t"<<"probt2="<<dcinfo.p[t2][3]<<endl;
 
-		double npetrh=0.5;
-                double PatcCut=450.;
-
-		//if( pcorr(tP(t1),1)>PatcCut && pcorr(tP(t1),1)<1500. && pcorr(tP(t2),2)>PatcCut && pcorr(tP(t2),2)<1500. && (good_region_t1>=1 && Dmeson.atcTotalNpet1>npetrh) && (good_region_t2>=1 && Dmeson.atcTotalNpet2<=npetrh) ){ idATC=1;}  //pi - t1, K - t2
-		//if( pcorr(tP(t1),2)>PatcCut && pcorr(tP(t1),2)<1500. && pcorr(tP(t2),1)>PatcCut && pcorr(tP(t2),1)<1500. && (good_region_t1>=1 && Dmeson.atcTotalNpet1<=npetrh) && (good_region_t2>=1 && Dmeson.atcTotalNpet2>npetrh) ){ idATC=2;}  //K - t1, pi -t2
-
-		//double PdedxCut=600.;
-		//float probCutK = 0.80;
-		//float probCutPi = 0.70;
-		//if( pcorr(tP(t1),1)<PdedxCut && ( Dmeson.probpit1>0. && Dmeson.probpit1<=probCutPi ) && pcorr(tP(t2),2)<PdedxCut && Dmeson.probKt2>0. && Dmeson.probKt2<=probCutK ) {iddEdx=1;}    //piK
-		//if( pcorr(tP(t1),2)<PdedxCut && Dmeson.probKt1>0. && Dmeson.probKt1<=probCutK && pcorr(tP(t2),1)<PdedxCut && ( Dmeson.probpit2>0. && Dmeson.probpit2<=probCutPi ) ) {iddEdx=2;}    //Kpi
-
 		double mbc, de, dp, prec1, prec2, fchi2;
 		kine_fit(t1, t2, &mbc, &de, &dp, &prec1, &prec2, &fchi2, progpar.Dkine_fit);
 
-		idATC=0;
-		//iddEdx=0;
 		Dmeson.mbc = mbc;
 		Dmeson.de = de;
 		Dmeson.dp = dp;
@@ -1288,8 +1238,8 @@ int main(int argc, char* argv[])
 
         kdcswitches_.kNoiseReject=3;      //Cut for DC noise  (0 - not cut, 1 - standart, 2 - soft, 3 - hard)
 	//kdcswitches_.kEmcPatch=1;
-	kdcswitches_.KemcAllowed=0;         //On use strips
-	//kdcswitches_.KemcAllowed=-1;      //off use strips for track reconstruction
+	//kdcswitches_.KemcAllowed=0;         //On use strips  - for 2016/2017
+	kdcswitches_.KemcAllowed=-1;          //off use strips for track reconstruction  - for 2004
 	//kdcpar1_.DeleteTracksGhost=0;
         //kdcswitches_.kVDRtAlt=1;
 
