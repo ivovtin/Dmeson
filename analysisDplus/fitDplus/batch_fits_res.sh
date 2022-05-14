@@ -25,8 +25,8 @@
 ##$ -l time=24:00:00
 ##$ -q remote
 ##$ -q extralong
-##$ -q 6h
-#$ -q day
+#$ -q 6h
+##$ -q day
 #
 # -- Send mail at submission and completion of script --
 #$ -m beas

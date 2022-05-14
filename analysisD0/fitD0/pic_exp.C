@@ -41,10 +41,11 @@
   int dpmax;
   double rmax;
 
-  TString KEDR = "/spool/users/ovtin/outDmeson/D0/results/fitsD0/";
-  //TString KEDR = "/spool/users/ovtin/outDmeson/D0/results/fitsD0/forTest/";
+  //TString KEDR = "/spool/users/ovtin/outDmeson/D0/results/fitsD0/";
+  TString KEDR = "/spool/users/ovtin/outDmeson/D0/results/fitsD0/forTest/";
 
   int key = 2016;
+  //int key = 2004;
   bool atc=1;
   //bool atc=0;
 
@@ -52,17 +53,27 @@
   float decut2=-100.;
 
   if( key==2004 ) {
-      infile = "dat/kp_exp_1.030_2004.dat";
-      mbcmax = 38;
-      mbcmax2 = 15;
-      mbcmax3 = 25;
-      demax = 29;
-      dpmax = 70;
-      rmax = 40.;
-      outfile1 = "exp_2004";
-      exp_sig = "gen/exp_sig_2004.gen";
-      exp_bck = "gen/exp_bck_2004.gen";
-      exp_dbck = "gen/exp_dbck_2004.gen";
+      mbcmax2 = 22;
+      mbcmax3 = 22;
+
+      mbcmax = 37;
+      rmax = 37.;
+      demax = 30;
+      dpmax = 82;
+
+      dat_dirname = "2004_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0";
+      corr = "1.033";
+      dataFile = "kp_exp_2004_KemcAllowedOff_kNoiseReject3_" + corr + "_ATC.dat";
+      prefOutfile = "KemcAllowedOn_kNoiseReject3_" + corr;
+
+      gen_dirname = dat_dirname;
+
+      infile = "dat/" + dat_dirname + "/" + dataFile;
+
+      outfile1 = "exp2004_mbc_" + prefOutfile;
+      exp_sig = "gen/" + gen_dirname + "/exp_sig_S1.0_A6.0_Z0.0_" + corr + ".gen";
+      exp_bck = "gen/" + gen_dirname + "/exp_bck_S1.0_A6.0_Z0.0_" + corr + ".gen";
+      exp_dbck = "gen/" + gen_dirname + "/exp_dbck_S1.0_A6.0_Z0.0_" + corr + ".gen";
   }
   else{
       mbcmax2 = 30;
@@ -74,10 +85,17 @@
 	  demax = 41;
 	  dpmax = 90;
 
+	  /*
 	  dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc";
           corr = "1.0130";
 	  dataFile = "kp_exp_2016-17_KemcAllowedOn_kNoiseReject3_" + corr + "_atc_dedx_ATC.dat";
           prefOutfile = "KemcAllowedOn_kNoiseReject3_" + corr + "_atc";
+          */
+
+	  dat_dirname = "KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_atc";
+          corr = "1.0130";
+	  dataFile = "kp_exp_2016-17_KemcAllowedOff_kNoiseReject3_" + corr + "_atc_dedx_ATC.dat";
+          prefOutfile = "KemcAllowedOff_kNoiseReject3_" + corr + "_atc";
 
 	  gen_dirname = dat_dirname;
 
@@ -613,8 +631,8 @@
   TCanvas c3("c3","c3",900,900);
   c3.Divide(3,3);
 
-  rmax = 28.;
-  mbcmax = 38;
+  rmax = 22.;
+  mbcmax = 30;
   //demax = 50;
 
   c3.cd(1);

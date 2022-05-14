@@ -33,9 +33,14 @@
   //TString type = "atc_tof_dedx_S1.0_A6.0_Z0.0" + dat_dirname;
 
   //atc_tof_dedx Syst BGudsShape
-  TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_TMVA";
-  TString data_file = "kpp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_atc_tof_dedx_tmva_0.50_ATC.dat";
-  TString type = "atc_tof_dedx_S1.0_A6.0_Z0.0" + dat_dirname;
+  //TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_TMVA";
+  //TString data_file = "kpp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_atc_tof_dedx_tmva_0.60_ATC.dat";
+  //TString type = "atc_tof_dedx_S1.0_A6.0_Z0.0" + dat_dirname;
+
+  //2004 dedx_tof
+  TString dat_dirname = "2004_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_dedx_tof_0.97_0.10_Pcuttof380_with_Cuts_chi255_rr0.5_z12";
+  TString data_file = "kpp_uds_2004_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_S1.0_A4.5_Z0.0_dedx_tof_ATC.dat";
+  TString type = "dedx_tof_S1.0_A4.5_Z0.0" + dat_dirname;
 
   TString gen_dirname = dat_dirname;
 

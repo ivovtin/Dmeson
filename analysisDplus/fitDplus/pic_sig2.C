@@ -26,9 +26,9 @@
   //TString type = "atc_tof_dedx_S1.0_A6.0_Z0.0"+dat_dirname;
 
   //atc_tof_dedx
-  TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_TMVA";
-  TString data_file = "kpp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_atc_tof_dedx_tmva_0.50_ATC.dat";
-  TString type = "atc_tof_dedx_S1.0_A6.0_Z0.0"+dat_dirname;
+  //TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_TMVA";
+  //TString data_file = "kpp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_atc_tof_dedx_tmva_0.60_ATC.dat";
+  //TString type = "atc_tof_dedx_S1.0_A6.0_Z0.0"+dat_dirname;
 
   //TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_syst_momres_S1.0_A7.2_Z0.2";
   //TString data_file = "kpp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A7.2_Z0.2_atc_tof_dedx_syst_momres_ATC.dat";
@@ -37,6 +37,11 @@
   //TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_tof_dedx_0.80_0.70_Pcuttof380_dedx_OR_atc_with_Cuts_chi255_rr0.5_z12_syst_momres_S1.0_A6.9_Z0.0";
   //TString data_file = "kpp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.9_Z0.0_atc_tof_dedx_syst_momres_ATC.dat";
   //TString type = "atc_tof_dedx_S1.0_A6.9_Z0.0"+dat_dirname;
+
+  //2004 dedx_tof
+  TString dat_dirname = "2004_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_dedx_tof_0.97_0.10_Pcuttof380_with_Cuts_chi255_rr0.5_z12";
+  TString data_file = "kpp_signal_2004_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_S1.0_A4.5_Z0.0_dedx_tof_ATC.dat";
+  TString type = "dedx_tof_S1.0_A4.5_Z0.0"+dat_dirname;
 
   TString gen_dirname = dat_dirname;
 

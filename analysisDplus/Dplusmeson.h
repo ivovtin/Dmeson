@@ -63,11 +63,10 @@ void chain(){
 	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0150_kNoiseReject3_atc_KemcAllowedOff_dedx_tof_KcExp1_kXTKey1/psi3770_to_D0meson_%d.root",i).Data());
 	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0150_kNoiseReject3_atc_KemcAllowedOn_dedx_tof_KcExp1_kXTKey1/psi3770_to_D0meson_%d.root",i).Data());
 	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0150_kNoiseReject3_atc_KemcAllowedOn_dedx_tof/psi3770_to_D0meson_%d.root",i).Data());
-	    tt->Add(TString::Format("/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0140_kNoiseReject3_atc_KemcAllowedOn_dedx_tof/psi3770_to_D0meson_%d.root",i).Data());
-	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0140_kNoiseReject3_atc_KemcAllowedOn_dedx_tof_ionization_losses_1.20/psi3770_to_D0meson_%d.root",i).Data());
-	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0140_kNoiseReject3_atc_KemcAllowedOn_dedx_tof_ionization_losses_0.80/psi3770_to_D0meson_%d.root",i).Data());
+	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0140_kNoiseReject3_atc_KemcAllowedOn_dedx_tof/psi3770_to_D0meson_%d.root",i).Data());
 	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0140_kNoiseReject3_atc_KemcAllowedOn_dedx_tof_ionization_losses_plus1sigma/psi3770_to_D0meson_%d.root",i).Data());
 	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0140_kNoiseReject3_atc_KemcAllowedOn_dedx_tof_ionization_losses_minus1sigma/psi3770_to_D0meson_%d.root",i).Data());
+	    tt->Add(TString::Format("/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0140_kNoiseReject3_atc_KemcAllowedOn_dedx_tof_ionization_losses_rndGauss/psi3770_to_D0meson_%d.root",i).Data());
 	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0130_kNoiseReject3_atc_KemcAllowedOn_dedx_tof/psi3770_to_D0meson_%d.root",i).Data());
 	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0170_kNoiseReject3_atc_KemcAllowedOn_dedx_tof/psi3770_to_D0meson_%d.root",i).Data());
 	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/Dplus/dataPcorr_1.0120_kNoiseReject3_atc_KemcAllowedOn_dedx_tof/psi3770_to_D0meson_%d.root",i).Data());
@@ -76,14 +75,7 @@ void chain(){
 	}
         */
 	tt->Add("/store/users/ovtin/outDmeson/Dplus/TMVA/exp_all_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_1.0140_new.root");
-    }
-    else if (key==4){
-	for(int i=1; i<=482; i++)   //signal 2004
-	{
-	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/Dplus/data2004/psi3770_to_D0meson_%d.root",i).Data());
-	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/Dplus/dataPcorr2004_1.031/psi3770_to_D0meson_%d.root",i).Data());    //best
-	    tt->Add(TString::Format("/store/users/ovtin/outDmeson/Dplus/dataPcorr2004_1.0250_kNoiseReject3_KemcAllowedOn/psi3770_to_D0meson_%d.root",i).Data());
-	}
+	//tt->Add("/store/users/ovtin/outDmeson/Dplus/TMVA/exp_all_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_1.0150_new.root");
     }
     else if (key==1){
         /*
@@ -92,11 +84,12 @@ void chain(){
 	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Signal/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0/psi3770_to_simDplusmesonSignal_%d.root",i).Data());
 	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Signal/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_ionization_losses_plus1sigma/psi3770_to_simDplusmesonSignal_%d.root",i).Data());
 	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Signal/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_ionization_losses_minus1sigma/psi3770_to_simDplusmesonSignal_%d.root",i).Data());
+	    tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Signal/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_ionization_losses_rndGauss/psi3770_to_simDplusmesonSignal_%d.root",i).Data());
 	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Signal/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A7.2_Z0.2_syst_momres/psi3770_to_simDplusmesonSignal_%d.root",i).Data());
 	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Signal/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A4.8_Z0.0_syst_momres/psi3770_to_simDplusmesonSignal_%d.root",i).Data());
 	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Signal/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.9_Z0.0_syst_momres/psi3770_to_simDplusmesonSignal_%d.root",i).Data());
 	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Signal/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A7.2_Z0.0_syst_momres/psi3770_to_simDplusmesonSignal_%d.root",i).Data());
-	    tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Signal/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A5.1_Z0.0_syst_momres/psi3770_to_simDplusmesonSignal_%d.root",i).Data());
+	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Signal/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A5.1_Z0.0_syst_momres/psi3770_to_simDplusmesonSignal_%d.root",i).Data());
 	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Signal/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_syst_isr_plus_sigma/psi3770_to_simDplusmesonSignal_%d.root",i).Data());
 	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Signal/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_syst_isr_minus_sigma/psi3770_to_simDplusmesonSignal_%d.root",i).Data());
 	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Signal/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_syst_isr_rnd/psi3770_to_simDplusmesonSignal_%d.root",i).Data());
@@ -110,22 +103,21 @@ void chain(){
 	//for(int i=1; i<=110; i++)   //pions BG
 	{
 		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_continium/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0/psi3770_to_simDplusmeson_ee_to_qq_%d.root",i).Data());
-		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_continium/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_ionization_losses_1.20/psi3770_to_simDplusmeson_ee_to_qq_%d.root",i).Data());
-		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_continium/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_ionization_losses_0.80/psi3770_to_simDplusmeson_ee_to_qq_%d.root",i).Data());
 		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_continium/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_ionization_losses_plus1sigma/psi3770_to_simDplusmeson_ee_to_qq_%d.root",i).Data());
 		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_continium/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_ionization_losses_minus1sigma/psi3770_to_simDplusmeson_ee_to_qq_%d.root",i).Data());
+		tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_continium/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_ionization_losses_rndGauss/psi3770_to_simDplusmeson_ee_to_qq_%d.root",i).Data());
 		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_continium/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A7.2_Z0.2_syst_momres/psi3770_to_simDplusmeson_ee_to_qq_%d.root",i).Data());
 		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_continium/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A4.8_Z0.0_syst_momres/psi3770_to_simDplusmeson_ee_to_qq_%d.root",i).Data());
 		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_continium/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.9_Z0.0_syst_momres/psi3770_to_simDplusmeson_ee_to_qq_%d.root",i).Data());
 		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_continium/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A7.2_Z0.0_syst_momres/psi3770_to_simDplusmeson_ee_to_qq_%d.root",i).Data());
-		tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_continium/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A5.1_Z0.0_syst_momres/psi3770_to_simDplusmeson_ee_to_qq_%d.root",i).Data());
+		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_continium/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A5.1_Z0.0_syst_momres/psi3770_to_simDplusmeson_ee_to_qq_%d.root",i).Data());
 		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_pions/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0/psi3770_to_simDplusmeson_pions_%d.root",i).Data());
 	}
         */
 	tt->Add("/store/users/ovtin/outDmeson/Dplus/TMVA/uds_all_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_new.root");
     }
     else if (key==3){
-        /*
+
 	for(int i=1; i<=216; i++)   //DD BG
 	{
 	    if( i!=5 && i!=61 && i!=69 && i!=70 && i!=114 && i!=136 )
@@ -133,30 +125,67 @@ void chain(){
 		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_eetoDD/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0/psi3770_to_simDplusmesonBkg_eetoDD_%d.root",i).Data());
 		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_eetoDD/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_ionization_losses_plus1sigma/psi3770_to_simDplusmesonBkg_eetoDD_%d.root",i).Data());
 		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_eetoDD/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_ionization_losses_minus1sigma/psi3770_to_simDplusmesonBkg_eetoDD_%d.root",i).Data());
+		tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_eetoDD/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_ionization_losses_rndGauss/psi3770_to_simDplusmesonBkg_eetoDD_%d.root",i).Data());
 		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_eetoDD/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A7.2_Z0.2_syst_momres/psi3770_to_simDplusmesonBkg_eetoDD_%d.root",i).Data());
 		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_eetoDD/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A4.8_Z0.0_syst_momres/psi3770_to_simDplusmesonBkg_eetoDD_%d.root",i).Data());
 		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_eetoDD/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.9_Z0.0_syst_momres/psi3770_to_simDplusmesonBkg_eetoDD_%d.root",i).Data());
 		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_eetoDD/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A7.2_Z0.0_syst_momres/psi3770_to_simDplusmesonBkg_eetoDD_%d.root",i).Data());
-		tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_eetoDD/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A5.1_Z0.0_syst_momres/psi3770_to_simDplusmesonBkg_eetoDD_%d.root",i).Data());
+		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_eetoDD/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A5.1_Z0.0_syst_momres/psi3770_to_simDplusmesonBkg_eetoDD_%d.root",i).Data());
 		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_eetoDD/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_syst_isr_plus_sigma/psi3770_to_simDplusmesonBkg_eetoDD_%d.root",i).Data());
 		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_eetoDD/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_syst_isr_minus_sigma/psi3770_to_simDplusmesonBkg_eetoDD_%d.root",i).Data());
 		//tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_eetoDD/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_syst_isr_rnd/psi3770_to_simDplusmesonBkg_eetoDD_%d.root",i).Data());
 	    }
 	}
-        */
-	tt->Add("/store/users/ovtin/outDmeson/Dplus/TMVA/dbck_all_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_new.root");
+
+	//tt->Add("/store/users/ovtin/outDmeson/Dplus/TMVA/dbck_all_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A6.0_Z0.0_new.root");
     }
+    else if (key==4){
+	for(int i=1; i<=482; i++)   //experiment 2004
+	{
+	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/Dplus/data2004/psi3770_to_D0meson_%d.root",i).Data());
+	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/Dplus/dataPcorr2004_1.031/psi3770_to_D0meson_%d.root",i).Data());    //best
+	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/Dplus/dataPcorr2004_1.0250_kNoiseReject3_KemcAllowedOn/psi3770_to_D0meson_%d.root",i).Data());
+	    tt->Add(TString::Format("/store/users/ovtin/outDmeson/Dplus/dataPcorr2004_1.0200_kNoiseReject3_KemcAllowedOn/psi3770_to_D0meson_%d.root",i).Data());
+	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/Dplus/dataPcorr2004_1.0170_kNoiseReject3_KemcAllowedOn/psi3770_to_D0meson_%d.root",i).Data());
+
+	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/Dplus/dataPcorr2004_1.0200_kNoiseReject3_KemcAllowedOff/psi3770_to_D0meson_%d.root",i).Data());
+	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/Dplus/dataPcorr2004_1.0250_kNoiseReject3_KemcAllowedOff/psi3770_to_D0meson_%d.root",i).Data());
+
+	}
+    }
+    else if (key==5){
+	for(int i=1; i<=108; i++)   //MC Signal 2004
+	{
+	    tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Signal2004/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A4.5_Z0.0/psi3770_to_simDplusmesonSignal_%d.root",i).Data());
+	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Signal2004/KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A4.5_Z0.0/psi3770_to_simDplusmesonSignal_%d.root",i).Data());
+	}
+    }
+    else if (key==6){
+	for(int i=1; i<=264; i++)   //MC uds 2004
+	{
+	    tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_continium2004/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A4.5_Z0.0/psi3770_to_simDplusmeson_ee_to_qq_%d.root",i).Data());
+	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_continium2004/KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A4.5_Z0.0/psi3770_to_simDplusmeson_ee_to_qq_%d.root",i).Data());
+	}
+    }
+    else if (key==7){
+	for(int i=1; i<=122; i++)   //MC DD bck 2004
+	{
+	    tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_eetoDD2004/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A4.5_Z0.0/psi3770_to_simDplusmesonBkg_eetoDD_%d.root",i).Data());
+	    //tt->Add(TString::Format("/store/users/ovtin/outDmeson/simulation/outsimDplus/Bkg_eetoDD2004/KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_ATC_S1.0_A4.5_Z0.0/psi3770_to_simDplusmesonBkg_eetoDD_%d.root",i).Data());
+	}
+    }
+
 }
 
 void setbranchstatus(){
     tt->SetBranchStatus("*",0);
     tt->SetBranchStatus("Dmeson",1);
-    tt->SetBranchStatus("MVA",1);
+    //tt->SetBranchStatus("MVA",1);
 }
 
 void setbranchaddress(){
     tt->SetBranchAddress("Dmeson",&Dmeson);
-    tt->SetBranchAddress("MVA",&MVA);
+    //tt->SetBranchAddress("MVA",&MVA);
 }
 
 #endif

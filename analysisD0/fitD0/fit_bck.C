@@ -17,22 +17,24 @@
 
   //with ATC
   if (atc ){
-      //inPar = "par/bck_uds.par";
+      inPar = "par/bck_uds.par";
       //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc";
       //data_file = "kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_ATC.dat";
       //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_ionization_losses_plus1sigma";
       //data_file = "kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_ionization_losses_plus1sigma_ATC.dat";
       //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_ionization_losses_minus1sigma";
       //data_file = "kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_ionization_losses_minus1sigma_ATC.dat";
+      //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_ionization_losses_rndGauss";
+      //data_file = "kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_ionization_losses_rndGauss_ATC.dat";
       //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_S1.0_A7.2_Z0.2_syst_momres";
       //data_file = "kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A7.2_Z0.2_syst_momres_ATC.dat";
       //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_S1.0_A4.8_Z0.0_syst_momres";
       //data_file = "kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A4.8_Z0.0_syst_momres_ATC.dat";
-      inPar = "par/bck_uds_momres.par";
+      //inPar = "par/bck_uds_momres.par";
       //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_S1.0_A6.9_Z0.0_syst_momres";
       //data_file = "kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.9_Z0.0_syst_momres_ATC.dat";
-      dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_S1.0_A5.1_Z0.0_syst_momres";
-      data_file = "kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A5.1_Z0.0_syst_momres_ATC.dat";
+      //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_S1.0_A5.1_Z0.0_syst_momres";
+      //data_file = "kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A5.1_Z0.0_syst_momres_ATC.dat";
       //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_syst_isr_plus_sigma";
       //data_file = "kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_ATC.dat";
       //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_syst_isr_minus_sigma";
@@ -42,6 +44,13 @@
       //inPar = "par/bck_pions.par";
       //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_Syst_BGudsShape";
       //data_file = "kp_pions_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_ATC.dat";
+
+      dat_dirname = "KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_atc";
+      data_file = "kp_uds_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_ATC.dat";
+
+      //2004
+      //dat_dirname = "2004_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0";
+      //data_file = "kp_uds_2004_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_S1.0_A4.5_Z0.0_ATC.dat";
 
       par_dirname = dat_dirname;
       gen_dirname = dat_dirname;

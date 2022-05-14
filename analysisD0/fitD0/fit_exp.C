@@ -20,29 +20,46 @@
   TString corr;
 
   int key = 2016;
+  //int key = 2004;
   bool atc = 1;
 
   if( key==2004 ) {
-      infile = "dat/kp_exp_1.030_2004.dat";
-      exp_def = "gen/exp_def_2004.gen";
-      exp_sig = "gen/exp_sig_2004.gen";
-      exp_bck = "gen/exp_bck_2004.gen";
-      exp_dbck = "gen/exp_dbck_2004.gen";
-      exp_fit_par = "par/exp_fit_2004.par";
+      dat_dirname = "2004_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0";
+      corr = "1.033";
+      //corr = "1.030";
+      //corr = "1.027";
+      //corr = "1.025";
+      dataFile = "kp_exp_2004_KemcAllowedOff_kNoiseReject3_" + corr + "_ATC.dat";
+
+      par_dirname = dat_dirname;
+      gen_dirname = dat_dirname;
+
+      infile = "dat/" + dat_dirname + "/" + dataFile;
+      //corr = corr + "_test";
+      exp_fit_par = "par/" + par_dirname + "/exp_fit_S1.0_A6.0_Z0.0_k" + corr + ".par";
+      gSystem->Exec("mkdir gen/" + gen_dirname);
+      exp_def = "gen/" + gen_dirname + "/exp_def_S1.0_A6.0_Z0.0_" + corr + ".gen";
+      exp_sig = "gen/" + gen_dirname + "/exp_sig_S1.0_A6.0_Z0.0_" + corr + ".gen";
+      exp_bck = "gen/" + gen_dirname + "/exp_bck_S1.0_A6.0_Z0.0_" + corr + ".gen";
+      exp_dbck = "gen/" + gen_dirname + "/exp_dbck_S1.0_A6.0_Z0.0_" + corr + ".gen";
   }
   else{
       if(atc){
 	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc";
 	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_ionization_losses_plus1sigma";
 	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_ionization_losses_minus1sigma";
+	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_ionization_losses_rndGauss";
 	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_S1.0_A7.2_Z0.2_syst_momres";
 	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_S1.0_A4.8_Z0.0_syst_momres";
 	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_S1.0_A6.9_Z0.0_syst_momres";
-	  dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_S1.0_A5.1_Z0.0_syst_momres";
+	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_S1.0_A5.1_Z0.0_syst_momres";
 	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_syst_isr_plus_sigma";
 	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_syst_isr_minus_sigma";
 	  //dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_syst_isr_rnd";
-          //corr = "1.0090";
+
+	  dat_dirname = "KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_atc";
+
+	  //corr = "1.0090";
           //corr = "1.0110";
           //corr = "1.0120";
           corr = "1.0130";
@@ -50,9 +67,12 @@
           //corr = "1.0150";
           //corr = "1.0160";
           //corr = "1.0170";
-          dataFile = "kp_exp_2016-17_KemcAllowedOn_kNoiseReject3_" + corr + "_atc_dedx_ATC.dat";
+          //dataFile = "kp_exp_2016-17_KemcAllowedOn_kNoiseReject3_" + corr + "_atc_dedx_ATC.dat";
           //dataFile = "kp_exp_2016-17_KemcAllowedOn_kNoiseReject3_" + corr + "_atc_dedx_ionization_losses_plus1sigma_ATC.dat";
           //dataFile = "kp_exp_2016-17_KemcAllowedOn_kNoiseReject3_" + corr + "_atc_dedx_ionization_losses_minus1sigma_ATC.dat";
+          //dataFile = "kp_exp_2016-17_KemcAllowedOn_kNoiseReject3_" + corr + "_atc_dedx_ionization_losses_rndGauss_ATC.dat";
+
+	  dataFile = "kp_exp_2016-17_KemcAllowedOff_kNoiseReject3_" + corr + "_atc_dedx_ATC.dat";
 
 	  par_dirname = dat_dirname;
 	  gen_dirname = dat_dirname;

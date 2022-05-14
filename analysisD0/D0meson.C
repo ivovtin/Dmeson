@@ -75,7 +75,7 @@ int main(int argc, char* argv[])
     {
 	key=atoi(argv[1]);
 	verbose=atoi(argv[2]);
-	if( key>4 ){ Usage(progname); return 0;}
+	if( key>7 ){ Usage(progname); return 0;}
 	if( key<0 ){ Usage(progname); return 0;}
     }
     else
@@ -97,7 +97,7 @@ int main(int argc, char* argv[])
 
     float rrCut,zCut,max_chi2,min_nhits,max_nhits;
 
-    if(key!=4){
+    if(key<4){
 	//2016-17
 	max_chi2=1000.;
 	rrCut=0.1;
@@ -106,15 +106,25 @@ int main(int argc, char* argv[])
         max_nhits=1000.;
     }
     else{
-        //2004
+	//2004
+        /*
+	max_nhits=1000.;
+	rrCut=0.1;
+	zCut=12.;
+	min_nhits=23.;
+	max_chi2=50.;
+        */
+
+	max_chi2=50.;
 	rrCut=0.5;
 	zCut=13.;
-	max_chi2=1000.;
-	min_nhits=24.;
-	max_nhits=1000.;
+	min_nhits=23.;
+	max_nhits=48.;
     }
     //*****************************************
 
+    //on/off atc indentification
+    bool fatc=1;
     //on/off tof indentification
     bool ftof=0;
     //on/off de/dx indentification
@@ -141,14 +151,18 @@ int main(int argc, char* argv[])
     //TString out_pref = "KemcAllowedOn_kNoiseReject3_1.0150_atc_dedx";
     //TString out_pref = "KemcAllowedOn_kNoiseReject3_1.0140_atc_dedx";
     //TString out_pref = "KemcAllowedOn_kNoiseReject3_1.0130_atc_dedx";
+    //TString out_pref = "KemcAllowedOn_kNoiseReject3_1.0130_atc_dedx_Cut_nthits30";
     //TString out_pref = "KemcAllowedOn_kNoiseReject3_1.0130_atc_dedx_plus1sigma";
     //TString out_pref = "KemcAllowedOn_kNoiseReject3_1.0130_atc_dedx_minus1sigma";
+    //TString out_pref = "KemcAllowedOn_kNoiseReject3_1.0130_atc_dedx_ionization_losses_rndGauss";
     //TString out_pref = "KemcAllowedOn_kNoiseReject3_1.0120_atc_dedx";
     //TString out_pref = "KemcAllowedOn_kNoiseReject3_1.0110_atc_dedx";
     //TString out_pref = "KemcAllowedOn_kNoiseReject3_1.0090_atc_dedx";
     //TString out_pref = "KemcAllowedOn_kNoiseReject3_1.0130_woATC";
     //TString out_pref = "KemcAllowedOn_kNoiseReject3_1.0140_woATC";
-    TString out_pref = "KemcAllowedOn_kNoiseReject3_1.0130_atc_dedx_tmva_0.90";
+    //TString out_pref = "KemcAllowedOn_kNoiseReject3_1.0130_atc_dedx_tmva_0.90";
+
+    TString out_pref = "KemcAllowedOff_kNoiseReject3_1.0130_atc_dedx";
     if( key==0 ){           //exp 2016-17
 	min_Mbc2=1800;
 	deCut1=-100; deCut2=100;
@@ -157,17 +171,6 @@ int main(int argc, char* argv[])
 	KEDR = "/home/ovtin/public_html/outDmeson/D0/dataPcorr_" + out_pref + "/";
 	fout_result=dir_out + "/" + "kp_exp_2016-17_" + out_pref +".dat";
 	fout_result_ident=dir_out + "/" + "kp_exp_2016-17_" + out_pref + "_ATC.dat";
-    }
-    else if (key==4)        //exp 2004
-    {
-	min_Mbc2=1800;
-	deCut1=-100; deCut2=100;
-	mbcCut1=1855, mbcCut2=1875;
-	fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data2004_%d.root",key).Data();
-	KEDR = "/home/ovtin/public_html/outDmeson/D0/data2004Pcorr/";
-        list_badruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/badruns";
-	fout_result_ident=dir_out + "/" + "kp_2004_ATC.dat";
-	fout_result=dir_out + "/" + "kp_2004.dat";
     }
     else if (key==1)        //sig
     {
@@ -179,6 +182,7 @@ int main(int argc, char* argv[])
         //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0";
         //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_ionization_losses_plus1sigma";
         //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_ionization_losses_minus1sigma";
+        //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_ionization_losses_rndGauss";
         //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A7.2_Z0.2_syst_momres";
         //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A4.8_Z0.0_syst_momres";
         //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.9_Z0.0_syst_momres";
@@ -187,7 +191,9 @@ int main(int argc, char* argv[])
         //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_syst_isr_minus_sigma";
         //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_syst_isr_rnd";
         //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_woATC";
-        out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_tmva";
+        //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_tmva";
+
+	out_pref = "KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0";
 	KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Sig_" + out_pref + "/";
 	fout_result=dir_out + "/" + "kp_signal_" + out_pref + ".dat";
 	fout_result_ident=dir_out + "/" + "kp_signal_" + out_pref + "_ATC.dat";
@@ -200,13 +206,16 @@ int main(int argc, char* argv[])
         //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0";
         //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_plus1sigma";
         //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_minus1sigma";
+        //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_ionization_losses_rndGauss";
         //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A7.2_Z0.2_syst_momres";
         //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A4.8_Z0.0_syst_momres";
         //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.9_Z0.0_syst_momres";
         //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A5.1_Z0.0_syst_momres";
         //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_woATC";
         //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0";
-        out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_tmva";
+        //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_tmva";
+
+	out_pref = "KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0";
 
 	KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_continium_" + out_pref + "/";
 	fout_result=dir_out + "/" + "kp_uds_" + out_pref + ".dat";
@@ -226,6 +235,7 @@ int main(int argc, char* argv[])
         //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0";
         //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_ionization_losses_plus1sigma";
         //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_ionization_losses_minus1sigma";
+        //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_ionization_losses_rndGauss";
         //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A7.2_Z0.2_syst_momres";
         //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A4.8_Z0.0_syst_momres";
         //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.9_Z0.0_syst_momres";
@@ -234,10 +244,63 @@ int main(int argc, char* argv[])
         //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_syst_isr_minus_sigma";
         //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_syst_isr_rnd";
         //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_woATC";
-        out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_tmva";
+        //out_pref = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_tmva";
+
+	out_pref = "KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0";
+
 	KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_eetodd_" + out_pref + "/";
 	fout_result=dir_out + "/" + "kp_dbck_" + out_pref + ".dat";
 	fout_result_ident=dir_out + "/" + "kp_dbck_" + out_pref + "_ATC.dat";
+    }
+    else if (key==4)        //exp 2004
+    {
+	min_Mbc2=1800;
+	deCut1=-100; deCut2=100;
+	mbcCut1=1855, mbcCut2=1875;
+	fnameout=dir_out + "/" + TString::Format("exp_Dmeson_data2004_%d.root",key).Data();
+
+        out_pref = "KemcAllowedOff_kNoiseReject3_1.033";
+        //out_pref = "KemcAllowedOff_kNoiseReject3_1.030";
+        //out_pref = "KemcAllowedOff_kNoiseReject3_1.027";
+        //out_pref = "KemcAllowedOff_kNoiseReject3_1.025";
+	KEDR = "/home/ovtin/public_html/outDmeson/D0/data2004Pcorr_" + out_pref + "/";
+	fout_result=dir_out + "/" + "kp_exp_2004_" + out_pref +".dat";
+	fout_result_ident=dir_out + "/" + "kp_exp_2004_" + out_pref + "_ATC.dat";
+    }
+    else if (key==5)       //MC Signal 2004
+    {
+	ntrk=2;
+	min_Mbc2=1800;
+	deCut1=-100; deCut2=100;
+	mbcCut1=1855, mbcCut2=1875;
+	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_sig_%d.root",key).Data();
+
+	out_pref = "KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_S1.0_A4.5_Z0.0";
+	KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Sig_2004_" + out_pref + "/";
+	fout_result=dir_out + "/" + "kp_signal_2004_" + out_pref + ".dat";
+	fout_result_ident=dir_out + "/" + "kp_signal_2004_" + out_pref + "_ATC.dat";
+    }
+    else if (key==6)        //uds 2004
+    {
+	deCut1=-300; deCut2=300;
+	mbcCut1=1700, mbcCut2=1900;
+	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_BG_continium_%d.root",key).Data();
+        out_pref = "KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_S1.0_A4.5_Z0.0";
+
+	KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_continium_2004_" + out_pref + "/";
+	fout_result=dir_out + "/" + "kp_uds_2004_" + out_pref + ".dat";
+	fout_result_ident=dir_out + "/" + "kp_uds_2004_" + out_pref + "_ATC.dat";
+    }
+    else if (key==7)        //ddBG
+    {
+	deCut1=-300; deCut2=300;
+	mbcCut1=1700, mbcCut2=1900;
+	fnameout=dir_out + "/" + TString::Format("sim_Dmeson_BG_eetoDD_%d.root",key).Data();
+        out_pref = "KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_S1.0_A4.5_Z0.0";
+
+	KEDR = "/home/ovtin/public_html/outDmeson/D0/simulation_Bkg_eetodd_2004_" + out_pref + "/";
+	fout_result=dir_out + "/" + "kp_dbck_2004_" + out_pref + ".dat";
+	fout_result_ident=dir_out + "/" + "kp_dbck_2004_" + out_pref + "_ATC.dat";
     }
 
     gSystem->Exec("mkdir " + KEDR);
@@ -261,7 +324,7 @@ int main(int argc, char* argv[])
     TH1F *hRunSigMbcCut;
     TH1F *hRunSigdECut;
     TH2D* hLum;
-    if( key!=4 )
+    if( key<4 )
     {
 	hRun = new TH1F("Run","Run", 3042, 23206., 26248.);
 	hTime = new TH1F("Time","Time", 3042,1454284800,1514592000);
@@ -1047,18 +1110,18 @@ int main(int argc, char* argv[])
             double pk=Dmeson.p2;
 
 	    //ATC suppression
-	    if( (Dmeson.prec1>Pcut1 && Dmeson.prec1<Pcut2 && good_region_t1>=1 && atcTotalNpet1_wo_wls<=npetrh) && (Dmeson.prec2>Pcut1 && Dmeson.prec2<Pcut2 && good_region_t2>=1 && atcTotalNpet2_wo_wls<=npetrh) ) continue;   //KK
-	    if( (Dmeson.prec1>Pcut1 && Dmeson.prec1<Pcut2 && good_region_t1>=1 && atcTotalNpet1_wo_wls>npetrh) && (Dmeson.prec2>Pcut1 && Dmeson.prec2<Pcut2 && good_region_t2>=1 && atcTotalNpet2_wo_wls>npetrh) ) continue;     //pipi
+	    if( (fatc==1 && Dmeson.prec1>Pcut1 && Dmeson.prec1<Pcut2 && good_region_t1>=1 && atcTotalNpet1_wo_wls<=npetrh) && (Dmeson.prec2>Pcut1 && Dmeson.prec2<Pcut2 && good_region_t2>=1 && atcTotalNpet2_wo_wls<=npetrh) ) continue;   //KK
+	    if( (fatc==1 && Dmeson.prec1>Pcut1 && Dmeson.prec1<Pcut2 && good_region_t1>=1 && atcTotalNpet1_wo_wls>npetrh) && (Dmeson.prec2>Pcut1 && Dmeson.prec2<Pcut2 && good_region_t2>=1 && atcTotalNpet2_wo_wls>npetrh) ) continue;     //pipi
 
 	    //ATC + dedx suppression
 	    //////if( (Dmeson.prec1>Pcut1 && Dmeson.prec1<Pcut2 && good_region_t1>=1 && atcTotalNpet1_wo_wls<=npetrh) && (Dmeson.prec2>Pcut1 && Dmeson.prec2<Pcut2 && good_region_t2>=1 && atcTotalNpet2_wo_wls<=npetrh) && dedx_t1_Pion==0 && dedx_t2_Pion==0 ) continue;   //KK
 	    //////if( (Dmeson.prec1>Pcut1 && Dmeson.prec1<Pcut2 && good_region_t1>=1 && atcTotalNpet1_wo_wls>npetrh) && (Dmeson.prec2>Pcut1 && Dmeson.prec2<Pcut2 && good_region_t2>=1 && atcTotalNpet2_wo_wls>npetrh) && dedx_t1_Kaon==0 && dedx_t2_Kaon==0 ) continue;     //pipi
 
 	    ////===TMVA======///////////////////////
-            if(verbose) cout<<"MVA="<<MVA<<endl;
-            hmva->Fill(MVA);
+            //if(verbose) cout<<"MVA="<<MVA<<endl;
+            //hmva->Fill(MVA);
 
-            if(MVA<0.90) continue;
+            //if(MVA<0.90) continue;
             ///////////////////////////////////////
 
 
@@ -1191,7 +1254,7 @@ int main(int argc, char* argv[])
     TLine line8(1700,deCut2,1900,deCut2);
     line8.SetLineColor(kGreen);
     line8.SetLineWidth(3);
-    if( key==0 || key==1 || key==4 ){
+    if( key==0 || key==1 || key==4 || key==5 ){
 	line5.Draw("same");
 	line6.Draw("same");
 	line7.Draw("same");

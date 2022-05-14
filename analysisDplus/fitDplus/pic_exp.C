@@ -45,7 +45,8 @@
   TString exp_bck;
   TString exp_dbck;
 
-  int key = 2016;
+  //int key = 2016;
+  int key = 2004;
 
   bool final = 1;
 
@@ -56,15 +57,31 @@
   TString KEDR="/spool/users/ovtin/outDmeson/Dplus/results/fitsDplus/forTest/";
 
   if( key==2004 ) {
-      infile = "dat/kpp_2004.dat";
-      mbcmax = 45;
-      rmax = 46.;
-      outfile1 = "kpp_exp_mbc_2004";
-      outfile2 = "kpp_exp_de_2004";
-      outfile3 = "kpp_exp_mbcde_2004";
-      exp_sig = "gen/exp_sig_2004.gen";
-      exp_bck = "gen/exp_bck_2004.gen";
-      exp_dbck = "gen/exp_dbck_2004.gen";
+      //dedx_tof
+
+      dat_dirname = "2004_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_dedx_tof_0.97_0.10_Pcuttof380_with_Cuts_chi255_rr0.5_z12";
+      dataFile = "kpp_exp_2004_KemcAllowedOff_kNoiseReject3_1.0250_dedx_tof_ATC.dat";
+      prefOutfile = "2004_KemcAllowedOff_kNoiseReject3_1.0250_dedx_tof";
+
+      /*
+      dat_dirname = "2004_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_tof_with_Cuts_chi250_rr0.5_z12";
+      dataFile = "kpp_exp_2004_KemcAllowedOff_kNoiseReject3_1.0250_tof_ATC.dat";
+      prefOutfile = "2004_KemcAllowedOff_kNoiseReject3_1.0250_tof";
+      */
+      gen_dirname = dat_dirname;
+
+      mbcmax = 40.;
+      rmax = 40.;
+
+      infile = "dat/" + dat_dirname + "/" + dataFile;
+
+      outfile1 = "kpp_exp_2004_mbc_" + prefOutfile;
+      outfile2 = "kpp_exp_2004_de_" + prefOutfile;
+      outfile3 = "kpp_exp_2004_mbcde_" + prefOutfile;
+
+      exp_sig = "gen/" + gen_dirname + "/exp_sig_S1.0_A4.5_Z0.0.gen";
+      exp_bck = "gen/" + gen_dirname + "/exp_bck_S1.0_A4.5_Z0.0.gen";
+      exp_dbck = "gen/" + gen_dirname + "/exp_dbck_S1.0_A4.5_Z0.0.gen";
   }
   else{
       if (final){
@@ -429,9 +446,12 @@
   TCanvas c4("c4","c4",1000,800);
   c4.Divide(3,2);
 
-  rmax = 80.;
-  mbcmax = 80;
-  //demax = 50;
+  //rmax = 80.;
+  //mbcmax = 80;
+
+  //2004
+  rmax = 48.;
+  mbcmax = 48;
 
   c4.cd(1);
   THStack mbcs1_hs("mbcs1_hs","");
@@ -540,7 +560,8 @@
   sig_des1->SetFillStyle(sig_style);
 
   //exp_des1->GetYaxis()->SetRangeUser(0, 270);
-  exp_des1->GetYaxis()->SetRangeUser(0, 170);
+  //exp_des1->GetYaxis()->SetRangeUser(0, 170);
+  exp_des1->GetYaxis()->SetRangeUser(0, 120);          //2004
   exp_des1.GetXaxis()->SetTitle("#Delta E (MeV)");
   exp_des1.GetYaxis()->SetTitle("Events/20 MeV");
   exp_des1.Draw("elp");
@@ -564,7 +585,8 @@
   sig_des2->SetFillStyle(sig_style);
 
   //exp_des2->GetYaxis()->SetRangeUser(0, 160);
-  exp_des2->GetYaxis()->SetRangeUser(0, 120);
+  //exp_des2->GetYaxis()->SetRangeUser(0, 120);
+  exp_des2->GetYaxis()->SetRangeUser(0, 80);        //2004
   exp_des2.GetXaxis()->SetTitle("#Delta E (MeV)");
   exp_des2.GetYaxis()->SetTitle("Events/20 MeV");
   exp_des2.Draw("elp");
@@ -587,7 +609,8 @@
   sig_des3->SetFillColor(sig_color);
   sig_des3->SetFillStyle(sig_style);
 
-  exp_des3->GetYaxis()->SetRangeUser(0, 130);
+  //exp_des3->GetYaxis()->SetRangeUser(0, 130);
+  exp_des3->GetYaxis()->SetRangeUser(0, 60);       //2004
   exp_des3.GetXaxis()->SetTitle("#Delta E (MeV)");
   exp_des3.GetYaxis()->SetTitle("Events/20 MeV");
   exp_des3.Draw("elp");

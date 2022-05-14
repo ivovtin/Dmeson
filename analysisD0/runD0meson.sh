@@ -1,5 +1,5 @@
 #!/bin/bash
-dataORmc=0
+dataORmc=2
 verbose=0
 
 ./D0meson $dataORmc $verbose

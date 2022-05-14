@@ -34,8 +34,8 @@
 ##$ -m beas
 ##$ -M ovtin.ivan@gmail.com
 
-##$ -t 1-482
-#$ -t 1-693
+##$ -t 1-693
+#$ -t 651-693
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]
@@ -57,18 +57,17 @@ inruns="/home/ovtin/development/Dmeson/runsDmeson/sig_runs/runDmeson"$i
 ##outfile="/store/users/ovtin/outDmeson/D0/dataPcorr_1.0000_kNoiseReject3_KemcAllowedOn_atc_dedx/psi3770_to_D0meson_"$i".root"
 ##outfile="/store/users/ovtin/outDmeson/D0/dataPcorr_1.0140_kNoiseReject3_KemcAllowedOn_atc_dedx/psi3770_to_D0meson_"$i".root"
 ##outfile="/store/users/ovtin/outDmeson/D0/dataPcorr_1.0130_kNoiseReject3_KemcAllowedOn_atc_dedx/psi3770_to_D0meson_"$i".root"
-outfile="/store/users/ovtin/outDmeson/D0/dataPcorr_1.0130_kNoiseReject3_KemcAllowedOn_atc_dedx_minus1sigma/psi3770_to_D0meson_"$i".root"
+##outfile="/store/users/ovtin/outDmeson/D0/dataPcorr_1.0130_kNoiseReject3_KemcAllowedOn_atc_dedx_minus1sigma/psi3770_to_D0meson_"$i".root"
+##outfile="/store/users/ovtin/outDmeson/D0/dataPcorr_1.0130_kNoiseReject3_KemcAllowedOn_atc_dedx_ionization_losses_rndGauss/psi3770_to_D0meson_"$i".root"
 ##outfile="/store/users/ovtin/outDmeson/D0/dataPcorr_1.0120_kNoiseReject3_KemcAllowedOn_atc_dedx/psi3770_to_D0meson_"$i".root"
 ##outfile="/store/users/ovtin/outDmeson/D0/dataPcorr_1.0110_kNoiseReject3_KemcAllowedOn_atc_dedx/psi3770_to_D0meson_"$i".root"
 ##outfile="/store/users/ovtin/outDmeson/D0/dataPcorr_1.0090_kNoiseReject3_KemcAllowedOn_atc_dedx/psi3770_to_D0meson_"$i".root"
 ##outfile="/store/users/ovtin/outDmeson/D0/dataPcorr_1.0140_kNoiseReject3_KemcAllowedOff_ATC/psi3770_to_D0meson_"$i".root"
 ##outfile="/store/users/ovtin/outDmeson/D0/dataPcorr_1.0140_kNoiseReject3_KemcAllowedOn/psi3770_to_D0meson_"$i".root"
 ##outfile="/store/users/ovtin/outDmeson/D0/dataPcorr_1.0155_kNoiseReject3_KemcAllowedOn_ATC_kXTKey=1_KcExp=1/psi3770_to_D0meson_"$i".root"
-##inruns="/home/ovtin/development/Dmeson/runsDmeson/runs2004/runDmeson"$i
-##outfile="/spool/users/ovtin/outDmeson/D0/dataPcorr2004_1.030/psi3770_to_D0meson_"$i".root"
-#Bkg
-#inruns="/home/ovtin/development/Dmeson/runsDmeson/runBkgDmeson"$i
-#outfile="/spool/users/ovtin/psi3770_to_BkgD0meson_"$i".root"
+
+outfile="/store/users/ovtin/outDmeson/D0/dataPcorr_1.0130_kNoiseReject3_KemcAllowedOff_atc_dedx/psi3770_to_D0meson_"$i".root"
+
 mintracks=3
 maxtracks=20
 minbeamtracks=0

@@ -7,12 +7,16 @@
   gStyle->SetHistLineWidth(2);
   gStyle->SetHistLineColor(4);
 
-  TString KEDR="/store/users/ovtin/outDmeson/D0/results/fitsD0/";
-  //TString KEDR="/store/users/ovtin/outDmeson/D0/results/fitsD0/forTest/";
+  //TString KEDR="/store/users/ovtin/outDmeson/D0/results/fitsD0/";
+  TString KEDR="/store/users/ovtin/outDmeson/D0/results/fitsD0/forTest/";
 
-  TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc";
-  TString data_file = "kp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_ATC.dat";
-  TString type = "S1.0_A6.0_Z0.0_"+dat_dirname;
+  //TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc";
+  //TString data_file = "kp_signal_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_ATC.dat";
+  //TString type = "S1.0_A6.0_Z0.0_"+dat_dirname;
+
+  TString dat_dirname = "2004_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0";
+  TString data_file = "kp_signal_2004_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_S1.0_A4.5_Z0.0_ATC.dat";
+  TString type = "S1.0_A4.5_Z0.0_"+dat_dirname;
 
   TString gen_dirname = dat_dirname;
 

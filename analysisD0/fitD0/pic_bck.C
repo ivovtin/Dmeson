@@ -21,10 +21,14 @@
   //TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_woATC";
   //TString data_file = "kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_woATC.dat";
 
-  TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_S1.0_A6.9_Z0.0_syst_momres";
-  TString data_file = "kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.9_Z0.0_syst_momres_ATC.dat";
+  //TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc_S1.0_A6.9_Z0.0_syst_momres";
+  //TString data_file = "kp_uds_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.9_Z0.0_syst_momres_ATC.dat";
 
-  TString type = "S1.0_A6.0_Z0.0_" + dat_dirname;
+  //2004
+  TString dat_dirname = "2004_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0";
+  TString data_file = "kp_uds_2004_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_S1.0_A4.5_Z0.0_ATC.dat";
+
+  TString type = "S1.0_A4.5_Z0.0_" + dat_dirname;
 
   TString gen_dirname = dat_dirname;
 

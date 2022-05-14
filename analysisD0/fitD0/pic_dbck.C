@@ -7,18 +7,22 @@
   gStyle->SetHistLineWidth(2);
   gStyle->SetHistLineColor(4);
 
-  TString KEDR="/spool/users/ovtin/outDmeson/D0/results/fitsD0/";
-  //TString KEDR="/store/users/ovtin/outDmeson/D0/results/fitsD0/forTest/";
+  //TString KEDR="/spool/users/ovtin/outDmeson/D0/results/fitsD0/";
+  TString KEDR="/store/users/ovtin/outDmeson/D0/results/fitsD0/forTest/";
 
-  TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc";
-  TString data_file = "kp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_ATC.dat";
-  TString type = "S1.0_A6.0_Z0.0_"+dat_dirname;
+  //TString dat_dirname = "KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_atc";
+  //TString data_file = "kp_dbck_KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0_S1.0_A6.0_Z0.0_ATC.dat";
+  //TString type = "S1.0_A6.0_Z0.0_"+dat_dirname;
 
-  //TString gen_dirname = dat_dirname;
+  TString dat_dirname = "2004_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0";
+  TString data_file = "kp_dbck_2004_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0_S1.0_A4.5_Z0.0_ATC.dat";
+  TString type = "S1.0_A4.5_Z0.0_"+dat_dirname;
+
+  TString gen_dirname = dat_dirname;
 
   //Syst_DbckShape
-  TString gen_dirname = dat_dirname + "_Syst_DbckShape";
-  type = type + "_Syst_DbckShape";
+  //TString gen_dirname = dat_dirname + "_Syst_DbckShape";
+  //type = type + "_Syst_DbckShape";
 
 
   TNtuple nt("nt","NTuple","mbc:de:dp");
