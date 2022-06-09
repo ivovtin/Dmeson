@@ -1,6 +1,6 @@
-void pic()
+void pic2004()
 {
-   TString dir_out="/store/users/ovtin/outDmeson/sim_mono/";
+   TString dir_out="/store/users/ovtin/outDmeson/sim_mono2004/";
 
    Double_t Pk[5]={200,500,800,1200,1500};
    Double_t ePk[5]={0,0,0,0,0};
@@ -32,7 +32,7 @@ void pic()
 
    for(int i=0; i<5; i++)
    {
-     inFileK = TString::Format("/store/users/ovtin/outDmeson/simulation/mono/kaon/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/mono_%d.root",i+2);
+     inFileK = TString::Format("/store/users/ovtin/outDmeson/simulation/mono/kaon/2004_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0/mono_%d.root",i+2);
      fK[i] = new TFile(inFileK);
      gDirectory->GetObject("et",tK[i]);
      tK[i]->Print();
@@ -42,11 +42,11 @@ void pic()
 
      fitK[i] = new TF1(Form("fitK%d",i),"gaus");
      //if(i==0){ boardK1[i]=100; boardK2[i]=120; }    //110
-     if(i==0){ boardK1[i]=155; boardK2[i]=195; }    //200
-     if(i==1){ boardK1[i]=460; boardK2[i]=530; }    //500
-     if(i==2){ boardK1[i]=730; boardK2[i]=860; }    //800
-     if(i==3){ boardK1[i]=1100; boardK2[i]=1300; }  //1200
-     if(i==4){ boardK1[i]=1330; boardK2[i]=1660; }  //1500
+     if(i==0){ boardK1[i]=155; boardK2[i]=192; }    //200
+     if(i==1){ boardK1[i]=470; boardK2[i]=522; }    //500
+     if(i==2){ boardK1[i]=755; boardK2[i]=835; }    //800
+     if(i==3){ boardK1[i]=1130; boardK2[i]=1260; }  //1200
+     if(i==4){ boardK1[i]=1410; boardK2[i]=1590; }  //1500
      hK[i]->Fit(Form("fitK%d",i),"","",boardK1[i],boardK2[i]);
      par1K[i] = fitK[i]->GetParameter(1);
      epar1K[i] = fitK[i]->GetParError(1);
@@ -73,7 +73,7 @@ void pic()
 
    for(int i=0; i<6; i++)
    {
-     inFilep = TString::Format("/store/users/ovtin/outDmeson/simulation/mono/pion/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/mono_%d.root",i+1);
+     inFilep = TString::Format("/store/users/ovtin/outDmeson/simulation/mono/pion/2004_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0/mono_%d.root",i+1);
      fp[i] = new TFile(inFilep);
      gDirectory->GetObject("et",tp[i]);
      tp[i]->Print();
@@ -82,12 +82,12 @@ void pic()
      tp[i]->Draw(Form("bcosm.P >> hp%d",i));
 
      fitp[i] = new TF1(Form("fitp%d",i),"gaus");
-     if(i==0){ boardp1[i]=92; boardp2[i]=117; }     //110
-     if(i==1){ boardp1[i]=180; boardp2[i]=212; }    //200
-     if(i==2){ boardp1[i]=465; boardp2[i]=530; }    //500
-     if(i==3){ boardp1[i]=740; boardp2[i]=860; }    //800
-     if(i==4){ boardp1[i]=1080; boardp2[i]=1320; }  //1200
-     if(i==5){ boardp1[i]=1320; boardp2[i]=1660; }  //1500
+     if(i==0){ boardp1[i]=92; boardp2[i]=115; }     //110
+     if(i==1){ boardp1[i]=183; boardp2[i]=212; }    //200
+     if(i==2){ boardp1[i]=478; boardp2[i]=520; }    //500
+     if(i==3){ boardp1[i]=758; boardp2[i]=837; }    //800
+     if(i==4){ boardp1[i]=1145; boardp2[i]=1260; }  //1200
+     if(i==5){ boardp1[i]=1410; boardp2[i]=1590; }  //1500
      hp[i]->Fit(Form("fitp%d",i),"","",boardp1[i],boardp2[i]);
      par1p[i] = fitp[i]->GetParameter(1);
      epar1p[i] = fitp[i]->GetParError(1);
@@ -114,7 +114,7 @@ void pic()
 
    for(int i=0; i<4; i++)
    {
-     inFilee = TString::Format("/store/users/ovtin/outDmeson/simulation/mono/electron/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/mono_%d.root",i+1);
+     inFilee = TString::Format("/store/users/ovtin/outDmeson/simulation/mono/electron/2004_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0/mono_%d.root",i+1);
      fe[i] = new TFile(inFilee);
      gDirectory->GetObject("et",te[i]);
      te[i]->Print();
@@ -123,10 +123,10 @@ void pic()
      te[i]->Draw(Form("bcosm.P >> he%d",i));
 
      fite[i] = new TF1(Form("fite%d",i),"gaus");
-     if(i==0){ boarde1[i]=465; boarde2[i]=535; }    //500
-     if(i==1){ boarde1[i]=730; boarde2[i]=862; }    //800
-     if(i==2){ boarde1[i]=1090; boarde2[i]=1310; }  //1200
-     if(i==3){ boarde1[i]=1330; boarde2[i]=1670; }  //1500
+     if(i==0){ boarde1[i]=475; boarde2[i]=520; }    //500
+     if(i==1){ boarde1[i]=760; boarde2[i]=830; }    //800
+     if(i==2){ boarde1[i]=1140; boarde2[i]=1260; }  //1200
+     if(i==3){ boarde1[i]=1400; boarde2[i]=1590; }  //1500
      he[i]->Fit(Form("fite%d",i),"","",boarde1[i],boarde2[i]);
      par1e[i] = fite[i]->GetParameter(1);
      epar1e[i] = fite[i]->GetParError(1);
@@ -153,7 +153,7 @@ void pic()
 
    for(int i=0; i<6; i++)
    {
-     inFilemu = TString::Format("/store/users/ovtin/outDmeson/simulation/mono/muon/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/mono_%d.root",i+1);
+     inFilemu = TString::Format("/store/users/ovtin/outDmeson/simulation/mono/muon/2004_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0/mono_%d.root",i+1);
      fmu[i] = new TFile(inFilemu);
      gDirectory->GetObject("et",tmu[i]);
      tmu[i]->Print();
@@ -163,11 +163,11 @@ void pic()
 
      fitmu[i] = new TF1(Form("fitmu%d",i),"gaus");
      if(i==0){ boardmu1[i]=92; boardmu2[i]=117; }     //110
-     if(i==1){ boardmu1[i]=180; boardmu2[i]=212; }    //200
-     if(i==2){ boardmu1[i]=465; boardmu2[i]=530; }    //500
-     if(i==3){ boardmu1[i]=740; boardmu2[i]=860; }    //800
-     if(i==4){ boardmu1[i]=1080; boardmu2[i]=1320; }  //1200
-     if(i==5){ boardmu1[i]=1340; boardmu2[i]=1660; }  //1500
+     if(i==1){ boardmu1[i]=182; boardmu2[i]=212; }    //200
+     if(i==2){ boardmu1[i]=475; boardmu2[i]=520; }    //500
+     if(i==3){ boardmu1[i]=760; boardmu2[i]=830; }    //800
+     if(i==4){ boardmu1[i]=1125; boardmu2[i]=1275; }  //1200
+     if(i==5){ boardmu1[i]=1410; boardmu2[i]=1590; }  //1500
      hmu[i]->Fit(Form("fitmu%d",i),"","",boardmu1[i],boardmu2[i]);
      par1mu[i] = fitmu[i]->GetParameter(1);
      epar1mu[i] = fitmu[i]->GetParError(1);

@@ -394,11 +394,18 @@ double pcorr(double p, int type) {
 	k = 0.;
 	*/
 
-	//2004
-	ms = 174.418;
-	dedx = 0.975741;
-	k = 0;
 
+	//2004
+	ms = 162.627;
+	dedx = 1.14257;
+	k = 0.000747119;
+
+        /*
+	//2004 ion losses rnd
+	ms = 159.838;
+	dedx = 1.2227;
+	k = 0.000383377;
+        */
     }
     else if(type==2)  //kaon
     {
@@ -420,11 +427,18 @@ double pcorr(double p, int type) {
 	k = 0.;
 	*/
 
-	//2004
-	ms = 856.05;
-	dedx = 0.3013;
-	k = 0;
 
+	//2004
+	ms = 661.453;
+	dedx = 0.631908;
+	k = 0.00213170;
+
+        /*
+	//2004 ion losses rnd
+	ms = 619.229;
+	dedx = 0.917901;
+	k = 0.00188997;
+        */
     }
     else if(type==3)  //muon
     {
@@ -933,8 +947,7 @@ int analyse_event()
 				    //RANECU(r2, 1, 1);       //RANECU generates a sequence of uniformly distributed random numbers in the interval (0,1).
                                     r2 = rndm.Rndm();
 
-				    //tof += r1*0.420;  //v0
-				    tof += r1*0.589;    //v1
+				    tof += r1*0.420;
 				    if (progpar.verbose) cout<<"r2="<<r2<<"\t"<<"tof="<<tof<<endl;
 				    if (r2 < 0.15) tof = 0.;
 
@@ -943,8 +956,8 @@ int analyse_event()
 			    }
 			}
 
-			//Dmeson.timet1 = kedrrun_cb_.Header.RunType != 64 ? kscBhit_.time_B_ns[t1][0] : tof; //v0, v1   !!!!
-			Dmeson.timet1 = kscBhit_.time_B_ns[t1][0];
+			Dmeson.timet1 = kedrrun_cb_.Header.RunType != 64 ? kscBhit_.time_B_ns[t1][0] : tof; //2004
+			//Dmeson.timet1 = kscBhit_.time_B_ns[t1][0];                                        //2016
 			Dmeson.betat1=kscBhit_.Beta[t1][0];         //v/c
 			Dmeson.lengtht1 = kscBhit_.len[t1][0];
 
@@ -1203,7 +1216,7 @@ int main(int argc, char* argv[])
 
         kdcswitches_.kNoiseReject=3;   //Cut for DC noise  (0 - not cut, 1 - standart, 2 - soft, 3 - hard)
         //kdcswitches_.KemcAllowed=0;     //on use strips for track reconstruction     //2016
-	kdcswitches_.KemcAllowed=-1;  //off use strips for track reconstruction    //2004
+	kdcswitches_.KemcAllowed=-1;  //off use strips for track reconstruction 2004
 
 	kf_MCCalibRunNumber(progpar.simOn,progpar.MCCalibRunNumber,progpar.MCCalibRunNumberL,progpar.NsimRate,progpar.Scale,progpar.Ascale,progpar.Zscale);
 

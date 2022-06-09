@@ -35,21 +35,20 @@
 ##$ -m beas
 ##$ -M ovtin.ivan@gmail.com
 
-##$ -t 1-5
+##$ -t 1-6
 ##$ -t 1-6
 ##$ -t 1-4
-##$ -t 1-6
-#$ -t 6-6
+#$ -t 1-6
 
 i=${SGE_TASK_ID}
 myrand=$[1000+$i]
 
 #Signal
 simOn=1
-outfile="/store/users/ovtin/outDmeson/simulation/mono/kaon/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/mono_"$i".root"
-##outfile="/store/users/ovtin/outDmeson/simulation/mono/pion/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/mono_"$i".root"
-##outfile="/store/users/ovtin/outDmeson/simulation/mono/electron/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/mono_"$i".root"
-##outfile="/store/users/ovtin/outDmeson/simulation/mono/muon/KemcAllowedOn_kNoiseReject3_kXTKey1_KcExp0/mono_"$i".root"
+##outfile="/store/users/ovtin/outDmeson/simulation/mono/kaon/2004_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0/mono_"$i".root"
+##outfile="/store/users/ovtin/outDmeson/simulation/mono/pion/2004_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0/mono_"$i".root"
+##outfile="/store/users/ovtin/outDmeson/simulation/mono/electron/2004_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0/mono_"$i".root"
+outfile="/store/users/ovtin/outDmeson/simulation/mono/muon/2004_KemcAllowedOff_kNoiseReject3_kXTKey1_KcExp0/mono_"$i".root"
 mintracks=0
 maxtracks=20
 minbeamtracks=0
@@ -68,13 +67,13 @@ minNhits=0
 #verbose=1
 
 ########################################################################################################
-inruns="/store/users/ovtin/outDmeson/simulation/mono/kaon/simDmeson00100"$i".dat"
+##inruns="/store/users/ovtin/outDmeson/simulation/mono/kaon/simDmeson00100"$i".dat"
 ##inruns="/store/users/ovtin/outDmeson/simulation/mono/pion/simDmeson00100"$i".dat"
 ##inruns="/store/users/ovtin/outDmeson/simulation/mono/electron/simDmeson00100"$i".dat"
-##inruns="/store/users/ovtin/outDmeson/simulation/mono/muon/simDmeson00100"$i".dat"
+inruns="/store/users/ovtin/outDmeson/simulation/mono/muon/simDmeson00100"$i".dat"
 #
-NumFirstExpRun=23272
-NumLastExpRun=26151
+NumFirstExpRun=4100
+NumLastExpRun=4707
 NevRate=1000
 
 #######################################################################################################

@@ -8,7 +8,7 @@
    c1->GetFrame()->SetFillColor(0);
    c1->GetFrame()->SetBorderSize(12);
 
-   const Int_t n = 4;
+   const Int_t n = 5;
 
    Float_t x_pdg = 1869.5;
    Float_t ex_pdg = 0.40;
@@ -17,28 +17,31 @@
                      1869.40,    // MARK II
                      1870.00,    // ACCMOR 1990
                      1869.53,    // KEDR 2010
-                     1869.58     // KEDR 2022
+                     1869.58,    // KEDR 2022
+                     1869.49     // KEDR 2004-2022
                    };
 
    Float_t ex[n] = {
                      0.6,                           // MARK II
                      sqrt(0.5*0.5+1.0*1.0),         // ACCMOR 1990
                      sqrt(0.49*0.49+0.20*0.20),     // KEDR 2010
-                     sqrt(0.360*0.360+0.134*0.134) // KEDR 2022
+                     sqrt(0.360*0.360+0.134*0.134), // KEDR 2022
+                     sqrt(0.490*0.490+0.172*0.172)  // KEDR 2004-2022
                    };
 
    Float_t sx[n] = {
                      0.,        // MARK II
                      1.0,       // ACCMOR 1990
                      0.20,      // KEDR 2010
-                     0.134      // KEDR 2022
+                     0.134,     // KEDR 2022
+                     0.172      // KEDR 2004-2022
                    };
 
-   char *exp[n] = {"MARK II","ACCMOR","KEDR 2010","KEDR 2022"};
+   char *exp[n] = {"MARK II","ACCMOR","KEDR 2010","KEDR 2022","KEDR 2022*"};
 
-   Float_t y[n]  = {4.,3.,2.,1.};
-   Float_t ey[n] = {0.06,0.06,0.06,0.06};
-   Float_t ey0[n] = {0.0,0.0,0.0,0.0};
+   Float_t y[n]  = {5.,4.,3.,2.,1.};
+   Float_t ey[n] = {0.06,0.06,0.06,0.06,0.06};
+   Float_t ey0[n] = {0.0,0.0,0.0,0.0,0.0};
 
    Float_t y_pdg = ((float)n+1.5)/2.;
    Float_t ey_pdg = ((float)n+0.5)/2.-0.15;
@@ -94,8 +97,8 @@
 
    c1->Update();
 
-   c1->Print(KEDR+"dp.eps");
-   c1->Print(KEDR+"dp.png");
-   c1->Print(KEDR+"dp.pdf");
+   c1->Print(KEDR+"dp_reprocessing.eps");
+   c1->Print(KEDR+"dp_reprocessing.png");
+   c1->Print(KEDR+"dp_reprocessing.pdf");
 
 }

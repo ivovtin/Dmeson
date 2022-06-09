@@ -8,7 +8,7 @@
    c1->GetFrame()->SetFillColor(0);
    c1->GetFrame()->SetBorderSize(12);
 
-   const Int_t n = 8;
+   const Int_t n = 9;
 
    Float_t x_pdg = 1864.84;
    Float_t ex_pdg = 0.05;
@@ -21,7 +21,8 @@
                      1864.750,    // LHCb 2013
                      1864.841,    // BaBar 2013
                      1864.845,    // CLEO 2014
-                     1864.95     // KEDR 2022
+                     1864.95,     // KEDR 2022
+                     1865.300     // KEDR 2004-2022
                    };
 
    Float_t ex[n] = {
@@ -32,7 +33,8 @@
                      sqrt(0.150*0.150+0.110*0.110),   // LHCb 2013
                      sqrt(0.048*0.048+0.063*0.063),   // BaBar 2013
                      sqrt(0.025*0.025+0.057*0.057),   // CLEO 2014
-                     sqrt(0.270*0.270+0.106*0.106)   // KEDR 2022
+                     sqrt(0.270*0.270+0.106*0.106),   // KEDR 2022
+                     sqrt(0.300*0.300+0.031*0.031)    // KEDR 2004-2022
    };
 
    Float_t sx[n] = {
@@ -43,14 +45,15 @@
                      0.11,      // LHCb 2013
                      0.063,     // BaBar 2013
                      0.057,     // CLEO 2014
-                     0.106     // KEDR 2022
+                     0.106,     // KEDR 2022
+                     0.031      // KEDR 2004-2022
                    };
 
-   char *exp[n] = {"MARK II","ACCMOR","CLEO 2007","KEDR 2010","LHCb 2013","BaBar 2013","CLEO 2014","KEDR 2022"};
+   char *exp[n] = {"MARK II","ACCMOR","CLEO 2007","KEDR 2010","LHCb 2013","BaBar 2013","CLEO 2014","KEDR 2022","KEDR 2022*"};
 
-   Float_t y[n]  = {8.,7.,6.,5.,4.,3.,2.,1.};
-   Float_t ey[n] = {0.06,0.06,0.06,0.06,0.06,0.06,0.06,0.06};
-   Float_t ey0[n] = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
+   Float_t y[n]  = {9.,8.,7.,6.,5.,4.,3.,2.,1.};
+   Float_t ey[n] = {0.06,0.06,0.06,0.06,0.06,0.06,0.06,0.06,0.06};
+   Float_t ey0[n] = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
 
    Float_t y_pdg = ((float)n+1.5)/2.;
    Float_t ey_pdg = ((float)n+0.5)/2.-0.2;
@@ -105,8 +108,8 @@
    }
 
    c1->Update();
-   c1->Print(KEDR+"d0.eps");
-   c1->Print(KEDR+"d0.png");
-   c1->Print(KEDR+"d0.pdf");
+   c1->Print(KEDR+"d0_reprocessing.eps");
+   c1->Print(KEDR+"d0_reprocessing.png");
+   c1->Print(KEDR+"d0_reprocessing.pdf");
 
 }

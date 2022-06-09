@@ -371,15 +371,16 @@ double pcorr(double p, int type) {
 	k = 0.;
         */
         /*
-	//poluektov
-	ms = 134.7;
-	dedx = 1.74;
-	k = 0;
-        */
 	//2004
-	ms = 174.418;
-	dedx = 0.975741;
-	k = 0;
+	ms = 162.627;
+	dedx = 1.14257;
+	k = 0.000747119;
+        */
+	//2004 ion losses rnd
+	ms = 159.838;
+	dedx = 1.2227;
+	k = 0.000383377;
+
     }
     else if(type==2)  //kaon
     {
@@ -389,16 +390,17 @@ double pcorr(double p, int type) {
 	dedx = 1.28546;
 	k = 0.;
 	*/
-	/*
-        //poluektov
-	ms = 228.;
-	dedx = 3.095;
-	k = 0;
+        /*
+	//2004
+	ms = 661.453;
+	dedx = 0.631908;
+	k = 0.00213170;
         */
-        //2004
-	ms = 856.05;
-	dedx = 0.3013;
-	k = 0;
+	//2004 ion losses rnd
+	ms = 619.229;
+	dedx = 0.917901;
+	k = 0.00188997;
+
     }
     else if(type==3)  //muon
     {
